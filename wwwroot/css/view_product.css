@@ -6,6 +6,7 @@ img.productImage {
     display: block;
     margin-left: auto;
     margin-right: auto;
+    width: 100%;
 }
 div.pageBackground {
     background-color: #ffffff;
@@ -42,6 +43,7 @@ button.CartBtn:hover {
 
 #price {
     margin-top: 75px;
+    width: 100%;
 }
 
 hr {

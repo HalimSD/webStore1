@@ -1,0 +1,52 @@
+#productsArea {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 3px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-left: 5%;
+    margin-right: 20%;
+    margin-bottom: 5%;
+}
+
+div.card {
+    margin-top: 20px;
+    margin-left: 20%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+div.card:hover {
+    box-shadow: 0 4px 8px 0 rgba(255,165,0, 0.2), 0 6px 20px 0 rgba(255,165,0, 0.5);
+    transition: 0.3s;
+}
+
+#productImage {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    border-radius: 5px;
+}
+
+#categoryArea {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 3px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-left: 5%;
+}
+
+#container1 {
+    margin-top: 20px;
+    text-align: center;
+    font_size: 20px;
+}
+
+div.categoryTitle {
+    text-align: center;
+    font-size: 30px;
+}
+
+#btnSelectCategory {
+    display: block;
+    margin: 0 auto;
+}

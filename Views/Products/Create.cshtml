@@ -1,7 +1,5 @@
 @model WebApp1.products.Productsoort
-
-@ViewData["kaas"]
-
+<link rel="stylesheet" href="~/css/product_creation_generic.css">
  <script type='text/javascript'>
 	var i=0;
         function addFields(){
@@ -41,36 +39,36 @@
                 i++;
         }
     </script>
+<div class="pageRoot">
+    <h2>Product soort</h2>
 
-<h2>Product soort</h2>
-
-<h4>Aanmaken</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Naam" class="control-label"></label>
-                <input asp-for="Naam" class="form-control" placeholder="Name"/>
-                <span asp-validation-for="Naam" class="text-danger"></span>
-            </div>
-            <div id="container" class="form-group"></div>
-            <div class="form-group">
-                <input id="AddAtribute" type="button" value="Voeg Product eigenchap toe" onclick="addFields()" />
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Aanmaken" class="btn btn-default" />
-            </div>
+    <h4>Aanmaken</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Naam" class="control-label"></label>
+                    <input asp-for="Naam" class="form-control" placeholder="Name"/>
+                    <span asp-validation-for="Naam" class="text-danger"></span>
+                </div>
+                <div id="container" class="form-group"></div>
+                <div class="form-group">
+                    <input id="AddAtribute" type="button" value="Voeg Product eigenchap toe" onclick="addFields()" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Aanmaken" class="btn btn-default" />
+                </div>
             
-        </form>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 

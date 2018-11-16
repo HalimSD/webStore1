@@ -11,7 +11,7 @@
 
 
 
-
+<link rel="stylesheet" href="~/css/product_creation_generic.css">
  <script type='text/javascript'>
         function addFields(){
            var Attribute = [];
@@ -58,44 +58,44 @@
         }
         window.onload = addFields;
     </script>
+<div class="pageRoot">
+    <h2>Create</h2>
 
-<h2>Create</h2>
-
-<h4>Products</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create3">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" placeholder="Title"/>
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" placeholder="Price"/>
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-             <div class="form-group">
-                <label asp-for="ProductsoortId" class="control-label"></label>
-                <input asp-for="ProductsoortId" class="form-control" placeholder="ProductsoortId" type="hidden"  value= "@productsoortid" />
-                <span asp-validation-for="ProductsoortId" class="text-danger"></span>
-            </div>
+    <h4>Products</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create3">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" placeholder="Title"/>
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Price" class="control-label"></label>
+                    <input asp-for="Price" class="form-control" placeholder="Price"/>
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProductsoortId" class="control-label"></label>
+                    <input asp-for="ProductsoortId" class="form-control" placeholder="ProductsoortId" type="hidden"  value= "@productsoortid" />
+                    <span asp-validation-for="ProductsoortId" class="text-danger"></span>
+                </div>
            
-            <div id="container" class="form-group"></div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
+                <div id="container" class="form-group"></div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
             
-        </form>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 

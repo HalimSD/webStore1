@@ -1,0 +1,24 @@
+﻿<Properties StartupConfiguration="{CE1AA41D-676E-4A19-A601-7B7690F3B01E}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Areas/Identity/Pages/_ValidationScriptsPartial.cshtml">
+    <Files>
+      <File FileName="Areas/Identity/Pages/_ViewStart.cshtml" Line="1" Column="1" />
+      <File FileName="Views/_ViewStart.cshtml" Line="1" Column="1" />
+      <File FileName="Views/_ViewImports.cshtml" Line="1" Column="1" />
+      <File FileName="wwwroot/css/layout.css" Line="1" Column="1" />
+      <File FileName="wwwroot/css/mainpage.css" Line="1" Column="1" />
+      <File FileName="wwwroot/css/product_creation_generic.css" Line="1" Column="1" />
+      <File FileName="wwwroot/css/product_overview_generic.css" Line="1" Column="1" />
+      <File FileName="wwwroot/css/site.css" Line="1" Column="1" />
+      <File FileName="wwwroot/css/site.min.css" Line="1" Column="1" />
+      <File FileName="wwwroot/css/view_product.css" Line="1" Column="1" />
+      <File FileName="Areas/Identity/Pages/_ValidationScriptsPartial.cshtml" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.WebApp1 PreferredExecutionTarget="MonoDevelop.Default" />
+</Properties>

@@ -32,7 +32,7 @@ namespace WebApp1
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<WebshopContext>(opt => opt.UseNpgsql(@"Host=localhost;Database=webShop;Username=postgres;Password=123"));
+            services.AddDbContext<WebshopContext>(opt => opt.UseNpgsql(@"Host=localhost;Database=WebStore2;Username=postgres;Password=1.Halimsd"));
 
             services.AddSession(options =>
             {
@@ -65,7 +65,6 @@ namespace WebApp1
             app.UseCookiePolicy();
             app.UseSession();
             app.UseAuthentication();
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

@@ -1,0 +1,89 @@
+﻿
+@{
+    ViewData["Title"] = "Statistics";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Overzicht</h2>
+Op deze pagina kun je statistieken zien die gerelateerd zijn aan de producten<br />De huidige pagina is een WIP en kan testdata bevatten!<br />
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h4 style="margin-left:200px"></h4>
+            <div id="chart1"></div>
+            <h4 style="margin-left:200px"></h4>
+            <div id="chart2"></div>
+        </div>
+    </div>
+    <style>
+        div.col-md-6 {
+            width: 100%;
+        }
+
+        #chart1 {
+            float: left;
+            display: inline-block;
+        }
+
+        #chart2 {
+            float: left;
+            display: inline-block;
+        }
+    </style>
+</div>
+@section scripts{
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            $.get('GetCategorySold', function (jsonData) {
+                var json = jsonData;
+                var data = new google.visualization.DataTable(json);
+
+                var option = {
+                    title: 'Percentage verkoop van elk categorie',
+                    width: 500,
+                    height: 400
+                };
+
+
+                //3D Pie Chart:
+                option.is3D = true;
+                chart = new google.visualization.PieChart(document.getElementById('chart1'));
+                chart.draw(data, option);
+
+            })
+            $.get('GetTotalSoldData', function (jsonData) {
+                data = google.visualization.arrayToDataTable(jsonData, false);
+                var option = {
+                    title: "Totaal verkochtte producten sinds begin van het week",
+                    width: 600,
+                    height: 400,
+                    hAxis: {
+                        title: 'Aantal dagen geleden'
+                    },
+                    vAxis: {
+                        title: 'Aantal verkochtte producten'
+                    },
+                };
+                chart = new google.visualization.LineChart(document.getElementById('chart2'));
+                chart.draw(data, option);
+            }) 
+            /*
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Tax Type');
+            data.addColumn('number', 'Tax Percentage');
+            data.addRows([
+                ['Roerboot', { v: 30, f: '30%' }],
+                ['Speedboten', { v: 35, f: '35%' }],
+                ['Zeilboten', { v: 15, f: '15%' }],
+                ['Jachtboten', { v: 12, f: '12%' }],
+                ['Boot Onderdelen', { v: 8, f: '8%' }]
+            ]);
+            */
+            // Simple Pie Chart:
+        }
+    </script>
+}

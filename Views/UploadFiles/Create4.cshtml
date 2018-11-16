@@ -1,0 +1,141 @@
+@model IEnumerable<WebApp1.products.Productwaarde>
+@using Microsoft.AspNetCore.Http
+@{
+    Layout = "";
+ }
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Webshop</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="@Url.Action("Mainpage", "Home")">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Login", "Account")">Login</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Admin
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="@Url.Action("Create", "Products")">Maak product soort aan</a>
+          <a class="dropdown-item" href="@Url.Action("Create2", "Products")">Voeg product toe</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="@Url.Action("Statistics", "Chart")">Site Statistieken</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Disabled</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>  
+<br>
+
+@{
+    //var hi= (ViewData["productsoorten"]);
+    var productst = Context.Session.Get<String>("productsoort");
+}
+
+@{var i = 1;
+}
+
+<div class="row" >
+@foreach (var item in Model)
+        {
+                if ((i%2)!=0){ 
+                    
+                        <div class="col">
+                        <div class="card" style="width: 25rem;">
+                            <div class="card-body">
+                              <form asp-action="Mainpage">
+                                <div id="container" class="form-group">
+                                <h5 class="card-title" >@item.Title</h5>
+                                <p class="card-text" >$ @item.Price</p>
+                                <input type="hidden" name = "hi" value =  '@item.Title' />
+                                <input type="submit" class="btn btn-primary" value="Buy"  >
+                                </div>
+                             </form>             
+                            </div>
+                        </div>
+                    </div>
+                
+                }
+                else{
+                    <div class="col">
+                        <div class="card" style="width: 25rem;">
+                            <div class="card-body">
+                               <form asp-action="Mainpage">
+                                <div id="container" class="form-group">
+                                <h5 class="card-title" >@item.Title</h5>
+                                <p class="card-text" >$ @item.Price</p>
+                                <input type="hidden" name = "hi" value =  '@item.Title' />
+                                <input type="submit" class="btn btn-primary" value="Buy"  >
+                                </div>
+                             </form> 
+                            </div>
+                        </div>
+                    </div>
+                     <div class="w-100"></div>
+                    <br>
+                }
+            i++;
+        }
+</div>
+
+<script type='text/javascript'>
+var names = @Html.Raw(Json.Serialize(ViewData["productsoorten"]));
+    //var serializedUsers = JSON.parse(names);
+        function addFields(){
+		for (i = 0; i <  names.length; i++) { 
+            var container = document.getElementById("container1");
+            // Clear previous contents of the container
+                //container.removeChild(container.lastChild);
+                // Append a node with a random text
+                var res = names[i].split("= ");
+                var end = res[1].split(" }");
+                container.appendChild(document.createTextNode(end[0]));
+                
+				
+                // Create an <input> element, set its type and name attributes
+                var radio = document.createElement("input");
+				radio.type = "radio";
+				radio.name = "hi";
+				radio.value = end[0];
+                container.appendChild(radio);
+                // Append a line break 
+                container.appendChild(document.createElement("br"));
+				}
+			}
+			window.onload = addFields;
+</script>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create4">
+            <div id="container1" class="form-group">
+                 Select all<input type="radio" name="hi" value="select all"><br>
+            </div>
+            <div id="container" class="form-group"></div>
+            <div class="form-group">
+                <input type="submit" value="Filter" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

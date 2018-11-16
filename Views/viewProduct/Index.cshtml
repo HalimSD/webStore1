@@ -1,0 +1,43 @@
+@{
+    ViewProductModel viewProductModel = (ViewProductModel) ViewData["ProductModel"];
+    List<ViewProductAttributes> attributes = (List<ViewProductAttributes>) ViewData["ProductAttributeModel"];
+}
+<link rel="stylesheet" href="~/css/view_product.css">
+<div class="pageBackground">  
+    <div class="row" id="productHeader">
+        <div class="col-6">
+            <h2>@viewProductModel.Name</h2>
+            <img src="~/images/boat.jpg" height="300" width="400" class="productImage"></img>
+        </div>
+        <div class="col-6">
+            <div id="price">Prijs: @viewProductModel.Price</div>
+            <div id="category">Categorie: @viewProductModel.Category</div>
+            <button type="submit" class="CartBtn">Zet in Winkelwagen</button>
+        </div>
+    </div>
+    <hr>
+    @if (attributes.Count > 0)
+    {
+        <h3>Product eigenschappen</h3>
+        <div id="tableContainer">
+            <table id="table">
+                <tr>
+                    <th></th>
+                    <th></th>
+                </tr>
+                @foreach (ViewProductAttributes item in attributes)
+                {
+                    <tr>
+                        <td>@item.AttributeName</td>
+                        <td>@item.AttributeValue</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
+    else
+    {
+        <h3>Geen product eigenschappen beschikbaar!</h3>
+    }
+
+</div>

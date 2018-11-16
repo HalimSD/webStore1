@@ -1,0 +1,102 @@
+@model WebApp1.products.Productwaarde
+@using Microsoft.AspNetCore.Http
+
+@{
+    //var hi= (ViewData["productsoorten"]);
+    var Attributen = Context.Session.Get<String[]>("Attributen");
+    var productsoortid = Context.Session.Get<int>("productsoortid");
+    var AttribuutsoortID = Context.Session.Get<int[]>("AttribuutsoortID");
+    //var hi = HttpContext.Session.GetString("Test");
+}
+
+
+
+
+ <script type='text/javascript'>
+        function addFields(){
+           var Attribute = [];
+           var AttribuutsoortIDs = [];
+           var productsoortidd = @productsoortid;  
+           
+
+            @foreach (var d in Attributen)
+             {
+                @:Attribute.push("@d");
+            }
+
+             @foreach (var d in AttribuutsoortID)
+             {
+                @:AttribuutsoortIDs.push("@d");
+            }
+
+            for (i = 0; i <  Attribute.length; i++) { 
+            var container = document.getElementById("container");
+                container.appendChild(document.createTextNode(Attribute[i]));
+
+                var input = document.createElement("input");
+                input.name= "Attribuutwaarde["+i+"].waarde";
+                input.setAttribute("class","form-control");
+                input.id= "Attribuutwaarde["+i+"].waarde";
+                input.type="text";
+                input.value="";
+                input.placeholder="Attribuut";
+
+                var input1 = document.createElement("input");
+                input1.name= "Attribuutwaarde["+i+"].AttribuutsoortId";
+                input1.setAttribute("class","form-control");
+                input1.id= "Attribuutwaarde["+i+"].AttribuutsoortId";
+                input1.type="hidden";
+                input1.value= AttribuutsoortIDs[i];
+                input1.placeholder="Attribuut";
+
+               
+                container.appendChild(input);
+                container.appendChild(input1);
+                // Append a line break 
+                container.appendChild(document.createElement("br"));
+            }
+        }
+        window.onload = addFields;
+    </script>
+
+<h2>Create</h2>
+
+<h4>Products</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create3">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" placeholder="Title"/>
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" placeholder="Price"/>
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                <label asp-for="ProductsoortId" class="control-label"></label>
+                <input asp-for="ProductsoortId" class="form-control" placeholder="ProductsoortId" type="hidden"  value= "@productsoortid" />
+                <span asp-validation-for="ProductsoortId" class="text-danger"></span>
+            </div>
+           
+            <div id="container" class="form-group"></div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+            
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+}

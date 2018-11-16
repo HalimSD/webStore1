@@ -1,0 +1,23 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@model UserManagementIndex
+@inject UserManager<Users> userManager
+
+<table>
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>@(string.Join(",", await userManager.GetRolesAsync(user)))</td>
+                <td><a asp-controller="UserManagement" asp-action="AddRole" asp-route-id="@user.Id">Add Role</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

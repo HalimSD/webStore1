@@ -1,0 +1,57 @@
+@model WebApp1.products.Productwaarde
+@using Microsoft.AspNetCore.Http
+
+
+
+
+<script type='text/javascript'>
+	var names = @Html.Raw(Json.Serialize(ViewData["productsoorten"]));
+    //var serializedUsers = JSON.parse(names);
+        function addFields(){
+		for (i = 0; i <  names.length; i++) { 
+            var container = document.getElementById("container");
+            // Clear previous contents of the container
+                //container.removeChild(container.lastChild);
+                // Append a node with a random text
+                var res = names[i].split("= ");
+                var end = res[1].split(" }");
+                container.appendChild(document.createTextNode(end[0]));
+                
+				
+                // Create an <input> element, set its type and name attributes
+                var radio = document.createElement("input");
+				radio.type = "radio";
+				radio.name = "hi";
+				radio.value = end[0];
+                container.appendChild(radio);
+                // Append a line break 
+                container.appendChild(document.createElement("br"));
+				}
+			}
+			window.onload = addFields;
+    </script>
+
+<h2>kaas</h2>
+
+<h4>Products</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create2">
+            <div id="container" class="form-group"></div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+}
+

@@ -1,4 +1,4 @@
-@model WebApp1.products.Productsoort
+@model WebApp1.products.Productwaarde
 
 @{
     ViewData["Title"] = "Delete";
@@ -12,17 +12,16 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Naam)
+            @Html.DisplayNameFor(model => model.Title)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Naam)
+            @Html.DisplayFor(model => model.Title)
         </dd>
     </dl>
     
-    <form asp-action="Delete">
+    <form asp-action="Deleteproductwaarde">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-default" /> |
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Indexproductwaarde">Back to List</a>
     </form>
 </div>
-

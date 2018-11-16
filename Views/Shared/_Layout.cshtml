@@ -27,22 +27,21 @@
                     <a class="dropdown-item" href="@Url.Action("Create", "Products")">Maak product soort aan</a>
                     <a class="dropdown-item" href="@Url.Action("Create2", "Products")">Voeg product toe</a>
                     <a class="dropdown-item" href="@Url.Action("Index", "UploadFiles")">Voeg meerdere producten</a>
-                    <a class="dropdown-item" href="@Url.Action("Index", "products")">overzicht product soorten</a>
-                    <a class="dropdown-item" href="@Url.Action("Indexproductwaarde", "products")">overzicht product waarden</a>
+                    <a class="dropdown-item" href="@Url.Action("Index", "products")">Vverzicht product soorten</a>
+                    <a class="dropdown-item" href="@Url.Action("Indexproductwaarde", "products")">Overzicht product waarden</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="@Url.Action("Statistics", "Chart")">Site Statistieken</a>
                 </div>
             }
         </li>
       <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
       </li>
     </ul>
     <partial name="_LoginPartial" />
 
     <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      <input class="form-control mr-sm-2" type="search" placeholder="Zoeken..." aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Zoek</button>
     </form>
   </div>
 </nav>

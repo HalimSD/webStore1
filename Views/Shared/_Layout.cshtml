@@ -1,4 +1,7 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<Users> SignInManager
+@inject UserManager<Users> UserManager
+@{
     Layout = "";
 } 
 <html>
@@ -16,20 +19,21 @@
       <li class="nav-item active">
         <a class="nav-link" href="@Url.Action("Mainpage", "Home")">Home <span class="sr-only">(current)</span></a>
       </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Admin
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="@Url.Action("Create", "Products")">Maak product soort aan</a>
-          <a class="dropdown-item" href="@Url.Action("Create2", "Products")">Voeg product toe</a>
-          <a class="dropdown-item" href="@Url.Action("Index", "UploadFiles")">Voeg meerdere producten</a>
-          <a class="dropdown-item" href="@Url.Action("Index", "products")">overzicht product soorten</a>
-          <a class="dropdown-item" href="@Url.Action("Indexproductwaarde", "products")">overzicht product waarden</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="@Url.Action("Statistics", "Chart")">Site Statistieken</a>
-        </div>
-      </li>
+        <li class="nav-item dropdown">
+            @if (User.IsInRole("Admin"))
+            {
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="@Url.Action("Create", "Products")">Maak product soort aan</a>
+                    <a class="dropdown-item" href="@Url.Action("Create2", "Products")">Voeg product toe</a>
+                    <a class="dropdown-item" href="@Url.Action("Index", "UploadFiles")">Voeg meerdere producten</a>
+                    <a class="dropdown-item" href="@Url.Action("Index", "products")">overzicht product soorten</a>
+                    <a class="dropdown-item" href="@Url.Action("Indexproductwaarde", "products")">overzicht product waarden</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="@Url.Action("Statistics", "Chart")">Site Statistieken</a>
+                </div>
+            }
+        </li>
       <li class="nav-item">
         <a class="nav-link disabled" href="#">Disabled</a>
       </li>

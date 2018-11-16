@@ -168,3 +168,5 @@ C:\Users\Wanne\Documents\git\webStore1\obj\Debug\netcoreapp2.1\WebApp1.Views.pdb
 C:\Users\Wanne\Documents\git\webStore1\obj\Debug\netcoreapp2.1\WebApp1.dll
 C:\Users\Wanne\Documents\git\webStore1\obj\Debug\netcoreapp2.1\WebApp1.pdb
 C:\Users\Wanne\Documents\git\webStore1\obj\Debug\netcoreapp2.1\WebApp1.csproj.CopyComplete
+C:\Users\Okan Emeni\RiderProjects\webStore1\obj\Debug\netcoreapp2.1\Razor\Views\Products\Deleteproductwaarde.g.cshtml.cs
+C:\Users\Okan Emeni\RiderProjects\webStore1\obj\Debug\netcoreapp2.1\Razor\Views\Products\indexproductwaarde.g.cshtml.cs

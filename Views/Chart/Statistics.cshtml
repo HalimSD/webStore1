@@ -3,31 +3,44 @@
     ViewData["Title"] = "Statistics";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h2>Overzicht</h2>
-Op deze pagina kun je statistieken zien die gerelateerd zijn aan de producten<br />De huidige pagina is een WIP en kan testdata bevatten!<br />
-
 <div class="container">
+    <h2>Overzicht</h2>
+    Op deze pagina kun je statistieken zien die gerelateerd zijn aan de producten<br />De huidige pagina is een WIP en kan testdata bevatten!<br />
+    <hr>
     <div class="row">
-        <div class="col-md-6">
-            <h4 style="margin-left:200px"></h4>
+        <div class="col-6">
+            <h4></h4>
             <div id="chart1"></div>
-            <h4 style="margin-left:200px"></h4>
+        </div>
+        <div class="col-6">
+            <h4></h4>
             <div id="chart2"></div>
         </div>
     </div>
     <style>
+        hr {
+            border: 0;
+            height: 1px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(10, 10, 10, 10.75), rgba(0, 0, 0, 0));
+        }
+        div.container {
+            background-color: #ffffff;
+            border-radius: 3px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            padding: 15px;
+        }
+        
         div.col-md-6 {
+
             width: 100%;
+            display: inline-block;
         }
-
         #chart1 {
-            float: left;
-            display: inline-block;
-        }
 
-        #chart2 {
             float: left;
-            display: inline-block;
+        }
+        #chart2 {
+            float: right;
         }
     </style>
 </div>

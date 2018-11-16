@@ -60,13 +60,13 @@
                     <div class="col">
                         <div class="card" style="width: 25rem;">
                             <div class="card-body">
-                               <form asp-controller="cart" asp-action="Index">
-                                <div id="container" class="form-group">
-                                <h5 class="card-title" >@item.Title</h5>
-                                <p class="card-text" >$ @item.Price</p>
-                                <input type="hidden" name = "hi" value =  '@item.Title' />
-                                <input type="submit" class="btn btn-primary" value="Buy"  >
-                                </div>
+                                <form action="@Url.Action("Index", "ViewProduct")" method="get">
+                                    <div id="container" class="form-group">
+                                        <h5 class="card-title" >@item.Title</h5>
+                                        <p class="card-text" >€ @item.Price</p>
+                                        <input type="hidden" name = "id" value =  '@item.Id' />
+                                        <input type="submit" class="btn btn-primary" value="Details">
+                                    </div>
                              </form> 
                             </div>
                         </div>

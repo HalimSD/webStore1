@@ -7549,7 +7549,7 @@
       ]
     },
     "Microsoft.VisualStudio.Web.CodeGeneration/2.1.4": {
-      "sha512": "TD7kcw+VSlVt8HnYpWI0cycv5sbQt6TmsiIotsUNmTEGldTJNbz9VnnFHXM4OlPeykk+pzzI+85hGTvjHEyitQ==",
+      "sha512": "pRyGF/8FWK+JGHH1ILwBGChTS+Gbo/oEKEOBnOSvwfUO1FmrSIYzF2+oMZCv8J1viGopXtZeIqbi3xLjdroR+A==",
       "type": "package",
       "path": "microsoft.visualstudio.web.codegeneration/2.1.4",
       "files": [
@@ -7561,7 +7561,7 @@
       ]
     },
     "Microsoft.VisualStudio.Web.CodeGeneration.Contracts/2.1.4": {
-      "sha512": "Wbho7vtTlx4dn5WiEeaHj1wl1YsOk0JuhQbQNORG412Z3c2O6J2P3Zm2GuLzGNvXsBEjMFjlXuxE6SjuxCEs7w==",
+      "sha512": "eRwMmal/ed9hDXIV0BoTuchMaX/N52U91UotVUOeNdYp0uplh33A52dhr3DiaeilHjc08gX+lFOwR/VLNxUMnA==",
       "type": "package",
       "path": "microsoft.visualstudio.web.codegeneration.contracts/2.1.4",
       "files": [
@@ -7573,7 +7573,7 @@
       ]
     },
     "Microsoft.VisualStudio.Web.CodeGeneration.Core/2.1.4": {
-      "sha512": "MCh9syrOIKOoeHNPbFa642yjz+XCAF43JrdO//Y4JE3nobwlLdu6NWCFrudAt6NxgL/0BQuZKL7AsYp9RcJxjA==",
+      "sha512": "f1d9gK4xdrHzjU2j4CGIL6JNvHWJUbKnZRmEhP/NRRSut29KhClPcALcV6R/nJ48QvECnu+Wwfy+hUJMa1uddg==",
       "type": "package",
       "path": "microsoft.visualstudio.web.codegeneration.core/2.1.4",
       "files": [
@@ -7585,7 +7585,7 @@
       ]
     },
     "Microsoft.VisualStudio.Web.CodeGeneration.Design/2.1.4": {
-      "sha512": "E1X3OljxZq46xpThV6x5vAAi34+aYXaUEGr2r69wgkcHCVy26HDMGVO6yNN9ZpJ99369b64O0HoKZ5WGo8VVIQ==",
+      "sha512": "qHnioaphp0iIQO6+FtHCLMRKABq7IOvApKmQ5/YELrY56yg/rtiT4DeXDUNpsBRmJEuTHP5mcYAXUXs7Pn7Arg==",
       "type": "package",
       "path": "microsoft.visualstudio.web.codegeneration.design/2.1.4",
       "files": [
@@ -7607,7 +7607,7 @@
       ]
     },
     "Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore/2.1.4": {
-      "sha512": "EX/69uGnM4tHjN+D8S4gyOo0CQhi/DjXV87ooRbdT3rfXQNk6JhauDGhDjj1xQnPr/6B8bDXh75kahRPYnr8Mg==",
+      "sha512": "EbNTVZ5lohK0C1EcnvJIjGzi3sqfzFbeqyUk4jkH/bq55uyUtObUrkao/ddFEQ9IgjXWAqy9BqKNVLEJ/kuBuw==",
       "type": "package",
       "path": "microsoft.visualstudio.web.codegeneration.entityframeworkcore/2.1.4",
       "files": [
@@ -7620,7 +7620,7 @@
       ]
     },
     "Microsoft.VisualStudio.Web.CodeGeneration.Templating/2.1.4": {
-      "sha512": "T0iX45PIu8y5E/EJobHiI8PBuaWqT04vsLV3QYfTfHBcMshs6VJjCvfCd1dmHDGIXiQXZO5gOS3EsLQ3VVBu9w==",
+      "sha512": "vy4sxmI9bgAc9PTd0f8re0h9Fq9DbltT0TCc5ZppH3rq/w22K1R23hzd0NA+TvM+kkzSiy6/mgzLlIylFqg1LQ==",
       "type": "package",
       "path": "microsoft.visualstudio.web.codegeneration.templating/2.1.4",
       "files": [
@@ -7632,7 +7632,7 @@
       ]
     },
     "Microsoft.VisualStudio.Web.CodeGeneration.Utils/2.1.4": {
-      "sha512": "bVXXOYfTHW425012c/OJHQ5J4V59U6ZpO+vwwE5Pad6eohbBxwTD1jiO/9dMHupDbgXdc4Qp4k+OaS3dFOoBrA==",
+      "sha512": "mODOWROfc7yeroPiU/MBQdVLYTV69GJTX0LY7Wlu2F5pjsvzKbqQRE1uzgLPeGYt5IHK5sV9Qq9JnsEeH6B8Vg==",
       "type": "package",
       "path": "microsoft.visualstudio.web.codegeneration.utils/2.1.4",
       "files": [
@@ -7644,7 +7644,7 @@
       ]
     },
     "Microsoft.VisualStudio.Web.CodeGenerators.Mvc/2.1.4": {
-      "sha512": "VA1NL3o2h2gcz2V5jSCoCg27GKvj56OATWbw2nMcNpfPmVVRBR/XFrxa9bqfs23dzMpFopIOm35EGOnGsYaMvg==",
+      "sha512": "3sAjNCBzP3ENcOfcHdrpKNioyDeO9lgjTtkB9pDhV9fwGpICyvcNUXIz1sbGiYgaxT6/oQ1F8TMYB8ejUKARFg==",
       "type": "package",
       "path": "microsoft.visualstudio.web.codegenerators.mvc/2.1.4",
       "files": [
@@ -9780,7 +9780,7 @@
       ]
     },
     "System.Interactive.Async/3.2.0": {
-      "sha512": "oaK7GqF8/ORnipYZck5ec+eKgvfZFShH64CWFlYB8Mpnr8/e99klLSk9SsmnaDzr9n2X672sUU8ZCLLrq8leDw==",
+      "sha512": "T3nigy9yShklMyVu7I2TvlVMRy2vUn9oQeBaRy0KZcOptyy+rUbekYaXxoa3s0h2tWT3UVtzrGkQC89CBbCtlg==",
       "type": "package",
       "path": "system.interactive.async/3.2.0",
       "files": [
@@ -13326,28 +13326,30 @@
     ]
   },
   "packageFolders": {
-    "/Users/halim/.nuget/packages/": {},
-    "/usr/local/share/dotnet/sdk/NuGetFallbackFolder": {}
+    "C:\\Users\\Okan Emeni\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/halim/hr/2de/projtest/WebApp1/WebApp1.csproj",
+      "projectUniqueName": "C:\\Users\\Okan Emeni\\RiderProjects\\webStore1\\WebApp1.csproj",
       "projectName": "WebApp1",
-      "projectPath": "/Users/halim/hr/2de/projtest/WebApp1/WebApp1.csproj",
-      "packagesPath": "/Users/halim/.nuget/packages/",
-      "outputPath": "/Users/halim/hr/2de/projtest/WebApp1/obj/",
+      "projectPath": "C:\\Users\\Okan Emeni\\RiderProjects\\webStore1\\WebApp1.csproj",
+      "packagesPath": "C:\\Users\\Okan Emeni\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Okan Emeni\\RiderProjects\\webStore1\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "/Users/halim/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Okan Emeni\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.1"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

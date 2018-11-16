@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ContosoRTM.Controllers
 {
-    [Authorize (Roles = "Admin")]
     public class UserManagementController : Controller
     {
         private readonly WebshopContext _dbContext;

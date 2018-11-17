@@ -10,6 +10,7 @@ public class Products
     public int Id { get; set; }
     public string Title { get; set; }
     public double Price { get; set; }
+    
     public List<Extra_Atributes> Extra_Atributes { get; set; }
     }
    public class Item
@@ -54,6 +55,7 @@ public class Productsoort
     public int Id { get; set; }
     public string Title { get; set; }
     public double Price { get; set; }
+    public string Image { get; set; }
     public int ProductsoortId{ get; set; }
     public Productsoort productsoort { get; set; }
     public List<Attribuutwaarde> Attribuutwaarde { get; set; }

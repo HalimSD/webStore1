@@ -12,18 +12,23 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+
 namespace WebApp1.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class ProductsController : Controller
     {
         private readonly WebshopContext _context;
+        private readonly IHostingEnvironment _appEnvironment;
         public const string SessionKeyName = "_Name";
         public string SessionInfo_Name { get; private set; }
 
-        public ProductsController(WebshopContext context)
+        public ProductsController(WebshopContext context, IHostingEnvironment appEnvironment)
         {
             _context = context;
+            _appEnvironment = appEnvironment;
         }
 
         // GET: Products
@@ -159,6 +164,9 @@ namespace WebApp1.Controllers
         // POST: Products/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+       // POST: Products/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create3(Productwaarde productwaarde)
@@ -166,15 +174,33 @@ namespace WebApp1.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Productwaarde.Add(productwaarde);
+            var files = HttpContext.Request.Form.Files;
+            foreach (var Image in files)
+            {
+                if (Image != null && Image.Length > 0)
+                {
+                    var file = Image;
+                    //There is an error here
+                    var uploads = Path.Combine(_appEnvironment.WebRootPath, "images");
+                    if (file.Length > 0)
+                    {
+                        var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
+                        using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
+                        {
+                            await file.CopyToAsync(fileStream);
+                            productwaarde.Image = fileName;
+                        }
+
+                    }
+                }
+            }
+                _context.Productwaarde.Add(productwaarde); 
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Indexproductwaarde));
 
             }
             return View();
         }
-
-
 
 
 

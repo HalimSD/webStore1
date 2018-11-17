@@ -1,12 +1,10 @@
-h2 {
-    text-align: center;
-}
 
 img.productImage {
     display: block;
     margin-left: auto;
     margin-right: auto;
     width: 100%;
+    border-radius: 3px;
 }
 div.pageBackground {
     background-color: #ffffff;
@@ -27,7 +25,6 @@ button.CartBtn {
     width: 150px;
     height: 45px;
     font-size: 14px;
-    margin-top: 25%;
     border-style: solid;
 }
 button.CartBtn:hover {
@@ -36,13 +33,9 @@ button.CartBtn:hover {
     border: none;
 }
 
-#category, #price {
+#price {
     font-size: 30px;
     color: #2e6da4;
-}
-
-#price {
-    margin-top: 75px;
     width: 100%;
 }
 
@@ -84,4 +77,32 @@ hr {
 h3 {
     font-size: 20px;
     text-align: center;
+}
+
+#no-attributes-warning {
+    margin-bottom: 10px;
+}
+
+div.description {
+    background-color: rgba(230, 230, 230, 255);
+    border-radius: 5px;
+    padding: 5px;
+}
+
+div.descriptionTitle {
+    font-weight: bold;
+    font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+}
+
+#productContent {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+#category {
+    margin-left: 10px;
+    margin-top: 30px;
+    font-weight: bold;
 }

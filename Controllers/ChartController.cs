@@ -2,6 +2,7 @@
  using System.Collections.Generic;
  using System.Linq;
  using System.Threading.Tasks;
+ using Microsoft.AspNetCore.Authorization;
  using WebApp1.Models;
  using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@
 
  namespace WebApp1.Controllers
  {
+     [Authorize(Roles = "Admin")]
      public class ChartController : Controller
      {
          public IActionResult Statistics()

@@ -79,7 +79,7 @@ using WebApp1.products;
             WriteLiteral("\r\n");
             EndContext();
             BeginContext(190, 49, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("link", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "8d890c90b5884db79f1adf7d62b8d958", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("link", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "7bf626773e434e23a588d408e298ed83", async() => {
             }
             );
             __Microsoft_AspNetCore_Mvc_Razor_TagHelpers_UrlResolutionTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.Razor.TagHelpers.UrlResolutionTagHelper>();
@@ -108,7 +108,7 @@ using WebApp1.products;
             WriteLiteral("\r\n\r\n<div class=\"row\">\r\n    <div class=\"col-2\">\r\n        <div id=\"categoryArea\">\r\n            <div class=\"categoryTitle\">Categorieën</div>\r\n            ");
             EndContext();
             BeginContext(512, 462, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f27d3e65eac043b8b121ff3208372b2e", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "044345bc85204e01930c7bf05c708fae", async() => {
                 BeginContext(540, 427, true);
                 WriteLiteral(@"
                 <div id=""container1"" class=""form-group"">
@@ -140,7 +140,7 @@ using WebApp1.products;
             WriteLiteral("\r\n            <div>\r\n                ");
             EndContext();
             BeginContext(1011, 51, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "2a72c848620145cf86b4350e8db98cac", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "25168bd261084feea6ba6c7add456233", async() => {
                 BeginContext(1033, 25, true);
                 WriteLiteral("Terug naar alle producten");
                 EndContext();
@@ -173,12 +173,12 @@ using WebApp1.products;
             WriteLiteral("                    <div class=\"card\" style=\"width: 25rem;\">\r\n                        <div class=\"card-body\">\r\n                            ");
             EndContext();
             BeginContext(1560, 644, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "a54299de4c80496f9b4b190227f149ae", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "9e33c9be10ca43ecb235bc9e8be89232", async() => {
                 BeginContext(1624, 111, true);
                 WriteLiteral("\r\n                                <div id=\"container\" class=\"form-group\">\r\n                                    ");
                 EndContext();
                 BeginContext(1735, 47, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("img", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "dbb68d39e20f4fb6a06489c09b3863a4", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("img", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "1d82a8e5a1804b998a16a2daccbaeae3", async() => {
                 }
                 );
                 __Microsoft_AspNetCore_Mvc_Razor_TagHelpers_UrlResolutionTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.Razor.TagHelpers.UrlResolutionTagHelper>();
@@ -277,12 +277,12 @@ AddHtmlAttributeValue("", 1574, Url.Action("Index", "ViewProduct"), 1574, 35, fa
             WriteLiteral("                <div class=\"card\" style=\"width: 25rem;\">\r\n                    <div class=\"card-body\">\r\n                        ");
             EndContext();
             BeginContext(2739, 612, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "3a8ea13b2084440b864e38b307d4049f", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "ccfefabd0a964238981e1c485e1e8aca", async() => {
                 BeginContext(2803, 103, true);
                 WriteLiteral("\r\n                            <div id=\"container\" class=\"form-group\">\r\n                                ");
                 EndContext();
                 BeginContext(2906, 47, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("img", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "f26b94d12e5247b38214939f2e4766d5", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("img", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "4026d7b6dc1d4484b361bcaa77ba6ebb", async() => {
                 }
                 );
                 __Microsoft_AspNetCore_Mvc_Razor_TagHelpers_UrlResolutionTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.Razor.TagHelpers.UrlResolutionTagHelper>();

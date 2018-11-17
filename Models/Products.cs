@@ -56,6 +56,7 @@ public class Productsoort
     public string Title { get; set; }
     public double Price { get; set; }
     public string Image { get; set; }
+    public string Description { get; set; }
     public int ProductsoortId{ get; set; }
     public Productsoort productsoort { get; set; }
     public List<Attribuutwaarde> Attribuutwaarde { get; set; }

@@ -8,7 +8,7 @@ using WebApp1.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Hosting;
 
 namespace klaas.Controllers
 {
@@ -28,7 +28,7 @@ namespace klaas.Controllers
             mUserManager = userManager;
             mSignInManager = signInManager;
              _context = context;
-        }
+            }
         public IActionResult Index()
         {
             var myList = new List<string>();
@@ -106,7 +106,7 @@ namespace klaas.Controllers
 
         public IActionResult Contact()
         {
-            ViewData["Message"] = User.IsInRole("Admin").ToString();
+            ViewData["Message"] = "";
 
             return View();
         }

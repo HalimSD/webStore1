@@ -3,8 +3,9 @@
 @using WebApp1.products
 @model IEnumerable<WebApp1.products.Productwaarde>
 @{
-    bool firstColumn = true;
-    List<Productwaarde> remainingItems = new List<Productwaarde>();
+    int currentColumn = 0;
+    List<Productwaarde> col2Items = new List<Productwaarde>();
+    List<Productwaarde> col3Items = new List<Productwaarde>();
  }
 
 <link rel="stylesheet" href="~/css/mainpage.css">
@@ -35,56 +36,83 @@
     </div>
     <div class="col-8">
         <div class="container" id="productsArea">
-        <h2>Boten</h2>
-        <h4>Producten</h4>
-        <div class="row" id="products">
-        <div class="col-sm">
-            @foreach (var item in Model)
-            {
-                if (firstColumn)
-                {
-                    <div class="card" style="width: 25rem;">
-                        <div class="card-body">
-                            <form action="@Url.Action("Index", "ViewProduct")" method="get">
-                                <div id="container" class="form-group">
-                                    <img src="~/images/boat.jpg" id="productImage"><img/>
-                                    <h5 class="card-title">@item.Title</h5>
-                                    <p class="card-text">€ @item.Price</p>
-                                    <input type="hidden" name="id" value='@item.Id'/>
-                                    <input type="submit" class="btn btn-primary" value="Details">
+            <h2>Boten</h2>
+            <h4>Producten</h4>
+            <div class="row" id="products">
+                <div class="col-sm">
+                    @foreach (var item in Model)
+                    {
+                        if (currentColumn == 0)
+                        {
+                            <div class="card" style="width: 20rem;">
+                                <div class="card-body">
+                                    <form action="@Url.Action("Index", "ViewProduct")" method="get">
+                                        <div id="container" class="form-group">
+                                            <img src="@("/images/products/" + item.Image)" id="productImage"><img/>
+                                            <h5 class="card-title">@item.Title</h5>
+                                            <p class="card-text">€ @item.Price</p>
+                                            <input type="hidden" name="id" value='@item.Id'/>
+                                            <input type="submit" class="btn btn-primary" value="Details">
+                                        </div>
+                                    </form>
                                 </div>
-                            </form>
-                        </div>
-                    </div>
-                    firstColumn = false;
-                }
-                else
-                {
-                    remainingItems.Add(item);
-                    firstColumn = true;
-                }
-            }
-        </div>
-        <div class="col-sm">
-            @foreach (Productwaarde item in remainingItems)
-            {
-                <div class="card" style="width: 25rem;">
-                    <div class="card-body">
-                        <form action="@Url.Action("Index", "ViewProduct")" method="get">
-                            <div id="container" class="form-group">
-                                <img src="~/images/boat.jpg" id="productImage"><img/>
-                                <h5 class="card-title">@item.Title</h5>
-                                <p class="card-text">€ @item.Price</p>
-                                <input type="hidden" name="id" value='@item.Id'/>
-                                <input type="submit" class="btn btn-primary" value="Details">
                             </div>
-                        </form>
-                    </div>
+                            currentColumn++;
+                        }
+                        else
+                        {
+                            switch (currentColumn)
+                            {
+                                case 1: 
+                                    col2Items.Add(item);
+                                    currentColumn++;
+                                    break;
+                                case 2: 
+                                    col3Items.Add(item);
+                                    currentColumn = 0;
+                                    break;
+                            }
+                        }
+                    }
                 </div>
-            }
+                <div class="col-sm">
+                    @foreach (Productwaarde item in col2Items)
+                    {
+                        <div class="card" style="width: 20rem;">
+                            <div class="card-body">
+                                <form action="@Url.Action("Index", "ViewProduct")" method="get">
+                                    <div id="container" class="form-group">
+                                        <img src="@("/images/products/" + item.Image)" id="productImage"><img/>
+                                        <h5 class="card-title">@item.Title</h5>
+                                        <p class="card-text">€ @item.Price</p>
+                                        <input type="hidden" name="id" value='@item.Id'/>
+                                        <input type="submit" class="btn btn-primary" value="Details">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="col-sm">
+                    @foreach (Productwaarde item in col3Items)
+                    {
+                        <div class="card" style="width: 20rem;">
+                            <div class="card-body">
+                                <form action="@Url.Action("Index", "ViewProduct")" method="get">
+                                    <div id="container" class="form-group">
+                                        <img src="@("/images/products/" + item.Image)" id="productImage"><img/>
+                                        <h5 class="card-title">@item.Title</h5>
+                                        <p class="card-text">€ @item.Price</p>
+                                        <input type="hidden" name="id" value='@item.Id'/>
+                                        <input type="submit" class="btn btn-primary" value="Details">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
-    </div>
-</div>
     </div>
 </div>
 <script type='text/javascript'>

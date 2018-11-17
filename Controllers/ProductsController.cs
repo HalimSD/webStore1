@@ -181,7 +181,7 @@ namespace WebApp1.Controllers
                 {
                     var file = Image;
                     //There is an error here
-                    var uploads = Path.Combine(_appEnvironment.WebRootPath, "images");
+                    var uploads = Path.Combine(_appEnvironment.WebRootPath, "images\\products");
                     if (file.Length > 0)
                     {
                         var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);

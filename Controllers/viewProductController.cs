@@ -1,11 +1,11 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using WebApp1.Models;
 using WebApp1.products;
 using Microsoft.AspNetCore.Mvc;
-using Npgsql.TypeHandling;
 
 namespace klaas.Controllers
 {
@@ -46,8 +46,10 @@ namespace klaas.Controllers
             // Build the model that will be passed to the view
             ViewProductModel product = new ViewProductModel();
             product.Name = productwaarde.Title;
-            product.Price = "€" + productwaarde.Price.ToString();
+            product.Price = "€ " + productwaarde.Price.ToString();
             product.Category = productsoort.Naam;
+            product.Image = productwaarde.Image;
+            product.Description = productwaarde.Description;
 
             ViewData["ProductModel"] = product;
             ViewData["ProductAttributeModel"] = attributes;

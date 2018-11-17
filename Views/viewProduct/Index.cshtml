@@ -1,19 +1,20 @@
 @{
     ViewProductModel viewProductModel = (ViewProductModel) ViewData["ProductModel"];
     List<ViewProductAttributes> attributes = (List<ViewProductAttributes>) ViewData["ProductAttributeModel"];
+    string imagePath = "/images/products/" + viewProductModel.Image;
 }
 <link rel="stylesheet" href="~/css/view_product.css">
 <div class="pageBackground">
     <div id="category">Categorie: @viewProductModel.Category</div>
     <div class="row" id="productHeader">
         <div class="col-6">
-            <img src="~/images/boat.jpg" height="300" width="400" class="productImage"></img>
+            <img src="@imagePath" height="300" width="400" class="productImage"></img>
         </div>
         <div class="col-6" id="productContent">
             <h2>@viewProductModel.Name</h2>
             <div class="description">
                 <div class="descriptionTitle">BESCHRIJVING</div>
-                <div class="descriptionContent">This is a sample product description. It's meant to be a short discription what the product is about.This is a sample product description. It's meant to be a short discription what the product is about.This is a sample product description. It's meant to be a short discription what the product is about.</div>
+                <div class="descriptionContent">@viewProductModel.Description</div>
             </div>
             <div id="price">@viewProductModel.Price</div>
             <button type="submit" class="CartBtn">Zet in Winkelwagen</button>

@@ -4,13 +4,11 @@
     border-radius: 3px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     margin-left: 5%;
-    margin-right: 20%;
     margin-bottom: 5%;
 }
 
 div.card {
     margin-top: 20px;
-    margin-left: 20%;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
@@ -25,6 +23,8 @@ div.card:hover {
     margin-right: auto;
     width: 100%;
     border-radius: 5px;
+    height: 200px;
+    max-width: 300px;
 }
 
 #categoryArea {

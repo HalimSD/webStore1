@@ -49,7 +49,11 @@
         "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
           "suppressParent": "All",
           "target": "Package",
-          "version": "[2.1.4, )"
+          "version": "[2.1.6, )"
+        },
+        "Microsoft.VisualStudio.Web.CodeGeneration.Tools": {
+          "target": "Package",
+          "version": "[2.0.4, )"
         },
         "Npgsql": {
           "target": "Package",

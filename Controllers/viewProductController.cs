@@ -22,12 +22,19 @@ namespace klaas.Controllers
         {
             
             Productwaarde productwaarde = (from pw in context.Productwaarde where pw.Id == id select pw).FirstOrDefault();
-            Productsoort productsoort =(from ps in context.Productsoort where ps.Id == productwaarde.ProductsoortId select ps).FirstOrDefault();
-            List<ViewProductAttributes> attributes = (from atts in context.Attribuutsoort
-                from attw in context.Attribuutwaarde
-                where atts.ProductsoortId == productsoort.Id && atts.Id == attw.AttribuutsoortId
-                select new ViewProductAttributes
-                    {AttributeName = atts.Attrbuut, AttributeValue = attw.Waarde.ToString()}).ToList();
+            Productsoort productsoort =(from ps in context.Productsoort where ps.Id == productwaarde.ProductsoortId select ps).FirstOrDefault();           
+            List<ViewProductAttributes> attributes = 
+                (from atts in context.Attribuutsoort 
+                    where atts.ProductsoortId == productsoort.Id
+                          select new ViewProductAttributes
+                          {
+                              AttributeName = atts.Attrbuut,
+                              AttributeValue = 
+                                  (from attw in context.Attribuutwaarde
+                                    where attw.AttribuutsoortId == atts.Id && attw.ProductwaardeId == productwaarde.Id
+                                          select attw.Waarde).FirstOrDefault()
+                                  
+                          }).ToList();
             
             // Check if product was found
             // Else return 404 error

@@ -4604,7 +4604,7 @@
     "Microsoft.VisualStudio.Web.CodeGeneration.Tools/2.0.4": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-ZLeVN6T5gvESnuaM8FCnR1hn9YH+YaJMSGBhEFyFzxPDPULInzlSCm65KjWcvlqd7rEL1yg9+3maGrrtRvvz7Q==",
+      "sha512": "sha512-WbjJqs3LNNL9xw6oGs381dks0Zz9zxgRcy2LVZnJwiH/wruCn47GSnjFc0Uyd48xImzR9YzLRj64JKA6ENiWyg==",
       "path": "microsoft.visualstudio.web.codegeneration.tools/2.0.4",
       "hashPath": "microsoft.visualstudio.web.codegeneration.tools.2.0.4.nupkg.sha512"
     },
@@ -4800,7 +4800,7 @@
     "System.Interactive.Async/3.2.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-oaK7GqF8/ORnipYZck5ec+eKgvfZFShH64CWFlYB8Mpnr8/e99klLSk9SsmnaDzr9n2X672sUU8ZCLLrq8leDw==",
+      "sha512": "sha512-T3nigy9yShklMyVu7I2TvlVMRy2vUn9oQeBaRy0KZcOptyy+rUbekYaXxoa3s0h2tWT3UVtzrGkQC89CBbCtlg==",
       "path": "system.interactive.async/3.2.0",
       "hashPath": "system.interactive.async.3.2.0.nupkg.sha512"
     },

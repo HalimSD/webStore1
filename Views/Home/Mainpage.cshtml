@@ -8,7 +8,7 @@
  }
 
 <link rel="stylesheet" href="~/css/mainpage.css">
-
+<link rel="stylesheet" href="~/css/interactiveimage.css">
 @{
     //var hi= (ViewData["productsoorten"]);
     var productst = Context.Session.Get<String>("productsoort");
@@ -36,9 +36,122 @@
     <div class="col-8">
         <div class="container" id="productsArea">
         <h2>Boten</h2>
+
+
+<!-- Interactive Image         -->
+<div id="mainDiv" >
+  <div class='circle-container container'>
+
+      <a href='#' class='center' id='middle'><img src='~/images/boat.png'></a>
+    <div id="cssSelectorRight" class="cssSelector">
+      
+      <a href='#' class='category' id='deg0'>
+           <div class="textDiv">
+               
+           </div>
+           <div class="imgDiv">
+
+           </div>          
+      </a>
+    </div>
+    <div id="cssSelectorBottomRight" class="cssSelector">
+      <a href='#' class='category' id='deg36'>
+           <div class="textDiv">
+               
+           </div>
+           <div class="imgDiv">
+
+           </div>
+      </a>
+    </div>
+    <div id="cssSelectorBottom1" class="cssSelector">  
+       <a href='#' class='category' id='deg72'>
+           <div class="textDiv">
+               <!-- text from array -->
+           </div>
+           <div class="imgDiv">
+               <!-- img from array -->
+           </div>       
+       </a>
+    </div>
+    <div id="cssSelectorBottom2" class="cssSelector">
+      <a href='#' class='category' id='deg108'>
+           <div class="textDiv">
+               <!-- text from array -->
+           </div>
+           <div class="imgDiv">
+               <!-- img from array -->
+           </div>   
+      </a>
+    </div>
+    <div id="cssSelectorBottomLeft" class="cssSelector">
+      <a href='#' class='category' id='deg144'>
+           <div class="textDiv">
+               <!-- text from array -->
+           </div>
+           <div class="imgDiv">
+               <!-- img from array -->
+           </div>             
+      </a>
+    </div>
+    <div id="cssSelectorLeft" class="cssSelector">
+      <a href='#' class='category' id='deg180'>
+           <div class="textDiv">
+               <!-- text from array -->
+           </div>
+           <div class="imgDiv">
+               <!-- img from array -->
+           </div>             
+      </a>
+    </div>
+    <div id="cssSelectorTopLeft" class="cssSelector">
+      <a href='#' class='category' id='deg216'>
+           <div class="textDiv">
+               <!-- text from array -->
+           </div>
+           <div class="imgDiv">
+               <!-- img from array -->
+           </div>             
+      </a>
+    </div>
+    <div id="cssSelectorTop1" class="cssSelector">
+      <a href='#' class='category' id='deg252'>
+           <div class="textDiv">
+               <!-- text from array -->
+           </div>
+           <div class="imgDiv">
+               <!-- img from array -->
+           </div>             
+      </a>
+    </div>
+    <div id="cssSelectorTop2" class="cssSelector">
+      <a href='#' class='category' id='deg288'>
+           <div class="textDiv">
+               <!-- text from array -->
+           </div>
+           <div class="imgDiv">
+               <!-- img from array -->
+           </div>             
+      </a>
+    </div>
+    <div id="cssSelectorTopRight" class="cssSelector">
+      <a href='#' class='category' id='deg324'>
+           <div class="textDiv">
+               <!-- text from array -->
+           </div>
+           <div class="imgDiv">
+               <!-- img from array -->
+           </div>             
+      </a>
+    </div>
+  </div>
+</div>
+    
+
         <h4>Producten</h4>
         <div class="row" id="products">
         <div class="col-sm">
+
             @foreach (var item in Model)
             {
                 if (firstColumn)
@@ -114,5 +227,7 @@ var names = @Html.Raw(Json.Serialize(ViewData["productsoorten"]));
 			window.onload = addFields;
 </script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.2.0/anime.js"></script>
+<script src="~/js/interactiveimage.js"></script>
 
          

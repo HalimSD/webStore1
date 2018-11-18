@@ -62,7 +62,7 @@ using WebApp1.products;
         public async override global::System.Threading.Tasks.Task ExecuteAsync()
         {
             BeginContext(25, 54, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("link", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "b8e2994011814bc3a9fca5b32c098f62", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("link", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "89b0aa2610ce4e6bb2b0141d7750c764", async() => {
             }
             );
             __Microsoft_AspNetCore_Mvc_Razor_TagHelpers_UrlResolutionTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.Razor.TagHelpers.UrlResolutionTagHelper>();
@@ -171,7 +171,7 @@ using WebApp1.products;
             WriteLiteral("\r\n            </td>\r\n        </tr>\r\n    </table>\r\n    <br>\r\n    ");
             EndContext();
             BeginContext(955, 65, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "980a985788a6484ea39ac1f5a3d171cc", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "944133584f1c401b8197c199082bd254", async() => {
                 BeginContext(999, 17, true);
                 WriteLiteral("Continue Shopping");
                 EndContext();
@@ -195,7 +195,7 @@ using WebApp1.products;
             WriteLiteral("\r\n    <br>\r\n    ");
             EndContext();
             BeginContext(1036, 54, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d0c52d74e1aa47fa97ea094b9a6ad195", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5e0f46a280324492b2922cc613ecfac4", async() => {
                 BeginContext(1078, 8, true);
                 WriteLiteral("checkOut");
                 EndContext();

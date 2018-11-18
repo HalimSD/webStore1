@@ -2,15 +2,20 @@
 @model UserManagementIndex
 @inject UserManager<Users> userManager
 
-<table>
-    <thead>
+<link rel="stylesheet" href="~/css/product_creation_generic.css">
+<div class="pageRoot">
+    <h2>User Management</h2>
+    <hr>
+    <br>
+    <table>
+        <thead>
         <tr>
             <th>Email</th>
             <th>Roles</th>
             <th>Options</th>
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
         @foreach (var user in Model.Users)
         {
             <tr>
@@ -19,5 +24,15 @@
                 <td><a asp-controller="UserManagement" asp-action="AddRole" asp-route-id="@user.Id">Add Role</a></td>
             </tr>
         }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
+
+<style>
+    tbody {
+        margin-top: 10px;
+    }
+    table {
+        width: 100%;
+    }
+</style>

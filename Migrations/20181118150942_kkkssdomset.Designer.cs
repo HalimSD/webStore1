@@ -10,8 +10,8 @@ using WebApp1.Models;
 namespace WebApp1.Migrations
 {
     [DbContext(typeof(WebshopContext))]
-    [Migration("20181117211424_InitialCreateMovieDb4")]
-    partial class InitialCreateMovieDb4
+    [Migration("20181118150942_kkkssdomset")]
+    partial class kkkssdomset
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -15,9 +15,10 @@ public class Products
     }
    public class Item
     {
-        public Productwaarde Product { get; set; }
 
         public int Quantity { get; set; }
+        public Productwaarde Product { get; set; }
+
     }
 
 public class Extra_Atributes
@@ -67,9 +68,10 @@ public class Productsoort
     public int Id { get; set; }
     public string Waarde { get; set; }
     public int ProductwaardeId{ get; set; }
-    public Productwaarde productwaarde { get; set; }
     public int AttribuutsoortId{get; set;}
     public Attribuutsoort attribuutsoort { get; set; }
+    public Productwaarde productwaarde { get; set; }
+
   }
 
   //this is the typed representation of an actor in our project

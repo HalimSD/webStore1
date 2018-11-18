@@ -10,8 +10,8 @@ using WebApp1.Models;
 namespace WebApp1.Migrations
 {
     [DbContext(typeof(WebshopContext))]
-    [Migration("20181116220904_initiaall")]
-    partial class initiaall
+    [Migration("20181118150618_kkkssdom")]
+    partial class kkkssdom
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -262,6 +262,10 @@ namespace WebApp1.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Image");
 
                     b.Property<double>("Price");
 

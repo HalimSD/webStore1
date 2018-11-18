@@ -8,8 +8,9 @@
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="~/css/layout.css">
+    
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Webshop</a>
+    <a class="navbar-brand" href="#"><img id="websitelogo" src="~/images/boatlogo.png" alt="logo"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -18,6 +19,9 @@
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
         <a class="nav-link" href="@Url.Action("Mainpage", "Home")">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="@Url.Action("About", "About")">Over ons <span class="sr-only">(current)</span></a>
       </li>
         <li class="nav-item dropdown">
             @if (User.IsInRole("Admin"))
@@ -45,7 +49,45 @@
     </form>
   </div>
 </nav>
+
+ <nav>
+<div id="alertbericht" class="alert alert-primary " role="alert">
+<ul id="alerberichtinline" class="nav navbar-nav navbar-center ">
+        <li id="bericht1"><p><span id="berichticon" class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;&nbsp;&nbsp;<b>Professioneel</b> en <b>persoonlijk</b> advies!</p></li>
+        <li id="bericht2"><p><span id="berichticon" class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;&nbsp;&nbsp;Vrijwel alles <b>direct</b> uit voorraad leverbaar!</p></li>
+        <li id="bericht3"><p><span id="berichticon" class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;&nbsp;&nbsp;<b>Gratis bezorgt</b> vanaf $50,00!</p></li>
+</ul>
+</nav>
+
 <br>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("About", "")">Motorboten</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("About", "")">Zeilboten</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("About", "")">Sportboten</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("About", "")">Accesoires</a>
+      </li>
+
+    </ul>
+</nav>
 </head>
 
 <body>

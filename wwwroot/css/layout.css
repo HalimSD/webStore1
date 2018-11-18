@@ -17,3 +17,39 @@ nav.navbar {
 #accountLinks {
     margin-left: 10px;
 }
+
+#alertbericht{
+    position: static;
+    background-color: whitesmoke;
+    height: 50px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    
+}
+
+#bericht1{
+    position: relative;
+    text-align: start;
+    color: black;
+    float: left;
+    margin-right: 220px;
+    
+}
+#bericht2{
+    position: relative;
+    text-align: center;
+    color: black;
+    float: left;
+    
+}
+#bericht3{
+    position: relative;
+    text-align: end;
+    color: black;
+
+
+}
+
+#websitelogo{
+    height: 50px;
+    width: 60px;
+}

@@ -55,7 +55,7 @@ using WebApp1.Models;
             WriteLiteral("you will recieve an email\n<br>\n");
             EndContext();
             BeginContext(31, 52, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "7c6a1d51b5d6443cbdc52ffb542f62de", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "76f19f9a601543c9830dab3c9fca15dd", async() => {
                 BeginContext(75, 4, true);
                 WriteLiteral("Home");
                 EndContext();

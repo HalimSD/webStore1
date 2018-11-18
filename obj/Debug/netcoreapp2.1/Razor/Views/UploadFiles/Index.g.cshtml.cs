@@ -56,7 +56,7 @@ using WebApp1.Models;
         public async override global::System.Threading.Tasks.Task ExecuteAsync()
         {
             BeginContext(0, 65, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("link", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "bdaba7c8587d43599730c0e5a66505e6", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("link", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "14b740f8f29a425898ff5e16a4201532", async() => {
             }
             );
             __Microsoft_AspNetCore_Mvc_Razor_TagHelpers_UrlResolutionTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.Razor.TagHelpers.UrlResolutionTagHelper>();
@@ -75,7 +75,7 @@ using WebApp1.Models;
             WriteLiteral("\r\n<div class=\"pageRoot\">\r\n    <div class=\"row\">\r\n        ");
             EndContext();
             BeginContext(122, 508, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "8bed53cddf574dcf959a71e0f627df3c", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "927c3ba5c92a48d48f8ef6ff93bb536d", async() => {
                 BeginContext(172, 451, true);
                 WriteLiteral(@"
             <div class=""form-group"">

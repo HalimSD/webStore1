@@ -1,8 +1,8 @@
 @using WebApp1.products
-
-
+<link rel="stylesheet" href="~/css/shopping_cart.css">
+<div class="pageRoot">
     <h3>Cart Page</h3>
-    <table cellpadding="2" cellspacing="2" border="1">
+    <table cellpadding="2" cellspacing="2" border="1" id="table">
         <tr>
             <th>Option</th>
             <th>Id</th>
@@ -33,7 +33,7 @@
     </table>
     <br>
     <a asp-controller="Home" asp-action="index">Continue Shopping</a>
-      <br>
+    <br>
     <a asp-controller="cart" asp-action="pay">checkOut</a>
-
+</div>
 

@@ -45,6 +45,7 @@ namespace klaas.Controllers
             
             // Build the model that will be passed to the view
             ViewProductModel product = new ViewProductModel();
+            product.Id = productwaarde.Id;
             product.Name = productwaarde.Title;
             product.Price = "€ " + productwaarde.Price.ToString();
             product.Category = productsoort.Naam;

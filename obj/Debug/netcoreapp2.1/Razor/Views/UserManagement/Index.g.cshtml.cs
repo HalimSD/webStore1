@@ -89,7 +89,7 @@ using Microsoft.AspNetCore.Identity;
             WriteLiteral("</td>\r\n                <td>");
             EndContext();
             BeginContext(489, 92, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "34791dd8d4274a9d8991f8ddbd72ed4d", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "9a97d12d22ef44cc91ad58dbd9362239", async() => {
                 BeginContext(569, 8, true);
                 WriteLiteral("Add Role");
                 EndContext();

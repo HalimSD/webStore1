@@ -3,6 +3,69 @@
 
 // Write your JavaScript code.
 
+// Loading from arrays
+
+var imgs = ['https://via.placeholder.com/150',
+'https://via.placeholder.com/150',            
+'https://via.placeholder.com/300',
+'https://via.placeholder.com/150',            
+'https://via.placeholder.com/300',
+'https://via.placeholder.com/150',            
+'https://via.placeholder.com/300',
+'https://via.placeholder.com/150',            
+'https://via.placeholder.com/300',
+'https://via.placeholder.com/150'
+         ];
+
+var text = [
+'1',
+'2',
+'3',
+'4',
+'5',
+'6',
+'7',
+'8',
+'9',
+'10'
+];
+  
+var container = document.getElementsByClassName('imgDiv');
+var container2 = document.getElementsByClassName('textDiv');
+var divContainer = document.getElementsByClassName('cssSelector');
+var aContainer = document.getElementsByClassName('category')
+
+count = 0;
+
+for(var i=0; i<container.length+1; i++) {
+
+  if (imgs[i]!=null && text[i]!=null){
+
+    var a = document.createElement('a');
+    a.href = "#";
+    a.className = "category";
+    a.id = "deg" + count;
+    divContainer[i].appendChild(a);
+
+    var divInA = document.createElement('div');
+    divInA.className = "textDiv";
+    var divInA2 = document.createElement('div');
+    divInA2.className = "imgDiv";
+
+    aContainer[i].appendChild(divInA);
+    aContainer[i].appendChild(divInA2);
+
+    var img = document.createElement('img');
+    img.src = imgs[i];
+    var h = document.createElement('span');
+    var t = document.createTextNode(text[i]);
+    container[i].appendChild(img);
+    container2[i].appendChild(t);
+    
+    count = count + 36;
+  }
+}
+
 var cssSelectorRight = anime({
   targets: '#cssSelectorRight',
   translateX: "9em",
@@ -102,45 +165,7 @@ var cssSelectorTop2 = anime({
 });
 
 
-// Loading from arrays
 
-var imgs = ['https://via.placeholder.com/150',
-'https://via.placeholder.com/150',            
-'https://via.placeholder.com/300',
-'https://via.placeholder.com/150',            
-'https://via.placeholder.com/300',
-'https://via.placeholder.com/150',            
-'https://via.placeholder.com/300',
-'https://via.placeholder.com/150',            
-'https://via.placeholder.com/300',
-'https://via.placeholder.com/150',            
-'https://via.placeholder.com/300'
-         ];
-
-var text = [
-'1',
-'2',
-'3',
-'4',
-'5',
-'6',
-'7',
-'8',
-'9',
-'10'
-];
-  
-var container = document.getElementsByClassName('imgDiv');
-var container2 = document.getElementsByClassName('textDiv');
-
-for(var i=0; i<container.length; i++) {
-  var img = document.createElement('img');
-  img.src = imgs[i];
-  var h = document.createElement('span');
-  var t = document.createTextNode(text[i]);
-  container[i].appendChild(img);
-  container2[i].appendChild(t);
-}
 
 
 

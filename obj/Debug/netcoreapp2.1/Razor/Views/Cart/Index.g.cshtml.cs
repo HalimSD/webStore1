@@ -80,7 +80,7 @@ using WebApp1.Models;
             WriteLiteral("            <tr>\r\n                <td>");
             EndContext();
             BeginContext(407, 87, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "89a5306ad9be41ffa82f48a326ed3991", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "4b6ef7b9f63b4598995b72b029f71f5b", async() => {
                 BeginContext(484, 6, true);
                 WriteLiteral("Remove");
                 EndContext();
@@ -185,7 +185,7 @@ using WebApp1.Models;
             WriteLiteral("\r\n            </td>\r\n        </tr>\r\n    </table>\r\n    <br>\r\n    ");
             EndContext();
             BeginContext(976, 65, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "435a4e2d2f6e40c69db3bf4dd44575fc", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "54b9611230204788857beb1cc2b394e1", async() => {
                 BeginContext(1020, 17, true);
                 WriteLiteral("Continue Shopping");
                 EndContext();
@@ -209,7 +209,7 @@ using WebApp1.Models;
             WriteLiteral("\r\n      <br>\r\n    ");
             EndContext();
             BeginContext(1059, 59, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "736750cfe823471baf291970b3f0b341", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "4eaabe8afe6e40e699fdf4ac3de61c69", async() => {
                 BeginContext(1106, 8, true);
                 WriteLiteral("checkOut");
                 EndContext();

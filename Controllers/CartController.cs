@@ -11,6 +11,7 @@ using MailKit.Net.Smtp;
 using MimeKit;
 using Microsoft.AspNetCore.Identity;
 using MailKit.Net.Imap;
+using Microsoft.AspNetCore.Session;
 
 namespace LearnASPNETCoreMVCWithRealApps.Controllers
 {
@@ -21,7 +22,7 @@ namespace LearnASPNETCoreMVCWithRealApps.Controllers
         private readonly WebshopContext _context;
         private UserManager<Users> _userManager;
 
-        public const string SessionKeyName = "_Name";
+        public const string SessionKeyName = "cart";
         public string SessionInfo_Name { get; private set; }
 
         public CartController(WebshopContext context, UserManager<Users> userManager)
@@ -31,7 +32,7 @@ namespace LearnASPNETCoreMVCWithRealApps.Controllers
         }
 
 
-        [Route("buy/{id}")]
+        [Route("buy")]
         public IActionResult Buy(int id)
         {
             Productwaarde productModel = new Productwaarde();
@@ -40,6 +41,8 @@ namespace LearnASPNETCoreMVCWithRealApps.Controllers
                 List<Item> cart = new List<Item>();
                 cart.Add(new Item { Product = _context.Productwaarde.Find(id), Quantity = 1 });
                 SessionExtensions.Set(HttpContext.Session, "cart", cart);
+                 ViewBag.cart = cart;
+            ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
             }
             else
             {
@@ -54,16 +57,18 @@ namespace LearnASPNETCoreMVCWithRealApps.Controllers
                     cart.Add(new Item { Product = _context.Productwaarde.Find(id), Quantity = 1 });
                 }
                 SessionExtensions.Set(HttpContext.Session, "cart", cart);
+                 ViewBag.cart = cart;
+            ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
             }
-            return RedirectToAction("Index");
+            return View("Index");
         }
-        [Route("index")]
+        // [Route("index")]
         public IActionResult Index()
         {
             var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
             ViewBag.cart = cart;
             ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
-            return View();
+            return View("buy");
         }
         [Route("remove/{id}")]
         public IActionResult Remove(int id)

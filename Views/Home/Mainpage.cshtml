@@ -34,7 +34,7 @@
             </div>
         </div>
     </div>
-    <div class="col-8">
+    <div class="col-10">
         <div class="container" id="productsArea">
             <h2>Boten</h2>
             <h4>Producten</h4>
@@ -53,6 +53,7 @@
                                             <p class="card-text">€ @item.Price</p>
                                             <input type="hidden" name="id" value='@item.Id'/>
                                             <input type="submit" class="btn btn-primary" value="Details">
+                                            <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" >
                                         </div>
                                     </form>
                                 </div>
@@ -87,6 +88,7 @@
                                         <p class="card-text">€ @item.Price</p>
                                         <input type="hidden" name="id" value='@item.Id'/>
                                         <input type="submit" class="btn btn-primary" value="Details">
+                                        <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" >
                                     </div>
                                 </form>
                             </div>
@@ -105,6 +107,8 @@
                                         <p class="card-text">€ @item.Price</p>
                                         <input type="hidden" name="id" value='@item.Id'/>
                                         <input type="submit" class="btn btn-primary" value="Details">
+                                        <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" >
+
                                     </div>
                                 </form>
                             </div>

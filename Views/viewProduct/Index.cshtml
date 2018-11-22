@@ -17,7 +17,10 @@
                 <div class="descriptionContent">@viewProductModel.Description</div>
             </div>
             <div id="price">@viewProductModel.Price</div>
-            <button type="submit" class="CartBtn">Zet in Winkelwagen</button>
+            <form action="@Url.Action("buy", "Cart")" method="get">
+                <input type="hidden" name="id" value='@viewProductModel.Id'/>
+                <input type="submit" class="CartBtn" value="Zet in Winkelwagen">
+            </form>
         </div>
     </div>
     <hr>

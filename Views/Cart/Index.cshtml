@@ -1,9 +1,10 @@
-
-
+@using WebApp1.products
+<link rel="stylesheet" href="~/css/shopping_cart.css">
+<div class="pageRoot">
     <h3>Cart Page</h3>
-    <table cellpadding="2" cellspacing="2" border="1">
+    <hr>
+    <table cellpadding="2" cellspacing="2" border="1" id="table">
         <tr>
-            <th>Option</th>
             <th>Id</th>
             <th>Name</th>
             <th>Quantity</th>
@@ -14,7 +15,6 @@
         @foreach (var item in ViewBag.cart)
         {
             <tr>
-                <td><a asp-controller="cart" asp-action="remove" asp-route-id="@item.Product.Id">Remove</a></td>
                 <td>@item.Product.Id</td>
                 <td>@item.Product.Title</td>
                 <td>@item.Quantity</td>
@@ -32,6 +32,7 @@
     </table>
     <br>
     <a asp-controller="Home" asp-action="index">Continue Shopping</a>
-      <br>
-    <a asp-controller="cart" asp-action="checkOut">checkOut</a>
+    <br>
+    <a asp-controller="cart" asp-action="pay">checkOut</a>
+</div>
 

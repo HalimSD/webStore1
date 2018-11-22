@@ -45,6 +45,38 @@ namespace klaas.Controllers
             return View("Mainpage",result);
         }
 
+         public IActionResult Searching(string searchString)
+        {
+            var products = from m in _context.Productwaarde
+                        select m;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                var query =
+                    from productwaarde in _context.Productwaarde
+                    join atributen in _context.Attribuutsoort on productwaarde.ProductsoortId equals atributen.ProductsoortId
+                    where atributen.Attrbuut.Contains(searchString)
+                    select productwaarde;
+
+                var query2 =
+                    from attributen in _context.Attribuutwaarde
+                    join productwaarde in _context.Productwaarde on attributen.ProductwaardeId equals productwaarde.Id
+                    join atribuut in _context.Attribuutsoort on attributen.AttribuutsoortId equals atribuut.Id
+                    where attributen.Waarde.Contains(searchString)
+                    select productwaarde;
+
+                products = products.Where(s => s.Title.Contains(searchString)).Union(query).Union(query2);
+                return View("Search",products);
+            }
+
+            return View("Search",products);
+        }
+
+        public IActionResult Search()
+        {
+            return View();
+        }
+
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";

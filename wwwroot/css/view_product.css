@@ -18,7 +18,7 @@ div.col-6 {
     padding: 25px 25px 25px 25px;
 }
 
-button.CartBtn {
+input.CartBtn {
     background-color: rgba(65,105,225,255);
     border-radius: 5px;
     color: white;
@@ -27,7 +27,7 @@ button.CartBtn {
     font-size: 14px;
     border-style: solid;
 }
-button.CartBtn:hover {
+input.CartBtn:hover {
     background-color: rgba(0,0,139,255);
     transition: 0.2s;
     border: none;

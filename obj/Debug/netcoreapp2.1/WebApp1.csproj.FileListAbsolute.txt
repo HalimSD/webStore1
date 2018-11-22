@@ -568,3 +568,4 @@ C:\Users\Okan Emeni\RiderProjects\webStore1\obj\Debug\netcoreapp2.1\Razor\Views\
 C:\Users\Okan Emeni\RiderProjects\webStore1\obj\Debug\netcoreapp2.1\Razor\Views\Account\ResetPassword.g.cshtml.cs
 C:\Users\Okan Emeni\RiderProjects\webStore1\obj\Debug\netcoreapp2.1\Razor\Views\Account\ResetPasswordConfirmation.g.cshtml.cs
 C:\Users\Okan Emeni\RiderProjects\webStore1\obj\Debug\netcoreapp2.1\Razor\Views\Account\_ViewImports.g.cshtml.cs
+C:\Users\Okan Emeni\RiderProjects\webStore1\obj\Debug\netcoreapp2.1\Razor\Views\EditProduct\Index.g.cshtml.cs

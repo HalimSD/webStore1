@@ -1,0 +1,8 @@
+#delete {
+    background-color: rgba(255, 0, 0, 255);
+    border-color: rgba(255, 0, 0, 255);
+}
+#delete:hover {
+    background-color: rgba(200, 0, 0, 255);
+    border-color: rgba(200, 0, 0, 255);
+}

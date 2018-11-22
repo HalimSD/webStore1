@@ -17,9 +17,18 @@
                 <div class="descriptionContent">@viewProductModel.Description</div>
             </div>
             <div id="price">@viewProductModel.Price</div>
-            <form action="@Url.Action("buy", "Cart")" method="get">
+            <form method="get">
                 <input type="hidden" name="id" value='@viewProductModel.Id'/>
-                <input type="submit" class="CartBtn" value="Zet in Winkelwagen">
+                <input type="submit" formaction="@Url.Action("buy", "Cart")" class="CartBtn" value="Zet in Winkelwagen">     
+                @if (ViewBag.alreadyInFav)
+                {
+                    <input type="hidden" name="returnUrl" value="@Url.Action("Index","ViewProduct", new {id=viewProductModel.Id})"/>
+                    <input type="submit" formaction="@Url.Action("RemoveProduct", "Favorites")" class="CartBtn" value="Verwijder uit Favorieten"> 
+                }
+                else
+                {
+                    <input type="submit" formaction="@Url.Action("AddProduct", "Favorites")" class="CartBtn" value="Zet in Favoriet">
+                }
             </form>
         </div>
     </div>

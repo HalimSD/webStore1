@@ -17,6 +17,7 @@ namespace WebApp1.Models
         public DbSet<Productwaarde> Productwaarde {get; set;}
         public DbSet<Attribuutsoort> Attribuutsoort {get; set;}
         public DbSet<Attribuutwaarde> Attribuutwaarde {get; set;}
+        public DbSet<FavoritesModel> Favorites { get; set; }
 
     }
 }

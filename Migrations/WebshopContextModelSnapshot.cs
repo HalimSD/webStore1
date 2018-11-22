@@ -126,6 +126,24 @@ namespace WebApp1.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("WebApp1.Models.FavoritesModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Date");
+
+                    b.Property<int>("ProductId");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Favorites");
+                });
+
             modelBuilder.Entity("WebApp1.Models.Users", b =>
                 {
                     b.Property<string>("Id")
@@ -320,6 +338,14 @@ namespace WebApp1.Migrations
                     b.HasOne("WebApp1.Models.Users")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WebApp1.Models.FavoritesModel", b =>
+                {
+                    b.HasOne("WebApp1.products.Productwaarde", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

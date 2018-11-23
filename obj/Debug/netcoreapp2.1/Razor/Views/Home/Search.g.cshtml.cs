@@ -78,7 +78,7 @@ using WebApp1.products;
             WriteLiteral("\r\n");
             EndContext();
             BeginContext(243, 49, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("link", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "072725bce5ff46c8b012f36cba74b106", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("link", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "fa190900f9654520bcc0bddd9acd51cf", async() => {
             }
             );
             __Microsoft_AspNetCore_Mvc_Razor_TagHelpers_UrlResolutionTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.Razor.TagHelpers.UrlResolutionTagHelper>();
@@ -129,7 +129,7 @@ using WebApp1.products;
             WriteLiteral("                            <div class=\"card\" style=\"width: 20rem;\">\r\n                                <div class=\"card-body\">\r\n                                    ");
             EndContext();
             BeginContext(991, 884, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "c8dc1857cea541fc8465afddf42cf577", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "7c84c0ad0ecc4ab4bfdec86848a39f7b", async() => {
                 BeginContext(1055, 131, true);
                 WriteLiteral("\r\n                                        <div id=\"container\" class=\"form-group\">\r\n                                            <img");
                 EndContext();
@@ -174,7 +174,7 @@ WriteAttributeValue("", 1506, item.Id, 1506, 8, false);
                 WriteLiteral("/>\r\n                                            <input type=\"submit\" class=\"btn btn-primary\" value=\"Details\">\r\n                                            ");
                 EndContext();
                 BeginContext(1670, 112, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("input", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "80ec1cbc6f254d1bb28f14a0e1e58a06", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("input", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "cf0c901bba5948c3a721dae8d64f7814", async() => {
                 }
                 );
                 __Microsoft_AspNetCore_Mvc_TagHelpers_FormActionTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.FormActionTagHelper>();
@@ -257,7 +257,7 @@ AddHtmlAttributeValue("", 1005, Url.Action("Index", "ViewProduct"), 1005, 35, fa
             WriteLiteral("                        <div class=\"card\" style=\"width: 20rem;\">\r\n                            <div class=\"card-body\">\r\n                                ");
             EndContext();
             BeginContext(2963, 848, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "eeb5e16f1bf640eea2a977d613b4de1b", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "8735117e1cb240cc933e49c94944e2db", async() => {
                 BeginContext(3027, 123, true);
                 WriteLiteral("\r\n                                    <div id=\"container\" class=\"form-group\">\r\n                                        <img");
                 EndContext();
@@ -302,7 +302,7 @@ WriteAttributeValue("", 3458, item.Id, 3458, 8, false);
                 WriteLiteral("/>\r\n                                        <input type=\"submit\" class=\"btn btn-primary\" value=\"Details\">\r\n                                        ");
                 EndContext();
                 BeginContext(3614, 112, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("input", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "60449710e5124e6f8cf6dea69ae6edfd", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("input", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "451c00cb00484970ba43c5d651bf6aae", async() => {
                 }
                 );
                 __Microsoft_AspNetCore_Mvc_TagHelpers_FormActionTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.FormActionTagHelper>();
@@ -369,7 +369,7 @@ AddHtmlAttributeValue("", 2977, Url.Action("Index", "ViewProduct"), 2977, 35, fa
             WriteLiteral("                        <div class=\"card\" style=\"width: 20rem;\">\r\n                            <div class=\"card-body\">\r\n                                ");
             EndContext();
             BeginContext(4204, 850, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "c121dae1bdff4add87251dad620782bd", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "79381dd553114636bb9cacb1206fe54c", async() => {
                 BeginContext(4268, 123, true);
                 WriteLiteral("\r\n                                    <div id=\"container\" class=\"form-group\">\r\n                                        <img");
                 EndContext();
@@ -414,7 +414,7 @@ WriteAttributeValue("", 4699, item.Id, 4699, 8, false);
                 WriteLiteral("/>\r\n                                        <input type=\"submit\" class=\"btn btn-primary\" value=\"Details\">\r\n                                        ");
                 EndContext();
                 BeginContext(4855, 112, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("input", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "9f2d1a27947e40ec8e00120ba4cfe66d", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("input", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "b4450d3106424ec9a44526d112607f61", async() => {
                 }
                 );
                 __Microsoft_AspNetCore_Mvc_TagHelpers_FormActionTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.FormActionTagHelper>();

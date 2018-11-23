@@ -12,7 +12,9 @@ namespace WebApp1.Models
     
     public class ViewProductAttributes
     {
+        public int AttributeNameId { get; set; }
         public string AttributeName { get; set; }
+        public int AttributeValueId { get; set; }
         public string AttributeValue { get; set; }
     }
 }

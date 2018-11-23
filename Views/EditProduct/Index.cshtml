@@ -3,13 +3,18 @@
 @model WebApp1.products.Productwaarde
 @{
     Productwaarde product = ViewBag.EditProduct;
+    List<ViewProductAttributes> attributes = ViewBag.EditProductAttributes;
     string imagePath = "/images/products/" + product.Image;
+    int attributeIndex = 0;
+    int attributeCount = attributes.Count();
 }
 <link rel="stylesheet" href="~/css/edit_product.css">
 <div class="pageRoot">
     <h2>Product Bewerken</h2>
     <hr>
-    <form action="@Url.Action("Index", "Home")" method="get">
+    <form action="@Url.Action("Edit", "EditProduct")" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="Id" value="@product.Id" />
+        <input type="hidden" name="Image" value="@product.Image" />
         <div class="row">
             <div class="col-6" id="productContent">
                 <div class="form-group">
@@ -23,8 +28,7 @@
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <input asp-for="Image" type="file" Class="form-control" placeholder="Image" value="@product.Image"/>
-                    <span asp-validation-for="Image" class="text-danger"></span>
+                    <input name="img" type="file" Class="form-control" value="@product.Image"/>
                 </div>
             </div>
             <div class="col-6">
@@ -33,11 +37,22 @@
         </div>
         <div class="form-group" id="desc">
             <label asp-for="Description" class="control-label">Product Beschrijving</label>
-            <textarea asp-for="Description" class="form-control" rows="2">@product.Description</textarea>
+            <textarea asp-for="Description" class="form-control" rows="2" placeholder="@product.Description"></textarea>
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
+        <input type="hidden" name="attributeCount" value="@attributeCount"/>
+        @foreach (ViewProductAttributes item in attributes)
+        {
+            <div class="form-group">
+                <label class="control-label">@item.AttributeName</label>
+                <input type="hidden" name="@("attributeId" + attributeIndex)" value="@item.AttributeValueId"/>
+                <input name="@("attributeValue" + attributeIndex)" class="form-control" value="@item.AttributeValue"/>
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            attributeIndex++;
+        }
         <div class="form-group">
-            <input type="submit" value="Opslaan" class="btn btn-default" />
+            <input type="submit" value="Opslaan" class="btn btn-default"/>
         </div>
     </form>
 </div>

@@ -55,7 +55,7 @@ using WebApp1.Models;
         public async override global::System.Threading.Tasks.Task ExecuteAsync()
         {
             BeginContext(0, 54, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("link", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "b4de906ede414072b776960d6f1f0289", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("link", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "d588bbead1d94b39bee437dd3fc487e2", async() => {
             }
             );
             __Microsoft_AspNetCore_Mvc_Razor_TagHelpers_UrlResolutionTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.Razor.TagHelpers.UrlResolutionTagHelper>();
@@ -74,7 +74,7 @@ using WebApp1.Models;
             WriteLiteral("\r\n<div class=\"pageRoot\">\r\n    <h2>Order confirmed!</h2>\r\n    <hr>\r\n    You will recieve an email with confirmation of your order!\r\n    <br>\r\n    ");
             EndContext();
             BeginContext(199, 52, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "b46d05924536449db20a5150624bb9db", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d460342f443e4d3b99198e1eec881b62", async() => {
                 BeginContext(243, 4, true);
                 WriteLiteral("Home");
                 EndContext();

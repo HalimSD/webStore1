@@ -22,6 +22,10 @@ namespace WebApp1.Controllers
         public IActionResult Index(int id)
         {
             Productwaarde product = (from pw in context.Productwaarde where pw.Id == id select pw).FirstOrDefault();
+            if (product == null)
+            {
+                return StatusCode(404);
+            }
             ViewBag.EditProduct = product;
             return View();
         }

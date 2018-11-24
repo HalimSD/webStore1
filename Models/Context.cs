@@ -18,6 +18,8 @@ namespace WebApp1.Models
         public DbSet<Attribuutsoort> Attribuutsoort {get; set;}
         public DbSet<Attribuutwaarde> Attribuutwaarde {get; set;}
         public DbSet<FavoritesModel> Favorites { get; set; }
+        public DbSet<Item> Items { get; set; }
+
 
     }
 }

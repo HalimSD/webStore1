@@ -51,9 +51,10 @@
                                             <img src="@("/images/products/" + item.Image)" id="productImage"><img/>
                                             <h5 class="card-title">@item.Title</h5>
                                             <p class="card-text">€ @item.Price</p>
+                                            <p class="card-text"> In voorraad @item.Quantity stuk(en)</p>
                                             <input type="hidden" name="id" value='@item.Id'/>
                                             <input type="submit" class="btn btn-primary" value="Details">
-                                            <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" >
+                                            <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@item.Id" >
                                         </div>
                                     </form>
                                 </div>
@@ -86,9 +87,10 @@
                                         <img src="@("/images/products/" + item.Image)" id="productImage"><img/>
                                         <h5 class="card-title">@item.Title</h5>
                                         <p class="card-text">€ @item.Price</p>
+                                        <p class="card-text"> In voorraad @item.Quantity stuk(en)</p>
                                         <input type="hidden" name="id" value='@item.Id'/>
                                         <input type="submit" class="btn btn-primary" value="Details">
-                                        <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" >
+                                        <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@item.Id" >
                                     </div>
                                 </form>
                             </div>
@@ -105,9 +107,10 @@
                                         <img src="@("/images/products/" + item.Image)" id="productImage"><img/>
                                         <h5 class="card-title">@item.Title</h5>
                                         <p class="card-text">€ @item.Price</p>
+                                        <p class="card-text"> In voorraad @item.Quantity stuk(en)</p>
                                         <input type="hidden" name="id" value='@item.Id'/>
                                         <input type="submit" class="btn btn-primary" value="Details">
-                                        <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" >
+                                        <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@item.Id">
 
                                     </div>
                                 </form>

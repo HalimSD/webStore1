@@ -248,6 +248,22 @@ namespace WebApp1.Migrations
                     b.ToTable("Extra_Atributes");
                 });
 
+            modelBuilder.Entity("WebApp1.products.Item", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("ProductId");
+
+                    b.Property<int>("Quantity");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Items");
+                });
+
             modelBuilder.Entity("WebApp1.products.Products", b =>
                 {
                     b.Property<int>("Id")
@@ -286,6 +302,8 @@ namespace WebApp1.Migrations
                     b.Property<double>("Price");
 
                     b.Property<int>("ProductsoortId");
+
+                    b.Property<int>("Quantity");
 
                     b.Property<string>("Title");
 
@@ -376,6 +394,13 @@ namespace WebApp1.Migrations
                         .WithMany("Extra_Atributes")
                         .HasForeignKey("ProductsId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WebApp1.products.Item", b =>
+                {
+                    b.HasOne("WebApp1.products.Productwaarde", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("WebApp1.products.Productwaarde", b =>

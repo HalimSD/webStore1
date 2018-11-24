@@ -1,8 +1,10 @@
 <link rel="stylesheet" href="~/css/shopping_cart.css">
 <div class="pageRoot">
     <h3>Checkout</h3>
-    <hr><
+    <hr>
     The total is: @ViewBag.total
-    <br>
-    <a asp-controller="cart" asp-action="pay">pay</a>
+    <br><br>
+    <form action="@Url.Action("pay", "cart")">
+        <button type="submit" class="btn btn-default">pay</button>
+    </form>
 </div>

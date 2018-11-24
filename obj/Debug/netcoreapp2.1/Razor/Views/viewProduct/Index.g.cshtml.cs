@@ -63,7 +63,7 @@ using WebApp1.Models;
 #line default
 #line hidden
             BeginContext(269, 53, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("link", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "fb7acee86fcd49eab1233c1baa438ed9", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("link", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "a98326fcd43546779744d89c9c4f6d1a", async() => {
             }
             );
             __Microsoft_AspNetCore_Mvc_Razor_TagHelpers_UrlResolutionTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.Razor.TagHelpers.UrlResolutionTagHelper>();
@@ -132,7 +132,7 @@ WriteAttributeValue("", 510, imagePath, 510, 10, false);
             WriteLiteral("</div>\n            ");
             EndContext();
             BeginContext(958, 793, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f2efffbb43d0476aac4aa7a6640d81a3", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "6ea6a74b6c854fca90627ff911849a36", async() => {
                 BeginContext(977, 47, true);
                 WriteLiteral("\n                <input type=\"hidden\" name=\"id\"");
                 EndContext();

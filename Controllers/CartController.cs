@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Session;
 
 namespace LearnASPNETCoreMVCWithRealApps.Controllers
 {
-    [Route("cart")]
+    
 
     public class CartController : Controller
     {
@@ -30,12 +30,17 @@ namespace LearnASPNETCoreMVCWithRealApps.Controllers
             _context = context;
             _userManager = userManager;
         }
-        [Route("index")]
+        [Route("cart")]
         public IActionResult Index()
         {
             var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
-            ViewBag.cart = cart;
-            ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
+            
+            if (cart == null){
+                return RedirectToAction ("Mainpage", "Home");
+            }else{
+                ViewBag.cart = cart;
+                ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);                
+            }
             return View();
         }
 
@@ -112,6 +117,7 @@ namespace LearnASPNETCoreMVCWithRealApps.Controllers
             }
             return -1;
         }
+        [Route("checkOut")]
         public IActionResult checkOut()
         {
             var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");

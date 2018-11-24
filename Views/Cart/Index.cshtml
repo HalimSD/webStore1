@@ -1,4 +1,6 @@
 @using WebApp1.products
+@model WebApp1.products.Productwaarde
+
 <link rel="stylesheet" href="~/css/shopping_cart.css">
 <div class="pageRoot">
     <h3>Cart Page</h3>
@@ -10,6 +12,7 @@
             <th>Quantity</th>
             <th>Price</th>
             <th>Photo</th>
+            <th></th>
             <th>Sub Total</th>
         </tr>
         @foreach (var item in ViewBag.cart)
@@ -19,7 +22,8 @@
                 <td>@item.Product.Title</td>
                 <td>@item.Quantity</td>
                 <td>@item.Product.Price</td>
-                <td></td>
+                <td><img src="~/images/products/@item.Product.Image" width="60" id="productImage"><img/></td>
+                <td><a  asp-controller="cart" asp-action="Remove" asp-route-id="@item.Product.Id" >Delete</a></td>
                 <td>@(item.Product.Price * item.Quantity)</td>
             </tr>
         }
@@ -33,6 +37,6 @@
     <br>
     <a asp-controller="Home" asp-action="index">Continue Shopping</a>
     <br>
-    <a asp-controller="cart" asp-action="pay">checkOut</a>
+    <a asp-controller="cart" asp-action="checkOut">checkOut</a>
 </div>
 

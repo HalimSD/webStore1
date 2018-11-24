@@ -30,6 +30,14 @@ namespace LearnASPNETCoreMVCWithRealApps.Controllers
             _context = context;
             _userManager = userManager;
         }
+        [Route("index")]
+        public IActionResult Index()
+        {
+            var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
+            ViewBag.cart = cart;
+            ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
+            return View();
+        }
 
 
         [Route("buy")]
@@ -40,9 +48,19 @@ namespace LearnASPNETCoreMVCWithRealApps.Controllers
             {
                 List<Item> cart = new List<Item>();
                 cart.Add(new Item { Product = _context.Productwaarde.Find(id), Quantity = 1 });
+                // foreach (var item in cart)
+                // {
+                //     var productQuantity = _context.Productwaarde.Find(id).Quantity;
+                //     int Quantity = productQuantity - 1;
+                //     using (_context)
+                //     {
+                //         var blog = _context.Productwaarde.Find(id);
+                //         blog.Quantity = Quantity;
+                //         _context.SaveChanges();
+                //     }
+                // }
+
                 SessionExtensions.Set(HttpContext.Session, "cart", cart);
-                 ViewBag.cart = cart;
-            ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
             }
             else
             {
@@ -56,20 +74,22 @@ namespace LearnASPNETCoreMVCWithRealApps.Controllers
                 {
                     cart.Add(new Item { Product = _context.Productwaarde.Find(id), Quantity = 1 });
                 }
+                // foreach (var item in cart)
+                // {
+                //     var productQuantity = _context.Productwaarde.Find(id).Quantity;
+                //     int Quantity = productQuantity -1;
+                //     using (_context)
+                //     {
+                //         var blog = _context.Productwaarde.Find(id);
+                //         blog.Quantity = Quantity;
+                //         _context.SaveChanges();
+                //     }
+                // }
                 SessionExtensions.Set(HttpContext.Session, "cart", cart);
-                 ViewBag.cart = cart;
-            ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
             }
-            return View("Index");
+            return RedirectToAction("Index");
         }
-        // [Route("index")]
-        public IActionResult Index()
-        {
-            var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
-            ViewBag.cart = cart;
-            ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
-            return View("buy");
-        }
+
         [Route("remove/{id}")]
         public IActionResult Remove(int id)
         {
@@ -92,13 +112,23 @@ namespace LearnASPNETCoreMVCWithRealApps.Controllers
             }
             return -1;
         }
-
-
         public IActionResult checkOut()
         {
             var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
             ViewBag.cart = cart;
             ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
+            foreach (var item in cart)
+                {
+                    int id = item.Product.Id;
+                    using (_context)
+                    {
+                        int itemQuantity = item.Quantity;
+                        Productwaarde productwaarde = _context.Productwaarde.Find(id);
+                        int productQuantity = productwaarde.Quantity;
+                        productwaarde.Quantity = productQuantity - itemQuantity ;
+                        _context.SaveChanges();
+                    }
+                }
 
             return View("checkOut");
 

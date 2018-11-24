@@ -3,7 +3,7 @@
     background-color: #ffffff;
     border-radius: 3px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    margin-left: 5%;
+    margin-left: 0%;
     margin-bottom: 5%;
 }
 
@@ -27,6 +27,7 @@ div.card:hover {
     max-width: 300px;
 }
 
+/* REGION: Category */
 #categoryArea {
     padding: 20px;
     background-color: #ffffff;
@@ -36,9 +37,10 @@ div.card:hover {
 }
 
 #container1 {
-    margin-top: 20px;
-    text-align: center;
-    font_size: 20px;
+    margin-top: 15px;
+    background-color: rgba(240,240,240,255);
+    border-radius: 4px;
+    padding: 10px;
 }
 
 div.categoryTitle {
@@ -49,4 +51,34 @@ div.categoryTitle {
 #btnSelectCategory {
     display: block;
     margin: 0 auto;
+}
+
+#categoryBtn {
+    width: 100%;
+    background-color: rgba(240,240,240,255);
+    border: 1px dotted;
+    border-bottom-color: rgba(210, 210, 210, 255);
+    border-right-color: rgba(240,240,240,255);
+    border-left-color: rgba(240,240,240,255);
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#categoryBtnLast {
+    width: 100%;
+    background-color: rgba(240,240,240,255);
+    border: 1px dotted rgba(0, 0, 0, 255);
+    border-right-color: rgba(240, 240, 240, 255);
+    border-left-color: rgba(240, 240, 240, 255);
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#categoryBtn:hover, #categoryBtnLast:hover {
+    background-color: rgba(190,190,190,255);
+    transition: 0.2s;
+}
+
+button.categoryBtnSelected {
+    background-color: rgba(190,190,190,255) !important;
 }

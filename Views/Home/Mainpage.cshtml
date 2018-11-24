@@ -6,6 +6,12 @@
     int currentColumn = 0;
     List<Productwaarde> col2Items = new List<Productwaarde>();
     List<Productwaarde> col3Items = new List<Productwaarde>();
+    
+    // In case currentCategoryName hasn't been assigned by controller
+    if (ViewBag.currentCategoryName == null)
+    {
+        ViewBag.currentCategoryName = "Alle Producten";
+    }
  }
 
 <link rel="stylesheet" href="~/css/mainpage.css">
@@ -21,13 +27,7 @@
         <div id="categoryArea">
             <div class="categoryTitle">Categorieën</div>
             <form asp-action="Mainpage">
-                <div id="container1" class="form-group">
-                    Select all<input type="radio" name="hi" value="select all"><br>
-                </div>
-                <div id="container" class="form-group"></div>
-                <div class="form-group">
-                    <input type="submit" value="Ga naar Categorie" class="btn btn-default" id="btnSelectCategory"/>
-                </div>
+                <div id="container1" class="form-group"></div>
             </form>
             <div>
                 <a asp-action="Index">Terug naar alle producten</a>
@@ -36,7 +36,7 @@
     </div>
     <div class="col-10">
         <div class="container" id="productsArea">
-            <h2>Boten</h2>
+            <h2>@("U bekijkt nu: " + ViewBag.currentCategoryName)</h2>
             <h4>Producten</h4>
             <div class="row" id="products">
                 <div class="col-sm">
@@ -120,30 +120,43 @@
     </div>
 </div>
 <script type='text/javascript'>
-var names = @Html.Raw(Json.Serialize(ViewData["productsoorten"]));
+    var names = @Html.Raw(Json.Serialize(ViewData["productsoorten"]));
+    var currSel = @Html.Raw(Json.Serialize(ViewBag.currentCategoryName));
     //var serializedUsers = JSON.parse(names);
-        function addFields(){
-		for (i = 0; i <  names.length; i++) { 
+    function addFields(){
+        for (i = 0; i <  names.length; i++) { 
             var container = document.getElementById("container1");
             // Clear previous contents of the container
-                //container.removeChild(container.lastChild);
-                // Append a node with a random text
-                var res = names[i].split("= ");
-                var end = res[1].split(" }");
-                container.appendChild(document.createTextNode(end[0]));
+            //container.removeChild(container.lastChild);
+            // Append a node with a random text
+            var res = names[i].split("= ");
+            var end = res[1].split(" }");
+            //container.appendChild(document.createTextNode(end[0]));
                 
-				
-                // Create an <input> element, set its type and name attributes
-                var radio = document.createElement("input");
-				radio.type = "radio";
-				radio.name = "hi";
-				radio.value = end[0];
-                container.appendChild(radio);
-                // Append a line break 
-                container.appendChild(document.createElement("br"));
-				}
-			}
-			window.onload = addFields;
+            // Create an <input> element, set its type and name attributes
+            var btn = document.createElement("button");
+            btn.type = "submit";
+            btn.name = "hi";
+            btn.value = end[0];
+            btn.innerHTML = end[0];
+            
+            // If this is the last button, give it a different id
+            // The last button has a slightly different styling
+            if (i == (names.length - 1)) {
+                btn.id = "categoryBtnLast";
+            } else {
+                btn.id = "categoryBtn";
+            }
+            
+            if (btn.value == currSel) {
+                btn.className = "categoryBtnSelected";
+            }
+            
+            // Insert element into container div
+            container.appendChild(btn);
+        }
+    }
+    window.onload = addFields;
 </script>
 
 

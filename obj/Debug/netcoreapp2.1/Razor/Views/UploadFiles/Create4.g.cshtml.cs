@@ -141,7 +141,7 @@ WriteAttributeValue("", 1684, Url.Action("Statistics", "Chart"), 1684, 34, false
             WriteLiteral(">Site Statistieken</a>\r\n        </div>\r\n      </li>\r\n      <li class=\"nav-item\">\r\n        <a class=\"nav-link disabled\" href=\"#\">Disabled</a>\r\n      </li>\r\n    </ul>\r\n    ");
             EndContext();
             BeginContext(1889, 241, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "bd7c6db6f7334b97bfe2226b84c049f4", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "9673d4c9dd8c4ef9ace42f8d6daa2a13", async() => {
                 BeginContext(1928, 195, true);
                 WriteLiteral("\r\n      <input class=\"form-control mr-sm-2\" type=\"search\" placeholder=\"Search\" aria-label=\"Search\">\r\n      <button class=\"btn btn-outline-success my-2 my-sm-0\" type=\"submit\">Search</button>\r\n    ");
                 EndContext();
@@ -193,7 +193,7 @@ WriteAttributeValue("", 1684, Url.Action("Statistics", "Chart"), 1684, 34, false
             WriteLiteral("                        <div class=\"col\">\r\n                        <div class=\"card\" style=\"width: 25rem;\">\r\n                            <div class=\"card-body\">\r\n                              ");
             EndContext();
             BeginContext(2607, 511, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "26cfaeb1321d44d8b0dad29c08480746", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "8fef7a0e6b304afa80bae740484e461a", async() => {
                 BeginContext(2635, 131, true);
                 WriteLiteral("\r\n                                <div id=\"container\" class=\"form-group\">\r\n                                <h5 class=\"card-title\" >");
                 EndContext();
@@ -257,7 +257,7 @@ WriteAttributeValue("", 2932, item.Title, 2932, 11, false);
             WriteLiteral("                    <div class=\"col\">\r\n                        <div class=\"card\" style=\"width: 25rem;\">\r\n                            <div class=\"card-body\">\r\n                               ");
             EndContext();
             BeginContext(3478, 511, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "6c35d1c2c6a94aa29e4e34c0b575a088", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d8b2abc590a145968d17608afd3c609d", async() => {
                 BeginContext(3506, 131, true);
                 WriteLiteral("\r\n                                <div id=\"container\" class=\"form-group\">\r\n                                <h5 class=\"card-title\" >");
                 EndContext();
@@ -359,7 +359,7 @@ WriteAttributeValue("", 3803, item.Title, 3803, 11, false);
             WriteLiteral("ss=\"col-md-4\">\r\n        ");
             EndContext();
             BeginContext(5366, 397, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "675f2f633f454f06892bd9abf33fd3de", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "3313734a21c24bf5b120a359f7135b17", async() => {
                 BeginContext(5393, 363, true);
                 WriteLiteral(@"
             <div id=""container1"" class=""form-group"">
@@ -391,7 +391,7 @@ WriteAttributeValue("", 3803, item.Title, 3803, 11, false);
             WriteLiteral("\r\n    </div>\r\n</div>\r\n\r\n<div>\r\n    ");
             EndContext();
             BeginContext(5798, 38, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "07d857150c3d4e0b90e1b247655cce18", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d8a5392b0901480fb2b5ba6997964845", async() => {
                 BeginContext(5820, 12, true);
                 WriteLiteral("Back to List");
                 EndContext();

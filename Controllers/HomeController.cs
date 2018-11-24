@@ -131,6 +131,7 @@ namespace klaas.Controllers
                productsoortid = product.Id;
             }
             var productwaardenq =  from m in _context.Productwaarde where productsoortid == m.ProductsoortId select m;
+            ViewBag.currentCategoryName = hi;
             return View(productwaardenq);
             }
         }

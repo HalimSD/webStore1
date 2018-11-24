@@ -27,6 +27,11 @@ div.card:hover {
     max-width: 300px;
 }
 
+#outOfStock {
+    color: red;
+    font-weight: bold;
+}
+
 /* REGION: Category */
 #categoryArea {
     padding: 20px;

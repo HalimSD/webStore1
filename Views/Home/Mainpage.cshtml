@@ -50,11 +50,23 @@
                                         <div id="container" class="form-group">
                                             <img src="@("/images/products/" + item.Image)" id="productImage"><img/>
                                             <h5 class="card-title">@item.Title</h5>
-                                            <p class="card-text">€ @item.Price</p>
-                                            <p class="card-text"> In voorraad @item.Quantity stuk(en)</p>
+                                            <div>
+                                                <div>€ @item.Price</div>
+                                                @if (item.Quantity > 0)
+                                                {
+                                                    <div>@string.Format("Voorraad: {0} stuk(ken)",item.Quantity)</div>
+                                                }
+                                                else
+                                                {
+                                                    <div id="outOfStock">Geen voorraad beschikbaar!</div>
+                                                }
+                                            </div>
                                             <input type="hidden" name="id" value='@item.Id'/>
                                             <input type="submit" class="btn btn-primary" value="Details">
-                                            <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@item.Id" >
+                                            @if (item.Quantity > 0)
+                                            {
+                                                <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@item.Id" >
+                                            }
                                         </div>
                                     </form>
                                 </div>

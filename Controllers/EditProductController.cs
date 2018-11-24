@@ -83,6 +83,7 @@ namespace WebApp1.Controllers
 
             productModel.Title = product.Title;
             productModel.Price = product.Price;
+            productModel.Quantity = product.Quantity;
             if (!string.IsNullOrWhiteSpace(product.Description))
             {
                 productModel.Description = product.Description;

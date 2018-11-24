@@ -40,7 +40,14 @@
             <textarea asp-for="Description" class="form-control" rows="2" placeholder="@product.Description"></textarea>
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
+        <div class="form-group">
+            <label asp-for="Quantity" class="control-label">Product Voorraad</label>
+            <input asp-for="Quantity" class="form-control" rows="2" value="@product.Quantity">
+            <span asp-validation-for="Quantity" class="text-danger"></span>
+        </div>
         <input type="hidden" name="attributeCount" value="@attributeCount"/>
+        <h4>Attributen</h4>
+        <hr>
         @foreach (ViewProductAttributes item in attributes)
         {
             <div class="form-group">

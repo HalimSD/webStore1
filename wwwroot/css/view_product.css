@@ -38,6 +38,19 @@ input.CartBtn:hover {
     color: #2e6da4;
     width: 100%;
 }
+#quantity {
+    font-size: 15px;
+    color: #2e6da4;
+    width: 100%;
+    font-weight: bold;
+}
+
+#outOfStock {
+    font-size: 15px;
+    color: red;
+    width: 100%;
+    font-weight: bold;
+}
 
 hr {
     border: 0;

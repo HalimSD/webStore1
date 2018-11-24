@@ -55,7 +55,7 @@ namespace klaas.Controllers
             product.Category = productsoort.Naam;
             product.Image = productwaarde.Image;
             product.Description = productwaarde.Description;
-            product.Quantity = productwaarde.Quantity.ToString();
+            product.Quantity = productwaarde.Quantity;
 
             
             // If product is already within user's favorites then skip it

@@ -2,6 +2,7 @@
     ViewProductModel viewProductModel = (ViewProductModel) ViewData["ProductModel"];
     List<ViewProductAttributes> attributes = (List<ViewProductAttributes>) ViewData["ProductAttributeModel"];
     string imagePath = "/images/products/" + viewProductModel.Image;
+    bool inStock = viewProductModel.Quantity > 0;
 }
 <link rel="stylesheet" href="~/css/view_product.css">
 <div class="pageBackground">
@@ -17,9 +18,20 @@
                 <div class="descriptionContent">@viewProductModel.Description</div>
             </div>
             <div id="price">@viewProductModel.Price</div>
+            @if (inStock)
+            {
+                <div id="quantity">@("Voorraad: "+viewProductModel.Quantity)</div>
+            }
+            else
+            {
+                <div id="outOfStock">Geen voorraad meer beschikbaar!</div>
+            }
             <form method="get">
                 <input type="hidden" name="id" value='@viewProductModel.Id'/>
-                <input type="submit" formaction="@Url.Action("buy", "Cart")" class="CartBtn" value="Zet in Winkelwagen">     
+                @if (inStock)
+                {
+                    <input type="submit" formaction="@Url.Action("buy", "Cart")" class="CartBtn" value="Zet in Winkelwagen">
+                }     
                 @if (ViewBag.alreadyInFav)
                 {
                     <input type="hidden" name="returnUrl" value="@Url.Action("Index","ViewProduct", new {id=viewProductModel.Id})"/>

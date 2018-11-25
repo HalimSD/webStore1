@@ -13,9 +13,9 @@ using Microsoft.AspNetCore.Identity;
 using MailKit.Net.Imap;
 using Microsoft.AspNetCore.Session;
 
-namespace LearnASPNETCoreMVCWithRealApps.Controllers
+namespace WebApp1.Controllers
 {
-    
+
 
     public class CartController : Controller
     {
@@ -34,12 +34,18 @@ namespace LearnASPNETCoreMVCWithRealApps.Controllers
         public IActionResult Index()
         {
             var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
-            
-            if (cart == null){
-                return RedirectToAction ("Mainpage", "Home");
-            }else{
+            ViewData["cart"] = cart;
+
+            if (cart == null)
+            {
+                return View("EmptyShoppingCart");
+            }
+            else
+            {
                 ViewBag.cart = cart;
-                ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);                
+                ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
+                ViewData["cart"] = cart;
+
             }
             return View();
         }
@@ -53,19 +59,12 @@ namespace LearnASPNETCoreMVCWithRealApps.Controllers
             {
                 List<Item> cart = new List<Item>();
                 cart.Add(new Item { Product = _context.Productwaarde.Find(id), Quantity = 1 });
-                // foreach (var item in cart)
-                // {
-                //     var productQuantity = _context.Productwaarde.Find(id).Quantity;
-                //     int Quantity = productQuantity - 1;
-                //     using (_context)
-                //     {
-                //         var blog = _context.Productwaarde.Find(id);
-                //         blog.Quantity = Quantity;
-                //         _context.SaveChanges();
-                //     }
-                // }
-
+                Productwaarde productwaarde = _context.Productwaarde.Find(id);
+                int productQuantity = productwaarde.Quantity;
+                productwaarde.Quantity -= 1;
+                _context.SaveChanges();
                 SessionExtensions.Set(HttpContext.Session, "cart", cart);
+
             }
             else
             {
@@ -81,18 +80,22 @@ namespace LearnASPNETCoreMVCWithRealApps.Controllers
                 }
                 // foreach (var item in cart)
                 // {
-                //     var productQuantity = _context.Productwaarde.Find(id).Quantity;
-                //     int Quantity = productQuantity -1;
-                //     using (_context)
-                //     {
-                //         var blog = _context.Productwaarde.Find(id);
-                //         blog.Quantity = Quantity;
-                //         _context.SaveChanges();
-                //     }
+                //     int idProductWaarde = item.Product.Id;
+                //     int itemQuantity = item.Quantity;
+                //     int productQuantity = (from x in _context.Productwaarde where x.Id == id select x.Quantity).First();
+                //     productQuantity = productQuantity -1;
+                //     _context.SaveChanges();
                 // }
+
+
+                Productwaarde productwaarde = _context.Productwaarde.Find(id);
+                int productQuantity = productwaarde.Quantity;
+                productwaarde.Quantity -= 1;
+                _context.SaveChanges();
+
                 SessionExtensions.Set(HttpContext.Session, "cart", cart);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Mainpage", "Home");
         }
 
         [Route("remove/{id}")]
@@ -117,27 +120,21 @@ namespace LearnASPNETCoreMVCWithRealApps.Controllers
             }
             return -1;
         }
+
         [Route("checkOut")]
         public IActionResult checkOut()
         {
             var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
-            ViewBag.cart = cart;
-            ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
-            foreach (var item in cart)
-                {
-                    int id = item.Product.Id;
-                    using (_context)
-                    {
-                        int itemQuantity = item.Quantity;
-                        Productwaarde productwaarde = _context.Productwaarde.Find(id);
-                        int productQuantity = productwaarde.Quantity;
-                        productwaarde.Quantity = productQuantity - itemQuantity ;
-                        _context.SaveChanges();
-                    }
-                }
-
+            if (cart == null)
+            {
+                return RedirectToAction("Mainpage", "Home");
+            }
+            else
+            {
+                ViewBag.cart = cart;
+                ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
+            }
             return View("checkOut");
-
         }
 
         [Route("pay")]

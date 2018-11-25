@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
+using WebApp1.products;
 
 namespace klaas.Controllers
 {
@@ -42,6 +43,11 @@ namespace klaas.Controllers
             var myArray = myList.ToArray();
             ViewData["productsoorten"] =  myArray;
             var result =  from m in _context.Productwaarde select m;
+            if (SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart") == null)
+            {
+                List<Item> cart = new List<Item>();
+                SessionExtensions.Set(HttpContext.Session, "cart", cart);
+            }
             return View(result);
         }
 

@@ -42,7 +42,7 @@ namespace klaas.Controllers
             var myArray = myList.ToArray();
             ViewData["productsoorten"] =  myArray;
             var result =  from m in _context.Productwaarde select m;
-            return View("Mainpage",result);
+            return View(result);
         }
 
          public IActionResult Searching(string searchString)

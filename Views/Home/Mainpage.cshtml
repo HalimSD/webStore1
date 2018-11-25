@@ -15,47 +15,6 @@
  }
 
 <link rel="stylesheet" href="~/css/mainpage.css">
-<link rel="stylesheet" href="~/css/interactiveimage.css">
-
-<!-- Interactive Image         -->
-<div id="mainDiv" >
-  <div class='circle-container container' id="containerDiv">
-
-      <a href='https://localhost:5001/Home/Mainpage' class='center' id='middle'><img src='~/images/boat.png'></a>
-    <div id="cssSelectorRight" class="cssSelector">
-     <!-- img1 -->
-    </div>
-    <div id="cssSelectorBottomRight" class="cssSelector">
-   <!-- img2 -->
-    </div>
-    <div id="cssSelectorBottom1" class="cssSelector">  
-<!-- img3 -->
-    </div>
-    <div id="cssSelectorBottom2" class="cssSelector">
- <!-- img4 -->
-    </div>
-    <div id="cssSelectorBottomLeft" class="cssSelector">
-  <!-- img5 -->
-    </div>
-    <div id="cssSelectorLeft" class="cssSelector">
-<!-- img6s -->
-    </div>
-    <div id="cssSelectorTopLeft" class="cssSelector">
- <!-- img7 -->
-    </div>
-    <div id="cssSelectorTop1" class="cssSelector">
-<!-- img8 -->
-    </div>
-    <div id="cssSelectorTop2" class="cssSelector">
-<!-- img9 -->
-    </div>
-    <div id="cssSelectorTopRight" class="cssSelector">
-      <!-- img10 -->
-    </div>
-  </div>
-</div>
-
-
 <div class="row">
     <div class="col-2">
         <div id="categoryArea">
@@ -132,8 +91,17 @@
                                     <div id="container" class="form-group">
                                         <img src="@("/images/products/" + item.Image)" id="productImage"><img/>
                                         <h5 class="card-title">@item.Title</h5>
-                                        <p class="card-text">€ @item.Price</p>
-                                        <p class="card-text"> In voorraad @item.Quantity stuk(en)</p>
+                                        <div>
+                                            <div>€ @item.Price</div>
+                                            @if (item.Quantity > 0)
+                                            {
+                                                <div>@string.Format("Voorraad: {0} stuk(ken)",item.Quantity)</div>
+                                            }
+                                            else
+                                            {
+                                                <div id="outOfStock">Geen voorraad beschikbaar!</div>
+                                            }
+                                        </div>
                                         <input type="hidden" name="id" value='@item.Id'/>
                                         <input type="submit" class="btn btn-primary" value="Details">
                                         <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@item.Id" >
@@ -152,8 +120,17 @@
                                     <div id="container" class="form-group">
                                         <img src="@("/images/products/" + item.Image)" id="productImage"><img/>
                                         <h5 class="card-title">@item.Title</h5>
-                                        <p class="card-text">€ @item.Price</p>
-                                        <p class="card-text"> In voorraad @item.Quantity stuk(en)</p>
+                                        <div>
+                                            <div>€ @item.Price</div>
+                                            @if (item.Quantity > 0)
+                                            {
+                                                <div>@string.Format("Voorraad: {0} stuk(ken)",item.Quantity)</div>
+                                            }
+                                            else
+                                            {
+                                                <div id="outOfStock">Geen voorraad beschikbaar!</div>
+                                            }
+                                        </div>
                                         <input type="hidden" name="id" value='@item.Id'/>
                                         <input type="submit" class="btn btn-primary" value="Details">
                                         <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@item.Id">
@@ -209,154 +186,7 @@
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.2.0/anime.js"></script>
-<script>
-var text = [];
-var imgs = [];
 
-@foreach (var item in Model)
-            {
-                @:text.push("@item.Title"); 
-            }
-
-@foreach (var item in Model)
-            {
-                @:imgs.push('/images/products/' + "@item.Image"); 
-            }
-
-var container = document.getElementsByClassName('imgDiv');
-var container2 = document.getElementsByClassName('textDiv');
-var divContainer = document.getElementsByClassName('cssSelector');
-var aContainer = document.getElementsByClassName('category')
-
-count = 0;
-
-for(var i=0; i<container.length+1; i++) {
-
-  if (imgs[i]!=null && text[i]!=null){
-
-    var a = document.createElement('a');
-    a.href = "https://localhost:5001/ViewProduct?id="+(i+1).toString();
-    a.className = "category";
-    a.id = "deg" + count;
-    divContainer[i].appendChild(a);
-
-    var divInA = document.createElement('div');
-    divInA.className = "textDiv";
-    var divInA2 = document.createElement('div');
-    divInA2.className = "imgDiv";
-
-    aContainer[i].appendChild(divInA);
-    aContainer[i].appendChild(divInA2);
-
-    var img = document.createElement('img');
-    img.src = imgs[i];
-    var h = document.createElement('span');
-    var t = document.createTextNode(text[i]);
-    container[i].appendChild(img);
-    container2[i].appendChild(t);
-    
-    count = count + 36;
-  }
-}
-
-var cssSelectorRight = anime({
-  targets: '#cssSelectorRight',
-  translateX: "9em",
-  opacity: 1,
-  easing: 'linear',
-  delay: 1000,
-  duration: 2000
-});
-
-var cssSelectorLeft = anime({
-  targets: '#cssSelectorLeft',
-  translateX: "-9em",
-  opacity: 1,
-  easing: 'linear',
-  delay: 1000,
-  duration: 2000
-});
-
-var cssSelectorBottomRight = anime({
-  targets: '#cssSelectorBottomRight',
-  translateX: "4em",
-  translateY: "9em",
-  opacity: 1,
-  easing: 'linear',
-  delay: 1000,
-  duration: 2000
-});
-
-var cssSelectorBottomLeft = anime({
-  targets: '#cssSelectorBottomLeft',
-  translateX: "-4em",
-  translateY: "9em",
-  opacity: 1,
-  easing: 'linear',
-  delay: 1000,
-  duration: 2000
-});
-
-var cssSelectorTopLeft = anime({
-  targets: '#cssSelectorTopLeft',
-  translateX: "-4em",
-  translateY: "-9em",
-  opacity: 1,
-  easing: 'linear',
-  delay: 1000,
-  duration: 2000
-});
-
-var cssSelectorTopRight = anime({
-  targets: '#cssSelectorTopRight',
-  translateX: "4em",
-  translateY: "-9em",
-  opacity: 1,
-  easing: 'linear',
-  delay: 1000,
-  duration: 2000
-});
-
-var cssSelectorBottom1 = anime({
-    targets: '#cssSelectorBottom1',
-    translateX: "1em",
-    translateY: "9em",
-    opacity: 1,
-    easing: 'linear',
-    delay: 1000,
-    duration: 2000
-  });
-
-var cssSelectorBottom2 = anime({
-  targets: '#cssSelectorBottom2',
-  translateX: "-1em",
-  translateY: "9em",
-  opacity: 1,
-  easing: 'linear',
-  delay: 1000,
-  duration: 2000
-});
-
-var cssSelectorTop1 = anime({
-  targets: '#cssSelectorTop1',
-  translateX: "-1em",
-  translateY: "-9em",
-  opacity: 1,
-  easing: 'linear',
-  delay: 1000,
-  duration: 2000
-});
-
-var cssSelectorTop2 = anime({
-  targets: '#cssSelectorTop2',
-  translateX: "1em",
-  translateY: "-9em",
-  opacity: 1,
-  easing: 'linear',
-  delay: 1000,
-  duration: 2000
-});
-</script>
 
 
          

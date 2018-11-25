@@ -1,0 +1,132 @@
+/**
+ * Position icons into circle (SO)
+ * http://stackoverflow.com/q/12813573/1397351 
+ */
+ .circle-container {
+	position: relative;
+	width: 48em;
+	height: 24em;
+	padding: 2.8em; /*= 2em * 1.4 (2em = half the width of an img, 1.4 = sqrt(2))*/
+	border-radius: 50%;
+	margin: 1.75em auto 0;
+}
+
+.circle-container a {
+	display: block;
+	overflow: hidden;
+	position: absolute;
+	top: 50%; left: 50%;
+	width: 8em; height: 8em;
+	margin: -4em; /* 2em = 4em/2 */ /* half the width */
+	
+}
+.circle-container #middle{
+    width: 32em; height: 32em;
+    margin-top: -10em;
+    margin-left: -16em;
+
+}
+
+.circle-container img { display: block; width: 100%; }
+#deg0 { transform: translate(24em); } /* 12em = half the width of the wrapper */
+#deg36 { transform: rotate(36deg) translate(20em) rotate(-36deg); }
+#deg72 { transform: rotate(72deg) translate(15em) rotate(-72deg); }
+#deg108 { transform: rotate(108deg) translate(15em) rotate(-108deg); }
+#deg144 { transform: rotate(144deg) translate(20em) rotate(-144deg); }
+#deg180 { transform: rotate(180deg) translate(24em) rotate(-180deg); }
+#deg216 { transform: rotate(216deg) translate(20em) rotate(-216deg); }
+#deg252 { transform: rotate(252deg) translate(15em) rotate(-252deg); }
+#deg288 { transform: rotate(288deg) translate(15em) rotate(-288deg); }
+#deg324 { transform: rotate(324deg) translate(20em) rotate(-324deg); }
+
+
+/* this is just for showing the angle on hover */
+.circle-container a:not(.center):before {
+	position: absolute;
+    width: 8em;
+    height: 8em;
+	color: white;
+	opacity: 0;
+	background: rgba(0,0,0,.5);
+	font: 1.25em/3.45 Courier, monospace;
+	letter-spacing: 2px;
+    text-decoration: none;
+	text-shadow: 0 0 .1em deeppink;
+	transition: .7s; /* only works in Firefox */
+    content: "";
+}
+
+.circle-container a:hover:before { opacity: 1; }
+
+/* this is for showing the circle on which the images are placed */
+
+.circle-container:hover:after { opacity: 1; }
+
+.circle-container:hover a:after { opacity: 1; }
+.circle-container a:hover:after { opacity: .3; }
+
+.cssSelector{
+	opacity: 0;
+	
+	
+}
+
+#mainDiv{
+    padding-top: 5%;
+    padding-bottom: 10%;
+    position: relative;
+}
+
+.text{
+	position: absolute;
+}
+
+.textDiv{
+	position: absolute;
+	width: 50%;
+	margin: 50px auto;
+}
+
+#cssSelectorRight{
+	position: relative;
+	top: 150px;
+	right: 150px;
+}
+
+#cssSelectorLeft{
+	position: relative;
+	top: 150px;
+	left: 150px;
+}
+
+#cssSelectorTop1{
+	position: relative;
+	top: 300px;
+}
+
+#cssSelectorTop2{
+	position: relative;
+	top: 300px;
+}
+
+#cssSelectorBottomRight{
+	position: relative;
+	right: 50px;
+}
+
+#cssSelectorBottomLeft{
+	position: relative;
+	left: 50px;
+}
+
+#cssSelectorTopLeft{
+	position: relative;
+	left: 50px;
+	top: 300px;
+}
+
+#cssSelectorTopRight{
+	position: relative;
+	right: 50px;
+	top: 300px;
+}

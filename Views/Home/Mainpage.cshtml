@@ -23,7 +23,7 @@
                 <div id="container1" class="form-group"></div>
             </form>
             <div>
-                <a asp-action="Index">Terug naar alle producten</a>
+                <a asp-action="Mainpage">Terug naar alle producten</a>
             </div>
         </div>
     </div>
@@ -104,7 +104,10 @@
                                         </div>
                                         <input type="hidden" name="id" value='@item.Id'/>
                                         <input type="submit" class="btn btn-primary" value="Details">
-                                        <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@item.Id" >
+                                        @if (item.Quantity > 0)
+                                        {
+                                            <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@item.Id" >
+                                        }
                                     </div>
                                 </form>
                             </div>
@@ -133,7 +136,10 @@
                                         </div>
                                         <input type="hidden" name="id" value='@item.Id'/>
                                         <input type="submit" class="btn btn-primary" value="Details">
-                                        <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@item.Id">
+                                        @if (item.Quantity > 0)
+                                        {
+                                            <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@item.Id" >
+                                        }
 
                                     </div>
                                 </form>

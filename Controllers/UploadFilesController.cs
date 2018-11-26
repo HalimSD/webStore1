@@ -88,7 +88,8 @@ namespace Controllers
                                 Productwaarde productwaarde = new Productwaarde{
                                 Title = title,
                                 Price = price,
-                                ProductsoortId = productsid
+                                ProductsoortId = productsid,
+                                Image = "default.png"
                             };
 
                             _context.Productwaarde.Add(productwaarde);

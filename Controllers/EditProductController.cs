@@ -106,10 +106,13 @@ namespace WebApp1.Controllers
 
                 }
                 // Delete old image
-                if (System.IO.File.Exists(Path.Combine(uploads, product.Image)))
+                if (product.Image != null)
                 {
-                    System.IO.File.Delete(Path.Combine(uploads, product.Image));
-                }                  
+                    if (System.IO.File.Exists(Path.Combine(uploads, product.Image)) && product.Image != "default.png")
+                    {
+                        System.IO.File.Delete(Path.Combine(uploads, product.Image));
+                    }  
+                }              
             }
             
             context.SaveChanges();

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApp1.products
 {

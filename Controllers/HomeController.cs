@@ -18,6 +18,9 @@ namespace klaas.Controllers
         protected UserManager<Users> mUserManager;
         protected SignInManager<Users> mSignInManager;
         private readonly WebshopContext _context;
+        
+        // Defines how many products is displayed foreach page
+        private readonly int maxPageSize = 9;
        
 
          public HomeController(
@@ -30,12 +33,11 @@ namespace klaas.Controllers
             mSignInManager = signInManager;
              _context = context;
             }
-        public IActionResult Index(int? id)
-        {
+        public IActionResult Index()
+        {            
             var myList = new List<string>();
             var productsoorten = from m in _context.Productsoort select new {m.Naam};
-            
-            
+
             foreach (var product in productsoorten){
                 myList.Add(product.ToString());
                 Console.WriteLine(product.Naam);
@@ -48,12 +50,7 @@ namespace klaas.Controllers
                 List<Item> cart = new List<Item>();
                 SessionExtensions.Set(HttpContext.Session, "cart", cart);
             }
-            var main = new WebApp1.Mainpage.Mainpage();
-             main.productwaardes = result;
-             main.pagesize = 1;
-            main.pageindex = (id ?? 1);
-
-            return View("Mainpage",main);
+            return View(result);
         }
 
          public IActionResult Searching(string searchString)
@@ -110,7 +107,7 @@ namespace klaas.Controllers
             var result =  from m in _context.Productwaarde select m;
             var main = new WebApp1.Mainpage.Mainpage();
              main.productwaardes = result;
-             main.pagesize = 1;
+             main.pagesize = maxPageSize;
             main.pageindex = (id ?? 1);
             return View(main);
         }
@@ -135,7 +132,7 @@ namespace klaas.Controllers
                 var productwaardenq =  from m in _context.Productwaarde select m;
                 var main = new WebApp1.Mainpage.Mainpage();
              main.productwaardes = productwaardenq;
-             main.pagesize = 1;
+             main.pagesize = maxPageSize;
             main.pageindex = (id ?? 1);
                 return View(main);
             }
@@ -143,7 +140,7 @@ namespace klaas.Controllers
                 var productwaardenq =  from m in _context.Productwaarde select m;
                 var main = new WebApp1.Mainpage.Mainpage();
              main.productwaardes = productwaardenq;
-             main.pagesize = 1;
+             main.pagesize = maxPageSize;
             main.pageindex = (id ?? 1);
                 return View(main);
             
@@ -158,7 +155,7 @@ namespace klaas.Controllers
             ViewBag.currentCategoryName = hi;
             var main = new WebApp1.Mainpage.Mainpage();
              main.productwaardes = productwaardenq;
-             main.pagesize = 1;
+             main.pagesize = maxPageSize;
             main.pageindex = (id ?? 1);
                 return View(main);
             }
@@ -188,7 +185,7 @@ namespace klaas.Controllers
         {
             return View();
         }
-
+    
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

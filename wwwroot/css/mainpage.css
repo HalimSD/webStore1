@@ -87,3 +87,13 @@ div.categoryTitle {
 button.categoryBtnSelected {
     background-color: rgba(190,190,190,255) !important;
 }
+
+#pagination {
+    display: flex;
+    margin-left: 10px;
+    margin-top: 20px;
+}
+
+#pagination * {
+    margin-left: 10px;
+}

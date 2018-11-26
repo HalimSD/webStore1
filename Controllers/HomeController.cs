@@ -30,7 +30,7 @@ namespace klaas.Controllers
             mSignInManager = signInManager;
              _context = context;
             }
-        public IActionResult Index()
+        public IActionResult Index(int? id)
         {
             var myList = new List<string>();
             var productsoorten = from m in _context.Productsoort select new {m.Naam};
@@ -48,7 +48,12 @@ namespace klaas.Controllers
                 List<Item> cart = new List<Item>();
                 SessionExtensions.Set(HttpContext.Session, "cart", cart);
             }
-            return View(result);
+            var main = new WebApp1.Mainpage.Mainpage();
+             main.productwaardes = result;
+             main.pagesize = 1;
+            main.pageindex = (id ?? 1);
+
+            return View("Mainpage",main);
         }
 
          public IActionResult Searching(string searchString)
@@ -90,7 +95,7 @@ namespace klaas.Controllers
             return View();
         }
 
-         public IActionResult Mainpage()
+         public IActionResult Mainpage(int? id)
         {
             var myList = new List<string>();
             var productsoorten = from m in _context.Productsoort select new {m.Naam};
@@ -103,7 +108,11 @@ namespace klaas.Controllers
             var myArray = myList.ToArray();
             ViewData["productsoorten"] =  myArray;
             var result =  from m in _context.Productwaarde select m;
-            return View(result);
+            var main = new WebApp1.Mainpage.Mainpage();
+             main.productwaardes = result;
+             main.pagesize = 1;
+            main.pageindex = (id ?? 1);
+            return View(main);
         }
 
         // POST: Products/Create
@@ -111,7 +120,7 @@ namespace klaas.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Mainpage(string hi)
+        public IActionResult Mainpage(string hi, int? id)
         {
             var myList = new List<string>();
             var productsoorten = from m in _context.Productsoort select new {m.Naam};
@@ -124,11 +133,20 @@ namespace klaas.Controllers
              if (hi == null)
             {
                 var productwaardenq =  from m in _context.Productwaarde select m;
-                return View(productwaardenq);
+                var main = new WebApp1.Mainpage.Mainpage();
+             main.productwaardes = productwaardenq;
+             main.pagesize = 1;
+            main.pageindex = (id ?? 1);
+                return View(main);
             }
             else if (hi == "select all"){
                 var productwaardenq =  from m in _context.Productwaarde select m;
-                return View(productwaardenq);
+                var main = new WebApp1.Mainpage.Mainpage();
+             main.productwaardes = productwaardenq;
+             main.pagesize = 1;
+            main.pageindex = (id ?? 1);
+                return View(main);
+            
             }
             else{
             var productsoortid = 0;
@@ -138,7 +156,11 @@ namespace klaas.Controllers
             }
             var productwaardenq =  from m in _context.Productwaarde where productsoortid == m.ProductsoortId select m;
             ViewBag.currentCategoryName = hi;
-            return View(productwaardenq);
+            var main = new WebApp1.Mainpage.Mainpage();
+             main.productwaardes = productwaardenq;
+             main.pagesize = 1;
+            main.pageindex = (id ?? 1);
+                return View(main);
             }
         }
 

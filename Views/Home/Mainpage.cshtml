@@ -1,7 +1,7 @@
-
-
 @using WebApp1.products
-@model IEnumerable<WebApp1.products.Productwaarde>
+@using WebApp1.Mainpage
+@model WebApp1.Mainpage.Mainpage;
+
 @{
     int currentColumn = 0;
     List<Productwaarde> col2Items = new List<Productwaarde>();
@@ -33,7 +33,7 @@
             <h4>Producten</h4>
             <div class="row" id="products">
                 <div class="col-sm">
-                    @foreach (var item in Model)
+                    @foreach (var item in Model.Page())
                     {
                         if (currentColumn == 0)
                         {
@@ -147,10 +147,21 @@
                         </div>
                     }
                 </div>
+                <div><form class="form-inline my-2 my-lg-0" asp-action="Mainpage">
+                <input class="form-control" type="hidden" name= "id" value= "@(Model.pageindex+1)">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">next</button></form>
+
+                <form class="form-inline my-2 my-lg-0" asp-action="Mainpage">
+                <input type="hidden" name= "id" value= "@(Model.pageindex-1)">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">previous</button>
+                </form></div>
+                <h1>page: @Model.pageindex of @Model.getnumberofpages() </h1>
             </div>
         </div>
     </div>
+    
 </div>
+ 
 <script type='text/javascript'>
     var names = @Html.Raw(Json.Serialize(ViewData["productsoorten"]));
     var currSel = @Html.Raw(Json.Serialize(ViewBag.currentCategoryName));

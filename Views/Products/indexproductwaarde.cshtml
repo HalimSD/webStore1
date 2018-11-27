@@ -1,39 +1,84 @@
+@using WebApp1.products
 @model IEnumerable<WebApp1.products.Productwaarde>
 
 @{
     ViewData["Title"] = "Index";
+    List<Productwaarde> products = ViewBag.products;
+    List<string> attributeNames = ViewBag.attributeNames;
 }
 <link rel="stylesheet" href="~/css/product_creation_generic.css">
-<div class="pageRoot">
+<link rel="stylesheet" href="~/css/shopping_cart.css">
+<div class="pageRoot" style="margin-left: 10%; margin-right: 10%;">
     <h2>Producten</h2>
 
     <p>
         <a asp-action="Create2">Create New</a>
     </p>
-    <table class="table">
+    <table id="table">
         <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                <input type="text" class="form-control" placeholder="Filteren bij ID">
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                <input type="text" class="form-control" placeholder="Filteren bij Naam">
             </th>
-            <th></th>
+            <th>
+                <input type="text" class="form-control" placeholder="Filteren bij Prijs">
+            </th>
+            <th>
+                <input type="text" class="form-control" placeholder="Filteren bij Voorraad">
+            </th>
+            <th>
+                <input type="text" class="form-control" placeholder="Filteren bij Categorie">
+            </th>
+            <th>
+                
+            </th>
+        </tr>
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                Naam
+            </th>
+            <th>
+                Prijs
+            </th>
+            <th>
+                Voorraad
+            </th>
+            <th>
+                Categorie
+            </th>
+            <th>
+                Opties
+            </th>
         </tr>
         </thead>
         <tbody>
-        @foreach (var item in Model) {
+        @foreach (Productwaarde item in products)
+        {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Title)
+                    @item.Id
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Price)
+                    @item.Title
+                </td>
+                <td>
+                    @item.Price
+                </td>
+                <td>
+                    @item.Quantity
+                </td>
+                <td>
+                    @attributeNames[products.IndexOf(item)]
                 </td>
                 <td>
                     <a asp-action="Deleteproductwaarde" asp-route-id="@item.Id">Verwijderen</a>
-                    | 
+                    |
                     <a asp-action="Index" asp-controller="EditProduct" asp-route-id="@item.Id">Bewerken</a>
                 </td>
             </tr>

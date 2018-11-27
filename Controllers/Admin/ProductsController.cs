@@ -37,9 +37,25 @@ namespace WebApp1.Controllers
             return View(await _context.Productsoort.ToListAsync());
         }
 
-         public async Task<IActionResult> Indexproductwaarde()
-        {
-            return View(await _context.Productwaarde.ToListAsync());
+         public IActionResult Indexproductwaarde()
+         {
+             List<Productwaarde> products = _context.Productwaarde.ToList();
+             List<string> attributeNames = new List<string>();
+
+             foreach (Productwaarde item in products)
+             {
+                 string res =
+                 (
+                     from ps in _context.Productsoort
+                     where ps.Id == item.ProductsoortId
+                     select ps.Naam
+                 ).FirstOrDefault();
+                 attributeNames.Add(res);
+             }
+
+            ViewBag.products = products;
+            ViewBag.attributeNames = attributeNames;
+            return View();
         }
 
         // GET: Products/Details/5

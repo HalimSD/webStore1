@@ -1,0 +1,56 @@
+<link rel="stylesheet" href="~/css/product_creation_generic.css">
+<link rel="stylesheet" href="~/css/shopping_cart.css">
+<div class="pageRoot" style="margin-left: 10%; margin-right: 10%;">
+    <h2>Producten</h2>
+
+    <p>
+        <a asp-action="Create2" asp-controller="Products">Create New</a>
+    </p>
+    <table id="table">
+        <thead>
+        <tr>
+            <th>
+                <input id="filterId" type="text" class="form-control" placeholder="Filteren bij ID">
+            </th>
+            <th>
+                <input id="filterName" type="text" class="form-control" placeholder="Filteren bij Naam">
+            </th>
+            <th>
+                <input id="filterPrice" type="text" class="form-control" placeholder="Filteren bij Prijs">
+            </th>
+            <th>
+                <input id="filterStock" type="text" class="form-control" placeholder="Filteren bij Voorraad">
+            </th>
+            <th>
+                <input id="filterCategory" type="text" class="form-control" placeholder="Filteren bij Categorie">
+            </th>
+            <th>
+                
+            </th>
+        </tr>
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                Naam
+            </th>
+            <th>
+                Prijs
+            </th>
+            <th>
+                Voorraad
+            </th>
+            <th>
+                Categorie
+            </th>
+            <th>
+                Opties
+            </th>
+        </tr>
+        </thead>
+        <tbody id="tableBody">
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript" src="~/js/loadProductsList.js"></script>

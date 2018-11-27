@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +15,7 @@ using NuGet.Frameworks;
 
 namespace WebApp1.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("/admin/[controller]/")]
     public class EditProductController : Controller
     {

@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApp1.Models;
+using WebApp1.products;
 
 namespace WebApp1.Controllers.Admin
 {
@@ -10,6 +12,7 @@ namespace WebApp1.Controllers.Admin
     public class ProductListController : Controller
     {
         private readonly WebshopContext context;
+        private readonly int maxPageSize = 20;
         
         public ProductListController(WebshopContext context)
         {
@@ -22,52 +25,91 @@ namespace WebApp1.Controllers.Admin
         {
             return View();
         }
-
-        [Route("GetData")]
-        public JsonResult GetData()
+        
+        [Route("ConfirmDelete")]
+        public IActionResult ConfirmDelete(int? id)
         {
-            // Use the helper class associated with that model to get all product data
-            List<ProductListViewModel> json = new ProductListViewModelHelper().GetData(context);
+            if (id == null)
+            {
+                return NotFound();
+            }           
+            Productwaarde products = context.Productwaarde.FirstOrDefault(m => m.Id == id);            
+            if (products == null)
+            {
+                return NotFound();
+            }
+            return View(products);
+        }
+
+        [Route("DeleteProduct")]
+        public IActionResult DeleteProduct(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Productwaarde product = context.Productwaarde.FirstOrDefault(m => m.Id == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            context.Productwaarde.Remove(product);
+            context.SaveChanges();
+            return RedirectToAction("Index", "ProductList");
+        }
+        
+        [Route("GetData")]
+        public JsonResult GetData(int pageIndex=1)
+        {
+            // Create the PaginationHelper instance and use it to get the first page of productwaarde
+            PaginationHelper<Productwaarde> pagination = new PaginationHelper<Productwaarde>(maxPageSize,context.Productwaarde);
+            PaginationViewModel<Productwaarde> productPage = pagination.GetPage(pageIndex);
             
-            // Encode to JSON and return it
+            // Since the default Productwaarde doesn't contain all of the needed info
+            // We will create a new model that we will return
+            PaginationViewModel<ProductListViewModel> json =
+                new ProductListViewModelHelper().ConvertToViewModel(context, productPage);
+            
             return new JsonResult(json);
         }
 
         [Route("GetDataFiltered")]
-        public JsonResult GetDataFiltered(string id="", string name="", string price="", string stock="", string category="")
+        public JsonResult GetDataFiltered(string id="", string name="", string price="", string stock="", string category="", int pageIndex=1)
         {
+            // Create a PaginationHelper instance. It will be used to generate a page
+            PaginationHelper<Productwaarde> pagination = new PaginationHelper<Productwaarde>(maxPageSize,context.Productwaarde);
+            
             // Some error checking as JS may give null values!
             if (id == null) { id = ""; }
             if (name == null) { name = ""; }
             if (price == null) { price = ""; }
             if (stock == null) { stock = ""; }
             if (category == null) { category = ""; }
-            
-            // Use the helper class associated with that model to get all product data
-            List<ProductListViewModel> data = new ProductListViewModelHelper().GetData(context);   
-            
-            // This list will contain the filtered items
-            List<ProductListViewModel> filtered = new List<ProductListViewModel>();
-            
-            // We will loop through the data and filter everything out
-            // For each element, we check if all applicable fields pass the filter
-            // If they all pass, then they will be added to the filtered list
-            foreach (ProductListViewModel item in data)
-            {
-                bool containsId = item.Id.ToString().Contains(id);
-                bool containsName = item.Name.ToUpper().Contains(name.ToUpper());
-                bool containsPrice = item.Price.ToString().Contains(price);
-                bool containsStock = item.Quantity.ToString().Contains(stock);
-                bool containsCategory = item.Category.ToUpper().Contains(category.ToUpper());
 
-                if (containsId && containsName && containsPrice && containsStock && containsCategory)
-                {
-                    filtered.Add(item);
-                }
-            }
+            // Since the pagination helper doesn't have built-in filtering,
+            // we'll have to prepare a custom filtered query and pass it to the helper
+            IQueryable<Productwaarde> query =
+                from pw in context.Productwaarde
+                from ps in context.Productsoort
+                where pw.ProductsoortId == ps.Id &&
+                      pw.Id.ToString().Contains(id) &&
+                      pw.Title.ToUpper().Contains(name.ToUpper()) &&
+                      pw.Price.ToString().Contains(price) &&
+                      pw.Quantity.ToString().Contains(stock) &&
+                      ps.Naam.ToUpper().Contains(category.ToUpper())
+                select pw;
+
+            // Generate pages from the custom query
+            PaginationViewModel<Productwaarde> productPage = pagination.GetPageIQueryable(pageIndex, query);
+            
+            // Since the default Productwaarde doesn't contain all of the needed info
+            // We will create a new model that we will return
+            PaginationViewModel<ProductListViewModel> json =
+                new ProductListViewModelHelper().ConvertToViewModel(context, productPage);
             
             // Encode to JSON and return it
-            return new JsonResult(filtered);
+            return new JsonResult(json);
         }
     }
 

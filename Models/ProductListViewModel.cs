@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using WebApp1.products;
 
 namespace WebApp1.Models
 {
@@ -15,21 +17,35 @@ namespace WebApp1.Models
 
     public class ProductListViewModelHelper
     {
-        public List<ProductListViewModel> GetData(WebshopContext context)
+        public PaginationViewModel<ProductListViewModel> ConvertToViewModel(WebshopContext context, PaginationViewModel<Productwaarde> productPage)
         {
-            return (
-                from pw in context.Productwaarde
-                from ps in context.Productsoort
-                where pw.ProductsoortId == ps.Id
-                select new ProductListViewModel
+            PaginationViewModel<ProductListViewModel> model = new PaginationViewModel<ProductListViewModel>
+            {
+                PageNumber = productPage.PageNumber,
+                PageSize = productPage.PageSize,
+                TotalPages = productPage.TotalPages,
+                Data = new List<ProductListViewModel>()
+            };
+
+            foreach (Productwaarde item in productPage.Data)
+            {
+                ProductListViewModel viewModel = new ProductListViewModel
                 {
-                    Id = pw.Id,
-                    Name = pw.Title,
-                    Price = pw.Price,
-                    Quantity = pw.Quantity,
-                    Category = ps.Naam
-                }
-            ).ToList();
+                    Id = item.Id, 
+                    Name = item.Title,
+                    Price = item.Price,
+                    Quantity = item.Quantity,
+                    Category = 
+                    (
+                        from ps in context.Productsoort
+                        where ps.Id == item.ProductsoortId
+                        select ps.Naam
+                    ).FirstOrDefault()
+                };
+                model.Data.Add(viewModel);
+            }
+
+            return model;
         }
     }
 }

@@ -1,12 +1,16 @@
+@{
+    ViewData["Title"] = "Product Lijst";
+}
+
 <link rel="stylesheet" href="~/css/product_creation_generic.css">
 <link rel="stylesheet" href="~/css/shopping_cart.css">
 <div class="pageRoot" style="margin-left: 10%; margin-right: 10%;">
     <h2>Producten</h2>
-
+    <hr>
     <p>
-        <a asp-action="Create2" asp-controller="Products">Create New</a>
+        <a asp-action="Create2" asp-controller="Products">Nieuw Product Aanmaken</a>
     </p>
-    <table id="table">
+    <table id="table" style="border-radius: 3px;">
         <thead>
         <tr>
             <th>
@@ -52,5 +56,8 @@
         <tbody id="tableBody">
         </tbody>
     </table>
+    <ul id="pagination" class="pagination" style="margin-top: 10px;">
+    </ul>
 </div>
+<br>
 <script type="text/javascript" src="~/js/loadProductsList.js"></script>

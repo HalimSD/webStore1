@@ -1,7 +1,7 @@
 function init() {
     // Do GET request to GetData action and pass JSON result to populateTable()
-    $.get("/admin/productlist/getdata", function (data) {
-        populateTable(data);
+    $.get("/admin/productlist/getdata", function (jsonModel) {
+        populateTable(jsonModel, false);
     });
     
     // Setup event handlers
@@ -11,7 +11,7 @@ function init() {
     }
 }
 
-function onInputChanged() {
+function onInputChanged(pageNumber=1) {
     let noFilters = false;
     let Id = document.getElementById("filterId").value.toString();
     let Name = document.getElementById("filterName").value.toString();
@@ -19,7 +19,7 @@ function onInputChanged() {
     let Stock = document.getElementById("filterStock").value.toString();
     let Category = document.getElementById("filterCategory").value.toString();
     
-    if (Id == "" && Name == "" && Price == "" && Stock == "" && Category == "") {
+    if (Id === "" && Name === "" && Price === "" && Stock === "" && Category === "") {
         noFilters = true;
     }
     
@@ -31,15 +31,16 @@ function onInputChanged() {
                 name : Name,
                 price : Price,
                 stock : Stock,
-                category : Category
+                category : Category,
+                pageIndex : pageNumber.toString()
             },
             function (data) {
-                populateTable(data);
+                populateTable(data, true);
             }
-        )
+        );
     } else {
-        $.get("/admin/productlist/getdata", function (data) {
-            populateTable(data);
+        $.get("/admin/productlist/getdata", {pageIndex : pageNumber.toString()}, function (data) {
+            populateTable(data, false);
         });
     }
 }
@@ -52,13 +53,13 @@ function createOptionsColumn(productId) {
     let aElementDelete = document.createElement("a");
     let aElementDeleteTxt = document.createTextNode("Verwijderen");
     aElementDelete.appendChild(aElementDeleteTxt);
-    aElementDelete.setAttribute("href", "/Products/Deleteproductwaarde/" + productId.toString());
+    aElementDelete.setAttribute("href", "/Admin/ProductList/ConfirmDelete?id=" + productId.toString());
 
     // Edit option
     let aElementEdit = document.createElement("a");
     let aElementEditTxt = document.createTextNode("Bewerken");
     aElementEdit.appendChild(aElementEditTxt);
-    aElementEdit.setAttribute("href", "/admin/EditProduct/Index?id=" + productId.toString());
+    aElementEdit.setAttribute("href", "/Admin/EditProduct/Index?id=" + productId.toString());
 
     // Visit page option
     let aElementVisit = document.createElement("a");
@@ -75,10 +76,11 @@ function createOptionsColumn(productId) {
     return tdElement;
 }
 
-function populateTable(data) {
+function populateTable(jsonModel, filtered) {
+    // Get the data from the page model
+    let data = jsonModel.data;
     // Get the tbody element by using its ID
     let tableBody = document.getElementById("tableBody");
-    
     // Clear the table of any previous rows
     while (tableBody.firstChild) {
         tableBody.removeChild(tableBody.firstChild);
@@ -110,8 +112,79 @@ function populateTable(data) {
         
         trElement.appendChild(createOptionsColumn(id));
         tableBody.appendChild(trElement);
+        createPagination(jsonModel)
     }
     
 }
+
+function createPagination(jsonModel) {
+    let pageNumber = jsonModel.pageNumber;
+    let totalPages = jsonModel.totalPages;
+    let root = document.getElementById("pagination")
+
+    // Clear the root element
+    while (root.firstChild) {
+        root.removeChild(root.firstChild);
+    }
+    
+    {
+        // Create the previous page button
+        let liElement = document.createElement("li");
+        let aElement = document.createElement("a");
+        if (pageNumber === 1) {
+            liElement.className = "page-item disabled";
+            aElement.setAttribute("tabindex", "-1");
+        } else {
+            liElement.className = "page-item";
+            aElement.addEventListener("click",function() {
+                onInputChanged(pageNumber-1)
+            });
+        }
+        aElement.className = "page-link";
+        aElement.appendChild(document.createTextNode("Vorige"));
+        liElement.appendChild(aElement);
+        root.appendChild(liElement);
+    }
+    
+    // Create page button foreach page
+    for (let i=1; i <= totalPages; i++) {
+        let liElement = document.createElement("li");
+        if (i === pageNumber) {
+            liElement.className = "page-item active";
+        } else {
+            liElement.className = "page-item";
+        }
+        // Create the <a> element
+        let aElement = document.createElement("a");
+        aElement.addEventListener("click",function() {
+            onInputChanged(i.toString());
+        });
+        aElement.className = "page-link";
+        aElement.appendChild(document.createTextNode(i.toString()));
+        liElement.appendChild(aElement);
+        root.appendChild(liElement);
+    }
+    
+    {
+        // Create the next page button
+        let liElement = document.createElement("li");
+        let aElement = document.createElement("a");
+        if (pageNumber === totalPages) {
+            liElement.className = "page-item disabled";
+            aElement.setAttribute("tabindex", "-1");
+        } else {
+            liElement.className = "page-item";
+            aElement.addEventListener("click",function() {
+                onInputChanged(pageNumber+1);
+            });
+        }
+        aElement.className = "page-link";
+        aElement.appendChild(document.createTextNode("Volgende"));
+        liElement.appendChild(aElement);
+        root.appendChild(liElement);
+    }
+}
+
+
 
 window.onload = init;

@@ -212,7 +212,7 @@ namespace WebApp1.Controllers
             }
                 _context.Productwaarde.Add(productwaarde); 
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Indexproductwaarde));
+                return RedirectToAction("Index", "ProductList");
 
             }
             return View();
@@ -306,37 +306,6 @@ namespace WebApp1.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
-
-
-        public async Task<IActionResult> Deleteproductwaarde(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var products = await _context.Productwaarde
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (products == null)
-            {
-                return NotFound();
-            }
-
-            return View(products);
-        }
-
-        // POST: Products/Delete/5
-        [HttpPost, ActionName("Deleteproductwaarde")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmedd(int id)
-        {
-            var products = await _context.Productwaarde.FindAsync(id);
-            _context.Productwaarde.Remove(products);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Indexproductwaarde));
-        }
-
 
         private bool ProductsExists(int id)
         {

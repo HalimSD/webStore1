@@ -2,6 +2,7 @@
 @using WebApp1.products
 @model WebApp1.products.Productwaarde
 @{
+    ViewData["Title"] = "Product Bewerken";                                
     Productwaarde product = ViewBag.EditProduct;
     List<ViewProductAttributes> attributes = ViewBag.EditProductAttributes;
     string imagePath = "/images/products/" + product.Image;

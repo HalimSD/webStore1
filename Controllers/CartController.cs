@@ -98,7 +98,7 @@ namespace WebApp1.Controllers
                 _context.SaveChanges();
             }
         }
-       
+
         private void CheckItemInSC(int id, List<Item> cart)
         {
             int index = isExist(id);
@@ -166,8 +166,39 @@ namespace WebApp1.Controllers
             {
                 ViewBag.cart = cart;
                 ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
+                if (_userManager.GetUserName(User) == null)
+                {
+                    return View("sendOrderMail");
+                }
             }
             return View("checkOut");
+        }
+
+        [HttpPost]
+        public ActionResult EmailOrder (SubscribeModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var email = model.Email;
+                var message = new MimeMessage();
+
+                message.From.Add(new MailboxAddress("Halim", "testprojecthr@gmail.com"));
+                message.To.Add(new MailboxAddress(email));
+                message.Subject = "Your order";
+                message.Body = new TextPart("plain")
+                {
+                    Text = "Hello, This is your order: "
+                };
+                using (var client = new SmtpClient())
+                {
+                    client.Connect("smtp.gmail.com", 587, false);
+                    client.Authenticate("testprojecthr@gmail.com", "1.Password");
+                    client.Send(message);
+                    client.Disconnect(true);
+                }
+            }
+
+            return View("pay");
         }
 
         [Route("pay")]

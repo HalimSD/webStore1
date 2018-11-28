@@ -1,0 +1,14 @@
+@model WebApp1.Models.SubscribeModel
+<link rel="stylesheet" href="~/css/shopping_cart.css">
+<div class="pageRoot">
+@using (Html.BeginForm("EmailOrder", "Cart", FormMethod.Post))
+{
+   
+    <h2>You are not logged in, enter your email to receive a confirmation!</h2>
+    <hr>
+    @Html.TextBoxFor(model => model.Email)
+    @Html.ValidationMessageFor(model => model.Email)
+    <input type="submit" class="btn btn-primary" value="Checkout">
+    
+}
+</div>

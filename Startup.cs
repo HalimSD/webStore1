@@ -12,6 +12,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebApp1.Models;
+using DinkToPdf.Contracts;
+using DinkToPdf;
+using WebApp1.Controllers;
+using System.IO;
 
 namespace WebApp1
 {
@@ -32,7 +36,7 @@ namespace WebApp1
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<WebshopContext>(opt => opt.UseNpgsql(@"Host=localhost;Database=webShop;Username=postgres;Password=123"));
+            services.AddDbContext<WebshopContext>(opt => opt.UseNpgsql(@"Host=localhost;Database=webshopsWanneKaas123;Username=postgres;Password=wanne"));
 
             services.AddSession(options =>
             {
@@ -43,6 +47,7 @@ namespace WebApp1
             services.AddIdentity<Users, IdentityRole>()
             .AddEntityFrameworkStores<WebshopContext>()
             .AddDefaultTokenProviders().AddDefaultUI();
+            services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

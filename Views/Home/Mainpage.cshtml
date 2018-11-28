@@ -2,13 +2,7 @@
 @using WebApp1.Mainpage
 @model WebApp1.Mainpage.Mainpage;
 
-@{   
-    // In case currentCategoryName hasn't been assigned by controller
-    if (ViewBag.currentCategoryName == null)
-    {
-        ViewBag.currentCategoryName = "Alle Producten";
-    }
-    
+@{       
     // The code below is used to populate the product page
     // The product page itself consists of 3 columns
     // We must first sort all the products into each column    
@@ -54,7 +48,7 @@
     </div>
     <div class="col-10">
         <div class="container" id="productsArea">
-            <h2>@("U bekijkt nu: " + ViewBag.currentCategoryName)</h2>
+            <h2>@("U bekijkt nu: " + Model.currentCategoryName)</h2>
             <h4>Producten</h4>
             <div class="row" id="products">
                 <div class="col-sm">
@@ -158,10 +152,12 @@
             <div id="pagination">
                 <form class="form-inline my-2 my-lg-0" asp-action="Mainpage">
                     <input type="hidden" name="id" value="@(Model.pageindex - 1)">
+                     <input type="hidden" name= "productsrt" value= "@(Model.currentCategoryName)">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Vorige</button>
                 </form>
                 <form class="form-inline my-2 my-lg-0" asp-action="Mainpage">
                     <input class="form-control" type="hidden" name="id" value="@(Model.pageindex + 1)">
+                     <input type="hidden" name= "productsrt" value= "@(Model.currentCategoryName)">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Volgende</button>
                 </form>
                 <h4>Pagina: @Model.pageindex van @Model.getnumberofpages() </h4>
@@ -172,8 +168,8 @@
 </div>
  
 <script type='text/javascript'>
-    var names = @Html.Raw(Json.Serialize(ViewData["productsoorten"]));
-    var currSel = @Html.Raw(Json.Serialize(ViewBag.currentCategoryName));
+    var names = @Html.Raw(Json.Serialize(Model.Getproductsoortnamen()));
+    var currSel = @Html.Raw(Json.Serialize(Model.currentCategoryName));
     //var serializedUsers = JSON.parse(names);
     function addFields(){
         for (i = 0; i <  names.length; i++) { 
@@ -181,16 +177,15 @@
             // Clear previous contents of the container
             //container.removeChild(container.lastChild);
             // Append a node with a random text
-            var res = names[i].split("= ");
-            var end = res[1].split(" }");
+            
             //container.appendChild(document.createTextNode(end[0]));
                 
             // Create an <input> element, set its type and name attributes
             var btn = document.createElement("button");
             btn.type = "submit";
-            btn.name = "hi";
-            btn.value = end[0];
-            btn.innerHTML = end[0];
+            btn.name = "productsrt";
+            btn.value = names[i];
+            btn.innerHTML = names[i];
             
             // If this is the last button, give it a different id
             // The last button has a slightly different styling
@@ -212,7 +207,3 @@
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.2.0/anime.js"></script>
-
-
-
-         

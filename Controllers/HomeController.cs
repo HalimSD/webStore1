@@ -20,7 +20,7 @@ namespace klaas.Controllers
         private readonly WebshopContext _context;
         
         // Defines how many products is displayed foreach page
-        private readonly int maxPageSize = 9;
+        private readonly int maxPageSize = 1;
        
 
          public HomeController(
@@ -85,78 +85,51 @@ namespace klaas.Controllers
             return View();
         }
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
+       
 
-            return View();
-        }
-
-         public IActionResult Mainpage(int? id)
+      
+        public IActionResult Mainpage(string productsrt, int? id)
         {
-            var myList = new List<string>();
-            var productsoorten = from m in _context.Productsoort select new {m.Naam};
-            
-            
-            foreach (var product in productsoorten){
-                myList.Add(product.ToString());
-                Console.WriteLine(product.Naam);
-            }
-            var myArray = myList.ToArray();
-            ViewData["productsoorten"] =  myArray;
-            var result =  from m in _context.Productwaarde select m;
-            var main = new WebApp1.Mainpage.Mainpage();
-             main.productwaardes = result;
-             main.pagesize = maxPageSize;
-            main.pageindex = (id ?? 1);
-            return View(main);
-        }
 
-        // POST: Products/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Mainpage(string hi, int? id)
-        {
-            var myList = new List<string>();
-            var productsoorten = from m in _context.Productsoort select new {m.Naam};
-            foreach (var product in productsoorten){
-                myList.Add(product.ToString());
-                Console.WriteLine(product.Naam);
-            }
-            var myArray = myList.ToArray();
-            ViewData["productsoorten"] =  myArray;
-             if (hi == null)
+            var productsoorten = from m in _context.Productsoort select m;
+
+
+             if (productsrt == null)
             {
                 var productwaardenq =  from m in _context.Productwaarde select m;
                 var main = new WebApp1.Mainpage.Mainpage();
-             main.productwaardes = productwaardenq;
-             main.pagesize = maxPageSize;
-            main.pageindex = (id ?? 1);
+                    main.productwaardes = productwaardenq;
+                    main.currentCategoryName = "Alle Producten";
+                    main.productsoorten = productsoorten;
+                    main.pagesize = maxPageSize;
+                    main.pageindex = (id ?? 1);
                 return View(main);
             }
-            else if (hi == "select all"){
+
+            else if (productsrt == "Alle Producten"){
                 var productwaardenq =  from m in _context.Productwaarde select m;
                 var main = new WebApp1.Mainpage.Mainpage();
-             main.productwaardes = productwaardenq;
-             main.pagesize = maxPageSize;
-            main.pageindex = (id ?? 1);
+                    main.productwaardes = productwaardenq;
+                    main.currentCategoryName = "Alle Producten";
+                    main.productsoorten = productsoorten;
+                    main.pagesize = maxPageSize;
+                    main.pageindex = (id ?? 1);
                 return View(main);
-            
             }
+
             else{
-            var productsoortid = 0;
-            var productsoortidq = from m in _context.Productsoort where m.Naam == hi select m;
-            foreach (var product in productsoortidq){
-               productsoortid = product.Id;
-            }
-            var productwaardenq =  from m in _context.Productwaarde where productsoortid == m.ProductsoortId select m;
-            ViewBag.currentCategoryName = hi;
-            var main = new WebApp1.Mainpage.Mainpage();
-             main.productwaardes = productwaardenq;
-             main.pagesize = maxPageSize;
-            main.pageindex = (id ?? 1);
+                var query =
+                        from productsoort in _context.Productsoort
+                        join productwaarde in _context.Productwaarde on productsoort.Id equals productwaarde.ProductsoortId
+                        where productsoort.Naam == productsrt 
+                        select productwaarde;
+
+                var main = new WebApp1.Mainpage.Mainpage();
+                            main.productwaardes = query;
+                            main.currentCategoryName = productsrt;
+                            main.productsoorten = productsoorten;
+                            main.pagesize = maxPageSize;
+                            main.pageindex = (id ?? 1);
                 return View(main);
             }
         }
@@ -179,6 +152,13 @@ namespace klaas.Controllers
             ViewData["Message"] = "Sign Up.";
 
             return RedirectToAction("Register", "Account");
+        }
+
+         public IActionResult About()
+        {
+            ViewData["Message"] = "Your application description page.";
+
+            return View();
         }
 
         public IActionResult Privacy()

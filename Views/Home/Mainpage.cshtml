@@ -158,10 +158,12 @@
             <div id="pagination">
                 <form class="form-inline my-2 my-lg-0" asp-action="Mainpage">
                     <input type="hidden" name="id" value="@(Model.pageindex - 1)">
+                     <input type="hidden" name= "hi" value= "@(ViewBag.currentCategoryName)">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Vorige</button>
                 </form>
                 <form class="form-inline my-2 my-lg-0" asp-action="Mainpage">
                     <input class="form-control" type="hidden" name="id" value="@(Model.pageindex + 1)">
+                     <input type="hidden" name= "hi" value= "@(ViewBag.currentCategoryName)">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Volgende</button>
                 </form>
                 <h4>Pagina: @Model.pageindex van @Model.getnumberofpages() </h4>

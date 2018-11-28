@@ -20,7 +20,7 @@ namespace klaas.Controllers
         private readonly WebshopContext _context;
         
         // Defines how many products is displayed foreach page
-        private readonly int maxPageSize = 9;
+        private readonly int maxPageSize = 1;
        
 
          public HomeController(
@@ -136,7 +136,7 @@ namespace klaas.Controllers
             main.pageindex = (id ?? 1);
                 return View(main);
             }
-            else if (hi == "select all"){
+            else if (hi == "Alle Producten"){
                 var productwaardenq =  from m in _context.Productwaarde select m;
                 var main = new WebApp1.Mainpage.Mainpage();
              main.productwaardes = productwaardenq;

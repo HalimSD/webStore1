@@ -20,7 +20,7 @@ namespace klaas.Controllers
         private readonly WebshopContext _context;
         
         // Defines how many products is displayed foreach page
-        private readonly int maxPageSize = 1;
+        private readonly int maxPageSize = 9;
        
 
          public HomeController(

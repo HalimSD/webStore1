@@ -54,45 +54,18 @@ namespace WebApp1.Controllers
         [Route("buy")]
         public IActionResult Buy(int id)
         {
-            Productwaarde productModel = new Productwaarde();
             if (SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart") == null)
             {
                 List<Item> cart = new List<Item>();
-                cart.Add(new Item { Product = _context.Productwaarde.Find(id), Quantity = 1 });
-                Productwaarde productwaarde = _context.Productwaarde.Find(id);
-                int productQuantity = productwaarde.Quantity;
-                productwaarde.Quantity -= 1;
-                _context.SaveChanges();
+                AddToShoppingCart(id, cart);
                 SessionExtensions.Set(HttpContext.Session, "cart", cart);
-
             }
             else
             {
                 List<Item> cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
-                int index = isExist(id);
-                if (index != -1)
-                {
-                    cart[index].Quantity++;
-                }
-                else
-                {
-                    cart.Add(new Item { Product = _context.Productwaarde.Find(id), Quantity = 1 });
-                }
-                // foreach (var item in cart)
-                // {
-                //     int idProductWaarde = item.Product.Id;
-                //     int itemQuantity = item.Quantity;
-                //     int productQuantity = (from x in _context.Productwaarde where x.Id == id select x.Quantity).First();
-                //     productQuantity = productQuantity -1;
-                //     _context.SaveChanges();
-                // }
-
-
-                Productwaarde productwaarde = _context.Productwaarde.Find(id);
-                int productQuantity = productwaarde.Quantity;
-                productwaarde.Quantity -= 1;
+                CheckItemInSC(id, cart);
+                VoorraadVerminderen(id);
                 _context.SaveChanges();
-
                 SessionExtensions.Set(HttpContext.Session, "cart", cart);
             }
             return RedirectToAction("Mainpage", "Home");
@@ -101,11 +74,71 @@ namespace WebApp1.Controllers
         [Route("remove/{id}")]
         public IActionResult Remove(int id)
         {
+            Productwaarde productwaarde = _context.Productwaarde.Find(id);
             List<Item> cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
             int index = isExist(id);
+            productwaarde.Quantity += cart[index].Quantity;
+            _context.SaveChanges();
             cart.RemoveAt(index);
             SessionExtensions.Set(HttpContext.Session, "cart", cart);
             return RedirectToAction("Index");
+        }
+        private void VoorraadVerminderen(int id)
+        {
+            Productwaarde productwaarde = _context.Productwaarde.Find(id);
+            if (productwaarde.Quantity > 0)
+            {
+                productwaarde.Quantity -= 1;
+                _context.SaveChanges();
+
+            }
+            else
+            {
+                productwaarde.Quantity = 0;
+                _context.SaveChanges();
+            }
+        }
+       
+        private void CheckItemInSC(int id, List<Item> cart)
+        {
+            int index = isExist(id);
+            if (index == -1)
+            {
+                AddToShoppingCart(id, cart);
+            }
+            else
+            {
+                Productwaarde productwaarde = _context.Productwaarde.Find(id);
+                if (productwaarde.Quantity == 0)
+                {
+                    RedirectToAction("Index", "Cart");
+                }
+                else
+                {
+                    cart[index].Quantity++;
+                }
+            }
+        }
+
+        private void AddToShoppingCart(int id, List<Item> cart)
+        {
+            if (_context.Productwaarde.Find(id).Quantity > 0)
+            {
+                cart.Add(new Item { Product = _context.Productwaarde.Find(id), Quantity = 1 });
+            }
+            else
+            {
+                RedirectToAction("Index", "Cart");
+            }
+        }
+        private void SetSession()
+        {
+            List<Item> cart = new List<Item>();
+            SessionExtensions.Set(HttpContext.Session, "cart", cart);
+        }
+        private void GetSession()
+        {
+            SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
         }
 
         private int isExist(int id)

@@ -10,8 +10,8 @@ using WebApp1.Models;
 namespace WebApp1.Migrations
 {
     [DbContext(typeof(WebshopContext))]
-    [Migration("20181125124109_kaaspindakaas")]
-    partial class kaaspindakaas
+    [Migration("20181130150247_product")]
+    partial class product
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -309,9 +309,13 @@ namespace WebApp1.Migrations
 
                     b.Property<string>("Title");
 
+                    b.Property<int?>("productsId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProductsoortId");
+
+                    b.HasIndex("productsId");
 
                     b.ToTable("Productwaarde");
                 });
@@ -411,6 +415,10 @@ namespace WebApp1.Migrations
                         .WithMany("Productwaarde")
                         .HasForeignKey("ProductsoortId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("WebApp1.products.Products", "products")
+                        .WithMany()
+                        .HasForeignKey("productsId");
                 });
 #pragma warning restore 612, 618
         }

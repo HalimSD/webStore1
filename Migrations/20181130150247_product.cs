@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace WebApp1.Migrations
 {
-    public partial class bb : Migration
+    public partial class product : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -230,8 +230,10 @@ namespace WebApp1.Migrations
                     Title = table.Column<string>(nullable: true),
                     Price = table.Column<double>(nullable: false),
                     Image = table.Column<string>(nullable: true),
+                    Quantity = table.Column<int>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    ProductsoortId = table.Column<int>(nullable: false)
+                    ProductsoortId = table.Column<int>(nullable: false),
+                    productsId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -242,6 +244,12 @@ namespace WebApp1.Migrations
                         principalTable: "Productsoort",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Productwaarde_Products_productsId",
+                        column: x => x.productsId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -290,6 +298,26 @@ namespace WebApp1.Migrations
                         principalTable: "Productwaarde",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Items",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Quantity = table.Column<int>(nullable: false),
+                    ProductId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Items", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Items_Productwaarde_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Productwaarde",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -355,9 +383,19 @@ namespace WebApp1.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Items_ProductId",
+                table: "Items",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Productwaarde_ProductsoortId",
                 table: "Productwaarde",
                 column: "ProductsoortId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Productwaarde_productsId",
+                table: "Productwaarde",
+                column: "productsId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -387,6 +425,9 @@ namespace WebApp1.Migrations
                 name: "Favorites");
 
             migrationBuilder.DropTable(
+                name: "Items");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -396,13 +437,13 @@ namespace WebApp1.Migrations
                 name: "Attribuutsoort");
 
             migrationBuilder.DropTable(
-                name: "Products");
-
-            migrationBuilder.DropTable(
                 name: "Productwaarde");
 
             migrationBuilder.DropTable(
                 name: "Productsoort");
+
+            migrationBuilder.DropTable(
+                name: "Products");
         }
     }
 }

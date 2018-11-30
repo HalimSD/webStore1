@@ -307,9 +307,13 @@ namespace WebApp1.Migrations
 
                     b.Property<string>("Title");
 
+                    b.Property<int?>("productsId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProductsoortId");
+
+                    b.HasIndex("productsId");
 
                     b.ToTable("Productwaarde");
                 });
@@ -409,6 +413,10 @@ namespace WebApp1.Migrations
                         .WithMany("Productwaarde")
                         .HasForeignKey("ProductsoortId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("WebApp1.products.Products", "products")
+                        .WithMany()
+                        .HasForeignKey("productsId");
                 });
 #pragma warning restore 612, 618
         }

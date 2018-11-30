@@ -40,6 +40,7 @@ public class Productsoort
     public string Naam { get; set; }
     public List<Attribuutsoort> Attribuutsoort  { get; set; }
     public List<Productwaarde> Productwaarde  { get; set; }
+
     
   }
   public class Attribuutsoort
@@ -63,6 +64,8 @@ public class Productsoort
     public int ProductsoortId{ get; set; }
     public Productsoort productsoort { get; set; }
     public List<Attribuutwaarde> Attribuutwaarde { get; set; }
+    public Products products { get; set; }
+
   }
 
   public class Attribuutwaarde

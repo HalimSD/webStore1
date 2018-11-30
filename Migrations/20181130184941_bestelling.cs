@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace WebApp1.Migrations
 {
-    public partial class ProductDiscount : Migration
+    public partial class bestelling : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -181,6 +181,29 @@ namespace WebApp1.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Bestelling",
+                columns: table => new
+                {
+                    BestellingId = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Price = table.Column<double>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false),
+                    Title = table.Column<string>(nullable: true),
+                    Image = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bestelling", x => x.BestellingId);
+                    table.ForeignKey(
+                        name: "FK_Bestelling_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Extra_Atributes",
                 columns: table => new
                 {
@@ -229,7 +252,6 @@ namespace WebApp1.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Title = table.Column<string>(nullable: true),
                     Price = table.Column<double>(nullable: false),
-                    DiscountedPrice = table.Column<double>(nullable: false),
                     Image = table.Column<string>(nullable: true),
                     Quantity = table.Column<int>(nullable: false),
                     Description = table.Column<string>(nullable: true),
@@ -367,6 +389,11 @@ namespace WebApp1.Migrations
                 column: "ProductwaardeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Bestelling_UserId",
+                table: "Bestelling",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Extra_Atributes_ProductsId",
                 table: "Extra_Atributes",
                 column: "ProductsId");
@@ -408,6 +435,9 @@ namespace WebApp1.Migrations
                 name: "Attribuutwaarde");
 
             migrationBuilder.DropTable(
+                name: "Bestelling");
+
+            migrationBuilder.DropTable(
                 name: "Extra_Atributes");
 
             migrationBuilder.DropTable(
@@ -420,10 +450,10 @@ namespace WebApp1.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Attribuutsoort");
 
             migrationBuilder.DropTable(
-                name: "Attribuutsoort");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Products");

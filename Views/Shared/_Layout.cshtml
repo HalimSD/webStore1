@@ -45,8 +45,12 @@
                 <a class="nav-link" href="@Url.Action("Index", "Favorites")">Favorieten<span class="sr-only">(current)</span></a>
             </li>
         }
-      <li class="nav-item">
-      </li>
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("History", "Cart")">History<span class="sr-only">(current)</span></a>
+            </li>
+        }
        <li class="nav-item">
           <a href="@Url.Action("Index", "Cart")"><img src="~/Images/ShoppingCart.png" width="40"/></a>
       </li>

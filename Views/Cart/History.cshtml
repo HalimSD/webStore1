@@ -1,0 +1,43 @@
+<link rel="stylesheet" href="~/css/product_creation_generic.css">
+<link rel="stylesheet" href="~/css/favorites.css">
+<div class="pageRoot">
+    <h2>Jouw vorige Bestellingen</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                Product naam
+            </th>
+            <th>
+                Product prijs
+            </th>
+            <th>
+                Product kwantiteit
+            </th>
+            <th>
+                Product foto
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (Bestelling item in ViewBag.bestelling)
+        {
+            <tr>
+                <td>
+                    @item.Title
+                </td>
+                <td>
+                    @item.Price
+                </td>
+                <td>
+                    @item.Quantity
+                </td>
+                <td>
+                   <img src="~/images/products/@item.Image" width="60" id="productImage"><img/>
+                </td>
+            </tr>               
+        }
+        </tbody>
+    </table>
+</div>

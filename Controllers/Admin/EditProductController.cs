@@ -16,7 +16,7 @@ using NuGet.Frameworks;
 namespace WebApp1.Controllers
 {
     [Authorize(Roles = "Admin")]
-    [Route("/admin/[controller]/")]
+    [Route("/Admin/[controller]/")]
     public class EditProductController : Controller
     {
         private readonly WebshopContext context;

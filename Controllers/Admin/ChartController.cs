@@ -11,7 +11,7 @@
  namespace WebApp1.Controllers
  {
      [Authorize(Roles = "Admin")]
-     [Route("/admin/[controller]/[action]")]
+     [Route("/Admin/[controller]/[action]")]
      public class ChartController : Controller
      {
          public IActionResult Statistics()

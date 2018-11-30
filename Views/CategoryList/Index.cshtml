@@ -1,0 +1,57 @@
+@{
+    ViewData["Title"] = "Categorie Lijst";
+}
+
+<link rel="stylesheet" href="~/css/product_creation_generic.css">
+<link rel="stylesheet" href="~/css/shopping_cart.css">
+<div class="pageRoot" style="margin-left: 20%; margin-right: 20%;">
+    <h2>Product Categorieën</h2>
+    <hr>
+    <p>
+        <a href="@Url.Action("Index", "products")">Nieuw Categorie Aanmaken</a>
+    </p>
+    <table id="table" style="border-radius: 3px;">
+        <thead>
+        <tr>
+            <th>
+                <input id="filterId" type="text" class="form-control" placeholder="Filteren bij ID">
+            </th>
+            <th>
+                <input id="filterName" type="text" class="form-control" placeholder="Filteren bij Naam">
+            </th>
+            <th>
+                <input id="filterProductCount" type="text" class="form-control" placeholder="Filteren bij Aantal Producten">
+            </th>
+            <th>
+                <input id="filterAttributeCount" type="text" class="form-control" placeholder="Filteren bij Aantal Attributen">
+            </th>
+            <th>
+                
+            </th>
+        </tr>
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                Naam
+            </th>
+            <th>
+                Aantal Producten
+            </th>
+            <th>
+                Aantal Attributen
+            </th>
+            <th>
+                Opties
+            </th>
+        </tr>
+        </thead>
+        <tbody id="tableBody">
+        </tbody>
+    </table>
+    <ul id="pagination" class="pagination" style="margin-top: 10px;">
+    </ul>
+</div>
+<br>
+<script type="text/javascript" src="~/js/loadCategoryList.js"></script>

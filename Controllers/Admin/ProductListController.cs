@@ -8,7 +8,7 @@ using WebApp1.products;
 
 namespace WebApp1.Controllers.Admin
 {
-    [Route("/admin/[controller]/")]
+    [Route("/Admin/[controller]/")]
     public class ProductListController : Controller
     {
         private readonly WebshopContext context;

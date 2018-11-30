@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using WebApp1.products;
 
 namespace WebApp1.Models
@@ -13,6 +14,15 @@ namespace WebApp1.Models
         public double Price { get; set; }
         public int Quantity { get; set; }
         public string Category { get; set; }
+    }
+
+    public class CategoryListViewModel
+    {
+        // JSON
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int ProductCount { get; set; }
+        public int AttributeCount { get; set; }
     }
 
     public class ProductListViewModelHelper
@@ -45,6 +55,42 @@ namespace WebApp1.Models
                 model.Data.Add(viewModel);
             }
 
+            return model;
+        }
+
+        public PaginationViewModel<CategoryListViewModel> ConvertToCategoryViewModel(WebshopContext context,
+            PaginationViewModel<Productsoort> productCategory)
+        {
+            PaginationViewModel<CategoryListViewModel> model = new PaginationViewModel<CategoryListViewModel>
+            {
+                PageNumber = productCategory.PageNumber,
+                PageSize = productCategory.PageSize,
+                TotalPages = productCategory.TotalPages,
+                Data = new List<CategoryListViewModel>()
+            };
+
+            foreach (Productsoort item in productCategory.Data)
+            {
+                CategoryListViewModel viewModel = new CategoryListViewModel
+                {
+                    Id = item.Id,
+                    Name = item.Naam,
+                    ProductCount =
+                    (
+                        from pw in context.Productwaarde
+                        where pw.ProductsoortId == item.Id
+                        select pw.Id
+                    ).Count(),
+                    AttributeCount =
+                    (
+                        from atts in context.Attribuutsoort
+                        where atts.ProductsoortId == item.Id
+                        select atts.Attrbuut
+                    ).Count()
+                };
+                model.Data.Add(viewModel);
+            }
+            
             return model;
         }
     }

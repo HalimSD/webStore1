@@ -60,7 +60,7 @@ namespace WebApp1.Controllers
         
         [HttpPost]
         [Route("Edit")]
-        public IActionResult Edit(Productwaarde product, int attributeCount, IFormFile img)
+        public IActionResult Edit(Productwaarde product, int attributeCount, IFormFile img, bool setDiscount=false)
         {            
             // Get all the attributes and update the database with the new values
             List<ViewProductAttributes> attributes = new List<ViewProductAttributes>();
@@ -90,6 +90,17 @@ namespace WebApp1.Controllers
             {
                 productModel.Description = product.Description;
             }
+
+            if (setDiscount)
+            {
+                productModel.DiscountedPrice = product.DiscountedPrice;
+            }
+            else
+            {
+                // Setting discount price to -1 disabled it!
+                productModel.DiscountedPrice = -1;
+            }
+            
             
             if (img != null && img.Length > 0)
             {

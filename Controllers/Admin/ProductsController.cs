@@ -210,6 +210,11 @@ namespace WebApp1.Controllers
                     }
                 }
             }
+
+                if (productwaarde.Image == null)
+                {
+                    productwaarde.Image = "default.png";
+                }
                 _context.Productwaarde.Add(productwaarde); 
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "ProductList");

@@ -119,3 +119,26 @@ div.descriptionTitle {
     margin-top: 30px;
     font-weight: bold;
 }
+
+#disabledPrice {
+    font-size: 30px;
+    color: rgba(200,200,200,255);
+    text-decoration: line-through;
+    text-decoration-color: red;
+    font-style: italic;
+    width: 100%;
+}
+
+#discountPrice {
+    font-size: 30px;
+    color: orange;
+    width: 100%;
+}
+
+#productInSaleNotification {
+    font-weight: bold;
+    font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    color: orange;
+    text-decoration: underline;
+}

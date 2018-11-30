@@ -12,6 +12,7 @@ namespace WebApp1.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public double Price { get; set; }
+        public double DiscountedPrice { get; set; }
         public int Quantity { get; set; }
         public string Category { get; set; }
     }
@@ -44,6 +45,7 @@ namespace WebApp1.Models
                     Id = item.Id, 
                     Name = item.Title,
                     Price = item.Price,
+                    DiscountedPrice = item.DiscountedPrice,
                     Quantity = item.Quantity,
                     Category = 
                     (

@@ -56,6 +56,14 @@ namespace klaas.Controllers
             product.Image = productwaarde.Image;
             product.Description = productwaarde.Description;
             product.Quantity = productwaarde.Quantity;
+            if (productwaarde.DiscountedPrice == -1)
+            {
+                product.DiscountedPrice = "-1";
+            }
+            else
+            {
+                product.DiscountedPrice = "€ " + productwaarde.DiscountedPrice.ToString();
+            }
 
             
             // If product is already within user's favorites then skip it

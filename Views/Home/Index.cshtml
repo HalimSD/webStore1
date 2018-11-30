@@ -64,24 +64,38 @@
             <div class="card-body">
               <form action="@Url.Action("Index", "ViewProduct")" method="get">
                 <div id="container" class="form-group">
-                  <img src="@("/images/products/" + products[0].Image)" id="productImage"><img/>
-                  <h5 class="card-title">@products[0].Title</h5>
+                  <img src="@("/images/products/" + products[products.Count() - 1].Image)" id="productImage"><img/>
+                  <h5 class="card-title">@products[products.Count() - 1].Title</h5>
                   <div>
-                    <div>€ @products[0].Price</div>
-                    @if (products[0].Quantity > 0)
+                    @if (products[products.Count() - 1].DiscountedPrice != -1)
                     {
-                      <div>@string.Format("Voorraad: {0} stuk(ken)",products[0].Quantity)</div>
+                      <div class="row">
+                        <div class="col-4-sm">
+                          <div id="disabledPrice">€ @products[products.Count() - 1].Price</div>
+                        </div>
+                        <div class="col-4-sm" style="margin-left: 15px;">
+                          <div id="discountPrice">NU VOOR: € @products[products.Count() - 1].DiscountedPrice</div>
+                        </div>
+                      </div>
+                    }
+                    else
+                    {
+                      <div>€ @products[products.Count() - 1].Price</div>
+                    }
+                    @if (products[products.Count() - 1].Quantity > 0)
+                    {
+                      <div>@string.Format("Voorraad: {0} stuk(ken)",products[products.Count() - 1].Quantity)</div>
                     }
                     else
                     {
                       <div id="outOfStock">Geen voorraad beschikbaar!</div>
                     }
                   </div>
-                  <input type="hidden" name="id" value='@products[0].Id'/>
+                  <input type="hidden" name="id" value='@products[products.Count() - 1].Id'/>
                   <input type="submit" class="btn btn-primary" value="Details">
-                  @if (products[0].Quantity > 0)
+                  @if (products[products.Count() - 1].Quantity > 0)
                   {
-                    <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@products[0].Id" >
+                    <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@products[products.Count() - 1].Id" >
                   }
                 </div>
               </form>
@@ -96,24 +110,38 @@
             <div class="card-body">
               <form action="@Url.Action("Index", "ViewProduct")" method="get">
                 <div id="container" class="form-group">
-                  <img src="@("/images/products/" + products[1].Image)" id="productImage"><img/>
-                  <h5 class="card-title">@products[1].Title</h5>
+                  <img src="@("/images/products/" + products[products.Count() - 2].Image)" id="productImage"><img/>
+                  <h5 class="card-title">@products[products.Count() - 2].Title</h5>
                   <div>
-                    <div>€ @products[1].Price</div>
-                    @if (products[1].Quantity > 0)
+                    @if (products[products.Count() - 2].DiscountedPrice != -1)
                     {
-                      <div>@string.Format("Voorraad: {0} stuk(ken)",products[1].Quantity)</div>
+                      <div class="row">
+                        <div class="col-4-sm">
+                          <div id="disabledPrice">€ @products[products.Count() - 2].Price</div>
+                        </div>
+                        <div class="col-4-sm" style="margin-left: 15px;">
+                          <div id="discountPrice">NU VOOR: € @products[products.Count() - 2].DiscountedPrice</div>
+                        </div>
+                      </div>
+                    }
+                    else
+                    {
+                      <div>€ @products[products.Count() - 2].Price</div>
+                    }
+                    @if (products[products.Count() - 2].Quantity > 0)
+                    {
+                      <div>@string.Format("Voorraad: {0} stuk(ken)",products[products.Count() - 2].Quantity)</div>
                     }
                     else
                     {
                       <div id="outOfStock">Geen voorraad beschikbaar!</div>
                     }
                   </div>
-                  <input type="hidden" name="id" value='@products[1].Id'/>
+                  <input type="hidden" name="id" value='@products[products.Count() - 2].Id'/>
                   <input type="submit" class="btn btn-primary" value="Details">
-                  @if (products[1].Quantity > 0)
+                  @if (products[products.Count() - 2].Quantity > 0)
                   {
-                    <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@products[1].Id" >
+                    <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@products[products.Count() - 2].Id" >
                   }
                 </div>
               </form>
@@ -128,24 +156,38 @@
             <div class="card-body">
               <form action="@Url.Action("Index", "ViewProduct")" method="get">
                 <div id="container" class="form-group">
-                  <img src="@("/images/products/" + products[2].Image)" id="productImage"><img/>
-                  <h5 class="card-title">@products[1].Title</h5>
+                  <img src="@("/images/products/" + products[products.Count() - 3].Image)" id="productImage"><img/>
+                  <h5 class="card-title">@products[products.Count() - 2].Title</h5>
                   <div>
-                    <div>€ @products[2].Price</div>
-                    @if (products[2].Quantity > 0)
+                    @if (products[products.Count() - 3].DiscountedPrice != -1)
                     {
-                      <div>@string.Format("Voorraad: {0} stuk(ken)",products[2].Quantity)</div>
+                      <div class="row">
+                        <div class="col-4-sm">
+                          <div id="disabledPrice">€ @products[products.Count() - 3].Price</div>
+                        </div>
+                        <div class="col-4-sm" style="margin-left: 15px;">
+                          <div id="discountPrice">NU VOOR: € @products[products.Count() - 3].DiscountedPrice</div>
+                        </div>
+                      </div>
+                    }
+                    else
+                    {
+                      <div>€ @products[products.Count() - 3].Price</div>
+                    }
+                    @if (products[products.Count() - 3].Quantity > 0)
+                    {
+                      <div>@string.Format("Voorraad: {0} stuk(ken)",products[products.Count() - 3].Quantity)</div>
                     }
                     else
                     {
                       <div id="outOfStock">Geen voorraad beschikbaar!</div>
                     }
                   </div>
-                  <input type="hidden" name="id" value='@products[2].Id'/>
+                  <input type="hidden" name="id" value='@products[products.Count() - 3].Id'/>
                   <input type="submit" class="btn btn-primary" value="Details">
-                  @if (products[2].Quantity > 0)
+                  @if (products[products.Count() - 3].Quantity > 0)
                   {
-                    <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@products[2].Id" >
+                    <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@products[products.Count() - 3].Id" >
                   }
                 </div>
               </form>
@@ -165,12 +207,18 @@
 
   @foreach (var item in Model)
   {
-    @:text.push("@item.Title"); 
+    if (item.DiscountedPrice != -1)
+    {
+      @:text.push("@item.Title");
+    } 
   }
 
   @foreach (var item in Model)
   {
-    @:imgs.push('/images/products/' + "@item.Image"); 
+    if (item.DiscountedPrice != -1)
+    {
+      @:imgs.push('/images/products/' + "@item.Image");
+    } 
   }
 
   var container = document.getElementsByClassName('imgDiv');

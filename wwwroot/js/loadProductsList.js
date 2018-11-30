@@ -98,9 +98,15 @@ function populateTable(jsonModel, filtered) {
         // Iterate through the object and create td html foreach value
         $.each(obj, function (key, value) {
             let tdElement = document.createElement("td");
-            let txtNode = document.createTextNode(value.toString());
+            let txtNode;
+            if (key === "discountedPrice" && value == "-1") {
+                txtNode = document.createTextNode("Geen Korting");
+            }
+            else {
+                txtNode = document.createTextNode(value.toString());
+            }
             if (key === "id") {
-                tdElement.setAttribute("width", "10%");
+                tdElement.setAttribute("width", "5%");
                 id = value;
             }
             

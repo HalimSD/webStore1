@@ -89,7 +89,8 @@ namespace Controllers
                                 Title = title,
                                 Price = price,
                                 ProductsoortId = productsid,
-                                Image = "default.png"
+                                Image = "default.png",
+                                DiscountedPrice = -1
                             };
 
                             _context.Productwaarde.Add(productwaarde);

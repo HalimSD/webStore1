@@ -17,6 +17,18 @@ div.card:hover {
     transition: 0.3s;
 }
 
+#disabledPrice {
+    color: rgba(200,200,200,255);
+    text-decoration: line-through;
+    text-decoration-color: red;
+    font-style: italic;
+}
+
+#discountPrice {
+    color: orange;
+    font-weight: bold;
+}
+
 #productImage {
     display: block;
     margin-left: auto;
@@ -97,3 +109,4 @@ button.categoryBtnSelected {
 #pagination * {
     margin-left: 10px;
 }
+

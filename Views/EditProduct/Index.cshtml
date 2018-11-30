@@ -29,6 +29,19 @@
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
                 <div class="form-group">
+                    <label asp-for="DiscountedPrice" class="control-label">Korting prijs</label>
+                    <input asp-for="DiscountedPrice" class="form-control" placeholder="Korting prijs" value="@product.DiscountedPrice"/>
+                    @if (product.DiscountedPrice == -1)
+                    {
+                        <input type="checkbox" name="setDiscount" value="true"/>@("Korting Inschakelen")<br>
+                    }
+                    else
+                    {
+                        <input type="checkbox" name="setDiscount" value="true" checked/>@("Korting Inschakelen")<br> 
+                    }
+                    <span asp-validation-for="DiscountedPrice" class="text-danger"></span>
+                </div>
+                <div class="form-group">
                     <input name="img" type="file" Class="form-control" value="@product.Image"/>
                 </div>
             </div>

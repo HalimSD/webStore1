@@ -75,7 +75,7 @@ namespace WebApp1.Controllers.Admin
         }
 
         [Route("GetDataFiltered")]
-        public JsonResult GetDataFiltered(string id="", string name="", string price="", string stock="", string category="", int pageIndex=1)
+        public JsonResult GetDataFiltered(string id="", string name="", string price="", string discountPrice="", string stock="", string category="", int pageIndex=1)
         {
             // Create a PaginationHelper instance. It will be used to generate a page
             PaginationHelper<Productwaarde> pagination = new PaginationHelper<Productwaarde>(maxPageSize,context.Productwaarde);

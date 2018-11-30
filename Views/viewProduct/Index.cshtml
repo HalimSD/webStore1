@@ -17,7 +17,25 @@
                 <div class="descriptionTitle">BESCHRIJVING</div>
                 <div class="descriptionContent">@viewProductModel.Description</div>
             </div>
-            <div id="price">@viewProductModel.Price</div>
+            @if (viewProductModel.DiscountedPrice != "-1")
+            {
+                <div id="productInSaleNotification">PRODUCT IS IN DE AANBIEDING!</div>
+            }
+            @if (viewProductModel.DiscountedPrice == "-1")
+            {
+                <div id="price">@viewProductModel.Price</div>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col">
+                        <div id="disabledPrice">@viewProductModel.Price</div>
+                    </div>
+                    <div class="col">
+                        <div id="discountPrice">@viewProductModel.DiscountedPrice</div>
+                    </div>
+                </div>
+            }
             @if (inStock)
             {
                 <div id="quantity">@("Voorraad: "+viewProductModel.Quantity)</div>

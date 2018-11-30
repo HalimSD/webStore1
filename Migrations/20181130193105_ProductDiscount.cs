@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace WebApp1.Migrations
 {
-    public partial class product : Migration
+    public partial class ProductDiscount : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -229,11 +229,11 @@ namespace WebApp1.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Title = table.Column<string>(nullable: true),
                     Price = table.Column<double>(nullable: false),
+                    DiscountedPrice = table.Column<double>(nullable: false),
                     Image = table.Column<string>(nullable: true),
                     Quantity = table.Column<int>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    ProductsoortId = table.Column<int>(nullable: false),
-                    productsId = table.Column<int>(nullable: true)
+                    ProductsoortId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -244,12 +244,6 @@ namespace WebApp1.Migrations
                         principalTable: "Productsoort",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Productwaarde_Products_productsId",
-                        column: x => x.productsId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -391,11 +385,6 @@ namespace WebApp1.Migrations
                 name: "IX_Productwaarde_ProductsoortId",
                 table: "Productwaarde",
                 column: "ProductsoortId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Productwaarde_productsId",
-                table: "Productwaarde",
-                column: "productsId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -437,13 +426,13 @@ namespace WebApp1.Migrations
                 name: "Attribuutsoort");
 
             migrationBuilder.DropTable(
+                name: "Products");
+
+            migrationBuilder.DropTable(
                 name: "Productwaarde");
 
             migrationBuilder.DropTable(
                 name: "Productsoort");
-
-            migrationBuilder.DropTable(
-                name: "Products");
         }
     }
 }

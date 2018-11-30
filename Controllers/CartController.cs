@@ -135,6 +135,7 @@ namespace WebApp1.Controllers
             if (_context.Productwaarde.Find(id).Quantity > 0)
             {
                 cart.Add(new Item { Product = _context.Productwaarde.Find(id), Quantity = 1 });
+
             }
             else
             {
@@ -164,7 +165,7 @@ namespace WebApp1.Controllers
             return -1;
         }
 
-        [Route("checkOut")]
+        // [Route("checkOut")]
         public IActionResult checkOut()
         {
             var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
@@ -175,7 +176,20 @@ namespace WebApp1.Controllers
             else
             {
                 ViewBag.cart = cart;
-                ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
+                ViewBag.total = cart.Sum(items => items.Product.Price * items.Quantity);
+                foreach (var i in cart)
+                {
+                    Bestelling bestelling = new Bestelling
+                    {
+                        Quantity = i.Quantity,
+                        Price = i.Product.Price,
+                        Image = i.Product.Image,
+                        Title = i.Product.Title,
+                        UserId = _userManager.GetUserId(User)
+                    };
+                    _context.Add(bestelling);
+                    _context.SaveChanges();
+                }
                 if (_userManager.GetUserName(User) == null)
                 {
                     return View("sendOrderMail");
@@ -211,6 +225,26 @@ namespace WebApp1.Controllers
             }
 
             return View("pay");
+        }
+
+        [Route("History")]
+        public IActionResult History(){
+            string userId = _userManager.GetUserId(User);
+            List<Bestelling> bestellings =
+            (
+                from b in _context.Bestelling
+                where b.UserId == userId 
+                select new Bestelling
+                {
+                    Title = b.Title,
+                    Price = b.Price,
+                    Quantity = b.Quantity,
+                    Image = b.Image
+                }
+            ).ToList();
+            ViewBag.bestelling = bestellings;
+
+            return View ();
         }
 
         [Route("pay")]

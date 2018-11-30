@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
@@ -8,10 +9,27 @@ namespace WebApp1.Models
 {
     public class Users : IdentityUser
     {
+        public ICollection<Bestelling> Bestellings { get; set; }
+
         // public string FirstName {get;set;}
         // public string LastName {get;set;}
 
     }
+     public class Bestelling
+  {
+    public int BestellingId { get; set; }
+    public double Price { get; set; }
+    public int Quantity { get; set; }
+    public string Title { get; set; }
+    public string Image { get; set; }
+
+    public string UserId { get; set; }
+    public virtual Users User {get;set;}
+  }
+
+
+  
+
     public class Roles : IdentityRole
     {
         private readonly RoleManager<IdentityRole> _roleManager;

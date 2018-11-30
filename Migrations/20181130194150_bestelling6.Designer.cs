@@ -10,8 +10,8 @@ using WebApp1.Models;
 namespace WebApp1.Migrations
 {
     [DbContext(typeof(WebshopContext))]
-    [Migration("20181130150247_product")]
-    partial class product
+    [Migration("20181130194150_bestelling6")]
+    partial class bestelling6
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -126,6 +126,28 @@ namespace WebApp1.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("WebApp1.Models.Bestelling", b =>
+                {
+                    b.Property<int>("BestellingId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Image");
+
+                    b.Property<double>("Price");
+
+                    b.Property<int>("Quantity");
+
+                    b.Property<string>("Title");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("BestellingId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Bestelling");
                 });
 
             modelBuilder.Entity("WebApp1.Models.FavoritesModel", b =>
@@ -309,13 +331,9 @@ namespace WebApp1.Migrations
 
                     b.Property<string>("Title");
 
-                    b.Property<int?>("productsId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ProductsoortId");
-
-                    b.HasIndex("productsId");
 
                     b.ToTable("Productwaarde");
                 });
@@ -363,6 +381,13 @@ namespace WebApp1.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WebApp1.Models.Bestelling", b =>
+                {
+                    b.HasOne("WebApp1.Models.Users", "User")
+                        .WithMany("Bestellings")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("WebApp1.Models.FavoritesModel", b =>
@@ -415,10 +440,6 @@ namespace WebApp1.Migrations
                         .WithMany("Productwaarde")
                         .HasForeignKey("ProductsoortId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("WebApp1.products.Products", "products")
-                        .WithMany()
-                        .HasForeignKey("productsId");
                 });
 #pragma warning restore 612, 618
         }

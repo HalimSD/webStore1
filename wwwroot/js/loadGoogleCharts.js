@@ -1,11 +1,24 @@
-google.charts.load('current', { 'packages': ['corechart'] });
-google.charts.setOnLoadCallback(drawChart);
+function init() {
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+}
 
 function drawChart() {
     $.get('GetCategorySold', function (jsonData) {
-        let json = jsonData;
-        let data = new google.visualization.DataTable(json);
-
+        let dataArray = [];
+        let isFirst = true;
+        jsonData.forEach(function (element) {
+            let key = element[0];
+            let value = element[1];
+            if (isFirst) {
+                isFirst = false;
+            } else {
+                value = parseInt(value);
+            }
+            dataArray.push([key, value]);
+            console.log(key + " " + value);
+        });
+        let data = new google.visualization.arrayToDataTable(dataArray);
         let option = {
             title: 'Percentage verkoop van elk categorie',
             width: 500,
@@ -36,3 +49,5 @@ function drawChart() {
         chart.draw(data, option);
     });
 }
+
+window.onload = init;

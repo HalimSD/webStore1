@@ -7,13 +7,21 @@
  using Microsoft.AspNetCore.Mvc;
 
  using Models;
+ using Remotion.Linq.Clauses;
 
- namespace WebApp1.Controllers
+namespace WebApp1.Controllers
  {
      [Authorize(Roles = "Admin")]
      [Route("/Admin/[controller]/[action]")]
      public class ChartController : Controller
      {
+         private readonly WebshopContext context;
+        
+         public ChartController(WebshopContext context)
+         {
+             this.context = context;
+         }
+         
          public IActionResult Statistics()
          {
              return View();
@@ -36,71 +44,33 @@
 
          public JsonResult GetCategorySold()
          {
-             List<CategorySoldColsModel> column = new List<CategorySoldColsModel>
-             {
-                 new CategorySoldColsModel
-                 {
-                     id = "taxType",
-                     label = "Tax Type",
-                     type = "string"
-                 },
-                 new CategorySoldColsModel
-                 {
-                     id = "percent",
-                     label = "Tax Percentage",
-                     type = "number"
-                 }
-             };
-             List<CategorySoldRowsModel> row = new List<CategorySoldRowsModel>
-             {
-                 new CategorySoldRowsModel
-                 {
-                     c = new List<object>
-                     {
-                         new CategorySoldColName
-                         {
-                             v = "Speedboten"
-                         },
-                         new CategorySoldValName
-                         {
-                             v = 30
-                         }
-                     }
-                 },
-                 new CategorySoldRowsModel
-                 {
-                     c = new List<object>
-                     {
-                         new CategorySoldColName
-                         {
-                             v = "Zeilboten"
-                         },
-                         new CategorySoldValName
-                         {
-                             v = 50
-                         }
-                     }
-                 },
-                 new CategorySoldRowsModel
-                 {
-                     c = new List<object>
-                     {
-                         new CategorySoldColName
-                         {
-                             v = "Boot Onderdelen"
-                         },
-                         new CategorySoldValName
-                         {
-                             v = 20
-                         }
-                     }
-                 }
-             };
+             string[] categoryArray = (from ps in context.Productsoort select ps.Naam).ToArray();
+             List<BesteldeItem> orders = (from bi in context.BesteldeItem select bi).ToList();
+             List<string[]> json = new List<string[]>();
+             json.Add(new[] {"Categorieen", "Verkochtte Producten"});
 
-             CategorySoldModel json = new CategorySoldModel {
-                 cols = column,
-                 rows = row
-             };
+             foreach (string category in categoryArray)
+             {
+                 int count = 0;
+                 foreach (BesteldeItem order in orders)
+                 {
+                     string categoryName =
+                     (
+                         from pw in context.Productwaarde
+                         from ps in context.Productsoort
+                         where pw.Id == order.ProductwaardeId &&
+                               pw.ProductsoortId == ps.Id &&
+                               ps.Naam == category
+                         select ps.Naam
+                     ).FirstOrDefault();
+
+                     if (categoryName == null) continue;
+                     count += order.Quantity;
+                 }
+                 
+                 json.Add(new[] {category, count.ToString()});
+             }
+             
              return Json(json);
          }
      }

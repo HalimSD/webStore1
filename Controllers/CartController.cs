@@ -1,22 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using WebApp1.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using WebApp1.products;
-using Microsoft.EntityFrameworkCore;
 using MailKit.Net.Smtp;
 using MimeKit;
 using Microsoft.AspNetCore.Identity;
-using MailKit.Net.Imap;
-using Microsoft.AspNetCore.Session;
 using System.Text;
 using DinkToPdf;
 using System.IO;
 using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Internal;
 using System;
 
 namespace WebApp1.Controllers
@@ -135,7 +129,7 @@ namespace WebApp1.Controllers
             if (_context.Productwaarde.Find(id).Quantity > 0)
             {
                 cart.Add(new Item { Product = _context.Productwaarde.Find(id), Quantity = 1 });
-
+                
             }
             else
             {
@@ -178,6 +172,7 @@ namespace WebApp1.Controllers
                 ViewBag.cart = cart;
                 ViewBag.total = cart.Sum(items => items.Product.Price * items.Quantity);
                 Bestelling bestelling = new Bestelling();
+                Productwaarde productwaarde = new Productwaarde();
                 bestelling.Status = "OnderWeg";
                 bestelling.Date = DateTime.Now.ToShortDateString();
                 bestelling.UserId = _userManager.GetUserId(User);
@@ -191,7 +186,8 @@ namespace WebApp1.Controllers
                         Price = i.Product.Price * i.Quantity,
                         Image = i.Product.Image,
                         Title = i.Product.Title,
-                        BestellingId = bestelling.BestellingId
+                        BestellingId = bestelling.BestellingId,
+                        ProductwaardeId = i.Product.Id
                     };
                     _context.Add(besteldeItem);
                     _context.SaveChanges();
@@ -235,6 +231,7 @@ namespace WebApp1.Controllers
 
         [Route("History")]
         public IActionResult oldOrderDetails(int id){
+            var x = id;
             List<BesteldeItem> besteldeItem = new List<BesteldeItem>();
            besteldeItem = ( from b in _context.BesteldeItem
                 where b.BestellingId == id 

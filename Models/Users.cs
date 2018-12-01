@@ -24,7 +24,10 @@ namespace WebApp1.Models
         public string Title { get; set; }
         public string Image { get; set; }
         public int BestellingId { get; set; }
+        public int ProductwaardeId { get; set; }
+
         public virtual Bestelling Bestelling { get; set; }
+
     }
 
     public class Bestelling

@@ -1,8 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using WebApp1.products;
 
 namespace WebApp1.Models
 {

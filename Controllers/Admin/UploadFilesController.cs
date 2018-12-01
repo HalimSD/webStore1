@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApp1.Models;
-using WebApp1.products;
 using System;
 
 namespace Controllers

@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace WebApp1.Migrations
 {
-    public partial class initoo : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -268,29 +268,6 @@ namespace WebApp1.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BesteldeItem",
-                columns: table => new
-                {
-                    BesteldeItemId = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    Price = table.Column<double>(nullable: false),
-                    Quantity = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(nullable: true),
-                    Image = table.Column<string>(nullable: true),
-                    BestellingId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BesteldeItem", x => x.BesteldeItemId);
-                    table.ForeignKey(
-                        name: "FK_BesteldeItem_Bestelling_BestellingId",
-                        column: x => x.BestellingId,
-                        principalTable: "Bestelling",
-                        principalColumn: "BestellingId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Attribuutwaarde",
                 columns: table => new
                 {
@@ -311,6 +288,36 @@ namespace WebApp1.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Attribuutwaarde_Productwaarde_ProductwaardeId",
+                        column: x => x.ProductwaardeId,
+                        principalTable: "Productwaarde",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BesteldeItem",
+                columns: table => new
+                {
+                    BesteldeItemId = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Price = table.Column<double>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false),
+                    Title = table.Column<string>(nullable: true),
+                    Image = table.Column<string>(nullable: true),
+                    BestellingId = table.Column<int>(nullable: false),
+                    ProductwaardeId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BesteldeItem", x => x.BesteldeItemId);
+                    table.ForeignKey(
+                        name: "FK_BesteldeItem_Bestelling_BestellingId",
+                        column: x => x.BestellingId,
+                        principalTable: "Bestelling",
+                        principalColumn: "BestellingId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BesteldeItem_Productwaarde_ProductwaardeId",
                         column: x => x.ProductwaardeId,
                         principalTable: "Productwaarde",
                         principalColumn: "Id",
@@ -414,6 +421,12 @@ namespace WebApp1.Migrations
                 name: "IX_BesteldeItem_BestellingId",
                 table: "BesteldeItem",
                 column: "BestellingId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BesteldeItem_ProductwaardeId",
+                table: "BesteldeItem",
+                column: "ProductwaardeId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bestelling_UserId",

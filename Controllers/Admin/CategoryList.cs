@@ -2,7 +2,6 @@ using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApp1.Models;
-using WebApp1.products;
 
 namespace WebApp1.Controllers.Admin
 {

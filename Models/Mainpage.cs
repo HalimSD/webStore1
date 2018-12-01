@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApp1.Models;
 
 namespace WebApp1.Mainpage
 {
@@ -26,9 +27,9 @@ namespace WebApp1.Mainpage
         
         
 
-        public IEnumerable<WebApp1.products.Productwaarde> productwaardes {get; set;}
+        public IEnumerable<WebApp1.Models.Productwaarde> productwaardes {get; set;}
 
-        public IEnumerable<WebApp1.products.Productsoort> productsoorten {get; set;}
+        public IEnumerable<WebApp1.Models.Productsoort> productsoorten {get; set;}
 
         
 
@@ -41,7 +42,7 @@ namespace WebApp1.Mainpage
            return div;
         }
 
-         public IEnumerable<WebApp1.products.Productwaarde> Page() {
+         public IEnumerable<WebApp1.Models.Productwaarde> Page() {
              return productwaardes.Skip((pageindex - 1) *pagesize).Take(pagesize);
          }
 

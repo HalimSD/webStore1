@@ -177,17 +177,23 @@ namespace WebApp1.Controllers
             {
                 ViewBag.cart = cart;
                 ViewBag.total = cart.Sum(items => items.Product.Price * items.Quantity);
+                Bestelling bestelling = new Bestelling();
+                bestelling.Status = "OnderWeg";
+                bestelling.Date = DateTime.Now.ToShortDateString();
+                bestelling.UserId = _userManager.GetUserId(User);
+                _context.Add(bestelling);
+                _context.SaveChanges();
                 foreach (var i in cart)
                 {
-                    Bestelling bestelling = new Bestelling
+                    BesteldeItem besteldeItem = new BesteldeItem
                     {
                         Quantity = i.Quantity,
-                        Price = i.Product.Price,
+                        Price = i.Product.Price * i.Quantity,
                         Image = i.Product.Image,
                         Title = i.Product.Title,
-                        UserId = _userManager.GetUserId(User)
+                        BestellingId = bestelling.BestellingId
                     };
-                    _context.Add(bestelling);
+                    _context.Add(besteldeItem);
                     _context.SaveChanges();
                 }
                 if (_userManager.GetUserName(User) == null)
@@ -228,23 +234,36 @@ namespace WebApp1.Controllers
         }
 
         [Route("History")]
-        public IActionResult History(){
-            string userId = _userManager.GetUserId(User);
-            List<Bestelling> bestellings =
-            (
-                from b in _context.Bestelling
-                where b.UserId == userId 
-                select new Bestelling
+        public IActionResult oldOrderDetails(int id){
+            List<BesteldeItem> besteldeItem = new List<BesteldeItem>();
+           besteldeItem = ( from b in _context.BesteldeItem
+                where b.BestellingId == id 
+                select new BesteldeItem
                 {
+                    BesteldeItemId = b.BesteldeItemId,
                     Title = b.Title,
                     Price = b.Price,
                     Quantity = b.Quantity,
                     Image = b.Image
                 }
-            ).ToList();
-            ViewBag.bestelling = bestellings;
-
+           ).ToList();
+            ViewBag.besteldeItem = besteldeItem;
             return View ();
+        }
+        [Route("oldOrders")]
+
+        public IActionResult oldOrders(){
+                List<Bestelling> bestellingen = (
+                    from x in _context.Bestelling
+                    where x.UserId == _userManager.GetUserId(User)
+                    select new Bestelling{
+                        BestellingId = x.BestellingId,
+                        Status = x.Status,
+                        Date = x.Date
+                    }
+                ).ToList();
+                ViewBag.bestellingen = bestellingen;
+            return View();
         }
 
         [Route("pay")]

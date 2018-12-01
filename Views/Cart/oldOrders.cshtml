@@ -1,0 +1,47 @@
+<link rel="stylesheet" href="~/css/product_creation_generic.css">
+<link rel="stylesheet" href="~/css/favorites.css">
+<div class="pageRoot">
+    <h2>Jouw vorige Bestellingen</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                Bestelling Id
+            </th>
+            <th>
+                Bestelling datum
+            </th>
+            <th>
+                Bestelling status
+            </th>
+            <th>
+                Details
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (Bestelling item in ViewBag.bestellingen)
+        {
+            <tr>
+                <td>
+                    @item.BestellingId
+                </td>
+                <td>
+                    @item.Date
+                </td>
+                <td>
+                    @item.Status
+                </td>
+                <td>
+                    <form method="get">
+                        <input type="hidden" name="id" value="@item.BestellingId">
+                        <input type="hidden" name="returnUrl" value="@Url.Action("oldOrderDetails","Cart", new {id=item.BestellingId})"/>
+                        <button id="gotoProduct" class="btn btn-primary" type="submit" formaction="@Url.Action("oldOrderDetails", "Cart")">Details</button>                        
+                    </form>
+                </td>
+            </tr>               
+        }
+        </tbody>
+    </table>
+</div>

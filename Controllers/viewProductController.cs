@@ -6,6 +6,7 @@ using System.Security.Cryptography.X509Certificates;
 using Microsoft.AspNetCore.Identity;
 using WebApp1.Models;
 using Microsoft.AspNetCore.Mvc;
+using WebApp1.Products;
 
 namespace klaas.Controllers
 {

@@ -1,4 +1,4 @@
-@using WebApp1.Models
+@using WebApp1.Products
 @using WebApp1.Mainpage
 @model WebApp1.Mainpage.Mainpage;
 
@@ -39,7 +39,13 @@
         <div id="categoryArea">
             <div class="categoryTitle">Categorieën</div>
             <form asp-action="Mainpage">
-                <div id="container1" class="form-group"></div>
+                <div class = "checkbox checkboxlist col-sm-9">
+             @for (var i = 0; i < Model.productsoortfilters.Count; i++)
+                 {
+                     <input type="checkbox" asp-for="@Model.productsoortfilters[i].selected"  />@Model.productsoortfilters[i].Productsoorts.Naam
+                     <input type="hidden" asp-for="@Model.productsoortfilters[i].Productsoorts.Naam" /> 
+                 }
+                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Filter</button>
             </form>
             <div>
                 <a asp-action="Mainpage">Terug naar alle producten</a>
@@ -61,21 +67,7 @@
                                         <img src="@("/images/products/" + item.Image)" id="productImage"><img/>
                                         <h5 class="card-title">@item.Title</h5>
                                         <div>
-                                            @if (item.DiscountedPrice != -1)
-                                            {
-                                                <div class="row">
-                                                    <div class="col-4-sm">
-                                                        <div id="disabledPrice">€ @item.Price</div>
-                                                    </div>
-                                                    <div class="col-4-sm" style="margin-left: 15px;">
-                                                        <div id="discountPrice">NU VOOR: € @item.DiscountedPrice</div>
-                                                    </div>
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <div>€ @item.Price</div>
-                                            }
+                                            <div>€ @item.Price</div>
                                             @if (item.Quantity > 0)
                                             {
                                                 <div>@string.Format("Voorraad: {0} stuk(ken)",item.Quantity)</div>
@@ -180,44 +172,6 @@
     </div>
     
 </div>
- 
-<script type='text/javascript'>
-    var names = @Html.Raw(Json.Serialize(Model.Getproductsoortnamen()));
-    var currSel = @Html.Raw(Json.Serialize(Model.currentCategoryName));
-    //var serializedUsers = JSON.parse(names);
-    function addFields(){
-        for (i = 0; i <  names.length; i++) { 
-            var container = document.getElementById("container1");
-            // Clear previous contents of the container
-            //container.removeChild(container.lastChild);
-            // Append a node with a random text
-            
-            //container.appendChild(document.createTextNode(end[0]));
-                
-            // Create an <input> element, set its type and name attributes
-            var btn = document.createElement("button");
-            btn.type = "submit";
-            btn.name = "productsrt";
-            btn.value = names[i];
-            btn.innerHTML = names[i];
-            
-            // If this is the last button, give it a different id
-            // The last button has a slightly different styling
-            if (i == (names.length - 1)) {
-                btn.id = "categoryBtnLast";
-            } else {
-                btn.id = "categoryBtn";
-            }
-            
-            if (btn.value == currSel) {
-                btn.className = "categoryBtnSelected";
-            }
-            
-            // Insert element into container div
-            container.appendChild(btn);
-        }
-    }
-    window.onload = addFields;
-</script>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.2.0/anime.js"></script>

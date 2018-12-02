@@ -1,68 +1,18 @@
-@model WebApp1.Models.Productwaarde
+@using WebApp1.CreateproductModel
+@model WebApp1.CreateproductModel.CreateproductModel
+
 @using Microsoft.AspNetCore.Http
-
-@{
-    //var hi= (ViewData["productsoorten"]);
-    var Attributen = Context.Session.Get<String[]>("Attributen");
-    var productsoortid = Context.Session.Get<int>("productsoortid");
-    var AttribuutsoortID = Context.Session.Get<int[]>("AttribuutsoortID");
-    //var hi = HttpContext.Session.GetString("Test");
-}
-
 
 
 <link rel="stylesheet" href="~/css/product_creation_generic.css">
- <script type='text/javascript'>
-        function addFields(){
-           var Attribute = [];
-           var AttribuutsoortIDs = [];
-           var productsoortidd = @productsoortid;  
-           
-
-            @foreach (var d in Attributen)
-             {
-                @:Attribute.push("@d");
-            }
-
-             @foreach (var d in AttribuutsoortID)
-             {
-                @:AttribuutsoortIDs.push("@d");
-            }
-
-            for (i = 0; i <  Attribute.length; i++) { 
-            var container = document.getElementById("container");
-                container.appendChild(document.createTextNode(Attribute[i]));
-
-                var input = document.createElement("input");
-                input.name= "Attribuutwaarde["+i+"].waarde";
-                input.setAttribute("class","form-control");
-                input.id= "Attribuutwaarde["+i+"].waarde";
-                input.type="text";
-                input.value="";
-                input.placeholder="Attribuut";
-
-                var input1 = document.createElement("input");
-                input1.name= "Attribuutwaarde["+i+"].AttribuutsoortId";
-                input1.setAttribute("class","form-control");
-                input1.id= "Attribuutwaarde["+i+"].AttribuutsoortId";
-                input1.type="hidden";
-                input1.value= AttribuutsoortIDs[i];
-                input1.placeholder="Attribuut";
-
-               
-                container.appendChild(input);
-                container.appendChild(input1);
-                // Append a line break 
-                container.appendChild(document.createElement("br"));
-            }
-        }
-        window.onload = addFields;
-    </script>
+ 
 <div class="pageRoot">
     <h2>Create</h2>
 
     <h4>Products</h4>
     <hr />
+
+   
     <div class="row">
         <div class="col-md-4">
             <form asp-action="Create3" enctype="multipart/form-data">
@@ -84,9 +34,9 @@
                 </div>
                 <div class="form-group">
                     
-                    <input asp-for="ProductsoortId" class="form-control" placeholder="ProductsoortId" type="hidden"  value= "@productsoortid" />
+                    <input asp-for="ProductsoortId" class="form-control" placeholder="ProductsoortId" type="hidden"  value= '@Model.GetAttribuutsoortsA()' />
                     <span asp-validation-for="ProductsoortId" class="text-danger"></span>
-                    <input asp-for="DiscountedPrice" class="form-control" placeholder="ProductsoortId" type="hidden"  value= "-1" />
+                     <input asp-for="DiscountedPrice" class="form-control" placeholder="ProductsoortId" type="hidden"  value= "-1" />
                     <span asp-validation-for="DiscountedPrice" class="text-danger"></span>
                 </div>
 
@@ -100,11 +50,24 @@
                 <input asp-for="Image" type="file" Class="form-control" placeholder="Image"/>
                 <span asp-validation-for="Image" class="text-danger"></span>
                 </div>
-           
-                <div id="container" class="form-group"></div>
+                @{var i = 0;}
+                 @foreach (var item in Model.Attribuutsoorts)
+                    {
+                    
+                    <div class="form-group">
+                        <label class="control-label">@item.Attrbuut</label>
+                        <input type="text"  class="form-control" name='Attribuutwaarde[@i].waarde'/>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="hidden"  class="form-control" name='Attribuutwaarde[@i].AttribuutsoortId' value='@item.Id'/>
+                    </div>
+                    i = i +1;
+                    }
                 <div class="form-group">
                     <input type="submit" value="Create" class="btn btn-default" />
                 </div>
+                
             
             </form>
         </div>

@@ -8,6 +8,7 @@ using WebApp1.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
+using WebApp1.Products;
 
 namespace klaas.Controllers
 {
@@ -86,52 +87,72 @@ namespace klaas.Controllers
        
 
       
-        public IActionResult Mainpage(string productsrt, int? id)
+        public IActionResult Mainpage(List<WebApp1.Mainpage.Mainpage.Productsoortfilter> productsoortfilters, int? id)
         {
+           
 
+            var productsoortenfilter = from m in _context.Productsoort select new WebApp1.Mainpage.Mainpage.Productsoortfilter(){Productsoorts = m, selected = false };
+            var productsoortfilterslijst = productsoortenfilter.ToList();
             var productsoorten = from m in _context.Productsoort select m;
+            
+            // var query1 =
+            //             (from productsoort in _context.Productsoort
+            //             join atributen in _context.Attribuutsoort on productsoort.Id equals atributen.ProductsoortId 
+            //             group atributen by productsoort into g
+            //             select new Prodctding(){Attribuutsoorts = g.ToList(), Productsoorts = g.Key}).ToList();
 
-
-             if (productsrt == null)
+             if (productsoortfilters.Count == 0)
             {
                 var productwaardenq =  from m in _context.Productwaarde select m;
                 var main = new WebApp1.Mainpage.Mainpage();
                     main.productwaardes = productwaardenq;
                     main.currentCategoryName = "Alle Producten";
+                    main.productsoortfilters = productsoortfilterslijst;
                     main.productsoorten = productsoorten;
                     main.pagesize = maxPageSize;
                     main.pageindex = (id ?? 1);
                 return View(main);
             }
+            else{
+                 var myList = new List<Productsoort>();
+                for (var i = 0; i<productsoortfilters.Count(); i++ ){
+                    if(productsoortfilters[i].selected == true){
+                        myList.Add(productsoortfilters[i].Productsoorts);
+                    }
+                }
 
-            else if (productsrt == "Alle Producten"){
-                var productwaardenq =  from m in _context.Productwaarde select m;
-                var main = new WebApp1.Mainpage.Mainpage();
+                if (myList.Count == 0){
+                    var productwaardenq =  from m in _context.Productwaarde select m;
+                    var main = new WebApp1.Mainpage.Mainpage();
                     main.productwaardes = productwaardenq;
                     main.currentCategoryName = "Alle Producten";
+                    main.productsoortfilters = productsoortfilterslijst;
                     main.productsoorten = productsoorten;
                     main.pagesize = maxPageSize;
                     main.pageindex = (id ?? 1);
-                return View(main);
-            }
+                    return View(main);
+                }
+                else{
+                    var productwaardenlijst = new List<Productwaarde>();
+                    for (var i = 0; i<myList.Count(); i++ ){
+                    var query =
+                            from productsoort in _context.Productsoort
+                            join productwaarde in _context.Productwaarde on productsoort.Id equals productwaarde.ProductsoortId
+                            where productsoort.Naam == myList[i].Naam
+                            select productwaarde;
+                        productwaardenlijst = productwaardenlijst.Union(query).ToList();
+                    }
 
-            else{
-                var query =
-                        from productsoort in _context.Productsoort
-                        join productwaarde in _context.Productwaarde on productsoort.Id equals productwaarde.ProductsoortId
-                        where productsoort.Naam == productsrt 
-                        select productwaarde;
-
-                var main = new WebApp1.Mainpage.Mainpage();
-                            main.productwaardes = query;
-                            main.currentCategoryName = productsrt;
-                            main.productsoorten = productsoorten;
-                            main.pagesize = maxPageSize;
-                            main.pageindex = (id ?? 1);
-                return View(main);
+                    var main = new WebApp1.Mainpage.Mainpage();
+                                main.productwaardes = productwaardenlijst;
+                                main.currentCategoryName = "filteredresult";
+                                main.productsoortfilters = productsoortfilterslijst;
+                                main.pagesize = maxPageSize;
+                                main.pageindex = (id ?? 1);
+                    return View(main);
+                }
             }
         }
-
 
         public IActionResult Contact()
         {

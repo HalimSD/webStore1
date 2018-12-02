@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using WebApp1.Products;
 
 namespace WebApp1.Models
 {
@@ -9,8 +10,6 @@ namespace WebApp1.Models
             : base(options)
         {
         }
-
-        public DbSet<Products> Products { get; set; }
         public DbSet<Extra_Atributes> Extra_Atributes { get; set; }
         public DbSet<Productsoort> Productsoort { get; set; }
         public DbSet<Productwaarde> Productwaarde { get; set; }

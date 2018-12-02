@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using WebApp1.Products;
 
 namespace WebApp1.Controllers
 {
@@ -146,34 +147,19 @@ namespace WebApp1.Controllers
 
 
 
-        public IActionResult Create3()
+        public IActionResult Create3(string productsoortt)
         {
-            var product_id_int = 0;
-            var AttribuutsoortID = new List<int>();
-            var attributes = new List<string>();
-            var productsoortnaam = HttpContext.Session.GetString("Test");
-            Console.WriteLine(productsoortnaam);
-            var productsoort = from m in _context.Productsoort where m.Naam == productsoortnaam select new { m.Id };
-            foreach (var productsoortje in productsoort)
-            {
-                product_id_int = productsoortje.Id;
-            }
-            var attribuutsoort = from a in _context.Attribuutsoort where a.ProductsoortId == product_id_int select new { a.Attrbuut, a.Id };
-            foreach (var attribute in attribuutsoort)
-            {
-                attributes.Add(attribute.Attrbuut.ToString());
-                AttribuutsoortID.Add(attribute.Id);
-            }
-            var Attributen = attributes.ToArray();
-            var AttribuutsoortIDs = AttribuutsoortID.ToArray();
-            HttpContext.Session.Set<String[]>("Attributen", Attributen);
-            HttpContext.Session.Set<int>("productsoortid", product_id_int);
-            HttpContext.Session.Set<int[]>("AttribuutsoortID", AttribuutsoortIDs);
+             var attributen =
+                    from productsoorten in _context.Productsoort
+                    join atributen in _context.Attribuutsoort on productsoorten.Id equals atributen.ProductsoortId
+                    where productsoorten.Naam == productsoortt
+                    select atributen;
 
-            //var hi = HttpContext.Session.Get<String[]>("Attributen");
-            // Console.WriteLine(hi[0]);
-            //Console.WriteLine(myArray);
-            return View();
+            var ProductModel = new WebApp1.CreateproductModel.CreateproductModel();
+                    ProductModel.Attribuutsoorts = attributen;
+
+            return View(ProductModel);
+            
         }
 
         // POST: Products/Create
@@ -252,7 +238,7 @@ namespace WebApp1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Price")] Products products)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Price")] Productwaarde products)
         {
             if (id != products.Id)
             {

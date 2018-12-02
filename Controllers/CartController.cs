@@ -12,6 +12,7 @@ using System.IO;
 using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Hosting;
 using System;
+using WebApp1.Products;
 
 namespace WebApp1.Controllers
 {

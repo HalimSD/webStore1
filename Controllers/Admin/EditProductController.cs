@@ -11,6 +11,7 @@ using WebApp1.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.Language;
 using NuGet.Frameworks;
+using WebApp1.Products;
 
 namespace WebApp1.Controllers
 {

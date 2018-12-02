@@ -1,3 +1,5 @@
+using WebApp1.Products;
+
 namespace WebApp1.Models
 {
     public class FavoritesModel

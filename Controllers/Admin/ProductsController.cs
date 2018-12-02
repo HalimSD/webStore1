@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using WebApp1.Products;
 
 namespace WebApp1.Controllers
 {
@@ -252,7 +253,7 @@ namespace WebApp1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Price")] Products products)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Price")] Productwaarde products)
         {
             if (id != products.Id)
             {

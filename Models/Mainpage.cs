@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebApp1.Models;
 
 namespace WebApp1.Mainpage
 {
@@ -12,7 +11,8 @@ namespace WebApp1.Mainpage
 
         public string currentCategoryName { get; set; }
         public int pagesize { get; set; }
-        public int pageindex 
+        public int pageindex
+         
         
         
         { 
@@ -24,14 +24,29 @@ namespace WebApp1.Mainpage
 
                 } 
         }
+
+        public class Prodctding{
+            public WebApp1.Products.Productsoort Productsoorts {get; set;}
+            public List<WebApp1.Products.Attribuutsoort> Attribuutsoorts {get; set;}
+
+            public bool selected{get;set;}
+
+        }
+
+        public class Productsoortfilter{
+            public WebApp1.Products.Productsoort Productsoorts {get; set;}
+            public bool selected{get;set;}
+
+        }
         
         
+        public IList<Prodctding> prodctding{get;set;}
 
-        public IEnumerable<WebApp1.Models.Productwaarde> productwaardes {get; set;}
+        public IList<Productsoortfilter> productsoortfilters{get;set;}
+        public IEnumerable<WebApp1.Products.Productwaarde> productwaardes {get; set;}
 
-        public IEnumerable<WebApp1.Models.Productsoort> productsoorten {get; set;}
+        public IEnumerable<WebApp1.Products.Productsoort> productsoorten {get; set;}
 
-        
 
         public int getnumberofpages(){
            int rest = productwaardes.Count()%pagesize;
@@ -42,7 +57,7 @@ namespace WebApp1.Mainpage
            return div;
         }
 
-         public IEnumerable<WebApp1.Models.Productwaarde> Page() {
+         public IEnumerable<WebApp1.Products.Productwaarde> Page() {
              return productwaardes.Skip((pageindex - 1) *pagesize).Take(pagesize);
          }
 

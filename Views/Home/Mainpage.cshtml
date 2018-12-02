@@ -38,12 +38,14 @@
     <div class="col-2">
         <div id="categoryArea">
             <div class="categoryTitle">Categorieën</div>
+            <hr>
             <form asp-action="Mainpage">
-                <div class = "checkbox checkboxlist">
+                <div id="categoryFormContent" class = "checkbox checkboxlist">
                     @for (var i = 0; i < Model.productsoortfilters.Count; i++)
                     {
                         <input type="checkbox" asp-for="@Model.productsoortfilters[i].selected"  />@Model.productsoortfilters[i].Productsoorts.Naam
                         <input type="hidden" asp-for="@Model.productsoortfilters[i].Productsoorts.Naam" /> <br>
+                        <hr>                                                                                  
                     }
                     <button class="btn btn-outline-success" type="submit">Filter</button>
                 </div>
@@ -68,7 +70,21 @@
                                         <img src="@("/images/products/" + item.Image)" id="productImage"><img/>
                                         <h5 class="card-title">@item.Title</h5>
                                         <div>
-                                            <div>€ @item.Price</div>
+                                            @if (item.DiscountedPrice != -1)
+                                            {
+                                                <div class="row">
+                                                    <div class="col-4-sm">
+                                                        <div id="disabledPrice">€ @item.Price</div>
+                                                    </div>
+                                                    <div class="col-4-sm" style="margin-left: 15px;">
+                                                        <div id="discountPrice">NU VOOR: € @item.DiscountedPrice</div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div>€ @item.Price</div>
+                                            }
                                             @if (item.Quantity > 0)
                                             {
                                                 <div>@string.Format("Voorraad: {0} stuk(ken)",item.Quantity)</div>
@@ -100,7 +116,21 @@
                                         <img src="@("/images/products/" + item.Image)" id="productImage"><img/>
                                         <h5 class="card-title">@item.Title</h5>
                                         <div>
-                                            <div>€ @item.Price</div>
+                                            @if (item.DiscountedPrice != -1)
+                                            {
+                                                <div class="row">
+                                                    <div class="col-4-sm">
+                                                        <div id="disabledPrice">€ @item.Price</div>
+                                                    </div>
+                                                    <div class="col-4-sm" style="margin-left: 15px;">
+                                                        <div id="discountPrice">NU VOOR: € @item.DiscountedPrice</div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div>€ @item.Price</div>
+                                            }
                                             @if (item.Quantity > 0)
                                             {
                                                 <div>@string.Format("Voorraad: {0} stuk(ken)",item.Quantity)</div>
@@ -132,7 +162,21 @@
                                         <img src="@("/images/products/" + item.Image)" id="productImage"><img/>
                                         <h5 class="card-title">@item.Title</h5>
                                         <div>
-                                            <div>€ @item.Price</div>
+                                            @if (item.DiscountedPrice != -1)
+                                            {
+                                                <div class="row">
+                                                    <div class="col-4-sm">
+                                                        <div id="disabledPrice">€ @item.Price</div>
+                                                    </div>
+                                                    <div class="col-4-sm" style="margin-left: 15px;">
+                                                        <div id="discountPrice">NU VOOR: € @item.DiscountedPrice</div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div>€ @item.Price</div>
+                                            }
                                             @if (item.Quantity > 0)
                                             {
                                                 <div>@string.Format("Voorraad: {0} stuk(ken)",item.Quantity)</div>

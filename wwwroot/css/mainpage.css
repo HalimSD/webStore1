@@ -110,3 +110,6 @@ button.categoryBtnSelected {
     margin-left: 10px;
 }
 
+#categoryFormContent {
+    text-align: center;
+}

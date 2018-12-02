@@ -5,8 +5,6 @@
  using Microsoft.AspNetCore.Authorization;
  using WebApp1.Models;
  using Microsoft.AspNetCore.Mvc;
-
- using Models;
  using Remotion.Linq.Clauses;
 
 namespace WebApp1.Controllers
@@ -25,6 +23,10 @@ namespace WebApp1.Controllers
          public IActionResult Index()
          {
              List<string[]> tableRows = new List<string[]>();
+             
+             // Add total revenue statistic
+             double revenue = (from bi in context.BesteldeItem select bi.Price).Sum();
+             tableRows.Add(new[] {"Totale Omzet", "€ " + revenue.ToString()});
              
              // Add Total sold statistic
              int soldCount = (from bi in context.BesteldeItem select bi.Quantity).Sum();

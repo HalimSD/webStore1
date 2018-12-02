@@ -193,7 +193,7 @@ namespace WebApp1.Migrations
                     b.Property<int>("BestellingId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Date");
+                    b.Property<DateTime>("Date");
 
                     b.Property<string>("Status");
 

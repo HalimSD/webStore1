@@ -12,36 +12,86 @@
 namespace WebApp1.Controllers
  {
      [Authorize(Roles = "Admin")]
-     [Route("/Admin/[controller]/[action]")]
-     public class ChartController : Controller
+     [Route("/Admin/[controller]/")]
+     public class StatisticsController : Controller
      {
          private readonly WebshopContext context;
         
-         public ChartController(WebshopContext context)
+         public StatisticsController(WebshopContext context)
          {
              this.context = context;
          }
          
-         public IActionResult Statistics()
+         public IActionResult Index()
          {
+             List<string[]> tableRows = new List<string[]>();
+             
+             // Add Total sold statistic
+             int soldCount = (from bi in context.BesteldeItem select bi.Quantity).Sum();
+             tableRows.Add(new[] {"Totaal verkochtte producten", soldCount.ToString()});
+             
+             // Add total products statistic
+             int productCount = (from pw in context.Productwaarde select pw).Count();
+             tableRows.Add(new[] {"Totaal Aantal Producten", productCount.ToString()});
+             
+             // Add products in stock statistic
+             int inStockCount = (from pw in context.Productwaarde where pw.Quantity > 0 select pw).Count();
+             tableRows.Add(new[] {"Aantal producten In Voorraad", inStockCount.ToString()});
+
+             ViewBag.chartTableRows = tableRows;
              return View();
          }
-
+         
+         [Route("GetTotalSoldData")]
          public JsonResult GetTotalSoldData()
          {
-             List<object> objs = new List<object>();
-             objs.Add(new[] {"x", "Sold Products"});
-             objs.Add(new[] { 0, 45 });
-             objs.Add(new[] { 1, 87 });
-             objs.Add(new[] { 2, 56 });
-             objs.Add(new[] { 3, 67 });
-             objs.Add(new[] { 4, 58 });
-             objs.Add(new[] { 5, 51 });
-             objs.Add(new[] { 6, 49 });
-             objs.Add(new[] { 7, 67 });
-             return Json(objs);
+             Bestelling[] orders = (from b in context.Bestelling select b).ToArray();
+             List<string[]> json = new List<string[]>();
+             json.Add(new[] {"X", "Verkochtte Producten"});
+             
+             // Each value in array represents sold count for specific day
+             // index 0: 0 days ago
+             // index 1: 1 days ago
+             // etc...
+             int[] soldCount = new int[7] {0,0,0,0,0,0,0};
+             
+             foreach (Bestelling order in orders)
+             {
+                 // Figure out which day it should be part off
+                 // -1 Means it happened more than a week ago
+                 int index = -1;
+                 if (order.Date == DateTime.Today) { index = 0; }
+                 if (order.Date == DateTime.Today.AddDays(-1)) { index = 1; }
+                 if (order.Date == DateTime.Today.AddDays(-2)) { index = 2; }
+                 if (order.Date == DateTime.Today.AddDays(-3)) { index = 3; }
+                 if (order.Date == DateTime.Today.AddDays(-4)) { index = 4; }
+                 if (order.Date == DateTime.Today.AddDays(-5)) { index = 5; }
+                 if (order.Date == DateTime.Today.AddDays(-6)) { index = 6; }
+
+                 // If it doesn't fall under this week, purchase will not be included
+                 // Skip this iteration of the foreach loop
+                 if (index == -1) continue;
+                 
+                 // Amount of products in this specific order
+                 int productCount =
+                 (
+                     from bi in context.BesteldeItem
+                     where bi.BestellingId == order.BestellingId
+                     select bi.Quantity
+                 ).Sum();
+
+                 soldCount[index] += productCount;
+             }
+
+             for (int i = soldCount.Length - 1; i >= 0; i--)
+             {
+                 json.Add(new[] {DateTime.Today.AddDays(i*-1).ToShortDateString(), soldCount[i].ToString()});
+             }
+             
+          return Json(json);
          }
 
+         [Route("GetCategorySold")]
          public JsonResult GetCategorySold()
          {
              string[] categoryArray = (from ps in context.Productsoort select ps.Naam).ToArray();

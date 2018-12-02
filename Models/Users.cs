@@ -33,7 +33,7 @@ namespace WebApp1.Models
     public class Bestelling
     {
         public int BestellingId { get; set; }
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
         public string Status { get; set; }
         public ICollection<BesteldeItem> BesteldeItem { get; set; }
         public string UserId { get; set; }

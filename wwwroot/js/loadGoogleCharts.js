@@ -4,7 +4,7 @@ function init() {
 }
 
 function drawChart() {
-    $.get('GetCategorySold', function (jsonData) {
+    $.get('Statistics/GetCategorySold', function (jsonData) {
         let dataArray = [];
         let isFirst = true;
         jsonData.forEach(function (element) {
@@ -32,11 +32,25 @@ function drawChart() {
         chart.draw(data, option);
 
     });
-    $.get('GetTotalSoldData', function (jsonData) {
-        let data = google.visualization.arrayToDataTable(jsonData, false);
+    $.get('Statistics/GetTotalSoldData', function (jsonData) {
+        
+        let dataArray = [];
+        let isFirst = true;
+        jsonData.forEach(function (element) {
+            let key = element[0];
+            let value = element[1];
+            if (isFirst) {
+                isFirst = false;
+            } else {
+                value = parseInt(value);
+            }
+            dataArray.push([key, value]);
+            console.log(key + " " + value);
+        });
+        let data = google.visualization.arrayToDataTable(dataArray, false);
         let option = {
             title: "Totaal verkochtte producten sinds begin van het week",
-            width: 600,
+            width: 650,
             height: 400,
             hAxis: {
                 title: 'Aantal dagen geleden'

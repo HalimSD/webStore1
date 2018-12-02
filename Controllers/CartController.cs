@@ -174,7 +174,7 @@ namespace WebApp1.Controllers
                 Bestelling bestelling = new Bestelling();
                 Productwaarde productwaarde = new Productwaarde();
                 bestelling.Status = "OnderWeg";
-                bestelling.Date = DateTime.Now.ToShortDateString();
+                bestelling.Date = DateTime.Today;
                 bestelling.UserId = _userManager.GetUserId(User);
                 _context.Add(bestelling);
                 _context.SaveChanges();

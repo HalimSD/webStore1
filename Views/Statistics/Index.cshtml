@@ -1,0 +1,80 @@
+﻿
+@{
+    ViewData["Title"] = "Statistics";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<string[]> tableRows = ViewBag.chartTableRows;
+}
+<link rel="stylesheet" href="~/css/shopping_cart.css">
+<div class="container">
+    <h2>Overzicht</h2>
+    Op deze pagina kun je statistieken zien die gerelateerd zijn aan de producten<br />
+    <hr>
+    <div class="row">
+        <div class="col-6">
+            <h4></h4>
+            <div id="chart1"></div>
+        </div>
+        <div class="col-6">
+            <h4></h4>
+            <div id="chart2"></div>
+        </div>
+    </div>
+    <br>
+    <h2>Algemene Statistieken</h2>
+    <hr>
+    <table id="table" style="border-radius: 3px;">
+        <thead>
+        <tr>
+            <th>
+                Statistiek
+            </th>
+            <th>
+                Waarde
+            </th>
+        </tr>
+        </thead>
+        <tbody id="tableBody">
+        @foreach (string[] row in tableRows)
+        {
+            <tr>
+                <td>
+                    @row[0]
+                </td>            
+                <td>
+                    @row[1]
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+<style>
+    hr {
+        border: 0;
+        height: 1px;
+        background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(10, 10, 10, 10.75), rgba(0, 0, 0, 0));
+    }
+    div.container {
+        background-color: #ffffff;
+        border-radius: 3px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        padding: 15px;
+    }
+        
+    div.col-md-6 {
+
+        width: 100%;
+        display: inline-block;
+    }
+    #chart1 {
+
+        float: left;
+    }
+    #chart2 {
+        float: right;
+    }
+</style>
+@section scripts{
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="~/js/loadGoogleCharts.js"></script>
+}

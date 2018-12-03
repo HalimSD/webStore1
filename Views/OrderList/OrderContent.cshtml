@@ -1,0 +1,52 @@
+@model OrderContentViewModel
+@{
+    ViewData["Title"] = "Bestellings inhoud";
+}
+<link rel="stylesheet" href="~/css/product_creation_generic.css">
+<div class="pageRoot" style="margin-left: 15%; margin-right: 15%;">
+    <h2>Bestellings inhoud</h2>
+    <hr>
+    <b>Bestelling ID: </b>@Model.OrderId<br>
+    <b>Klant ID: </b>@Model.UserId<br>
+    <b>Klant E-Mail: </b>@Model.UserEmail<br><br>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                Product naam
+            </th>
+            <th>
+                Product prijs
+            </th>
+            <th>
+                Product kwantiteit
+            </th>
+            <th>
+                Product foto
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (BesteldeItem item in Model.Products)
+        {
+            <tr>
+                <td>
+                    @item.Title
+                </td>
+                <td>
+                    @item.Price
+                </td>
+                <td>
+                    @item.Quantity
+                </td>
+                <td>
+                    <img src="~/images/products/@item.Image" width="60" id="productImage"><img/>
+                </td>
+            </tr>               
+        }
+        </tbody>
+    </table>
+    <br>
+    <a href="@Url.Action("Index","OrderList")">Terug naar alle bestellingen</a>
+</div>

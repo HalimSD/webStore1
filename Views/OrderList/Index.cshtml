@@ -1,0 +1,66 @@
+@{
+    ViewData["Title"] = "Categorie Lijst";
+}
+
+<link rel="stylesheet" href="~/css/product_creation_generic.css">
+<link rel="stylesheet" href="~/css/shopping_cart.css">
+<div class="pageRoot" style="margin-left: 10%; margin-right: 10%;">
+    <h2>Alle bestellingen</h2>
+    <hr>
+    <table id="table" style="border-radius: 3px;">
+        <thead>
+        <tr>
+            <th>
+                <input id="filterId" type="text" class="form-control" placeholder="Filteren bij ID">
+            </th>
+            <th>
+                <input id="filterDate" type="text" class="form-control" placeholder="Filteren bij Datum">
+            </th>
+            <th>
+                <input id="filterStatus" type="text" class="form-control" placeholder="Filteren bij Status">
+            </th>
+            <th>
+                <input id="filterProductCount" type="text" class="form-control" placeholder="Filteren bij Aantal Producten">
+            </th>
+            <th>
+                <input id="filterUserEmail" type="text" class="form-control" placeholder="Filteren bij Klant E-Mail">
+            </th>
+            <th>
+                <input id="filterUserId" type="text" class="form-control" placeholder="Filteren bij Klant ID">
+            </th>
+            <th>
+                
+            </th>
+        </tr>
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                Datum
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Aantal Producten
+            </th>
+            <th>
+                Klant E-Mail
+            </th>
+            <th>
+                Klant ID
+            </th>
+            <th>
+                Opties
+            </th>
+        </tr>
+        </thead>
+        <tbody id="tableBody">
+        </tbody>
+    </table>
+    <ul id="pagination" class="pagination" style="margin-top: 10px;">
+    </ul>
+</div>
+<br>
+<script type="text/javascript" src="~/js/loadOrderList.js"></script>

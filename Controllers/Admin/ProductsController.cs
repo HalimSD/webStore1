@@ -96,7 +96,7 @@ namespace WebApp1.Controllers
             {
                 _context.Productsoort.Add(productsoort);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "CategoryList");
                 
 
             }

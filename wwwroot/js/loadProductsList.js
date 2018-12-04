@@ -120,9 +120,8 @@ function populateTable(jsonModel, filtered) {
         
         trElement.appendChild(createOptionsColumn(id));
         tableBody.appendChild(trElement);
-        createPagination(jsonModel)
     }
-    
+    createPagination(jsonModel, onInputChanged);
 }
 
 window.onload = init;

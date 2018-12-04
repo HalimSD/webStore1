@@ -22,10 +22,15 @@ namespace klaas.Controllers
         }
         
         // GET
-        public IActionResult Index(int id)
+        public IActionResult Index(int? id)
         {
+            // Check if product was found
+            // Else return 404 error
+            if (id == null) return NotFound();
             
             Productwaarde productwaarde = (from pw in context.Productwaarde where pw.Id == id select pw).FirstOrDefault();
+            if (productwaarde == null) return NotFound();
+            
             Productsoort productsoort =(from ps in context.Productsoort where ps.Id == productwaarde.ProductsoortId select ps).FirstOrDefault();           
             List<ViewProductAttributes> attributes = 
                 (from atts in context.Attribuutsoort 
@@ -40,9 +45,9 @@ namespace klaas.Controllers
                                   
                           }).ToList();
             
-            // Check if product was found
+            // Check if productsoort was found
             // Else return 404 error
-            if (productwaarde == null)
+            if (productsoort == null)
             {
                 return StatusCode(404);
             };

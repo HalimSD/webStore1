@@ -24,6 +24,7 @@ namespace WebApp1.Controllers
         private UserManager<Users> _userManager;
         private IConverter _converter;
         private readonly IHostingEnvironment _appEnvironment;
+        private readonly int maxPageSize = 5;
 
         public const string SessionKeyName = "cart";
         public string SessionInfo_Name { get; private set; }
@@ -250,18 +251,25 @@ namespace WebApp1.Controllers
         }
         [Route("oldOrders")]
 
-        public IActionResult oldOrders(){
-                List<Bestelling> bestellingen = (
-                    from x in _context.Bestelling
-                    where x.UserId == _userManager.GetUserId(User)
-                    select new Bestelling{
-                        BestellingId = x.BestellingId,
-                        Status = x.Status,
-                        Date = x.Date
-                    }
-                ).ToList();
-                ViewBag.bestellingen = bestellingen;
-            return View();
+        public IActionResult oldOrders(int pageNumber = 1)
+        {
+            // Helper object used to generate a page model
+            PaginationHelper<Bestelling> pagination = new PaginationHelper<Bestelling>(maxPageSize, _context.Bestelling);
+            
+            // Prepare a query that we will pass to the pagination helper
+            IQueryable<Bestelling> query = (
+                from x in _context.Bestelling
+                where x.UserId == _userManager.GetUserId(User)
+                select new Bestelling
+                {
+                    BestellingId = x.BestellingId,
+                    Status = x.Status,
+                    Date = x.Date
+                }
+            );
+            // Let the pagination helper build a page model and pass it to the view
+            PaginationViewModel<Bestelling> model = pagination.GetPageIQueryable(pageNumber, query);
+            return View(model);
         }
 
         [Route("pay")]

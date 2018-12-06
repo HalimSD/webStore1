@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebApp1.Products;
+using WebApp1.Models;
 
 namespace WebApp1.CreateproductModel
 {
     public class CreateproductModel
     {
         
-        public IEnumerable<WebApp1.Products.Attribuutsoort> Attribuutsoorts {get; set;}
+        public IEnumerable<WebApp1.Models.Attribuutsoort> Attribuutsoorts {get; set;}
 
         
         public int Id { get; set; }

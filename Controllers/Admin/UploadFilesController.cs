@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApp1.Models;
 using System;
-using WebApp1.Products;
 
 namespace Controllers
 {

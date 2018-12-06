@@ -1,5 +1,5 @@
 @using WebApp1.Models
-@model WebApp1.Products.Productwaarde
+@model WebApp1.Models.Productwaarde
 <link rel="stylesheet" href="~/css/shopping_cart.css">
 <div class="pageRoot">
     <h3>Cart Page</h3>
@@ -19,7 +19,7 @@
             <tr>
                 <td>@item.Product.Id</td>
                 <td>@item.Product.Title</td>
-                <td>@item.Quantity</td>
+                <td><input id='myTextbox1' class="form-control" value="@item.Quantity"></td>
                 <td>@item.Product.Price</td>
                 <td><img src="~/images/products/@item.Product.Image" width="60" id="productImage"><img/></td>
                 <td><a  asp-controller="cart" asp-action="Remove" asp-route-id="@item.Product.Id" >Delete</a></td>
@@ -38,4 +38,9 @@
     <br>
     <a asp-controller="cart" asp-action="CreatePDF">checkOut</a>
 </div>
+<script type="text/javascript">
+    $('#myTextbox1').on('input', function() {
+    alert('Text1 changed!');
+});
+</script>
 

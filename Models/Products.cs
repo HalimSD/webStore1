@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace WebApp1.Products
+namespace WebApp1.Models
 {
 
 public class Products

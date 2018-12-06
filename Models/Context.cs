@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using WebApp1.Products;
+using WebApp1.Models;
 
 namespace WebApp1.Models
 {

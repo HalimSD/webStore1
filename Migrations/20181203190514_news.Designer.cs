@@ -10,8 +10,8 @@ using WebApp1.Models;
 namespace WebApp1.Migrations
 {
     [DbContext(typeof(WebshopContext))]
-    [Migration("20181202205654_BuildDb")]
-    partial class BuildDb
+    [Migration("20181203190514_news")]
+    partial class news
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -128,6 +128,44 @@ namespace WebApp1.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("WebApp1.Models.Attribuutsoort", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Attrbuut");
+
+                    b.Property<int>("ProductsoortId");
+
+                    b.Property<string>("Type");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductsoortId");
+
+                    b.ToTable("Attribuutsoort");
+                });
+
+            modelBuilder.Entity("WebApp1.Models.Attribuutwaarde", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AttribuutsoortId");
+
+                    b.Property<int>("ProductwaardeId");
+
+                    b.Property<string>("Waarde");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AttribuutsoortId");
+
+                    b.HasIndex("ProductwaardeId");
+
+                    b.ToTable("Attribuutwaarde");
+                });
+
             modelBuilder.Entity("WebApp1.Models.BesteldeItem", b =>
                 {
                     b.Property<int>("BesteldeItemId")
@@ -170,6 +208,22 @@ namespace WebApp1.Migrations
                     b.ToTable("Bestelling");
                 });
 
+            modelBuilder.Entity("WebApp1.Models.Extra_Atributes", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Atribute");
+
+                    b.Property<int>("ProductsId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductsId");
+
+                    b.ToTable("Extra_Atributes");
+                });
+
             modelBuilder.Entity("WebApp1.Models.FavoritesModel", b =>
                 {
                     b.Property<int>("Id")
@@ -186,6 +240,74 @@ namespace WebApp1.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("Favorites");
+                });
+
+            modelBuilder.Entity("WebApp1.Models.Item", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("ProductId");
+
+                    b.Property<int>("Quantity");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Items");
+                });
+
+            modelBuilder.Entity("WebApp1.Models.Products", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<double>("Price");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("WebApp1.Models.Productsoort", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Naam");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Productsoort");
+                });
+
+            modelBuilder.Entity("WebApp1.Models.Productwaarde", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<double>("DiscountedPrice");
+
+                    b.Property<string>("Image");
+
+                    b.Property<double>("Price");
+
+                    b.Property<int>("ProductsoortId");
+
+                    b.Property<int>("Quantity");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductsoortId");
+
+                    b.ToTable("Productwaarde");
                 });
 
             modelBuilder.Entity("WebApp1.Models.Users", b =>
@@ -238,128 +360,6 @@ namespace WebApp1.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("WebApp1.Products.Attribuutsoort", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Attrbuut");
-
-                    b.Property<int>("ProductsoortId");
-
-                    b.Property<string>("Type");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductsoortId");
-
-                    b.ToTable("Attribuutsoort");
-                });
-
-            modelBuilder.Entity("WebApp1.Products.Attribuutwaarde", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("AttribuutsoortId");
-
-                    b.Property<int>("ProductwaardeId");
-
-                    b.Property<string>("Waarde");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AttribuutsoortId");
-
-                    b.HasIndex("ProductwaardeId");
-
-                    b.ToTable("Attribuutwaarde");
-                });
-
-            modelBuilder.Entity("WebApp1.Products.Extra_Atributes", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Atribute");
-
-                    b.Property<int>("ProductsId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductsId");
-
-                    b.ToTable("Extra_Atributes");
-                });
-
-            modelBuilder.Entity("WebApp1.Products.Item", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("ProductId");
-
-                    b.Property<int>("Quantity");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("Items");
-                });
-
-            modelBuilder.Entity("WebApp1.Products.Products", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<double>("Price");
-
-                    b.Property<string>("Title");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("WebApp1.Products.Productsoort", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Naam");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Productsoort");
-                });
-
-            modelBuilder.Entity("WebApp1.Products.Productwaarde", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description");
-
-                    b.Property<double>("DiscountedPrice");
-
-                    b.Property<string>("Image");
-
-                    b.Property<double>("Price");
-
-                    b.Property<int>("ProductsoortId");
-
-                    b.Property<int>("Quantity");
-
-                    b.Property<string>("Title");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductsoortId");
-
-                    b.ToTable("Productwaarde");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
@@ -405,6 +405,27 @@ namespace WebApp1.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("WebApp1.Models.Attribuutsoort", b =>
+                {
+                    b.HasOne("WebApp1.Models.Productsoort", "productsoort")
+                        .WithMany("Attribuutsoort")
+                        .HasForeignKey("ProductsoortId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WebApp1.Models.Attribuutwaarde", b =>
+                {
+                    b.HasOne("WebApp1.Models.Attribuutsoort", "attribuutsoort")
+                        .WithMany("Attribuutwaarde")
+                        .HasForeignKey("AttribuutsoortId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("WebApp1.Models.Productwaarde", "productwaarde")
+                        .WithMany("Attribuutwaarde")
+                        .HasForeignKey("ProductwaardeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("WebApp1.Models.BesteldeItem", b =>
                 {
                     b.HasOne("WebApp1.Models.Bestelling", "Bestelling")
@@ -420,53 +441,32 @@ namespace WebApp1.Migrations
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("WebApp1.Models.FavoritesModel", b =>
+            modelBuilder.Entity("WebApp1.Models.Extra_Atributes", b =>
                 {
-                    b.HasOne("WebApp1.Products.Productwaarde", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("WebApp1.Products.Attribuutsoort", b =>
-                {
-                    b.HasOne("WebApp1.Products.Productsoort", "productsoort")
-                        .WithMany("Attribuutsoort")
-                        .HasForeignKey("ProductsoortId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("WebApp1.Products.Attribuutwaarde", b =>
-                {
-                    b.HasOne("WebApp1.Products.Attribuutsoort", "attribuutsoort")
-                        .WithMany("Attribuutwaarde")
-                        .HasForeignKey("AttribuutsoortId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("WebApp1.Products.Productwaarde", "productwaarde")
-                        .WithMany("Attribuutwaarde")
-                        .HasForeignKey("ProductwaardeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("WebApp1.Products.Extra_Atributes", b =>
-                {
-                    b.HasOne("WebApp1.Products.Products", "products")
+                    b.HasOne("WebApp1.Models.Products", "products")
                         .WithMany("Extra_Atributes")
                         .HasForeignKey("ProductsId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("WebApp1.Products.Item", b =>
+            modelBuilder.Entity("WebApp1.Models.FavoritesModel", b =>
                 {
-                    b.HasOne("WebApp1.Products.Productwaarde", "Product")
+                    b.HasOne("WebApp1.Models.Productwaarde", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WebApp1.Models.Item", b =>
+                {
+                    b.HasOne("WebApp1.Models.Productwaarde", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId");
                 });
 
-            modelBuilder.Entity("WebApp1.Products.Productwaarde", b =>
+            modelBuilder.Entity("WebApp1.Models.Productwaarde", b =>
                 {
-                    b.HasOne("WebApp1.Products.Productsoort", "productsoort")
+                    b.HasOne("WebApp1.Models.Productsoort", "productsoort")
                         .WithMany("Productwaarde")
                         .HasForeignKey("ProductsoortId")
                         .OnDelete(DeleteBehavior.Cascade);

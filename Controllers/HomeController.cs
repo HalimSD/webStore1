@@ -8,7 +8,6 @@ using WebApp1.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
-using WebApp1.Products;
 
 namespace klaas.Controllers
 {

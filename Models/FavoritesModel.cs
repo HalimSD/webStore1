@@ -1,4 +1,4 @@
-using WebApp1.Products;
+using WebApp1.Models;
 
 namespace WebApp1.Models
 {

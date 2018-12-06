@@ -12,7 +12,6 @@ using System.IO;
 using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Hosting;
 using System;
-using WebApp1.Products;
 
 namespace WebApp1.Controllers
 {
@@ -200,6 +199,16 @@ namespace WebApp1.Controllers
             }
             return View("checkOut");
         }
+        public void increaseQuantity (int id){
+            // List<Item> cart = new List<Item>();
+            // cart.Add(new Item { Product = _context.Productwaarde.Find(id), Quantity = 1 });
+            // BesteldeItem besteldeItem = new BesteldeItem{
+            //     besteldeItem.Quantity = 1
+            // };
+            Productwaarde productwaarde = _context.Productwaarde.Find(id);
+            productwaarde.Quantity ++;
+
+        }
 
         [HttpPost]
         public ActionResult EmailOrder(SubscribeModel model)
@@ -285,6 +294,7 @@ namespace WebApp1.Controllers
                 client.Send(message);
                 client.Disconnect(true);
             }
+            HttpContext.Session.Remove("cart");
             return View();
 
         }

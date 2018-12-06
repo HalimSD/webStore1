@@ -26,15 +26,15 @@ namespace WebApp1.Mainpage
         }
 
         public class Prodctding{
-            public WebApp1.Products.Productsoort Productsoorts {get; set;}
-            public List<WebApp1.Products.Attribuutsoort> Attribuutsoorts {get; set;}
+            public WebApp1.Models.Productsoort Productsoorts {get; set;}
+            public List<WebApp1.Models.Attribuutsoort> Attribuutsoorts {get; set;}
 
             public bool selected{get;set;}
 
         }
 
         public class Productsoortfilter{
-            public WebApp1.Products.Productsoort Productsoorts {get; set;}
+            public WebApp1.Models.Productsoort Productsoorts {get; set;}
             public bool selected{get;set;}
 
         }
@@ -43,9 +43,9 @@ namespace WebApp1.Mainpage
         public IList<Prodctding> prodctding{get;set;}
 
         public IList<Productsoortfilter> productsoortfilters{get;set;}
-        public IEnumerable<WebApp1.Products.Productwaarde> productwaardes {get; set;}
+        public IEnumerable<WebApp1.Models.Productwaarde> productwaardes {get; set;}
 
-        public IEnumerable<WebApp1.Products.Productsoort> productsoorten {get; set;}
+        public IEnumerable<WebApp1.Models.Productsoort> productsoorten {get; set;}
 
 
         public int getnumberofpages(){
@@ -57,7 +57,7 @@ namespace WebApp1.Mainpage
            return div;
         }
 
-         public IEnumerable<WebApp1.Products.Productwaarde> Page() {
+         public IEnumerable<WebApp1.Models.Productwaarde> Page() {
              return productwaardes.Skip((pageindex - 1) *pagesize).Take(pagesize);
          }
 

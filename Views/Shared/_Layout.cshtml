@@ -42,19 +42,23 @@
         </li>
         @if (SignInManager.IsSignedIn(User))
         {
-            <li class="nav-item">
-                <a class="nav-link" href="@Url.Action("Index", "Favorites")">Favorieten<span class="sr-only">(current)</span></a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mijn Account</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Mijn Profiel</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="@Url.Action("Index", "Favorites")">Favorieten</a>
+                    <a class="dropdown-item" href="@Url.Action("oldOrders", "Cart")">Bestelgeschiedenis</a>
+                    <a class="dropdown-item" href="@Url.Action("Index", "Cart")">Winkelmand</a>
+                </div>
             </li>
         }
-        @if (SignInManager.IsSignedIn(User))
+        else
         {
             <li class="nav-item">
-                <a class="nav-link" href="@Url.Action("oldOrders", "Cart")">History<span class="sr-only">(current)</span></a>
+                <a href="@Url.Action("Index", "Cart")"><img src="~/Images/ShoppingCart.png" width="40"/></a>
             </li>
         }
-       <li class="nav-item">
-          <a href="@Url.Action("Index", "Cart")"><img src="~/Images/ShoppingCart.png" width="40"/></a>
-      </li>
     </ul>
     <partial name="_LoginPartial" />
 

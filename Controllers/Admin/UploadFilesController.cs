@@ -84,9 +84,13 @@ namespace Controllers
                                 var title = record[1].ToString();
 
                                 var price = Convert.ToDouble(record[2]);
+                                var description = Convert.ToString(record[3]);
+                                var quantity = Int32.Parse(record[4]);
 
                                 Productwaarde productwaarde = new Productwaarde{
                                 Title = title,
+                                Description = description,
+                                Quantity = quantity,
                                 Price = price,
                                 ProductsoortId = productsid,
                                 Image = "default.png",
@@ -97,7 +101,7 @@ namespace Controllers
                             _context.SaveChanges();
 
                              var extrattributen = new List<string>();
-                             for (int recor = 3; recor < record.Length; recor++)
+                             for (int recor = 5; recor < record.Length; recor++)
                                 { 
                                     extrattributen.Add(record[recor]);
                                 }

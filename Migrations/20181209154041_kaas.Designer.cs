@@ -10,7 +10,7 @@ using WebApp1.Models;
 namespace WebApp1.Migrations
 {
     [DbContext(typeof(WebshopContext))]
-    [Migration("20181207151809_kaas")]
+    [Migration("20181209154041_kaas")]
     partial class kaas
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

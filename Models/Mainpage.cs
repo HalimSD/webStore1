@@ -27,10 +27,22 @@ namespace WebApp1.Mainpage
 
         public class Prodctding{
             public WebApp1.Products.Productsoort Productsoorts {get; set;}
-            public List<WebApp1.Products.Attribuutsoort> Attribuutsoorts {get; set;}
+            public List<Atribuutsoortnumber> Attribuutsoortsn {get; set;}
+            public List<Atribuutsoorttekst> Attribuutsoortst {get; set;}
 
-            public bool selected{get;set;}
+           
+        }
 
+        public class Atribuutsoortnumber{
+            public WebApp1.Products.Attribuutsoort atribuutsoortn{get;set;}
+            public int max{get;set;}
+            public int min{get;set;}
+        }
+
+        public class Atribuutsoorttekst{
+            public WebApp1.Products.Attribuutsoort atribuutsoortt{get;set;}
+            public string value{get;set;}
+        
         }
 
         public class Productsoortfilter{

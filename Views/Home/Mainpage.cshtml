@@ -2,9 +2,7 @@
 @using WebApp1.Mainpage
 @model WebApp1.Mainpage.Mainpage;
 
-@{
-    ViewData["Title"] = "Producten pagina";
-
+@{       
     // The code below is used to populate the product page
     // The product page itself consists of 3 columns
     // We must first sort all the products into each column    
@@ -37,6 +35,52 @@
 
 <link rel="stylesheet" href="~/css/mainpage.css">
 <div class="row">
+     <div class="col-2">
+        <div id="categoryArea">
+            <div class="categoryTitle">Mijn Filter</div>
+            <hr>
+            <form asp-action="Mainpage">
+                <div  >
+                    @for (var i = 0; i < Model.prodctding.Count; i++)
+                    {
+                        <input type="hidden" asp-for="@Model.prodctding[i].Productsoorts.Naam"  />@Model.prodctding[i].Productsoorts.Naam
+
+                       if(Model.prodctding[i].Attribuutsoortst != null){
+                            @for (var k = 0; k < Model.prodctding[i].Attribuutsoortst.Count; k++)
+                            {
+                            <br></br>@Model.prodctding[i].Attribuutsoortst[k].atribuutsoortt.Attrbuut
+                            <p>text: </p><input type="text" asp-for="@Model.prodctding[i].Attribuutsoortst[k].value" />
+                            
+                            @Html.HiddenFor(modelItem => @Model.prodctding[i].Attribuutsoortst[k].atribuutsoortt.Type)
+                            @Html.HiddenFor(modelItem => @Model.prodctding[i].Attribuutsoortst[k].atribuutsoortt.Attrbuut)
+                            @Html.HiddenFor(modelItem => @Model.prodctding[i].Attribuutsoortst[k].atribuutsoortt.ProductsoortId)
+                            }
+                        }
+                         if(Model.prodctding[i].Attribuutsoortsn != null){
+                            @for (var k = 0; k < Model.prodctding[i].Attribuutsoortsn.Count; k++)
+                            {
+                            <br></br>@Model.prodctding[i].Attribuutsoortsn[k].atribuutsoortn.Attrbuut
+                             <p>minimum: </p><input type="text" asp-for="@Model.prodctding[i].Attribuutsoortsn[k].min" />
+                             <p>maximum: </p><input type="text" asp-for="@Model.prodctding[i].Attribuutsoortsn[k].max" />
+                            
+                            @Html.HiddenFor(modelItem => @Model.prodctding[i].Attribuutsoortsn[k].atribuutsoortn.Type)
+                            @Html.HiddenFor(modelItem => @Model.prodctding[i].Attribuutsoortsn[k].atribuutsoortn.Attrbuut)
+                            @Html.HiddenFor(modelItem => @Model.prodctding[i].Attribuutsoortsn[k].atribuutsoortn.ProductsoortId)
+                            
+                            }
+                          
+                        }
+                         <hr>
+                    }
+                    <button class="btn btn-outline-success" type="submit">Filter</button>
+                </div>
+            </form>
+            <div>
+                <a asp-action="Mainpage">Terug naar alle producten</a>
+            </div>
+        </div>
+        
+     </div>
     <div class="col-2">
         <div id="categoryArea">
             <div class="categoryTitle">Categorieën</div>
@@ -46,7 +90,7 @@
                     @for (var i = 0; i < Model.productsoortfilters.Count; i++)
                     {
                         <input type="checkbox" asp-for="@Model.productsoortfilters[i].selected"  />@Model.productsoortfilters[i].Productsoorts.Naam
-                        <input type="hidden" asp-for="@Model.productsoortfilters[i].Productsoorts.Naam" /> <br>
+                        <input type="hidden" asp-for="@Model.productsoortfilters[i].Productsoorts.Naam" /> 
                         <hr>                                                                                  
                     }
                     <button class="btn btn-outline-success" type="submit">Filter</button>

@@ -84,7 +84,7 @@ namespace klaas.Controllers
             return View();
         }
      
-        public IActionResult Mainpage(List<WebApp1.Mainpage.Mainpage.Productsoortfilter> productsoortfilters, int? id)
+        public IActionResult Mainpage(List<WebApp1.Mainpage.Mainpage.Productsoortfilter> productsoortfilters, List<WebApp1.Mainpage.Mainpage.Prodctding> prodctding, int? id)
         {
            
 
@@ -92,17 +92,72 @@ namespace klaas.Controllers
             var productsoortfilterslijst = productsoortenfilter.ToList();
             var productsoorten = from m in _context.Productsoort select m;
             
-            // var query1 =
-            //             (from productsoort in _context.Productsoort
-            //             join atributen in _context.Attribuutsoort on productsoort.Id equals atributen.ProductsoortId 
-            //             group atributen by productsoort into g
-            //             select new Prodctding(){Attribuutsoorts = g.ToList(), Productsoorts = g.Key}).ToList();
+            var quer = new List<WebApp1.Mainpage.Mainpage.Prodctding>{}.ToList();
 
-             if (productsoortfilters.Count == 0)
+            if(prodctding.Count != 0){
+                
+                    var productwaardenlijst1 = new List<Productwaarde>();
+                    for (var i = 0; i<prodctding.Count(); i++ ){
+                     if(prodctding[i].Attribuutsoortst!=null){
+                        for(var k = 0; k < prodctding[i].Attribuutsoortst.Count; k++){
+
+                            var query =
+                                from attributen in _context.Attribuutwaarde
+                                join productwaarde in _context.Productwaarde on attributen.ProductwaardeId equals productwaarde.Id
+                                join atribuut in _context.Attribuutsoort on attributen.AttribuutsoortId equals atribuut.Id
+                                join productsoort in _context.Productsoort on productwaarde.ProductsoortId equals productsoort.Id
+                                where attributen.Waarde.Contains(prodctding[i].Attribuutsoortst[k].value) && productsoort.Naam == prodctding[i].Productsoorts.Naam
+                                select productwaarde;
+
+                                productwaardenlijst1 = productwaardenlijst1.Union(query).ToList();
+                        }
+                     }
+
+                      if(prodctding[i].Attribuutsoortsn!= null){
+                        for(var k = 0; k < prodctding[i].Attribuutsoortsn.Count; k++){
+
+                            var query1 =
+                                from attribuutwaarde in _context.Attribuutwaarde
+                                join productwaarde in _context.Productwaarde on attribuutwaarde.ProductwaardeId equals productwaarde.Id
+                                join atribuutsoorten in _context.Attribuutsoort on attribuutwaarde.AttribuutsoortId equals atribuutsoorten.Id
+                                join productsoort in _context.Productsoort on productwaarde.ProductsoortId equals productsoort.Id
+                                where atribuutsoorten.Type == "number" && productsoort.Naam == prodctding[i].Productsoorts.Naam && Int32.Parse(attribuutwaarde.Waarde)> prodctding[i].Attribuutsoortsn[k].min && 
+                                Int32.Parse(attribuutwaarde.Waarde)<= prodctding[i].Attribuutsoortsn[k].max 
+                                select productwaarde;
+
+                                
+                            
+                            // var query2 = query1.Where(x => Convert.ToInt32("100")> prodctding[i].Attribuutsoortsn[k].min && 
+                            //      Convert.ToInt32("100")<= prodctding[i].Attribuutsoortsn[k].max
+                            //      ).Select(x => x.productwaarde);
+
+                            //  var query2 = query1.
+                            //  Select(x => x.productwaarde);
+                               
+                                
+                                
+
+                                productwaardenlijst1 = productwaardenlijst1.Union(query1).ToList();
+                        }
+                     }
+                    }
+
+                    var main = new WebApp1.Mainpage.Mainpage();
+                                main.productwaardes = productwaardenlijst1;
+                                main.currentCategoryName = "filteredresult";
+                                main.prodctding = prodctding;
+                                main.productsoortfilters = productsoortfilterslijst;
+                                main.pagesize = maxPageSize;
+                                main.pageindex = (id ?? 1);
+                    return View(main);
+            }
+
+             else if (productsoortfilters.Count == 0) 
             {
                 var productwaardenq =  from m in _context.Productwaarde orderby m.Title select m;
                 var main = new WebApp1.Mainpage.Mainpage();
                     main.productwaardes = productwaardenq;
+                    main.prodctding = quer;
                     main.currentCategoryName = "Alle Producten";
                     main.productsoortfilters = productsoortfilterslijst;
                     main.productsoorten = productsoorten;
@@ -110,6 +165,7 @@ namespace klaas.Controllers
                     main.pageindex = (id ?? 1);
                 return View(main);
             }
+            
             else{
                  var myList = new List<Productsoort>();
                 for (var i = 0; i<productsoortfilters.Count(); i++ ){
@@ -130,6 +186,53 @@ namespace klaas.Controllers
                     return View(main);
                 }
                 else{
+                    var productwithatlijst = new List<WebApp1.Mainpage.Mainpage.Prodctding>();
+                    foreach(var item in myList){
+                        var productding1 = new WebApp1.Mainpage.Mainpage.Prodctding();
+                        productding1.Productsoorts = item;
+                       var atribuutsoortn = (from atribuutsoort in _context.Attribuutsoort
+                                        join productsoort in _context.Productsoort on atribuutsoort.ProductsoortId equals productsoort.Id
+                                         where productsoort.Naam == item.Naam && atribuutsoort.Type == "number"
+                                         select new WebApp1.Mainpage.Mainpage.Atribuutsoortnumber(){atribuutsoortn = atribuutsoort, min = 0, max = 10}); 
+                        productding1.Attribuutsoortsn= atribuutsoortn.ToList();
+                        var atribuutsoortt = (from atribuutsoort in _context.Attribuutsoort
+                                        join productsoort in _context.Productsoort on atribuutsoort.ProductsoortId equals productsoort.Id
+                                         where productsoort.Naam == item.Naam && atribuutsoort.Type == "string"
+                                         select new WebApp1.Mainpage.Mainpage.Atribuutsoorttekst(){atribuutsoortt = atribuutsoort,value = "henk"}); 
+                        productding1.Attribuutsoortst= atribuutsoortt.ToList();
+                        productwithatlijst.Add(productding1);
+                         
+                    }
+
+                    //  var productwithatlijst = new List<WebApp1.Mainpage.Mainpage.Prodctding>();
+                    //  for (var i = 0; i<myList.Count(); i++ ){
+
+                    //     var subquery1 = (from atribuutsoorten in _context.Attribuutsoort
+                    //                     where atribuutsoorten.Type == "number"
+                    //                     select new WebApp1.Mainpage.Mainpage.Atribuutsoortnumber(){atribuutsoortn = atribuutsoorten, min = 0, max = 10});
+                    //     var query1 =
+                    //                 (from productsoort in _context.Productsoort
+                    //                 join atributen in subquery1 on productsoort.Id equals atributen.atribuutsoortn.ProductsoortId
+                    //                 where productsoort.Naam == myList[i].Naam 
+                    //                 group atributen by productsoort into g
+                    //                 select new WebApp1.Mainpage.Mainpage.Prodctding(){Productsoorts = g.Key, Attribuutsoortsn = g.ToList()}).ToList();
+                    //     productwithatlijst = productwithatlijst.Union(query1).ToList();
+
+                    //     var subquery2 = (from atribuutsoorten in _context.Attribuutsoort
+                    //                     where atribuutsoorten.Type == "string"
+                    //                     select new WebApp1.Mainpage.Mainpage.Atribuutsoorttekst(){atribuutsoortt = atribuutsoorten, value = "hoi"});
+
+                    //     var query2 =
+                    //                 (from productsoort in _context.Productsoort
+                    //                 join atributen in subquery2 on productsoort.Id equals atributen.atribuutsoortt.ProductsoortId
+                    //                 where productsoort.Naam == myList[i].Naam 
+                    //                 group atributen by productsoort into g
+                    //                 select new WebApp1.Mainpage.Mainpage.Prodctding(){Productsoorts = g.Key, Attribuutsoortst = g.ToList()}).ToList();
+                    //     productwithatlijst = productwithatlijst.Union(query2).ToList();
+                       
+                    // }
+
+                    // //list with products
                     var productwaardenlijst = new List<Productwaarde>();
                     for (var i = 0; i<myList.Count(); i++ ){
                     var query =
@@ -143,10 +246,12 @@ namespace klaas.Controllers
                     var main = new WebApp1.Mainpage.Mainpage();
                                 main.productwaardes = productwaardenlijst;
                                 main.currentCategoryName = "filteredresult";
+                                main.prodctding = productwithatlijst;
                                 main.productsoortfilters = productsoortfilterslijst;
                                 main.pagesize = maxPageSize;
                                 main.pageindex = (id ?? 1);
                     return View(main);
+
                 }
             }
         }

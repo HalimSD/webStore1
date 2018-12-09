@@ -212,6 +212,7 @@ namespace klaas.Controllers
                     main.currentCategoryName = "Alle Producten";
                     main.productsoortfilters = productsoortfilterslijst;
                     main.productsoorten = productsoorten;
+                    main.prodctding = quer;
                     main.pagesize = maxPageSize;
                     main.pageindex = (id ?? 1);
                     return View(main);

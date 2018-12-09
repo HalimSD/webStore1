@@ -44,8 +44,10 @@
         </tr>
     </table>
     <br>
-    <a asp-controller="Home" asp-action="index">Doorgaan met shoppen</a>
-    <br>
-    <a asp-controller="cart" asp-action="CreatePDF">Checkout</a>
+    <form  method="get">
+     <input type="submit" class="btn btn-primary"  value="Doorgaan met shoppen" asp-controller="Home" asp-action="index" >
+     <input type="submit" class="btn btn-primary float-right"  value="Checkout" asp-controller="cart" asp-action="CreatePDF">
+    </form>
+    
 </div>
 

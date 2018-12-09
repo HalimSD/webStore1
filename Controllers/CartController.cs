@@ -55,29 +55,44 @@ namespace WebApp1.Controllers
             return View();
         }
 
-        
+        public double productPrice(List<Item> cart, int id)
+        {
+            var total = 1.0;
+            if (new Item().Product.DiscountedPrice != -1)
+            {
+                total = cart.Sum(item => item.Product.DiscountedPrice * item.Quantity);
+            }
+            else
+            {
+                total = cart.Sum(item => item.Product.DiscountedPrice * item.Quantity);
+            }
+            return total;
+        }
         public IActionResult plus(int id)
         {
             List<Item> cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
             CheckItemInSC(id, cart);
-            VoorraadVerminderen(id);
             _context.SaveChanges();
             SessionExtensions.Set(HttpContext.Session, "cart", cart);
             return RedirectToAction("Index", "cart");
         }
 
-        public IActionResult min (int id){
+        public IActionResult min(int id)
+        {
             Productwaarde productwaarde = _context.Productwaarde.Find(id);
             List<Item> cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
             int index = isExist(id);
-            productwaarde.Quantity += cart[index].Quantity;
+            productwaarde.Quantity += 1;
             _context.SaveChanges();
-            if ( cart[index].Quantity != 1){
-                cart[index].Quantity = cart[index].Quantity - 1 ;
-            }else{
-                cart[index].Quantity = cart[index].Quantity ;
+            if (cart[index].Quantity > 1)
+            {
+                cart[index].Quantity = cart[index].Quantity - 1;
             }
-            
+            else
+            {
+                cart[index].Quantity = cart[index].Quantity;
+            }
+
             SessionExtensions.Set(HttpContext.Session, "cart", cart);
             return RedirectToAction("Index");
         }
@@ -96,7 +111,6 @@ namespace WebApp1.Controllers
             {
                 List<Item> cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
                 CheckItemInSC(id, cart);
-                VoorraadVerminderen(id);
                 _context.SaveChanges();
                 SessionExtensions.Set(HttpContext.Session, "cart", cart);
             }
@@ -148,6 +162,7 @@ namespace WebApp1.Controllers
                 else
                 {
                     cart[index].Quantity++;
+                    VoorraadVerminderen(id);
                 }
             }
         }
@@ -156,7 +171,17 @@ namespace WebApp1.Controllers
         {
             if (_context.Productwaarde.Find(id).Quantity > 0)
             {
-                cart.Add(new Item { Product = _context.Productwaarde.Find(id), Quantity = 1 });
+                var Product1 = _context.Productwaarde.Find(id);
+                if (Product1.DiscountedPrice != -1)
+                {
+                    Product1.Price = Product1.DiscountedPrice;
+                    cart.Add(new Item { Product = Product1, Quantity = 1 });
+                }
+                else
+                {
+                    cart.Add(new Item { Product = Product1, Quantity = 1 });
+                }
+                VoorraadVerminderen(id);
 
             }
             else

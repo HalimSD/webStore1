@@ -2,6 +2,23 @@
  * Position icons into circle (SO)
  * http://stackoverflow.com/q/12813573/1397351 
  */
+.circle-container img{ display: block; height: 100%; }
+
+.center img{
+	height: 55%;
+}
+
+a{
+	/* border-radius: 100px; */
+	color: white;
+	text-decoration: none;
+}
+
+a:hover{
+	color: white;
+	text-decoration: none;
+}
+
  .circle-container {
 	position: relative;
 	width: 48em;
@@ -72,9 +89,8 @@
 }
 
 #mainDiv{
-    padding-top: 5%;
-    padding-bottom: 10%;
-    position: relative;
+	position: relative;
+	padding-bottom: 100px;
 }
 
 .text{
@@ -136,15 +152,9 @@
     background-color: #ffffff;
     border-radius: 3px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-	
 	margin-left: 15%;
     margin-right: 15%;
     margin-bottom: 5%;
-}
-
-#mainDiv {
-	padding-top: 10px;
-	padding-left: 10px;
 }
 
 #containerDiv {

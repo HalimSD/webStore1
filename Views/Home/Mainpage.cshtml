@@ -41,9 +41,12 @@
             <hr>
             <form asp-action="Mainpage">
                 <div  >
+                    <p>Min Price: </p><input type="text" asp-for="@Model.minprice"  />
+                    <p>Max Price: </p><input type="text" asp-for="@Model.maxprice"  />
                     @for (var i = 0; i < Model.prodctding.Count; i++)
                     {
                         <input type="hidden" asp-for="@Model.prodctding[i].Productsoorts.Naam"  />@Model.prodctding[i].Productsoorts.Naam
+                        
 
                        if(Model.prodctding[i].Attribuutsoortst != null){
                             @for (var k = 0; k < Model.prodctding[i].Attribuutsoortst.Count; k++)

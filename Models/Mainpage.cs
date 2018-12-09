@@ -12,6 +12,7 @@ namespace WebApp1.Mainpage
         public string currentCategoryName { get; set; }
         public int pagesize { get; set; }
         public int pageindex
+        
          
         
         
@@ -24,6 +25,9 @@ namespace WebApp1.Mainpage
 
                 } 
         }
+
+        public double minprice{ get;set;}
+        public double maxprice{ get;set;}
 
         public class Prodctding{
             public WebApp1.Models.Productsoort Productsoorts {get; set;}

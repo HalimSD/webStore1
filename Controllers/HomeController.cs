@@ -84,7 +84,7 @@ namespace klaas.Controllers
             return View();
         }
      
-        public IActionResult Mainpage(List<WebApp1.Mainpage.Mainpage.Productsoortfilter> productsoortfilters, List<WebApp1.Mainpage.Mainpage.Prodctding> prodctding, int? id)
+         public IActionResult Mainpage(List<WebApp1.Mainpage.Mainpage.Productsoortfilter> productsoortfilters, List<WebApp1.Mainpage.Mainpage.Prodctding> prodctding, double? minprice , double? maxprice, int? id)
         {
            
 
@@ -94,9 +94,18 @@ namespace klaas.Controllers
             
             var quer = new List<WebApp1.Mainpage.Mainpage.Prodctding>{}.ToList();
 
+            
+
+           
             if(prodctding.Count != 0){
-                
-                    var productwaardenlijst1 = new List<Productwaarde>();
+                var productwaardenlijst1 = new List<Productwaarde>();
+                // if (minprice!= null && maxprice!= null){
+                //         var produtwaarde = from productwaarde in _context.Productwaarde 
+                //                         where productwaarde.Price> minprice && 
+                //                         productwaarde.Price<= maxprice 
+                //                         select productwaarde;
+                //         productwaardenlijst1 = productwaardenlijst1.Union(produtwaarde).ToList();
+                // }
                     for (var i = 0; i<prodctding.Count(); i++ ){
                      if(prodctding[i].Attribuutsoortst!=null){
                         for(var k = 0; k < prodctding[i].Attribuutsoortst.Count; k++){
@@ -106,7 +115,9 @@ namespace klaas.Controllers
                                 join productwaarde in _context.Productwaarde on attributen.ProductwaardeId equals productwaarde.Id
                                 join atribuut in _context.Attribuutsoort on attributen.AttribuutsoortId equals atribuut.Id
                                 join productsoort in _context.Productsoort on productwaarde.ProductsoortId equals productsoort.Id
-                                where attributen.Waarde.Contains(prodctding[i].Attribuutsoortst[k].value) && productsoort.Naam == prodctding[i].Productsoorts.Naam
+                                where attributen.Waarde.Contains(prodctding[i].Attribuutsoortst[k].value) && productsoort.Naam == prodctding[i].Productsoorts.Naam &&
+                                productwaarde.Price> minprice && 
+                                        productwaarde.Price<= maxprice 
                                 select productwaarde;
 
                                 productwaardenlijst1 = productwaardenlijst1.Union(query).ToList();
@@ -122,7 +133,9 @@ namespace klaas.Controllers
                                 join atribuutsoorten in _context.Attribuutsoort on attribuutwaarde.AttribuutsoortId equals atribuutsoorten.Id
                                 join productsoort in _context.Productsoort on productwaarde.ProductsoortId equals productsoort.Id
                                 where atribuutsoorten.Type == "number" && productsoort.Naam == prodctding[i].Productsoorts.Naam && Int32.Parse(attribuutwaarde.Waarde)> prodctding[i].Attribuutsoortsn[k].min && 
-                                Int32.Parse(attribuutwaarde.Waarde)<= prodctding[i].Attribuutsoortsn[k].max 
+                                Int32.Parse(attribuutwaarde.Waarde)<= prodctding[i].Attribuutsoortsn[k].max &&
+                                  productwaarde.Price> minprice && 
+                                        productwaarde.Price<= maxprice 
                                 select productwaarde;
 
                                 
@@ -151,6 +164,24 @@ namespace klaas.Controllers
                                 main.pageindex = (id ?? 1);
                     return View(main);
             }
+
+            if (minprice!= null && maxprice!= null){
+                var produtwaarde = from productwaarde in _context.Productwaarde 
+                                where productwaarde.Price> minprice && 
+                                productwaarde.Price<= maxprice 
+                                select productwaarde;
+                var main = new WebApp1.Mainpage.Mainpage();
+                    main.productwaardes = produtwaarde;
+                    main.prodctding = quer;
+                    main.currentCategoryName = "Alle Producten";
+                    main.productsoortfilters = productsoortfilterslijst;
+                    main.productsoorten = productsoorten;
+                    main.pagesize = maxPageSize;
+                    main.pageindex = (id ?? 1);
+                return View(main);
+            }
+
+             
 
              else if (productsoortfilters.Count == 0) 
             {

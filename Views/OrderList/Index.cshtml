@@ -1,15 +1,12 @@
 @{
-    ViewData["Title"] = "Product Lijst";
+    ViewData["Title"] = "Categorie Lijst";
 }
 
 <link rel="stylesheet" href="~/css/product_creation_generic.css">
 <link rel="stylesheet" href="~/css/shopping_cart.css">
 <div class="pageRoot" style="margin-left: 10%; margin-right: 10%;">
-    <h2>Producten</h2>
+    <h2>Alle bestellingen</h2>
     <hr>
-    <p>
-        <a asp-action="Create2" asp-controller="Products">Nieuw Product Aanmaken</a>
-    </p>
     <table id="table" style="border-radius: 3px;">
         <thead>
         <tr>
@@ -17,19 +14,19 @@
                 <input id="filterId" type="text" class="form-control" placeholder="Filteren bij ID">
             </th>
             <th>
-                <input id="filterName" type="text" class="form-control" placeholder="Filteren bij Naam">
+                <input id="filterDate" type="text" class="form-control" placeholder="Filteren bij Datum">
             </th>
             <th>
-                <input id="filterPrice" type="text" class="form-control" placeholder="Filteren bij Prijs">
+                <input id="filterStatus" type="text" class="form-control" placeholder="Filteren bij Status">
             </th>
             <th>
-                <input id="filterDiscountPrice" type="text" class="form-control" placeholder="Filteren bij Korting">
+                <input id="filterProductCount" type="text" class="form-control" placeholder="Filteren bij Aantal Producten">
             </th>
             <th>
-                <input id="filterStock" type="text" class="form-control" placeholder="Filteren bij Voorraad">
+                <input id="filterUserEmail" type="text" class="form-control" placeholder="Filteren bij Klant E-Mail">
             </th>
             <th>
-                <input id="filterCategory" type="text" class="form-control" placeholder="Filteren bij Categorie">
+                <input id="filterUserId" type="text" class="form-control" placeholder="Filteren bij Klant ID">
             </th>
             <th>
                 
@@ -40,19 +37,19 @@
                 ID
             </th>
             <th>
-                Naam
+                Datum
             </th>
             <th>
-                Prijs
+                Status
             </th>
             <th>
-                Korting Prijs
+                Aantal Producten
             </th>
             <th>
-                Voorraad
+                Klant E-Mail
             </th>
             <th>
-                Categorie
+                Klant ID
             </th>
             <th>
                 Opties
@@ -66,4 +63,4 @@
     </ul>
 </div>
 <br>
-<script type="module" src="~/js/loadProductsList.js"></script>
+<script type="module" src="~/js/loadOrderList.js"></script>

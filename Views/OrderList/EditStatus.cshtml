@@ -1,0 +1,33 @@
+@model WebApp1.Models.OrderListViewModel;
+@{
+    ViewData["Title"] = "Status bewerken";
+}
+<link rel="stylesheet" href="~/css/product_creation_generic.css">
+<div class="pageRoot">
+    <h2>Bestelstatus weizigen</h2>
+    <hr>
+    Op dit pagina kunt u de bestelstatus van deze bestelling weizigen.
+    <br><br>
+    <b>Bestelling ID:</b><br>
+    @Model.Id<br>
+    <b>Klant ID:</b><br>
+    @Model.UserId<br>
+    <b>Klant E-Mail:</b><br>
+    @Model.UserEmail<br>
+    <b>Huidige Status:</b><br>
+    @Model.Status<br><br>
+    <form action="@Url.Action("SetOrderStatus", "OrderList")" method="get">
+        <input type="hidden" name="id" value="@Model.Id"/>
+        <label class="label">Nieuwe bestel status:</label>
+        <select class="form-control" name="selection">
+            <option value="OnderWeg">OnderWeg</option>
+            <option value="Bezorgd">Bezorgt</option>
+            <option value="In Behandeling">In Behandeling</option>
+            <option value="Geannuleerd">Geannuleerd</option>
+            <option value="Mislukt">Mislukt</option>
+        </select><br>
+        <input type="submit" class="btn btn-primary" value="Opslaan"/>
+    </form><br>
+    <a href="@Url.Action("Index","OrderList")">Terug naar alle bestellingen</a>
+    
+</div>

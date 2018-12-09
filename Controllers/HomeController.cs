@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using MailKit.Search;
 using Microsoft.AspNetCore.Mvc;
 using WebApp1.Models;
 using Microsoft.AspNetCore.Identity;
@@ -82,10 +83,7 @@ namespace klaas.Controllers
         {
             return View();
         }
-
-       
-
-      
+     
         public IActionResult Mainpage(List<WebApp1.Mainpage.Mainpage.Productsoortfilter> productsoortfilters, int? id)
         {
            
@@ -102,7 +100,7 @@ namespace klaas.Controllers
 
              if (productsoortfilters.Count == 0)
             {
-                var productwaardenq =  from m in _context.Productwaarde select m;
+                var productwaardenq =  from m in _context.Productwaarde orderby m.Title select m;
                 var main = new WebApp1.Mainpage.Mainpage();
                     main.productwaardes = productwaardenq;
                     main.currentCategoryName = "Alle Producten";
@@ -151,81 +149,6 @@ namespace klaas.Controllers
                     return View(main);
                 }
             }
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "";
-
-            return View();
-        }
-        public IActionResult Signin()
-        {
-            ViewData["Message"] = "LogIn.";
-
-            return RedirectToAction("Login", "Account");
-        }
-        public IActionResult signup()
-        {
-            ViewData["Message"] = "Sign Up.";
-
-            return RedirectToAction("Register", "Account");
-        }
-
-         public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-    
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        // [Route ("signup")]
-        // public async Task<IActionResult> CreatUserAsync(){
-        //     var result = await mUserManager.CreateAsync(new Users{
-        //         UserName = "halim",
-        //         Email = "halim@gmail.com"
-        //     }, "1.Password");
-        //     if (result.Succeeded)
-        //         return Content("user was created", "text/html");
-            
-        //     return Content ("user creation faild", "text/html");
-        // }
-
-        [Authorize]
-        [Route("profile")]
-        public IActionResult userProfile(){
-            return Content($"Welcome {HttpContext.User.Identity.Name} this is your profile.", "text/html");
-        }
-
-        // [Route("login")]
-        // public async Task <IActionResult> login(string returnUrl){
-        //    await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
-        //    var result = await mSignInManager.PasswordSignInAsync("halim", "1.Password", true, false);
-        //    if (result.Succeeded){
-        //        if (string.IsNullOrEmpty(returnUrl))
-        //             return RedirectToAction(nameof(Index));
-        //     return Redirect (returnUrl);
-        //    }
-        //    return Content("Faild to login", "text/html");
-        // }
-
-        
-        [HttpGet]
-        [Route("logout")]
-        public async Task <IActionResult> logout(){
-            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
-            return Content ("Logged out.", "text/html");
         }
     }
 }

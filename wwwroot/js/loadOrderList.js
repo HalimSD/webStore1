@@ -2,12 +2,12 @@ import { createPagination } from "./createPagination.js";
 
 function init() {
     // Do GET request to GetData action and pass JSON result to populateTable()
-    $.get("/admin/categorylist/getdata", function (jsonModel) {
+    $.get("/admin/orderlist/getdata", function (jsonModel) {
         populateTable(jsonModel, false);
     });
     
     // Setup event handlers
-    let filters = ["#filterId", "#filterName", "#filterProductCount", "#filterAttributeCount"];
+    let filters = ["#filterId", "#filterDate", "#filterStatus", "#filterProductCount", "#filterUserEmail", "#filterUserId"];
     for (let i in filters) {
         $(filters[i]).on("input", onInputChanged);
     }
@@ -16,22 +16,26 @@ function init() {
 function onInputChanged(pageNumber=1) {
     let noFilters = false;
     let Id = document.getElementById("filterId").value.toString();
-    let Name = document.getElementById("filterName").value.toString();
+    let Date = document.getElementById("filterDate").value.toString();
+    let Status = document.getElementById("filterStatus").value.toString();
     let ProductCount = document.getElementById("filterProductCount").value.toString();
-    let AttributeCount = document.getElementById("filterAttributeCount").value.toString();
+    let UserEmail = document.getElementById("filterUserEmail").value.toString();
+    let UserId = document.getElementById("filterUserId").value.toString();
     
-    if (Id === "" && Name === "" && ProductCount === "" && AttributeCount === "") {
+    if (Id === "" && Date === "" && Status === "" && ProductCount === "" && UserEmail === "" && UserId === "") {
         noFilters = true;
     }
     
     if (noFilters == false) {
         $.get(
-            "/admin/categorylist/getdatafiltered",
+            "/admin/orderlist/getdatafiltered",
             {
                 id : Id,
-                name : Name,
-                productCount: ProductCount,
-                attributeCount: AttributeCount,
+                date : Date,
+                status : Status,
+                productCount : ProductCount,
+                userEmail : UserEmail,
+                userId : UserId,
                 pageIndex : pageNumber.toString()
             },
             function (data) {
@@ -39,7 +43,7 @@ function onInputChanged(pageNumber=1) {
             }
         );
     } else {
-        $.get("/admin/categorylist/getdata", {pageIndex : pageNumber.toString()}, function (data) {
+        $.get("/admin/orderlist/getdata", {pageIndex : pageNumber.toString()}, function (data) {
             populateTable(data, false);
         });
     }
@@ -49,14 +53,22 @@ function onInputChanged(pageNumber=1) {
 function createOptionsColumn(productId) {
     let tdElement = document.createElement("td");
     
-    // Delete option
-    let aElementDelete = document.createElement("a");
-    let aElementDeleteTxt = document.createTextNode("Verwijderen");
-    aElementDelete.appendChild(aElementDeleteTxt);
-    aElementDelete.setAttribute("href", "/Admin/CategoryList/ConfirmDelete?id=" + productId.toString());
+    // Edit option
+    let aElementEdit = document.createElement("a");
+    let aElementEditTxt = document.createTextNode("Wijzigen");
+    aElementEdit.appendChild(aElementEditTxt);
+    aElementEdit.setAttribute("href", "/Admin/OrderList/EditStatus?id=" + productId.toString());
+
+    // View option
+    let aElementView = document.createElement("a");
+    let aElementViewTxt = document.createTextNode("Bekijken");
+    aElementView.appendChild(aElementViewTxt);
+    aElementView.setAttribute("href", "/Admin/OrderList/OrderContent?id=" + productId.toString());
     
     // Append everything
-    tdElement.appendChild(aElementDelete);
+    tdElement.appendChild(aElementEdit);
+    tdElement.appendChild(document.createTextNode(" | "));
+    tdElement.appendChild(aElementView);
     return tdElement;
 }
 
@@ -84,8 +96,11 @@ function populateTable(jsonModel, filtered) {
             let tdElement = document.createElement("td");
             let txtNode = document.createTextNode(value.toString());
             if (key === "id") {
-                tdElement.setAttribute("width", "10%");
+                tdElement.setAttribute("width", "5%");
                 id = value;
+            }
+            if (key === "productCount") {
+                tdElement.setAttribute("width", "5%");
             }
             
             // Append the newly created elements into their respective parent elements

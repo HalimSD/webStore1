@@ -23,6 +23,7 @@ namespace WebApp1.Controllers
         private UserManager<Users> _userManager;
         private IConverter _converter;
         private readonly IHostingEnvironment _appEnvironment;
+        private readonly int maxPageSize = 5;
 
         public const string SessionKeyName = "cart";
         public string SessionInfo_Name { get; private set; }
@@ -54,9 +55,36 @@ namespace WebApp1.Controllers
             return View();
         }
 
+        
+        public IActionResult plus(int id)
+        {
+            List<Item> cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
+            CheckItemInSC(id, cart);
+            VoorraadVerminderen(id);
+            _context.SaveChanges();
+            SessionExtensions.Set(HttpContext.Session, "cart", cart);
+            return RedirectToAction("Index", "cart");
+        }
 
-        [Route("buy")]
-        public IActionResult Buy(int id)
+        public IActionResult min (int id){
+            Productwaarde productwaarde = _context.Productwaarde.Find(id);
+            List<Item> cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
+            int index = isExist(id);
+            productwaarde.Quantity += cart[index].Quantity;
+            _context.SaveChanges();
+            if ( cart[index].Quantity != 1){
+                cart[index].Quantity = cart[index].Quantity - 1 ;
+            }else{
+                cart[index].Quantity = cart[index].Quantity ;
+            }
+            
+            SessionExtensions.Set(HttpContext.Session, "cart", cart);
+            return RedirectToAction("Index");
+        }
+
+
+        [Route("buy/{id}")]
+        public IActionResult Buy(int id, string action = "Mainpage", string controller = "Home")
         {
             if (SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart") == null)
             {
@@ -129,7 +157,7 @@ namespace WebApp1.Controllers
             if (_context.Productwaarde.Find(id).Quantity > 0)
             {
                 cart.Add(new Item { Product = _context.Productwaarde.Find(id), Quantity = 1 });
-                
+
             }
             else
             {
@@ -199,15 +227,37 @@ namespace WebApp1.Controllers
             }
             return View("checkOut");
         }
-        public void increaseQuantity (int id){
+        public void increaseQuantity(int id)
+        {
             // List<Item> cart = new List<Item>();
             // cart.Add(new Item { Product = _context.Productwaarde.Find(id), Quantity = 1 });
             // BesteldeItem besteldeItem = new BesteldeItem{
             //     besteldeItem.Quantity = 1
             // };
             Productwaarde productwaarde = _context.Productwaarde.Find(id);
-            productwaarde.Quantity ++;
+            productwaarde.Quantity++;
 
+        }
+
+        [Route("QuantityInput/{id}")]
+        [HttpPost]
+        public int QuantityInput(int changedQuantity, int id)
+        {
+            Productwaarde productwaarde = _context.Productwaarde.Find(id);
+            List<Item> cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
+            int index = isExist(id);
+            cart[index].Quantity = changedQuantity;
+            _context.SaveChanges();
+
+
+            // // cart.Add(new Item { Product = _context.Productwaarde.Find(id),  Quantity = changedQuantity });
+            // // ViewBag.cart = cart;
+            // // ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
+            // // ViewData["cart"] = cart;
+
+            // SessionExtensions.Set(HttpContext.Session, "cart", cart);
+
+            return changedQuantity;
         }
 
         [HttpPost]
@@ -240,37 +290,45 @@ namespace WebApp1.Controllers
         }
 
         [Route("History")]
-        public IActionResult oldOrderDetails(int id){
+        public IActionResult oldOrderDetails(int id)
+        {
             var x = id;
             List<BesteldeItem> besteldeItem = new List<BesteldeItem>();
-           besteldeItem = ( from b in _context.BesteldeItem
-                where b.BestellingId == id 
-                select new BesteldeItem
-                {
-                    BesteldeItemId = b.BesteldeItemId,
-                    Title = b.Title,
-                    Price = b.Price,
-                    Quantity = b.Quantity,
-                    Image = b.Image
-                }
-           ).ToList();
+            besteldeItem = (from b in _context.BesteldeItem
+                            where b.BestellingId == id
+                            select new BesteldeItem
+                            {
+                                BesteldeItemId = b.BesteldeItemId,
+                                Title = b.Title,
+                                Price = b.Price,
+                                Quantity = b.Quantity,
+                                Image = b.Image
+                            }
+            ).ToList();
             ViewBag.besteldeItem = besteldeItem;
-            return View ();
+            return View();
         }
         [Route("oldOrders")]
 
-        public IActionResult oldOrders(){
-                List<Bestelling> bestellingen = (
-                    from x in _context.Bestelling
-                    where x.UserId == _userManager.GetUserId(User)
-                    select new Bestelling{
-                        BestellingId = x.BestellingId,
-                        Status = x.Status,
-                        Date = x.Date
-                    }
-                ).ToList();
-                ViewBag.bestellingen = bestellingen;
-            return View();
+        public IActionResult oldOrders(int pageNumber = 1)
+        {
+            // Helper object used to generate a page model
+            PaginationHelper<Bestelling> pagination = new PaginationHelper<Bestelling>(maxPageSize, _context.Bestelling);
+
+            // Prepare a query that we will pass to the pagination helper
+            IQueryable<Bestelling> query = (
+                from x in _context.Bestelling
+                where x.UserId == _userManager.GetUserId(User)
+                select new Bestelling
+                {
+                    BestellingId = x.BestellingId,
+                    Status = x.Status,
+                    Date = x.Date
+                }
+            );
+            // Let the pagination helper build a page model and pass it to the view
+            PaginationViewModel<Bestelling> model = pagination.GetPageIQueryable(pageNumber, query);
+            return View(model);
         }
 
         [Route("pay")]

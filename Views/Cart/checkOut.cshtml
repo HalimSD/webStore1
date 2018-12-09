@@ -2,9 +2,19 @@
 <div class="pageRoot">
     <h3>Checkout</h3>
     <hr>
-    The total is: @ViewBag.total
+    Hier is een overzicht van de bestelling.<br></br>
+    Het totale bedrag is: <strong>€ @ViewBag.total</strong>
+    <br><br>
+    <strong>Om te kunnen betalen hebben we uw bankgegevens nodig!</strong><br>
+    Betaalmethode: 
+    <select class="form-control" style="width: 50%">
+        <option>iDEAL</option>
+        <option>PayPal</option>
+        <option>Paysafe Card</option>
+    </select>
     <br><br>
     <form action="@Url.Action("pay", "cart")">
-        <button type="submit" class="btn btn-default">pay</button>
+        <button type="submit" class="btn btn-primary">Betalen</button>
+        <button formaction="@Url.Action("Index", "Cart")" type="submit" class="btn btn-default">Terug</button>
     </form>
 </div>

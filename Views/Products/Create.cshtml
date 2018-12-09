@@ -5,68 +5,64 @@
         function addFields(){
             var container = document.getElementById("container");
             // Clear previous contents of the container
-                //container.removeChild(container.lastChild);
-                // Append a node with a random text
-                //container.appendChild(document.createTextNode("Attribute "+ i));
+            //container.removeChild(container.lastChild);
+            // Append a node with a random text
+            //container.appendChild(document.createTextNode("Attribute "+ i));
 
                 
 				
-                // Create an <input> element, set its type and name attributes
-                container.appendChild(document.createTextNode("Attribute "+ i));
+            // Create an <input> element, set its type and name attributes
+            container.appendChild(document.createTextNode("Attribute "+ i));
 
-                var input = document.createElement("input");
-                input.name= "Attribuutsoort["+i+"].Attrbuut";
-                input.setAttribute("class","form-control");
-                input.id="Attribuutsoort["+i+"].Attrbuut";
-                input.type="text";
-                input.value="";
-                input.placeholder="Attribuut";
+            var input = document.createElement("input");
+            input.name= "Attribuutsoort["+i+"].Attrbuut";
+            input.setAttribute("class","form-control");
+            input.id="Attribuutsoort["+i+"].Attrbuut";
+            input.type="text";
+            input.value="";
+            input.placeholder="Attribuut Naam";
 
                 
 
-                var input2 = document.createElement("input");
-                input2.name= "Attribuutsoort["+i+"].Type";
-                input2.setAttribute("class", "form-control");
-                input2.id="Attribuutsoort["+i+"].Type";
-                input2.type="text";
-                input2.value="";
-                input2.placeholder="Type";
+            var input2 = document.createElement("input");
+            input2.name= "Attribuutsoort["+i+"].Type";
+            input2.setAttribute("class", "form-control");
+            input2.id="Attribuutsoort["+i+"].Type";
+            input2.type="text";
+            input2.value="";
+            input2.placeholder="Type";
+            input2.style.marginTop = "10px";
                
-                container.appendChild(input);
-                container.appendChild(input2);
-                // Append a line break 
-                container.appendChild(document.createElement("br"));
-                i++;
+            container.appendChild(input);
+            container.appendChild(input2);
+            // Append a line break 
+            container.appendChild(document.createElement("br"));
+            i++;
         }
     </script>
 <div class="pageRoot">
-    <h2>Product soort</h2>
+    <h2>Product Categorie</h2>
 
     <h4>Aanmaken</h4>
     <hr />
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-action="Create">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Naam" class="control-label"></label>
-                    <input asp-for="Naam" class="form-control" placeholder="Name"/>
-                    <span asp-validation-for="Naam" class="text-danger"></span>
-                </div>
-                <div id="container" class="form-group"></div>
-                <div class="form-group">
-                    <input id="AddAtribute" type="button" value="Voeg Product eigenchap toe" onclick="addFields()" />
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Aanmaken" class="btn btn-default" />
-                </div>
-            
-            </form>
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Naam" class="control-label"></label>
+            <input asp-for="Naam" class="form-control" placeholder="Categorie Naam"/>
+            <span asp-validation-for="Naam" class="text-danger"></span>
         </div>
-    </div>
-
+        <div id="container" class="form-group"></div>
+        <div class="form-group">
+            <input id="AddAtribute" class="btn" type="button" value="Voeg Product eigenchap toe" onclick="addFields()" />
+        </div>
+        <div class="form-group">
+            <hr>
+            <input type="submit" value="Aanmaken" class="btn btn-primary"/>
+        </div>          
+    </form>
     <div>
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Index" asp-controller="CategoryList">Terug naar categorie lijst</a>
     </div>
 </div>
 @section Scripts {

@@ -2,45 +2,50 @@
 @model WebApp1.Models.Productwaarde
 <link rel="stylesheet" href="~/css/shopping_cart.css">
 <div class="pageRoot">
-    <h3>Cart Page</h3>
+    <h3>Winkelmand</h3>
     <hr>
     <table cellpadding="2" cellspacing="2" border="1" id="table">
         <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Photo</th>
+            <th>ID</th>
+            <th>Naam</th>
+            <th>Kwantiteit</th>
+            <th>Prijs</th>
+            <th>Foto</th>
             <th></th>
-            <th>Sub Total</th>
+            <th>Subtotaal</th>
         </tr>
         @foreach (var item in ViewBag.cart)
         {
             <tr>
                 <td>@item.Product.Id</td>
                 <td>@item.Product.Title</td>
-                <td><input id='myTextbox1' class="form-control" value="@item.Quantity"></td>
+                <td>
+                    @{ var quantity = @item.Quantity; } 
+                   
+                    @quantity 
+                    <a  asp-route-id="@item.Product.Id" asp-controller="cart" asp-action="plus" >+</a>
+                    @if(quantity > 1){
+                    <a  asp-route-id="@item.Product.Id" asp-controller="cart" asp-action="min" >-</a>
+
+                    }
+                
+                </td>
                 <td>@item.Product.Price</td>
                 <td><img src="~/images/products/@item.Product.Image" width="60" id="productImage"><img/></td>
-                <td><a  asp-controller="cart" asp-action="Remove" asp-route-id="@item.Product.Id" >Delete</a></td>
-                <td>@(item.Product.Price * item.Quantity)</td>
+                <td><a  asp-controller="cart" asp-action="Remove" asp-route-id="@item.Product.Id" >Verwijderen</a></td>
+                <td>@(item.Product.Price * quantity)</td>
             </tr>
         }
         <tr>
-            <td align="right" colspan="6">Sum</td>
+            <td align="right" colspan="6">Totaal</td>
             <td>
                 @ViewBag.total
             </td>
         </tr>
     </table>
     <br>
-    <a asp-controller="Home" asp-action="index">Continue Shopping</a>
+    <a asp-controller="Home" asp-action="index">Doorgaan met shoppen</a>
     <br>
-    <a asp-controller="cart" asp-action="CreatePDF">checkOut</a>
+    <a asp-controller="cart" asp-action="CreatePDF">Checkout</a>
 </div>
-<script type="text/javascript">
-    $('#myTextbox1').on('input', function() {
-    alert('Text1 changed!');
-});
-</script>
 

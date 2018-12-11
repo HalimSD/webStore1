@@ -113,3 +113,9 @@ button.categoryBtnSelected {
 #categoryFormContent {
     text-align: center;
 }
+svg {
+    overflow: hidden;
+    vertical-align: inline;
+    margin-top: 5%;
+  
+}

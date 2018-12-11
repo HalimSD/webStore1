@@ -51,7 +51,11 @@ public class Productsoort
     public Productsoort productsoort { get; set; }
     public List<Attribuutwaarde> Attribuutwaarde { get; set; }
   }
-
+  // public class productKlass 
+  // {
+  //   public int id  { get; set; }
+  //   public List<Productsoort> Productsoort  { get; set; }
+  // }
   public class Productwaarde
   {
     public int Id { get; set; }

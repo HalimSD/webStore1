@@ -35,14 +35,33 @@
 
 <link rel="stylesheet" href="~/css/mainpage.css">
 <div class="row">
-     <div class="col-2">
+
+    <div class="col-2">
         <div id="categoryArea">
+            <div class="categoryTitle">Categorieën</div>
+            <hr>
+            <form asp-action="Mainpage">
+                <div id="categoryFormContent" class = "checkbox checkboxlist">
+                    @for (var i = 0; i < Model.productsoortfilters.Count; i++)
+                    {
+                        <input type="checkbox" asp-for="@Model.productsoortfilters[i].selected"  />@Model.productsoortfilters[i].Productsoorts.Naam
+                        <input type="hidden" asp-for="@Model.productsoortfilters[i].Productsoorts.Naam" /> 
+                        <hr>                                                                                  
+                    }
+                    <button class="btn btn-outline-success" type="submit">Filter</button>
+                </div>
+            </form>
+            <div>
+                <a asp-action="Mainpage">Terug naar alle producten</a>
+            </div>
+        </div>
+            <div id="categoryArea" style="margin-top: 15px;">
             <div class="categoryTitle">Mijn Filter</div>
             <hr>
             <form asp-action="Mainpage">
                 <div  >
-                    <p>Min Price: </p><input type="text" asp-for="@Model.minprice"  />
-                    <p>Max Price: </p><input type="text" asp-for="@Model.maxprice"  />
+                    <p>Min Price: </p><input type="text" asp-for="@Model.minprice"  style="width: 50%;"/>
+                    <p>Max Price: </p><input type="text" asp-for="@Model.maxprice"  style="width: 50%;"/>
                     @for (var i = 0; i < Model.prodctding.Count; i++)
                     {
                         <input type="hidden" asp-for="@Model.prodctding[i].Productsoorts.Naam"  />@Model.prodctding[i].Productsoorts.Naam
@@ -75,34 +94,14 @@
                         }
                          <hr>
                     }
-                    <button class="btn btn-outline-success" type="submit">Filter</button>
+                    <br><button class="btn btn-outline-success" type="submit">Filter</button>
                 </div>
             </form>
             <div>
                 <a asp-action="Mainpage">Terug naar alle producten</a>
             </div>
         </div>
-        
-     </div>
-    <div class="col-2">
-        <div id="categoryArea">
-            <div class="categoryTitle">Categorieën</div>
-            <hr>
-            <form asp-action="Mainpage">
-                <div id="categoryFormContent" class = "checkbox checkboxlist">
-                    @for (var i = 0; i < Model.productsoortfilters.Count; i++)
-                    {
-                        <input type="checkbox" asp-for="@Model.productsoortfilters[i].selected"  />@Model.productsoortfilters[i].Productsoorts.Naam
-                        <input type="hidden" asp-for="@Model.productsoortfilters[i].Productsoorts.Naam" /> 
-                        <hr>                                                                                  
-                    }
-                    <button class="btn btn-outline-success" type="submit">Filter</button>
-                </div>
-            </form>
-            <div>
-                <a asp-action="Mainpage">Terug naar alle producten</a>
-            </div>
-        </div>
+
     </div>
     <div class="col-10">
         <div class="container" id="productsArea">

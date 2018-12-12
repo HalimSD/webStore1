@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebApp1.Models;
@@ -9,9 +10,10 @@ using WebApp1.Models;
 namespace WebApp1.Migrations
 {
     [DbContext(typeof(WebshopContext))]
-    partial class WebshopContextModelSnapshot : ModelSnapshot
+    [Migration("20181211201437_klaask")]
+    partial class klaask
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -135,15 +137,11 @@ namespace WebApp1.Migrations
 
                     b.Property<int>("ProductsoortId");
 
-                    b.Property<int>("ProductwaardeId");
-
                     b.Property<string>("Type");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProductsoortId");
-
-                    b.HasIndex("ProductwaardeId");
 
                     b.ToTable("Attribuutsoort");
                 });
@@ -258,19 +256,6 @@ namespace WebApp1.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("Items");
-                });
-
-            modelBuilder.Entity("WebApp1.Models.ParentChild", b =>
-                {
-                    b.Property<int>("ChildId");
-
-                    b.Property<int>("ParentId");
-
-                    b.HasKey("ChildId", "ParentId");
-
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("ParentChild");
                 });
 
             modelBuilder.Entity("WebApp1.Models.Products", b =>
@@ -426,11 +411,6 @@ namespace WebApp1.Migrations
                         .WithMany("Attribuutsoort")
                         .HasForeignKey("ProductsoortId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("WebApp1.Models.Productwaarde")
-                        .WithMany("Attribuutsoorts")
-                        .HasForeignKey("ProductwaardeId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("WebApp1.Models.Attribuutwaarde", b =>
@@ -482,19 +462,6 @@ namespace WebApp1.Migrations
                     b.HasOne("WebApp1.Models.Productwaarde", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId");
-                });
-
-            modelBuilder.Entity("WebApp1.Models.ParentChild", b =>
-                {
-                    b.HasOne("WebApp1.Models.Productsoort", "Child")
-                        .WithMany("Children")
-                        .HasForeignKey("ChildId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("WebApp1.Models.Productsoort", "Parent")
-                        .WithMany("Parents")
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("WebApp1.Models.Productwaarde", b =>

@@ -6,6 +6,20 @@ namespace WebApp1.Models
 {
     public class WebshopContext : IdentityDbContext<Users>
     {
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<WebApp1.Models.ParentChild>()
+                .HasKey(bc => new { bc.ChildId, bc.ParentId });
+            modelBuilder.Entity<WebApp1.Models.ParentChild>()
+                .HasOne(p => p.Child)
+                .WithMany(p => p.Children)
+                .HasForeignKey(bc => bc.ChildId);
+            modelBuilder.Entity<WebApp1.Models.ParentChild>()
+                .HasOne(bc => bc.Parent)
+                .WithMany(c => c.Parents)
+                .HasForeignKey(bc => bc.ParentId);
+        }  
         public WebshopContext(DbContextOptions<WebshopContext> options)
             : base(options)
         {

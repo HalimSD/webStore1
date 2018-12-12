@@ -1,6 +1,6 @@
 function init() {
     // Do GET request to GetData action and pass JSON result to populateTable()
-    $.get("/home/getcategories", function (jsonModel) {
+    $.get("/category/getcategories", function (jsonModel) {
         populateDropDown(jsonModel, false);
     });
 }

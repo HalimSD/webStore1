@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using WebApp1.Models;
@@ -23,9 +26,39 @@ namespace WebApp1.Controllers
             {
                 pageNumber = 1;
             }
-            
-            var modelHelper = new CategoryViewModelHelper(maxPageSize, context);
-            return View(modelHelper.CreateViewModel(categoryId, (int) pageNumber));
+
+            var model = new CategoryViewModelHelper(maxPageSize, context).CreateViewModel(categoryId, (int) pageNumber);
+            return View(model);
+        }
+        
+        public IActionResult Filtered(int? categoryId, int? pageNumber, CategoryFilterModel filters)
+        {
+            if (pageNumber == null)
+            {
+                pageNumber = 1;
+            }
+
+            var model = new CategoryViewModelHelper(maxPageSize, context).CreateViewModel(categoryId, (int) pageNumber, filters);
+            return View("Index", model);
+        }
+        
+        public JsonResult GetCategories()
+        {
+            int parentId = (from ps in context.Productsoort where ps.RootParent select ps.Id).FirstOrDefault();
+            List<List<string>> json =
+            (
+                from ps in context.Productsoort
+                from pc in context.ParentChild
+                where ps.RootParent == false
+                where ps.Id == pc.ChildId
+                where pc.ParentId == parentId
+                select new List<string>
+                {
+                    ps.Naam,
+                    ps.Id.ToString()
+                }
+            ).ToList();
+            return new JsonResult(json);
         }
     }
 }

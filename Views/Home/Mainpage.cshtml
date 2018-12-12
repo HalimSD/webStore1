@@ -71,7 +71,8 @@
                             @for (var k = 0; k < Model.prodctding[i].Attribuutsoortst.Count; k++)
                             {
                             <br></br>@Model.prodctding[i].Attribuutsoortst[k].atribuutsoortt.Attrbuut
-                            <p>text: </p><input type="text" asp-for="@Model.prodctding[i].Attribuutsoortst[k].value" />
+                      
+                                  <p>text: </p><input type="text" asp-for="@Model.prodctding[i].Attribuutsoortst[k].value" />
                             
                             @Html.HiddenFor(modelItem => @Model.prodctding[i].Attribuutsoortst[k].atribuutsoortt.Type)
                             @Html.HiddenFor(modelItem => @Model.prodctding[i].Attribuutsoortst[k].atribuutsoortt.Attrbuut)

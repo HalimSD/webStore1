@@ -6,10 +6,21 @@ namespace WebApp1.Models
 {
     public class CategoryViewModel
     {
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string CategoryPath { get; set; }
         public PaginationViewModel<Productwaarde> Products { get; set; }
         public List<Productsoort> Categories { get; set; }
+        public CategoryFilterModel Filters { get; set; }
+    }
+
+    // Model is used to group the filter parameters
+    // that is passed to the controller by the form into one model
+    public class CategoryFilterModel
+    {
+        // Model will be expanded as more filter options are added
+        public double MinPrice { get; set; }
+        public double MaxPrice { get; set; }
     }
 
     public class CategoryViewModelHelper
@@ -23,7 +34,7 @@ namespace WebApp1.Models
             this.maxPageSize = maxPageSize;
         }
         
-        public CategoryViewModel CreateViewModel(int? categoryId, int pageNumber)
+        public CategoryViewModel CreateViewModel(int? categoryId, int pageNumber, CategoryFilterModel filters = null)
         {
             CategoryViewModel viewModel = new CategoryViewModel();
             PaginationHelper<Productwaarde> productsPage = new PaginationHelper<Productwaarde>(maxPageSize,context.Productwaarde);
@@ -36,7 +47,7 @@ namespace WebApp1.Models
             viewModel.CategoryName =
                 (from ps in context.Productsoort where ps.Id == categoryId select ps.Naam).FirstOrDefault();
             
-            IQueryable<Productwaarde> productsQuery =
+            IQueryable<Productwaarde> productsQuery0 =
             (
                 from pw in context.Productwaarde
                 from pc in context.ParentChild
@@ -44,7 +55,28 @@ namespace WebApp1.Models
                       (pw.ProductsoortId == pc.ChildId && pc.ParentId == categoryId)
                 select pw
             );
+            
+            IQueryable<Productwaarde> productsQuery1 =
+            (
+                from pw in context.Productwaarde
+                from pc in context.ParentChild
+                where pw.ProductsoortId == pc.ChildId && pc.ParentId == categoryId
+                select pw
+            );
 
+            // Both sub queries will be merged.
+            // The total query is split into two subqueries in order to prevent duplicate data
+            IQueryable<Productwaarde> productsQuery = productsQuery0.Union(productsQuery1);
+
+            // Apply filters if controller provided us with one
+            if (filters != null)
+            {
+                viewModel.Filters = filters;
+                productsQuery = from q in productsQuery
+                    where q.Price >= filters.MinPrice && q.Price <= filters.MaxPrice
+                    select q;
+            }
+            
             viewModel.Products = productsPage.GetPageIQueryable(pageNumber, productsQuery);
             viewModel.Categories =
             (
@@ -56,6 +88,7 @@ namespace WebApp1.Models
             ).ToList();
 
             viewModel.CategoryPath = BuildCategoryPath((int)categoryId);
+            viewModel.CategoryId = (int)categoryId;
             
             return viewModel;
         }
@@ -85,5 +118,6 @@ namespace WebApp1.Models
             string res = BuildCategoryPath(parentId) + " > " + category.Naam;
             return res;
         }
+
     }
 }

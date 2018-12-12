@@ -1,6 +1,4 @@
-@using Microsoft.EntityFrameworkCore
-@using WebApp1.Models
-@using WebApp1.Mainpage
+@using WebApp1.Models;
 @model WebApp1.Models.CategoryViewModel
 
 @{       
@@ -46,13 +44,30 @@
                     {
                         if (item == Model.Categories.Last())
                         {
-                            <button id="categoryBtnLast" type="submit" name="categoryId" value="@item.Id">@item.Naam</button> 
+                            <button id="categoryBtnLast" type="submit" name="categoryId" value="@item.Id">@item.Naam</button>
                         }
                         else
                         {
                             <button id="categoryBtn" type="submit" name="categoryId" value="@item.Id">@item.Naam</button> 
                         }                                                                                  
                     }
+                </div>
+            </form>
+            <div>
+                <a asp-action="Index">Terug naar alle producten</a>
+            </div>
+        </div>
+        <div id="categoryArea" style="margin-top: 15px;">
+            <div class="categoryTitle">Filteren</div>
+            <hr>
+            <form asp-action="Filtered" class="text-center" method="get">
+                <div>
+                    <p>Min Price: </p><input class="form-control" type="text" asp-for="Filters.MinPrice"/>
+                    <span asp-validation-for="Filters.MinPrice" class="text-danger"></span>
+                    <p>Max Price: </p><input class="form-control" type="text" asp-for="Filters.MaxPrice"/>
+                    <span asp-validation-for="Filters.MaxPrice" class="text-danger"></span>
+                    <hr>                   
+                    <button class="btn btn-outline-success" type="submit">Filter</button>
                 </div>
             </form>
             <div>
@@ -214,7 +229,7 @@
                 else
                 {
                     <li class="page-item">
-                        <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.Products.PageNumber - 1)">Vorige</a>
+                        <a class="page-link" asp-action="Index" asp-route-categoryId="@Model.CategoryId" asp-route-pageNumber="@(Model.Products.PageNumber - 1)">Vorige</a>
                     </li>
                 }
                 @for (int i = 0; i < Model.Products.TotalPages; i++)
@@ -222,12 +237,12 @@
                     if ((i + 1) == Model.Products.PageNumber)
                     {
                         <li class="page-item active">
-                            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(i + 1)">@(i + 1) <span class="sr-only">current</span></a>
+                            <a class="page-link" asp-action="Index" asp-route-categoryId="@Model.CategoryId" asp-route-pageNumber="@(i + 1)">@(i + 1) <span class="sr-only">current</span></a>
                         </li>
                     }
                     else
                     {
-                        <li class="page-item"><a class="page-link" asp-action="Index" asp-route-pageNumber="@(i + 1)">@(i + 1)</a></li>
+                        <li class="page-item"><a class="page-link" asp-action="Index" asp-route-categoryId="@Model.CategoryId" asp-route-pageNumber="@(i + 1)">@(i + 1)</a></li>
                     }
                 }
                 @if (Model.Products.PageNumber == Model.Products.TotalPages)
@@ -239,7 +254,7 @@
                 else
                 {
                     <li class="page-item">
-                        <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.Products.PageNumber + 1)">Volgende</a>
+                        <a class="page-link" asp-action="Index" asp-route-categoryId="@Model.CategoryId" asp-route-pageNumber="@(Model.Products.PageNumber + 1)">Volgende</a>
                     </li>
                 }
             </div>
@@ -248,5 +263,7 @@
     
 </div>
 
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.2.0/anime.js"></script>
+<script>
+    
+</script>

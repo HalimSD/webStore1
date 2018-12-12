@@ -307,7 +307,6 @@ namespace klaas.Controllers
                 }
             ).ToList();
             return new JsonResult(json);
-
         }
     }
 }

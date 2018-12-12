@@ -100,4 +100,4 @@ function populateTable(jsonModel, filtered) {
     createPagination(jsonModel, onInputChanged);
 }
 
-window.onload = init;
+$(init);

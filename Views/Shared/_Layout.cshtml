@@ -20,8 +20,10 @@
         <li class="nav-item">
             <a class="nav-link" href="@Url.Action("Index", "Home")">Home <span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="@Url.Action("Mainpage", "Home")">Producten <span class="sr-only">(current)</span></a>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Producten</a>
+            <div id="productsDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
+            </div>
         </li>
         <li class="nav-item dropdown">
             @if (User.IsInRole("Admin"))
@@ -83,6 +85,8 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
 
     <script src="~/js/site.js" asp-append-version="true"></script>
+    
+    <script src="~/js/headerProductsDropDown.js"></script>
 
 </environment>
 
@@ -111,13 +115,14 @@
     </script>
 
     <script src="~/js/site.min.js" asp-append-version="true"></script>
+    
+    <script src="~/js/headerProductsDropDown.js"></script>
 
 </environment>
 @RenderSection("Scripts", required: false)
 </body>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 

@@ -294,6 +294,8 @@ namespace WebApp1.Migrations
 
                     b.Property<string>("Naam");
 
+                    b.Property<bool>("RootParent");
+
                     b.HasKey("Id");
 
                     b.ToTable("Productsoort");

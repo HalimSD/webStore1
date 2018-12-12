@@ -33,6 +33,7 @@ namespace WebApp1.Models
         public DbSet<Item> Items { get; set; }
         public DbSet<BesteldeItem> BesteldeItem { get; set; }
         public DbSet<Bestelling> Bestelling { get; set; }
+        public DbSet<ParentChild> ParentChild { get; set; }
 
     }
 

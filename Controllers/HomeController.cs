@@ -9,6 +9,7 @@ using WebApp1.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
+using Org.BouncyCastle.Crypto.Signers;
 
 namespace klaas.Controllers
 {
@@ -78,7 +79,8 @@ namespace klaas.Controllers
 
             return View("Search",products);
         }
-
+        
+        // Wordt dit gebruikt?
         public IActionResult Search()
         {
             return View();
@@ -286,6 +288,26 @@ namespace klaas.Controllers
 
                 }
             }
+        }
+
+        public JsonResult GetCategories()
+        {
+            int parentId = (from ps in _context.Productsoort where ps.RootParent select ps.Id).FirstOrDefault();
+            List<List<string>> json =
+            (
+                from ps in _context.Productsoort
+                from pc in _context.ParentChild
+                where ps.RootParent == false
+                where ps.Id == pc.ChildId
+                where pc.ParentId == parentId
+                select new List<string>
+                {
+                    ps.Naam,
+                    ps.Id.ToString()
+                }
+            ).ToList();
+            return new JsonResult(json);
+
         }
     }
 }

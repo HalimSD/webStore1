@@ -75,7 +75,8 @@ namespace WebApp1.Models
             // Calculate how many records we need to skip when collecting data
             int skip = (pageNumber - 1) * PageSize;
             // Calculate total amount of pages
-            int totalPages = query.Count() / PageSize;
+            //int totalPages = query.Count() / PageSize;
+            int totalPages = (int)Math.Ceiling((double)query.Count() / PageSize);
             // There is always atleast 1 page, even with no data
             if (totalPages == 0) { totalPages = 1; }
             // Create the viewModel using the calculated skip and take values

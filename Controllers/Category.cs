@@ -41,6 +41,47 @@ namespace WebApp1.Controllers
             var model = new CategoryViewModelHelper(maxPageSize, context).CreateViewModel(categoryId, (int) pageNumber, filters);
             return View("Index", model);
         }
+
+        public IActionResult Search(string search, int? pageNumber)
+        {
+            if (pageNumber == null)
+            {
+                pageNumber = 1;
+            }
+            
+            var products = 
+                from m in context.Productwaarde
+                where m.Title.ToUpper().Contains(search.ToUpper())
+                select m;
+
+            if (!String.IsNullOrEmpty(search))
+            {
+                var query0 =
+                    from productwaarde in context.Productwaarde
+                    join atributen in context.Attribuutsoort on productwaarde.ProductsoortId equals atributen.ProductsoortId
+                    where atributen.Attrbuut.Contains(search)
+                    select productwaarde;
+
+                var query1 =
+                    from attributen in context.Attribuutwaarde
+                    join productwaarde in context.Productwaarde on attributen.ProductwaardeId equals productwaarde.Id
+                    join atribuut in context.Attribuutsoort on attributen.AttribuutsoortId equals atribuut.Id
+                    where attributen.Waarde.Contains(search)
+                    select productwaarde;
+
+                products = products.Union(query0).Union(query1);
+                var pagination = new PaginationHelper<Productwaarde>(maxPageSize, context.Productwaarde);
+                var viewModel = new CategoryViewModel
+                {
+                    CategoryName = search,
+                    Products = pagination.GetPageIQueryable((int) pageNumber, products)
+                };
+                
+                return View(viewModel);
+            }
+
+            return RedirectToAction("Index", "Category");
+        }
         
         public JsonResult GetCategories()
         {

@@ -1,6 +1,5 @@
-@using WebApp1.Models
-@using WebApp1.Mainpage
-@model WebApp1.Mainpage.Mainpage;
+@using WebApp1.Models;
+@model WebApp1.Models.CategoryViewModel
 
 @{       
     // The code below is used to populate the product page
@@ -12,7 +11,7 @@
     List<Productwaarde> col2Items = new List<Productwaarde>();
     
     int currentColumn = 0;
-    foreach (Productwaarde item in Model.Page())
+    foreach (Productwaarde item in Model.Products.Data)
     {
         switch (currentColumn)
         {
@@ -35,79 +34,9 @@
 
 <link rel="stylesheet" href="~/css/mainpage.css">
 <div class="row">
-
-    <div class="col-2">
-        <div id="categoryArea">
-            <div class="categoryTitle">Categorieën</div>
-            <hr>
-            <form asp-action="Mainpage">
-                <div id="categoryFormContent" class = "checkbox checkboxlist">
-                    @for (var i = 0; i < Model.productsoortfilters.Count; i++)
-                    {
-                        <input type="checkbox" asp-for="@Model.productsoortfilters[i].selected"  />@Model.productsoortfilters[i].Productsoorts.Naam
-                        <input type="hidden" asp-for="@Model.productsoortfilters[i].Productsoorts.Naam" /> 
-                        <hr>                                                                                  
-                    }
-                    <button class="btn btn-outline-success" type="submit">Filter</button>
-                </div>
-            </form>
-            <div>
-                <a asp-action="Mainpage">Terug naar alle producten</a>
-            </div>
-        </div>
-            <div id="categoryArea" style="margin-top: 15px;">
-            <div class="categoryTitle">Mijn Filter</div>
-            <hr>
-            <form asp-action="Mainpage">
-                <div  >
-                    <p>Min Price: </p><input type="text" asp-for="@Model.minprice"  style="width: 50%;"/>
-                    <p>Max Price: </p><input type="text" asp-for="@Model.maxprice"  style="width: 50%;"/>
-                    @for (var i = 0; i < Model.prodctding.Count; i++)
-                    {
-                        <input type="hidden" asp-for="@Model.prodctding[i].Productsoorts.Naam"  />@Model.prodctding[i].Productsoorts.Naam
-                        
-
-                       if(Model.prodctding[i].Attribuutsoortst != null){
-                            @for (var k = 0; k < Model.prodctding[i].Attribuutsoortst.Count; k++)
-                            {
-                            <br></br>@Model.prodctding[i].Attribuutsoortst[k].atribuutsoortt.Attrbuut
-                      
-                                  <p>text: </p><input type="text" asp-for="@Model.prodctding[i].Attribuutsoortst[k].value" />
-                            
-                            @Html.HiddenFor(modelItem => @Model.prodctding[i].Attribuutsoortst[k].atribuutsoortt.Type)
-                            @Html.HiddenFor(modelItem => @Model.prodctding[i].Attribuutsoortst[k].atribuutsoortt.Attrbuut)
-                            @Html.HiddenFor(modelItem => @Model.prodctding[i].Attribuutsoortst[k].atribuutsoortt.ProductsoortId)
-                            }
-                        }
-                         if(Model.prodctding[i].Attribuutsoortsn != null){
-                            @for (var k = 0; k < Model.prodctding[i].Attribuutsoortsn.Count; k++)
-                            {
-                            <br></br>@Model.prodctding[i].Attribuutsoortsn[k].atribuutsoortn.Attrbuut
-                             <p>minimum: </p><input type="text" asp-for="@Model.prodctding[i].Attribuutsoortsn[k].min" />
-                             <p>maximum: </p><input type="text" asp-for="@Model.prodctding[i].Attribuutsoortsn[k].max" />
-                            
-                            @Html.HiddenFor(modelItem => @Model.prodctding[i].Attribuutsoortsn[k].atribuutsoortn.Type)
-                            @Html.HiddenFor(modelItem => @Model.prodctding[i].Attribuutsoortsn[k].atribuutsoortn.Attrbuut)
-                            @Html.HiddenFor(modelItem => @Model.prodctding[i].Attribuutsoortsn[k].atribuutsoortn.ProductsoortId)
-                            
-                            }
-                          
-                        }
-                         <hr>
-                    }
-                    <br><button class="btn btn-outline-success" type="submit">Filter</button>
-                </div>
-            </form>
-            <div>
-                <a asp-action="Mainpage">Terug naar alle producten</a>
-            </div>
-        </div>
-
-    </div>
-    <div class="col-10">
+    <div class="col-10 align-self-center">
         <div class="container" id="productsArea">
-            <h2>@("U bekijkt nu: " + Model.currentCategoryName)</h2>
-            <h4>Producten</h4>
+            <h4>Zoekterm: @Model.CategoryName</h4>
             <div class="row" id="products">
                 <div class="col-sm">
                     @foreach (Productwaarde item in col0Items)
@@ -249,23 +178,51 @@
                     }
                 </div>
             </div>
-            <div id="pagination">
-                <form class="form-inline my-2 my-lg-0" asp-action="Mainpage">
-                    <input type="hidden" name="id" value="@(Model.pageindex - 1)">
-                     <input type="hidden" name= "productsrt" value= "@(Model.currentCategoryName)">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Vorige</button>
-                </form>
-                <form class="form-inline my-2 my-lg-0" asp-action="Mainpage">
-                    <input class="form-control" type="hidden" name="id" value="@(Model.pageindex + 1)">
-                     <input type="hidden" name= "productsrt" value= "@(Model.currentCategoryName)">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Volgende</button>
-                </form>
-                <h4>Pagina: @Model.pageindex van @Model.getnumberofpages() </h4>
+            <div class="pagination">
+                @if (Model.Products.PageNumber == 1)
+                {
+                    <li class="page-item disabled">
+                        <a class="page-link"  tabindex="-1">Vorige</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-action="Search" asp-controller="Category" asp-route-search="@Model.CategoryName" asp-route-pageNumber="@(Model.Products.PageNumber - 1)">Vorige</a>
+                    </li>
+                }
+                @for (int i = 0; i < Model.Products.TotalPages; i++)
+                {
+                    if ((i + 1) == Model.Products.PageNumber)
+                    {
+                        <li class="page-item active">
+                            <a class="page-link" asp-action="Search" asp-controller="Category" asp-route-search="@Model.CategoryName" asp-route-pageNumber="@(i + 1)">@(i + 1) <span class="sr-only">current</span></a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item"><a class="page-link" asp-action="Search" asp-controller="Category" asp-route-search="@Model.CategoryName" asp-route-pageNumber="@(i + 1)">@(i + 1)</a></li>
+                    }
+                }
+                @if (Model.Products.PageNumber == Model.Products.TotalPages)
+                {
+                    <li class="page-item disabled">
+                        <a class="page-link"  tabindex="-1">Volgende</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-action="Search" asp-controller="Category" asp-route-search="@Model.CategoryName" asp-route-pageNumber="@(Model.Products.PageNumber + 1)">Volgende</a>
+                    </li>
+                }
             </div>
         </div>
     </div>
     
 </div>
 
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.2.0/anime.js"></script>
+<script>
+    
+</script>

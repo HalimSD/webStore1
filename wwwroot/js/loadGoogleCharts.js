@@ -64,4 +64,4 @@ function drawChart() {
     });
 }
 
-window.onload = init;
+$(init);

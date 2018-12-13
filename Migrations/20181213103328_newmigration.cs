@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace WebApp1.Migrations
 {
-    public partial class kaas : Migration
+    public partial class newmigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -67,7 +67,8 @@ namespace WebApp1.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    Naam = table.Column<string>(nullable: true)
+                    Naam = table.Column<string>(nullable: true),
+                    RootParent = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -222,21 +223,24 @@ namespace WebApp1.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Attribuutsoort",
+                name: "ParentChild",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    Attrbuut = table.Column<string>(nullable: true),
-                    Type = table.Column<string>(nullable: true),
-                    ProductsoortId = table.Column<int>(nullable: false)
+                    ParentId = table.Column<int>(nullable: false),
+                    ChildId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Attribuutsoort", x => x.Id);
+                    table.PrimaryKey("PK_ParentChild", x => new { x.ChildId, x.ParentId });
                     table.ForeignKey(
-                        name: "FK_Attribuutsoort_Productsoort_ProductsoortId",
-                        column: x => x.ProductsoortId,
+                        name: "FK_ParentChild_Productsoort_ChildId",
+                        column: x => x.ChildId,
+                        principalTable: "Productsoort",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ParentChild_Productsoort_ParentId",
+                        column: x => x.ParentId,
                         principalTable: "Productsoort",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -292,26 +296,27 @@ namespace WebApp1.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Attribuutwaarde",
+                name: "Attribuutsoort",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    Waarde = table.Column<string>(nullable: true),
-                    ProductwaardeId = table.Column<int>(nullable: false),
-                    AttribuutsoortId = table.Column<int>(nullable: false)
+                    Attrbuut = table.Column<string>(nullable: true),
+                    Type = table.Column<string>(nullable: true),
+                    ProductsoortId = table.Column<int>(nullable: false),
+                    ProductwaardeId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Attribuutwaarde", x => x.Id);
+                    table.PrimaryKey("PK_Attribuutsoort", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Attribuutwaarde_Attribuutsoort_AttribuutsoortId",
-                        column: x => x.AttribuutsoortId,
-                        principalTable: "Attribuutsoort",
+                        name: "FK_Attribuutsoort_Productsoort_ProductsoortId",
+                        column: x => x.ProductsoortId,
+                        principalTable: "Productsoort",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Attribuutwaarde_Productwaarde_ProductwaardeId",
+                        name: "FK_Attribuutsoort_Productwaarde_ProductwaardeId",
                         column: x => x.ProductwaardeId,
                         principalTable: "Productwaarde",
                         principalColumn: "Id",
@@ -359,6 +364,33 @@ namespace WebApp1.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Attribuutwaarde",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Waarde = table.Column<string>(nullable: true),
+                    ProductwaardeId = table.Column<int>(nullable: false),
+                    AttribuutsoortId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Attribuutwaarde", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Attribuutwaarde_Attribuutsoort_AttribuutsoortId",
+                        column: x => x.AttribuutsoortId,
+                        principalTable: "Attribuutsoort",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Attribuutwaarde_Productwaarde_ProductwaardeId",
+                        column: x => x.ProductwaardeId,
+                        principalTable: "Productwaarde",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -402,6 +434,11 @@ namespace WebApp1.Migrations
                 column: "ProductsoortId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Attribuutsoort_ProductwaardeId",
+                table: "Attribuutsoort",
+                column: "ProductwaardeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Attribuutwaarde_AttribuutsoortId",
                 table: "Attribuutwaarde",
                 column: "AttribuutsoortId");
@@ -435,6 +472,11 @@ namespace WebApp1.Migrations
                 name: "IX_Items_ProductId",
                 table: "Items",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ParentChild_ParentId",
+                table: "ParentChild",
+                column: "ParentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Productwaarde_ProductsoortId",
@@ -473,6 +515,9 @@ namespace WebApp1.Migrations
 
             migrationBuilder.DropTable(
                 name: "Items");
+
+            migrationBuilder.DropTable(
+                name: "ParentChild");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

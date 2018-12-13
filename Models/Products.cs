@@ -2,9 +2,15 @@ using System.Collections.Generic;
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+
+
+
 
 namespace WebApp1.Models
 {
+
+
 
 public class Products
   {
@@ -30,7 +36,12 @@ public class Extra_Atributes
     public Products products { get; set; }
   }
 
-
+public class ParentChild{
+  public int ParentId { get; set; }
+  public Productsoort Parent { get; set; }
+  public int ChildId { get; set; }
+  public Productsoort Child { get; set; }
+}
 
 
 
@@ -38,17 +49,23 @@ public class Productsoort
   {
     public int Id { get; set; }
     public string Naam { get; set; }
+    public bool RootParent { get; set; }
+    //public int ProductclassID{get;set;}
     public List<Attribuutsoort> Attribuutsoort  { get; set; }
     public List<Productwaarde> Productwaarde  { get; set; }
-    
+    public List<ParentChild> Children{get;set;}
+    public List<ParentChild> Parents{get;set;}
   }
+
   public class Attribuutsoort
   {
     public int Id { get; set; }
     public string Attrbuut { get; set; }
     public string Type { get; set; }
     public int ProductsoortId{ get; set; }
-    public Productsoort productsoort { get; set; }
+    public int ProductwaardeId{get;set;}
+    
+
     public List<Attribuutwaarde> Attribuutwaarde { get; set; }
   }
   // public class productKlass 
@@ -68,6 +85,7 @@ public class Productsoort
     public int ProductsoortId{ get; set; }
     public Productsoort productsoort { get; set; }
     public List<Attribuutwaarde> Attribuutwaarde { get; set; }
+    public List<Attribuutsoort> Attribuutsoorts{get;set;}
   }
 
   public class Attribuutwaarde
@@ -80,8 +98,11 @@ public class Productsoort
     public Productwaarde productwaarde { get; set; }
 
   }
+}
+
+  
 
  
   //this is the typed representation of an actor in our project
   
-}
+

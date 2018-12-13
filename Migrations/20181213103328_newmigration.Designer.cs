@@ -10,8 +10,8 @@ using WebApp1.Models;
 namespace WebApp1.Migrations
 {
     [DbContext(typeof(WebshopContext))]
-    [Migration("20181210152745_last")]
-    partial class last
+    [Migration("20181213103328_newmigration")]
+    partial class newmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -137,11 +137,15 @@ namespace WebApp1.Migrations
 
                     b.Property<int>("ProductsoortId");
 
+                    b.Property<int>("ProductwaardeId");
+
                     b.Property<string>("Type");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProductsoortId");
+
+                    b.HasIndex("ProductwaardeId");
 
                     b.ToTable("Attribuutsoort");
                 });
@@ -258,6 +262,19 @@ namespace WebApp1.Migrations
                     b.ToTable("Items");
                 });
 
+            modelBuilder.Entity("WebApp1.Models.ParentChild", b =>
+                {
+                    b.Property<int>("ChildId");
+
+                    b.Property<int>("ParentId");
+
+                    b.HasKey("ChildId", "ParentId");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("ParentChild");
+                });
+
             modelBuilder.Entity("WebApp1.Models.Products", b =>
                 {
                     b.Property<int>("Id")
@@ -278,6 +295,8 @@ namespace WebApp1.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Naam");
+
+                    b.Property<bool>("RootParent");
 
                     b.HasKey("Id");
 
@@ -407,9 +426,14 @@ namespace WebApp1.Migrations
 
             modelBuilder.Entity("WebApp1.Models.Attribuutsoort", b =>
                 {
-                    b.HasOne("WebApp1.Models.Productsoort", "productsoort")
+                    b.HasOne("WebApp1.Models.Productsoort")
                         .WithMany("Attribuutsoort")
                         .HasForeignKey("ProductsoortId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("WebApp1.Models.Productwaarde")
+                        .WithMany("Attribuutsoorts")
+                        .HasForeignKey("ProductwaardeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -462,6 +486,19 @@ namespace WebApp1.Migrations
                     b.HasOne("WebApp1.Models.Productwaarde", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId");
+                });
+
+            modelBuilder.Entity("WebApp1.Models.ParentChild", b =>
+                {
+                    b.HasOne("WebApp1.Models.Productsoort", "Child")
+                        .WithMany("Children")
+                        .HasForeignKey("ChildId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("WebApp1.Models.Productsoort", "Parent")
+                        .WithMany("Parents")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("WebApp1.Models.Productwaarde", b =>

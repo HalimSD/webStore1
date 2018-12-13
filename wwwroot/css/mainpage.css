@@ -113,9 +113,7 @@ button.categoryBtnSelected {
 #categoryFormContent {
     text-align: center;
 }
-svg {
-    overflow: hidden;
-    vertical-align: inline;
-    margin-top: 5%;
-  
+
+div.pagination {
+    margin-top: 30px;
 }

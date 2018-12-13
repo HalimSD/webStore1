@@ -78,10 +78,13 @@ namespace WebApp1.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
+            var parents = from m in _context.Productsoort select new WebApp1.Models.AddCategory.Parent(){Productsoorts = m, selected = false };
+            var childs = from m in _context.Productsoort select new WebApp1.Models.AddCategory.Child(){Productsoorts = m, selected = false };
+             var main = new WebApp1.Models.AddCategory();
+                                main.parents = parents.ToList();
+                                main.children  = childs.ToList();
 
-            ViewData["kaas"] = "1";
-
-            return View();
+            return View(main);
         }
 
         // POST: Products/Create
@@ -89,19 +92,41 @@ namespace WebApp1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Productsoort productsoort)
+        public async Task<IActionResult> Create(Productsoort productsoort, List<WebApp1.Models.AddCategory.Parent> parents )
         {
-            if (ModelState.IsValid)
+             if (ModelState.IsValid)
             {
                 _context.Productsoort.Add(productsoort);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "CategoryList");
+            }
+
+            var productsoortid = from p in _context.Productsoort where p.Naam == productsoort.Naam select p;
+            productsoortid.First();
+            
+
+             var selectedparents = new List<Productsoort>();
+                for (var i = 0; i<parents.Count(); i++ ){
+                    if(parents[i].selected == true){
+                        selectedparents.Add(parents[i].Productsoorts);
+                    }
+                }
+                 foreach(var parent in selectedparents){  
+                var parentchild = new ParentChild();
+                        parentchild.ParentId = parent.Id;
+                        parentchild.ChildId =  productsoortid.First().Id;
+                        _context.ParentChild.Add(parentchild);
+                 }
+                    await _context.SaveChangesAsync();
+                 
+
+           
+           
                 
+               return RedirectToAction("Index", "CategoryList");
 
             }
-            return View(productsoort);
-        }
-
+            
+        
 
         public IActionResult Create2()
         {

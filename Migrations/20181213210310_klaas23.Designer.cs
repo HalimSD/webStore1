@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebApp1.Models;
@@ -9,9 +10,10 @@ using WebApp1.Models;
 namespace WebApp1.Migrations
 {
     [DbContext(typeof(WebshopContext))]
-    partial class WebshopContextModelSnapshot : ModelSnapshot
+    [Migration("20181213210310_klaas23")]
+    partial class klaas23
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -133,11 +135,9 @@ namespace WebApp1.Migrations
 
                     b.Property<string>("Attrbuut");
 
-                    b.Property<bool>("Custom");
-
                     b.Property<int>("ProductsoortId");
 
-                    b.Property<int?>("ProductwaardeId");
+                    b.Property<int>("ProductwaardeId");
 
                     b.Property<string>("Type");
 
@@ -426,14 +426,15 @@ namespace WebApp1.Migrations
 
             modelBuilder.Entity("WebApp1.Models.Attribuutsoort", b =>
                 {
-                    b.HasOne("WebApp1.Models.Productsoort", "productsoort")
+                    b.HasOne("WebApp1.Models.Productsoort")
                         .WithMany("Attribuutsoort")
                         .HasForeignKey("ProductsoortId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("WebApp1.Models.Productwaarde")
                         .WithMany("Attribuutsoorts")
-                        .HasForeignKey("ProductwaardeId");
+                        .HasForeignKey("ProductwaardeId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("WebApp1.Models.Attribuutwaarde", b =>

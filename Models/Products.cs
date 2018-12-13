@@ -63,8 +63,8 @@ public class Productsoort
     public string Attrbuut { get; set; }
     public string Type { get; set; }
     public int ProductsoortId{ get; set; }
-    public int ProductwaardeId{get;set;}
-    
+    public bool Custom { get; set; }
+    public Productsoort productsoort { get; set; }
 
     public List<Attribuutwaarde> Attribuutwaarde { get; set; }
   }

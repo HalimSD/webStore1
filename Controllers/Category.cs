@@ -39,7 +39,7 @@ namespace WebApp1.Controllers
             }
 
             var model = new CategoryViewModelHelper(maxPageSize, context).CreateViewModel(categoryId, (int) pageNumber, filters);
-            return View("Index", model);
+            return View(model);
         }
 
         public IActionResult Search(string search, int? pageNumber)

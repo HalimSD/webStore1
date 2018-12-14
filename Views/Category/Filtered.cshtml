@@ -1,7 +1,10 @@
 @using WebApp1.Models;
 @model WebApp1.Models.CategoryViewModel
 
-@{       
+@{
+   
+    ViewData["Title"] = Model.CategoryName;
+    
     // The code below is used to populate the product page
     // The product page itself consists of 3 columns
     // We must first sort all the products into each column    
@@ -60,13 +63,22 @@
         <div id="categoryArea" style="margin-top: 15px;">
             <div class="categoryTitle">Filteren</div>
             <hr>
-            <form asp-action="Filtered" class="text-center" method="get">
+            <form asp-action="Filtered" method="get" class="text-center">
                 <div>
-                    <p>Min Price: </p><input class="form-control" type="text" asp-for="Filters.MinPrice" value="@Model.Filters.MinPrice"/>
-                    <span asp-validation-for="Filters.MinPrice" class="text-danger"></span>
-                    <p>Max Price: </p><input class="form-control" type="text" asp-for="Filters.MaxPrice" value="@Model.Filters.MaxPrice"/>
-                    <span asp-validation-for="Filters.MaxPrice" class="text-danger"></span>
-                    <hr>                   
+                    <strong>Filteren op prijsgebieden</strong><br>
+                    <input type="hidden" asp-for="CategoryId" value="@Model.CategoryId"/>
+                    @for (int i = 0; i <= Model.PriceFilterRange.Length - 1; i++)
+                    {
+                        if (Model.Filters.PriceRanges.Contains(Model.PriceFilterRange[i]))
+                        {
+                            <input type="checkbox" name="PriceRanges" value="@Model.PriceFilterRange[i]" checked> @Model.PriceFilterRange[i]<br>
+                        }
+                        else
+                        {
+                            <input type="checkbox" name="PriceRanges" value="@Model.PriceFilterRange[i]"> @Model.PriceFilterRange[i]<br>
+                        }
+                    }
+                    <hr>
                     <button class="btn btn-outline-success" type="submit">Filter</button>
                 </div>
             </form>
@@ -229,9 +241,7 @@
                 else
                 {
                     <li class="page-item">
-                        <a class="page-link" asp-action="Filtered" asp-route-categoryId="@Model.CategoryId" asp-route-pageNumber="@(Model.Products.PageNumber - 1)"
-                           asp-route-MinPrice="@Model.Filters.MinPrice"
-                           asp-route-MaxPrice="@Model.Filters.MaxPrice">Vorige</a>
+                        <a class="page-link" href="@Url.Action("Filtered", "Category", new{categoryId = Model.CategoryId,pageNumber = (Model.Products.PageNumber - 1),PriceRanges = Model.Filters.PriceRanges})">Vorige</a>
                     </li>
                 }
                 @for (int i = 0; i < Model.Products.TotalPages; i++)
@@ -239,16 +249,12 @@
                     if ((i + 1) == Model.Products.PageNumber)
                     {
                         <li class="page-item active">
-                            <a class="page-link" asp-action="Filtered" asp-route-categoryId="@Model.CategoryId" asp-route-pageNumber="@(i + 1)"
-                               asp-route-MinPrice="@Model.Filters.MinPrice"
-                               asp-route-MaxPrice="@Model.Filters.MaxPrice">@(i + 1) <span class="sr-only">current</span></a>
+                            <a class="page-link" href="@Url.Action("Filtered", "Category", new{categoryId = Model.CategoryId,pageNumber = (i + 1),PriceRanges = Model.Filters.PriceRanges})">@(i + 1) <span class="sr-only">current</span></a>
                         </li>
                     }
                     else
                     {
-                        <li class="page-item"><a class="page-link" asp-action="Filtered" asp-route-categoryId="@Model.CategoryId" asp-route-pageNumber="@(i + 1)"
-                                                 asp-route-MinPrice="@Model.Filters.MinPrice"
-                                                 asp-route-MaxPrice="@Model.Filters.MaxPrice">@(i + 1)</a></li>
+                        <li class="page-item"><a class="page-link" href="@Url.Action("Filtered", "Category", new{categoryId = Model.CategoryId,pageNumber = (i + 1),PriceRanges = Model.Filters.PriceRanges})">@(i + 1)</a></li>
                     }
                 }
                 @if (Model.Products.PageNumber == Model.Products.TotalPages)
@@ -260,9 +266,7 @@
                 else
                 {
                     <li class="page-item">
-                        <a class="page-link" asp-action="Filtered" asp-route-categoryId="@Model.CategoryId" asp-route-pageNumber="@(Model.Products.PageNumber + 1)" 
-                           asp-route-MinPrice="@Model.Filters.MinPrice"
-                           asp-route-MaxPrice="@Model.Filters.MaxPrice">Volgende</a>
+                        <a class="page-link" asp-action="Filtered" href="@Url.Action("Filtered", "Category", new{categoryId = Model.CategoryId,pageNumber = (Model.Products.PageNumber + 1),PriceRanges = Model.Filters.PriceRanges})">Volgende</a>
                     </li>
                 }
             </div>

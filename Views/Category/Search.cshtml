@@ -1,7 +1,9 @@
 @using WebApp1.Models;
 @model WebApp1.Models.CategoryViewModel
 
-@{       
+@{      
+    ViewData["Title"] = Model.CategoryName;
+
     // The code below is used to populate the product page
     // The product page itself consists of 3 columns
     // We must first sort all the products into each column    

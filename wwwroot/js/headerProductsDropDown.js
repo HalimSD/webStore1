@@ -9,7 +9,7 @@ function populateDropDown(data) {
     // Element that will contain all the dropdown items
     let dropdown = document.getElementById("productsDropdown");
     
-    // Add option to view all products
+    /*
     let aElement = document.createElement("a");
     let txtElement = document.createTextNode("Alle Producten");
     aElement.appendChild(txtElement);
@@ -21,6 +21,7 @@ function populateDropDown(data) {
     let divider = document.createElement("div");
     divider.className = "dropdown-divider";
     dropdown.appendChild(divider);
+    */
     
     // Loop through the data and add all elements
     for (let i in data) {

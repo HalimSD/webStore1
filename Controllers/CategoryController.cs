@@ -7,16 +7,16 @@ using WebApp1.Models;
 
 namespace WebApp1.Controllers
 {
-    public class Category : Controller
+    public class CategoryController : Controller
     {
         private readonly int maxPageSize = 9;
         private readonly WebshopContext context;
-        private PaginationHelper<Productwaarde> paginationProductwaarde;
+        private CategoryViewModelHelper helper;
         
-        public Category(WebshopContext context)
+        public CategoryController(WebshopContext context)
         {
             this.context = context;
-            paginationProductwaarde = new PaginationHelper<Productwaarde>(maxPageSize, context.Productwaarde);
+            helper = new CategoryViewModelHelper(maxPageSize,context);
         }
         
         // GET
@@ -27,7 +27,7 @@ namespace WebApp1.Controllers
                 pageNumber = 1;
             }
 
-            var model = new CategoryViewModelHelper(maxPageSize, context).CreateViewModel(categoryId, (int) pageNumber);
+            CategoryViewModel model = helper.CreateViewModel(categoryId, (int) pageNumber);
             return View(model);
         }
         
@@ -38,7 +38,16 @@ namespace WebApp1.Controllers
                 pageNumber = 1;
             }
 
-            var model = new CategoryViewModelHelper(maxPageSize, context).CreateViewModel(categoryId, (int) pageNumber, filters);
+            if (filters.isEmpty)
+            {
+                int? id = categoryId;
+                return RedirectToAction("Index", "Category", new
+                {
+                    categoryId = id
+                });
+            }
+            
+            CategoryViewModel model = helper.CreateViewModel(categoryId, (int) pageNumber, filters);
             return View(model);
         }
 
@@ -59,14 +68,14 @@ namespace WebApp1.Controllers
                 var query0 =
                     from productwaarde in context.Productwaarde
                     join atributen in context.Attribuutsoort on productwaarde.ProductsoortId equals atributen.ProductsoortId
-                    where atributen.Attrbuut.Contains(search)
+                    where atributen.Attrbuut.ToUpper().Contains(search.ToUpper())
                     select productwaarde;
 
                 var query1 =
                     from attributen in context.Attribuutwaarde
                     join productwaarde in context.Productwaarde on attributen.ProductwaardeId equals productwaarde.Id
                     join atribuut in context.Attribuutsoort on attributen.AttribuutsoortId equals atribuut.Id
-                    where attributen.Waarde.Contains(search)
+                    where attributen.Waarde.ToUpper().Contains(search.ToUpper())
                     select productwaarde;
 
                 products = products.Union(query0).Union(query1);
@@ -85,12 +94,11 @@ namespace WebApp1.Controllers
         
         public JsonResult GetCategories()
         {
-            int parentId = (from ps in context.Productsoort where ps.RootParent select ps.Id).FirstOrDefault();
+            int parentId = helper.GetRootParentId();
             List<List<string>> json =
             (
                 from ps in context.Productsoort
                 from pc in context.ParentChild
-                where ps.RootParent == false
                 where ps.Id == pc.ChildId
                 where pc.ParentId == parentId
                 select new List<string>

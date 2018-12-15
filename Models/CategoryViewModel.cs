@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore.Internal;
 using Org.BouncyCastle.Crypto.Agreement.Srp;
 using Org.BouncyCastle.Crypto.Engines;
+using Org.BouncyCastle.Crypto.Signers;
 using Org.BouncyCastle.OpenSsl;
 using Remotion.Linq.Clauses;
 
@@ -16,6 +18,8 @@ namespace WebApp1.Models
         public string[] PriceFilterRange { get; set; }
         public PaginationViewModel<Productwaarde> Products { get; set; }
         public List<Productsoort> Categories { get; set; }
+        // Index 0 = attribute name, Index 1 = attribute id
+        public List<string[]> Attributes { get; set; }
         public CategoryFilterModel Filters { get; set; }
     }
 
@@ -25,18 +29,39 @@ namespace WebApp1.Models
     {
         // Model will be expanded as more filter options are added
         public string[] PriceRanges { get; set; }
+        public List<AttributeFilter> AttributeFilters { get; set; }
         // Used to check if Filter options are empty!
         public bool isEmpty
         {
             get
             {
-                // Will be expanded as more filter options are added
-                if (PriceRanges == null) return true;
-                return false;
+                bool emptyPrice = PriceRanges == null;
+                bool empty = true;
+                if (AttributeFilters != null)
+                {
+                    foreach (var item in AttributeFilters)
+                    {
+                        if (item.FilterValue != null)
+                        {
+                            empty = false;
+                        }
+                    }
+                }
+                else
+                {
+                    empty = true;
+                }
+                return empty && emptyPrice;
             }
         }
     }
 
+    public class AttributeFilter
+    {
+        public int AttributeId { get; set; }
+        public string FilterValue { get; set; }
+    }
+    
     public class CategoryViewModelHelper
     {
         private readonly WebshopContext context;
@@ -75,42 +100,101 @@ namespace WebApp1.Models
             if (filters != null)
             {
                 var filteredQuery = productsQuery.Take(0);
-                
-                // Apply the price range filter
-                foreach (string item in filters.PriceRanges)
+                var filteredAttributeQuery = productsQuery.Take(0);
+                bool attributeFilterPeformed = false;
+                bool priceFilterPeformed = false;
+
+                if (filters.AttributeFilters != null)
                 {
-                    if (item.ToUpper() != "FALSE")
+                    foreach (AttributeFilter item in filters.AttributeFilters)
                     {
-                        // Get the price range that is used in the filter
-                        double[] range = GetMinMaxPrice(item);
-                    
-                        // First we check the products with discount
-                        var discountQuery =
-                            from p in productsQuery
-                            where p.DiscountedPrice != -1 &&
-                                  p.DiscountedPrice >= range[0] &&
-                                  p.DiscountedPrice <= range[1]
-                            select p;
-                    
-                        // Now we check the products that aren't in discount!
-                        // Savvy?
-                        filteredQuery = filteredQuery.Union(
-                            (
-                                from p in productsQuery
-                                where p.DiscountedPrice == -1 &&
-                                      p.Price >= range[0] &&
-                                      p.Price <= range[1]
-                                select p
-                            ).Union(discountQuery)
-                        );
+                        if (item.FilterValue != null)
+                        {
+                            attributeFilterPeformed = true;
+                            filteredAttributeQuery = filteredAttributeQuery.Union(
+                                from attw in context.Attribuutwaarde
+                                from pw in productsQuery
+                                where attw.ProductwaardeId == pw.Id &&
+                                      attw.AttribuutsoortId == item.AttributeId &&
+                                      attw.Waarde.ToUpper().Contains(item.FilterValue.ToUpper())
+                                select pw
+                            );
+                        }
                     }
                 }
 
-                productsQuery = filteredQuery;
+                if (!attributeFilterPeformed)
+                {
+                    filteredAttributeQuery = productsQuery;
+                }
+                
+                // Apply the price range filter
+                if (filters.PriceRanges != null)
+                {
+                    foreach (string item in filters.PriceRanges)
+                    {
+                        if (item.ToUpper() != "FALSE")
+                        {
+                            priceFilterPeformed = true;
+
+                            // Get the price range that is used in the filter
+                            double[] range = GetMinMaxPrice(item);
+
+                            // First we check the products with discount
+                            var discountQuery =
+                                from p in filteredAttributeQuery
+                                where p.DiscountedPrice != -1 &&
+                                      p.DiscountedPrice >= range[0] &&
+                                      p.DiscountedPrice <= range[1]
+                                select p;
+
+                            // Now we check the products that aren't in discount!
+                            // Savvy?
+                            filteredQuery = filteredQuery.Union(
+                                (
+                                    from p in filteredAttributeQuery
+                                    where p.DiscountedPrice == -1 &&
+                                          p.Price >= range[0] &&
+                                          p.Price <= range[1]
+                                    select p
+                                ).Union(discountQuery)
+                            );
+                        }
+                    }
+                }
+                else
+                {
+                    filters.PriceRanges = new string[0];
+                }
+
+                if (priceFilterPeformed)
+                {
+                    viewModel.Products = productsPage.GetPageIQueryable(pageNumber, filteredQuery);
+                }
+                else
+                {
+                    viewModel.Products = productsPage.GetPageIQueryable(pageNumber, filteredAttributeQuery);
+                }
                 viewModel.Filters = filters;
             }
             
-            viewModel.Products = productsPage.GetPageIQueryable(pageNumber, productsQuery);
+            // Get the attributes of that category
+            List<string[]> attributes = new List<string[]>();
+            var att =
+                (from atts in context.Attribuutsoort where atts.ProductsoortId == categoryId select atts).ToList();
+
+            foreach (var attribute in att)
+            {
+                attributes.Add(new []{attribute.Attrbuut, attribute.Id.ToString()});
+            }
+
+            viewModel.Attributes = attributes;
+            // Get the products incase the filter section already didn't
+            if (viewModel.Products == null)
+            {
+                viewModel.Products = productsPage.GetPageIQueryable(pageNumber, productsQuery);
+            }
+            
             viewModel.Categories =
             (
                 from ps in context.Productsoort

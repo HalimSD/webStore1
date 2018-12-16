@@ -64,9 +64,6 @@
                     }
                 </div>
             </form>
-            <div>
-                <a asp-action="Index">Terug naar alle producten</a>
-            </div>
         </div>
         <div id="categoryArea" style="margin-top: 15px;">
             <div class="categoryTitle">Filteren</div>
@@ -102,7 +99,7 @@
                 </div>
             </form>
             <div>
-                <a asp-action="Index">Terug naar alle producten</a>
+                <a asp-action="Index" asp-route-categoryId="@Model.CategoryId">Terug naar alle producten</a>
             </div>
         </div>
     </div>

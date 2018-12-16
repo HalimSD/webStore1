@@ -24,6 +24,8 @@ namespace WebApp1.Controllers
         // GET
         public IActionResult Index(int? categoryId, int? pageNumber)
         {
+            if (categoryId == null) return NotFound();
+            
             if (pageNumber == null)
             {
                 pageNumber = 1;
@@ -36,6 +38,8 @@ namespace WebApp1.Controllers
         public IActionResult Filtered(int? categoryId, int? pageNumber, CategoryFilterModel filters, List<string> AttributeArray = null)
         {
             string seperator = "!@#$%^&*";
+
+            if (categoryId == null) return NotFound();
             
             if (pageNumber == null)
             {

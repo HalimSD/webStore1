@@ -221,7 +221,7 @@ namespace WebApp1.Models
             ).FirstOrDefault();
         }
         
-        private string BuildCategoryPath(int id)
+        public string BuildCategoryPath(int id)
         {
             int parentId;
             Productsoort category = (from ps in context.Productsoort where ps.Id == id select ps).FirstOrDefault();

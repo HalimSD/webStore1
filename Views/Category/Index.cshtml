@@ -38,7 +38,9 @@
 <link rel="stylesheet" href="~/css/mainpage.css">
 <div class="row">
 
-    <div class="col-2">
+<div class="col-2">
+    @if (Model.Categories.Any())
+    {
         <div id="categoryArea">
             <div class="categoryTitle">Sub-Categorieën</div>
             <form asp-action="Index">
@@ -56,41 +58,37 @@
                     }
                 </div>
             </form>
-            <div>
-                <a asp-action="Index">Terug naar alle producten</a>
-            </div>
         </div>
-        <div id="categoryArea" style="margin-top: 15px;">
-            <div class="categoryTitle">Filteren</div>
-            <hr>
-            <form asp-action="Filtered" method="post" class="text-center">
-                <div>
-                    <strong>Prijsgebied</strong><br>
-                    <input type="hidden" asp-for="CategoryId" value="@Model.CategoryId"/>
-                    @for (int i = 0; i <= Model.PriceFilterRange.Length - 1; i++)
+    }
+    <div id="categoryArea" style="margin-top: 15px;">
+        <div class="categoryTitle">Filteren</div>
+        <hr>
+        <form asp-action="Filtered" method="post" class="text-center">
+            <div>
+                <strong>Prijsgebied</strong><br>
+                <input type="hidden" asp-for="CategoryId" value="@Model.CategoryId"/>
+                @for (int i = 0; i <= Model.PriceFilterRange.Length - 1; i++)
+                {
+                    <input type="checkbox" asp-for="Filters.PriceRanges[i]" value="@Model.PriceFilterRange[i]">
+                    @Model.PriceFilterRange[i]<br>
+                }
+                <hr>
+                @if (Model.Attributes.Any())
+                {
+                    <strong>Attributen</strong><br>
+                    for (int i = 0; i <= Model.Attributes.Count - 1; i++)
                     {
-                        <input type="checkbox" asp-for="Filters.PriceRanges[i]" value="@Model.PriceFilterRange[i]"> @Model.PriceFilterRange[i]<br>
+                        <input type="hidden" asp-for="Filters.AttributeFilters[i].AttributeId" value="@Model.Attributes[i][1]">
+                        <label>@Model.Attributes[i][0]</label>
+                        <input class="form-control" type="text" asp-for="Filters.AttributeFilters[i].FilterValue">
                     }
                     <hr>
-                    @if (Model.Attributes.Any())
-                    {
-                        <strong>Attributen</strong><br>
-                         for (int i=0; i <= Model.Attributes.Count-1; i++)
-                         {
-                             <input type="hidden" asp-for="Filters.AttributeFilters[i].AttributeId" value="@Model.Attributes[i][1]">
-                             <label>@Model.Attributes[i][0]</label>
-                             <input class="form-control" type="text" asp-for="Filters.AttributeFilters[i].FilterValue">                            
-                         }
-                        <hr>
-                    }
-                    <button class="btn btn-outline-success" type="submit">Filter</button>
-                </div>
-            </form>
-            <div>
-                <a asp-action="Index">Terug naar alle producten</a>
+                }
+                <button class="btn btn-outline-success" type="submit">Filter</button>
             </div>
-        </div>
+        </form>
     </div>
+</div>
     <div class="col-10">
         <div class="container" id="productsArea">
             <h4>@Model.CategoryPath</h4>

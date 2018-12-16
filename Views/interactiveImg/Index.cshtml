@@ -1,4 +1,4 @@
-@model IEnumerable<Productsoort>
+@model IEnumerable<WebApp1.Models.Productsoort>
  
    <head>
 <link rel="stylesheet" href="~/css/interactiveImg.css">
@@ -11,14 +11,12 @@
              <img class="top" src="~/images/ApiModels.jpg">
         </div>
         <div class="bottom position">
-      
-        @foreach (var soort in Model)
-        {
+   
+        @foreach (var parent in Model){
            <article class="wrapper" >
-            <a  asp-route-id="@soort.Id" >
-            <h4>@soort.Naam</h4>
+            <a href="@Url.Action("child","interactiveImg", new{id=@parent.Id})">
+            <h1>@parent.Naam</h1>
             </a>
-           <!-- <img  src="~/images/products/@soort." /> -->
            </article>
            
         }

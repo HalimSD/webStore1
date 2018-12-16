@@ -1,0 +1,33 @@
+@model IEnumerable<WebApp1.Models.Productsoort>
+ 
+   <head>
+<link rel="stylesheet" href="~/css/interactiveImg.css">
+   </head>
+
+
+<div class="container" id="containerDiv">
+    <h4>Hi there.. Here u 'll find the interactive IMG</h4>
+    <div class="imgContainer ">
+        <div class="top position">
+             <img class="top" src="~/images/ApiModels.jpg">
+        </div>
+        <div class="bottom position">
+      
+        @foreach (var soort in Model)
+        {
+           <article class="wrapper" >
+            <h4 style="background : blue">Parent</h4>
+            <h4 style="background : blue">@soort.Naam</h4>
+            
+          <br>
+          <br>
+                
+            
+           <!-- <img  src="~/images/products/@soort." /> -->
+           </article>
+           
+        }
+    </div>
+    </div>
+</div>
+

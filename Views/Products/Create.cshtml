@@ -1,4 +1,4 @@
-@model WebApp1.Models.Productsoort
+@model WebApp1.Models.AddCategory
 <link rel="stylesheet" href="~/css/product_creation_generic.css">
  <script type='text/javascript'>
 	var i=0;
@@ -15,9 +15,9 @@
             container.appendChild(document.createTextNode("Attribute "+ i));
 
             var input = document.createElement("input");
-            input.name= "Attribuutsoort["+i+"].Attrbuut";
+            input.name= "productsoort.Attribuutsoort["+i+"].Attrbuut";
             input.setAttribute("class","form-control");
-            input.id="Attribuutsoort["+i+"].Attrbuut";
+            input.id="productsoort.Attribuutsoort["+i+"].Attrbuut";
             input.type="text";
             input.value="";
             input.placeholder="Attribuut Naam";
@@ -25,19 +25,22 @@
                 
 
             var input2 = document.createElement("input");
-            input2.name= "Attribuutsoort["+i+"].Type";
+            input2.name= "productsoort.Attribuutsoort["+i+"].Type";
             input2.setAttribute("class", "form-control");
-            input2.id="Attribuutsoort["+i+"].Type";
+            input2.id="productsoort.Attribuutsoort["+i+"].Type";
             input2.type="text";
             input2.value="";
             input2.placeholder="Type";
             input2.style.marginTop = "10px";
+
+            
                
             container.appendChild(input);
             container.appendChild(input2);
             // Append a line break 
             container.appendChild(document.createElement("br"));
             i++;
+
         }
     </script>
 <div class="pageRoot">
@@ -45,14 +48,30 @@
 
     <h4>Aanmaken</h4>
     <hr />
+    
+                
+                  
+            
+        
     <form asp-action="Create">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
-            <label asp-for="Naam" class="control-label"></label>
-            <input asp-for="Naam" class="form-control" placeholder="Categorie Naam"/>
-            <span asp-validation-for="Naam" class="text-danger"></span>
+            <label asp-for="@Model.productsoort.Naam" class="control-label"></label>
+            <input asp-for="@Model.productsoort.Naam" class="form-control" placeholder="Categorie Naam"/>
+            <span asp-validation-for="@Model.productsoort.Naam" class="text-danger"></span>
         </div>
+       <div id="categoryFormContent" class = "checkbox checkboxlist">
+           <p>Kies de bovenliggende categorie(n) uit de onderstaande lijst</p>
+                    @for (var i = 0; i < Model.parents.Count; i++)
+                    {
+                        <input type="checkbox" asp-for="@Model.parents[i].selected"  />@Model.parents[i].Productsoorts.Naam
+                        <input type="hidden" asp-for="@Model.parents[i].Productsoorts.Id" /> 
+                        <hr>                                                                                  
+                    }
+        </div>
+       
         <div id="container" class="form-group"></div>
+
         <div class="form-group">
             <input id="AddAtribute" class="btn" type="button" value="Voeg Product eigenchap toe" onclick="addFields()" />
         </div>

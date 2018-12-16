@@ -133,9 +133,11 @@ namespace WebApp1.Migrations
 
                     b.Property<string>("Attrbuut");
 
+                    b.Property<bool>("Custom");
+
                     b.Property<int>("ProductsoortId");
 
-                    b.Property<int>("ProductwaardeId");
+                    b.Property<int?>("ProductwaardeId");
 
                     b.Property<string>("Type");
 
@@ -424,15 +426,14 @@ namespace WebApp1.Migrations
 
             modelBuilder.Entity("WebApp1.Models.Attribuutsoort", b =>
                 {
-                    b.HasOne("WebApp1.Models.Productsoort")
+                    b.HasOne("WebApp1.Models.Productsoort", "productsoort")
                         .WithMany("Attribuutsoort")
                         .HasForeignKey("ProductsoortId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("WebApp1.Models.Productwaarde")
                         .WithMany("Attribuutsoorts")
-                        .HasForeignKey("ProductwaardeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ProductwaardeId");
                 });
 
             modelBuilder.Entity("WebApp1.Models.Attribuutwaarde", b =>

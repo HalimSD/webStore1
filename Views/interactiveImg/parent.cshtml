@@ -15,16 +15,19 @@
       
         @foreach (var soort in Model)
         {
-           <article class="wrapper" >
-            <h4 style="background : blue">Parent</h4>
-            <h4 style="background : blue">@soort.Naam</h4>
+         
+             <article class="wrapper" >
+            <a href="@Url.Action("child","interactiveImg", new{id=@soort.Id})">
+            <h1>@soort.Naam</h1>
+            </a>
             
+           </article>
           <br>
           <br>
                 
             
            <!-- <img  src="~/images/products/@soort." /> -->
-           </article>
+         
            
         }
     </div>

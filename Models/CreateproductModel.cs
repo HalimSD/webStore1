@@ -8,20 +8,25 @@ namespace WebApp1.CreateproductModel
 {
     public class CreateproductModel
     {
-        
-        public IEnumerable<WebApp1.Models.Attribuutsoort> Attribuutsoorts {get; set;}
+        public class Atribuutsoortmetwaardes{
+              public WebApp1.Models.Attribuutsoort extraAtribute {get; set;}
+              public WebApp1.Models.Attribuutwaarde extraAtributewaarde {get; set;}
+        }
+        public class AlreadyCustomAtributes{
+            public WebApp1.Models.Attribuutsoort customAtribute {get; set;}
+             public WebApp1.Models.Attribuutwaarde cattribuutwaarde {get; set;}
+            public bool selected{get;set;}
+        }
 
+         public IList<AlreadyCustomAtributes> AcustomAtributes {get;set;}
         
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public double Price { get; set; }
-        public string Image { get; set; }
-        public int Quantity { get; set; }
-        public string Description { get; set; }
-        public double DiscountedPrice { get; set; }
-        public int ProductsoortId{ get; set; }
-        public Productsoort productsoort { get; set; }
-        public List<Attribuutwaarde> Attribuutwaarde { get; set; }
+        public IList<WebApp1.Models.Attribuutsoort> Attribuutsoorts {get; set;}
+        public IList<Atribuutsoortmetwaardes> newcustom{get;set;}
+        
+
+        public Productwaarde productwaarde {get;set;}
+        //public IList<Attribuutwaarde> Attribuutwaardes { get; set; }
+        
 
          public int GetAttribuutsoortsA() {
             var AttribuutsoortsA = from a in Attribuutsoorts select a.ProductsoortId;

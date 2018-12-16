@@ -1,12 +1,14 @@
 @{
+    
     ViewProductModel viewProductModel = (ViewProductModel) ViewData["ProductModel"];
+    ViewData["Title"] = viewProductModel.Name;
     List<ViewProductAttributes> attributes = (List<ViewProductAttributes>) ViewData["ProductAttributeModel"];
     string imagePath = "/images/products/" + viewProductModel.Image;
     bool inStock = viewProductModel.Quantity > 0;
 }
 <link rel="stylesheet" href="~/css/view_product.css">
 <div class="pageBackground">
-    <div id="category">Categorie: @viewProductModel.Category</div>
+    <div id="category">@viewProductModel.CategoryPath</div>
     <div class="row" id="productHeader">
         <div class="col-6">
             <img src="@imagePath" height="300" width="400" class="productImage"></img>

@@ -60,6 +60,7 @@ namespace klaas.Controllers
             product.Image = productwaarde.Image;
             product.Description = productwaarde.Description;
             product.Quantity = productwaarde.Quantity;
+            product.CategoryPath = new CategoryViewModelHelper(0, context).BuildCategoryPath(productsoort.Id);
             if (productwaarde.DiscountedPrice == -1)
             {
                 product.DiscountedPrice = "-1";

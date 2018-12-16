@@ -1,8 +1,8 @@
-@using Microsoft.EntityFrameworkCore.Internal
 @using WebApp1.Models;
 @model WebApp1.Models.CategoryViewModel
 
 @{
+   
     ViewData["Title"] = Model.CategoryName;
     
     // The code below is used to populate the product page
@@ -33,14 +33,20 @@
                 break;
         }
     }
+
+    ;
+    List<string> AttributeFilterList = new List<string>();
+    foreach (var item in Model.Filters.AttributeFilters)
+    {
+        AttributeFilterList.Add(item.AttributeId.ToString() + "!@#$%^&*" + item.FilterValue);
+        
+    }
  }
 
 <link rel="stylesheet" href="~/css/mainpage.css">
 <div class="row">
 
-<div class="col-2">
-    @if (Model.Categories.Any())
-    {
+    <div class="col-2">
         <div id="categoryArea">
             <div class="categoryTitle">Sub-Categorieën</div>
             <form asp-action="Index">
@@ -59,36 +65,44 @@
                 </div>
             </form>
         </div>
-    }
-    <div id="categoryArea" style="margin-top: 15px;">
-        <div class="categoryTitle">Filteren</div>
-        <hr>
-        <form asp-action="Filtered" method="post" class="text-center">
-            <div>
-                <strong>Prijsgebied</strong><br>
-                <input type="hidden" asp-for="CategoryId" value="@Model.CategoryId"/>
-                @for (int i = 0; i <= Model.PriceFilterRange.Length - 1; i++)
-                {
-                    <input type="checkbox" asp-for="Filters.PriceRanges[i]" value="@Model.PriceFilterRange[i]">
-                    @Model.PriceFilterRange[i]<br>
-                }
-                <hr>
-                @if (Model.Attributes.Any())
-                {
-                    <strong>Attributen</strong><br>
-                    for (int i = 0; i <= Model.Attributes.Count - 1; i++)
+        <div id="categoryArea" style="margin-top: 15px;">
+            <div class="categoryTitle">Filteren</div>
+            <hr>
+            <form asp-action="Filtered" method="post" class="text-center">
+                <div>
+                    <strong>Prijsgebied</strong><br>
+                    <input type="hidden" asp-for="CategoryId" value="@Model.CategoryId"/>
+                    @for (int i = 0; i <= Model.PriceFilterRange.Length - 1; i++)
                     {
-                        <input type="hidden" asp-for="Filters.AttributeFilters[i].AttributeId" value="@Model.Attributes[i][1]">
-                        <label>@Model.Attributes[i][0]</label>
-                        <input class="form-control" type="text" asp-for="Filters.AttributeFilters[i].FilterValue">
+                        if (Model.Filters.PriceRanges.Contains(Model.PriceFilterRange[i]))
+                        {
+                            <input type="checkbox" name="@("priceRange" + i.ToString())" value="@Model.PriceFilterRange[i]" checked> @Model.PriceFilterRange[i]<br>
+                        }
+                        else
+                        {
+                            <input type="checkbox" name="@("priceRange" + i.ToString())" value="@Model.PriceFilterRange[i]"> @Model.PriceFilterRange[i]<br>                                                                                                                 
+                        }
                     }
                     <hr>
-                }
-                <button class="btn btn-outline-success" type="submit">Filter</button>
+                    @if (Model.Attributes.Any())
+                    {
+                        <strong>Attributen</strong><br>
+                        for (int i=0; i <= Model.Attributes.Count-1; i++)
+                        {
+                            <input type="hidden" asp-for="Filters.AttributeFilters[i].AttributeId" value="@Model.Attributes[i][1]">
+                            <label>@Model.Attributes[i][0]</label>
+                            <input class="form-control" type="text" asp-for="Filters.AttributeFilters[i].FilterValue" value="@Model.Filters.AttributeFilters[i].FilterValue">                            
+                        }
+                        <hr>
+                    }
+                    <button class="btn btn-outline-success" type="submit">Filter</button>
+                </div>
+            </form>
+            <div>
+                <a asp-action="Index" asp-route-categoryId="@Model.CategoryId">Terug naar alle producten</a>
             </div>
-        </form>
+        </div>
     </div>
-</div>
     <div class="col-10">
         <div class="container" id="productsArea">
             <h4>@Model.CategoryPath</h4>
@@ -243,7 +257,7 @@
                 else
                 {
                     <li class="page-item">
-                        <a class="page-link" asp-action="Index" asp-route-categoryId="@Model.CategoryId" asp-route-pageNumber="@(Model.Products.PageNumber - 1)">Vorige</a>
+                        <a class="page-link" href="@Url.Action("Filtered", "Category", new{categoryId = Model.CategoryId,pageNumber = (Model.Products.PageNumber - 1),PriceRanges = Model.Filters.PriceRanges,AttributeArray=AttributeFilterList})">Vorige</a>
                     </li>
                 }
                 @for (int i = 0; i < Model.Products.TotalPages; i++)
@@ -251,12 +265,12 @@
                     if ((i + 1) == Model.Products.PageNumber)
                     {
                         <li class="page-item active">
-                            <a class="page-link" asp-action="Index" asp-route-categoryId="@Model.CategoryId" asp-route-pageNumber="@(i + 1)">@(i + 1) <span class="sr-only">current</span></a>
+                            <a class="page-link" href="@Url.Action("Filtered", "Category", new{categoryId = Model.CategoryId,pageNumber = (i + 1),PriceRanges = Model.Filters.PriceRanges,AttributeArray=AttributeFilterList})">@(i + 1) <span class="sr-only">current</span></a>
                         </li>
                     }
                     else
                     {
-                        <li class="page-item"><a class="page-link" asp-action="Index" asp-route-categoryId="@Model.CategoryId" asp-route-pageNumber="@(i + 1)">@(i + 1)</a></li>
+                        <li class="page-item"><a class="page-link" href="@Url.Action("Filtered", "Category", new{categoryId = Model.CategoryId,pageNumber = (i + 1),PriceRanges = Model.Filters.PriceRanges,AttributeArray=AttributeFilterList})">@(i + 1)</a></li>
                     }
                 }
                 @if (Model.Products.PageNumber == Model.Products.TotalPages)
@@ -268,7 +282,7 @@
                 else
                 {
                     <li class="page-item">
-                        <a class="page-link" asp-action="Index" asp-route-categoryId="@Model.CategoryId" asp-route-pageNumber="@(Model.Products.PageNumber + 1)">Volgende</a>
+                        <a class="page-link" href="@Url.Action("Filtered", "Category", new{categoryId = Model.CategoryId,pageNumber = (Model.Products.PageNumber + 1),PriceRanges = Model.Filters.PriceRanges,AttributeArray=AttributeFilterList})" data-form-method="post">Volgende</a>
                     </li>
                 }
             </div>

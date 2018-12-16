@@ -19,8 +19,15 @@ namespace WebApp1.Controllers
         {
              var parent1 = (from soort in _context.Productsoort join parent in _context.ParentChild
                             on soort.Id  equals parent.ParentId
-                            where soort.Id == parent.ParentId && soort.Id != parent.ChildId
+                            where soort.Id == parent.ParentId
                             select soort).ToList().Distinct();
+
+            // var childx = (from child in _context.ParentChild join child1 in _context.ParentChild
+            // on child.ParentId equals child1.ChildId where child.ParentId == -1 
+            // select new {
+            //     parentx = (from parent in _context.ParentChild where parent.ParentId != child.ChildId select parent)
+            // }
+            // ).ToList().Distinct();
                             
                     //         where p.Parent == null 
                     //         select p.Child;
@@ -69,11 +76,22 @@ namespace WebApp1.Controllers
          [Route("parent/{id}")]
         public IActionResult parent(int id)
         {
-            var parent = from p in _context.ParentChild
-                            where p.Parent != null 
-                            && p.ParentId == id
-                            select p.Parent;
-                            return View(parent.ToList());
+             var parent1 = (from soort in _context.Productsoort join parent in _context.ParentChild
+                            on soort.Id  equals parent.ParentId
+                            where id == parent.ChildId
+                            select soort).ToList().Distinct();
+
+
+            //  var parent1 = (from soort in _context.Productsoort join parent in _context.ParentChild
+            //                 on soort.Id  equals parent.ChildId
+            //                 where id == parent.ChildId
+            //                 select soort).ToList().Distinct();
+
+            // var parent = from p in _context.ParentChild
+            //                 where p.Parent != null 
+            //                 && p.ParentId == id
+            //                 select p.Parent;
+                            return View(parent1);
 
         }
         

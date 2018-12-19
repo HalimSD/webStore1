@@ -76,10 +76,7 @@ namespace WebApp1.Controllers
          [Route("parent/{id}")]
         public IActionResult parent(int id)
         {
-             var parent1 = (from soort in _context.Productsoort join parent in _context.ParentChild
-                            on soort.Id  equals parent.ParentId
-                            where id == parent.ChildId
-                            select soort).ToList().Distinct();
+             var parent1 = _context.Productsoort.Select(x=> x.Parents.Select(l=> l.Parent).Where(v=> v.Id == id)).ToList();
 
 
             //  var parent1 = (from soort in _context.Productsoort join parent in _context.ParentChild

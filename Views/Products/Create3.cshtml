@@ -29,14 +29,21 @@
 
                 
 
-            var input2 = document.createElement("input");
-            input2.name= "newcustom["+i+"].extraAtribute.Type";
-            input2.setAttribute("class", "form-control");
-            input2.id="newcustom["+i+"].extraAtribute.Type";
-            input2.type="text";
-            input2.value="";
-            input2.placeholder="Type";
-            input2.style.marginTop = "10px";
+
+            var radioN = document.createElement("input");
+				radioN.type = "radio";
+                radioN.id = "newcustom["+i+"].extraAtribute.Type";
+				radioN.name = "newcustom["+i+"].extraAtribute.Type";
+                
+				radioN.value = "number";
+    
+
+             var radioS = document.createElement("input");
+				radioS.type = "radio";
+                radioS.id = "newcustom["+i+"].extraAtribute.Type";
+				radioS.name = "newcustom["+i+"].extraAtribute.Type";
+				radioS.value = "string";
+                
 
             var input3 = document.createElement("input");
             input3.name= "newcustom["+i+"].extraAtributewaarde.waarde";
@@ -44,11 +51,15 @@
             input3.id="newcustom["+i+"].extraAtributewaarde.waarde";
             input3.type="text";
             input3.value="";
-            input3.placeholder="Type";
+            input3.placeholder="Waarde";
             input3.style.marginTop = "10px";
                
             container.appendChild(input);
-            container.appendChild(input2);
+            container.appendChild(document.createTextNode("Getal"));
+            container.appendChild(radioN);
+            container.appendChild(document.createElement("br"));
+             container.appendChild(document.createTextNode("Tekst"));
+            container.appendChild(radioS);
             container.appendChild(input3);
             // Append a line break 
             container.appendChild(document.createElement("br"));

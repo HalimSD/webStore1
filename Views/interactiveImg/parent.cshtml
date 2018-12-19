@@ -1,4 +1,4 @@
-@model IEnumerable<WebApp1.Models.Productsoort>
+@model List<IEnumerable<WebApp1.Models.Productsoort>>
  
    <head>
 <link rel="stylesheet" href="~/css/interactiveImg.css">
@@ -13,7 +13,7 @@
         </div>
         <div class="bottom position">
       
-        @foreach (var soort in Model)
+        @foreach (var soort in Model.FirstOrDefault())
         {
          
              <article class="wrapper" >

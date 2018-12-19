@@ -32,15 +32,15 @@ namespace klaas.Controllers
             
             Productsoort productsoort =(from ps in context.Productsoort where ps.Id == productwaarde.ProductsoortId select ps).FirstOrDefault();           
             List<ViewProductAttributes> attributes = 
-                (from atts in context.Attribuutsoort 
-                    where atts.ProductsoortId == productsoort.Id
-                          select new ViewProductAttributes
+                (from a in context.Attribuutwaarde
+                join pwaarde in context.Productwaarde on a.ProductwaardeId equals pwaarde.Id
+                join at in context.Attribuutsoort on a.AttribuutsoortId equals at.Id
+                where pwaarde.Id == productwaarde.Id
+                 select new ViewProductAttributes
                           {
-                              AttributeName = atts.Attrbuut,
-                              AttributeValue = 
-                                  (from attw in context.Attribuutwaarde
-                                    where attw.AttribuutsoortId == atts.Id && attw.ProductwaardeId == productwaarde.Id
-                                          select attw.Waarde).FirstOrDefault()
+                              AttributeName = at.Attrbuut,
+                              AttributeValue = a.Waarde
+                      
                                   
                           }).ToList();
             

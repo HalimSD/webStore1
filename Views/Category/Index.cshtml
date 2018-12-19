@@ -65,12 +65,18 @@
         <hr>
         <form asp-action="Filtered" method="post" class="text-center">
             <div>
-                <strong>Prijsgebied</strong><br>
+                <strong>Prijs</strong><br>
                 <input type="hidden" asp-for="CategoryId" value="@Model.CategoryId"/>
                 @for (int i = 0; i <= Model.PriceFilterRange.Length - 1; i++)
                 {
                     <input type="checkbox" asp-for="Filters.PriceRanges[i]" value="@Model.PriceFilterRange[i]">
                     @Model.PriceFilterRange[i]<br>
+                }
+                <br><strong>Voorraad</strong><br>
+                @for (int i = 0; i <= Model.QuantityFilterRange.Length - 1; i++)
+                {
+                    <input type="checkbox" asp-for="Filters.QuantityRanges[i]" value="@Model.QuantityFilterRange[i]">
+                    @Model.QuantityFilterRange[i]<br>
                 }
                 <hr>
                 @if (Model.Attributes.Any())

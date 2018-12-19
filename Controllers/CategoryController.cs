@@ -36,7 +36,6 @@ namespace WebApp1.Controllers
         
         public IActionResult Filtered(int? categoryId, int? pageNumber, CategoryFilterModel filters, List<string> AttributeArray = null)
         {
-            string seperator = "!@#$%^&*";
             
             if (pageNumber == null)
             {
@@ -53,34 +52,26 @@ namespace WebApp1.Controllers
                         priceRanges.Add(Request.Form["priceRange" + i]);
                     }
                 }
+                List<string> quantityRanges = new List<string>();
+                for (int i = 0; i <= 4; i++)
+                {
+                    if (Request.Form.ContainsKey("quantityRange" + i))
+                    {
+                        quantityRanges.Add(Request.Form["quantityRange" + i]);
+                    }
+                }
 
                 if (filters.PriceRanges == null && priceRanges.Any())
                 {
                     filters.PriceRanges = priceRanges.ToArray();
                 }
-            }
-            else
-            {
-                if (AttributeArray != null)
+                if (filters.QuantityRanges == null && quantityRanges.Any())
                 {
-                    filters.AttributeFilters = new List<AttributeFilter>();
-                    foreach (var item in AttributeArray)
-                    {
-                        string[] split = item.Split(seperator);
-                        if (split[1] == "")
-                        {
-                            split[1] = null;
-                        }
-                        filters.AttributeFilters.Add(new AttributeFilter
-                        {
-                            AttributeId = int.Parse(split[0]),
-                            FilterValue = split[1]
-                        });
-                    }
+                    filters.QuantityRanges = quantityRanges.ToArray();
                 }
             }
             
-            if (filters.isEmpty)
+            if (filters.IsEmpty)
             {
                 int? id = categoryId;
                 return RedirectToAction("Index", "Category", new

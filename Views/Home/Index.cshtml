@@ -7,49 +7,179 @@
 
 <link rel="stylesheet" href="~/css/interactiveimage.css">
 <link rel="stylesheet" href="~/css/mainpage.css">
+<link rel="stylesheet" href="~/css/image.css">
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
 
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <div class="section">
   <h1>Welkom bij de webshop!</h1>
+
+
+<img src="~/images/vessel.png" class="vessel">
+
+<div class="popup" onclick="togglePopup1()" id="cat0">
+ 
+    <div class="sel popuptext" id="myPopup1">
+      <div id="menu"></div>
+    </div>
+
+  <img src="~/images/circle.png" class="category" >
 </div>
 
+<div class="popup" onclick="togglePopup2()" id="cat1">
+
+    <div class="sel popuptext" id="myPopup2">
+      <div id="menu2"></div>
+    </div>
+<img src="~/images/circle.png" class="category">
+</div>
+</div>
+<script>
+
+function menuToElement(menu) {
+    const ul = document.createElement("ul");
+    ul.className = "imageDropdownUl";
+    for (const item of menu) {
+        const li = document.createElement("li");
+        if (Object(item) === item) {
+            li.textContent = item.text + ' \u25BD';
+            li.className = "btn btn-primary";
+            li.appendChild(menuToElement(item.children));
+            
+        } else {
+            
+            const a = document.createElement("a");
+            li.appendChild(a);
+            a.textContent = item;
+            a.className = "btn btn-secondary";
+        }
+        ul.appendChild(li);
+        //console.log(menu);
+    }
+    return ul;
+   
+}
+
+ 
+
+var categories = [{ 
+    text: "engine",
+    children: ["marco",2,3,5,7,9, { 
+        text: "piston",
+        children: [4,5,6, { 
+        text: "piston",
+        children: [4,5,6]
+    }]
+    }]   
+}, {
+    text: "tire",
+    children: [7,8,9]
+}];
+
+console.log(categories[0]);
+
+var engine = [categories[0]];
+var tire = [categories[1]];
+
+const ul = menuToElement(engine);
+document.getElementById("menu").appendChild(ul);
+
+const ul2 = menuToElement(tire);
+document.getElementById("menu2").app, endChild(ul2);
+
+
+</script>
+
+
+<script>
+
+//When the user clicks on <div>, open the popup
+for (const item of categories){
+function togglePopup1() {
+    var popup = document.getElementById("myPopup1");
+    popup.classList.toggle("show");
+}
+
+function togglePopup2() {
+    var popup = document.getElementById("myPopup2");
+    popup.classList.toggle("show");
+}
+
+
+//dropdown in popup
+var txt = $('.txt'),
+    options = $('.options');
+
+txt.click(function (e) {
+    var dropId = $(this).attr("id");
+    e.stopPropagation();
+
+
+    var content = $(e.target).text();
+    console.log(content);
+    $('#'+ item.text).show(); 
+});
+
+
+$('body').click(function (e) {
+    options.hide();
+});
+}
+
+
+</script>
+
+
+
+
+
+
+
+
+
 <!-- Interactive Image         -->
-<div id="mainDiv">
+<!--<div id="mainDiv">
   <h3>Uitgelichte producten</h3>
   <div class='circle-container container' id="containerDiv">
 
     <a href='https://localhost:5001/Home/Mainpage' class='center' id='middle'><img src='~/images/boat.png'></a>
     <div id="cssSelectorRight" class="cssSelector">
-      <!-- img1 -->
+     
     </div>
     <div id="cssSelectorBottomRight" class="cssSelector">
-      <!-- img2 -->
+      
     </div>
     <div id="cssSelectorBottom1" class="cssSelector">
-      <!-- img3 -->
+      
     </div>
     <div id="cssSelectorBottom2" class="cssSelector">
-      <!-- img4 -->
+      
     </div>
     <div id="cssSelectorBottomLeft" class="cssSelector">
-      <!-- img5 -->
+      
     </div>
     <div id="cssSelectorLeft" class="cssSelector">
-      <!-- img6s -->
+      
     </div>
     <div id="cssSelectorTopLeft" class="cssSelector">
-      <!-- img7 -->
+      
     </div>
     <div id="cssSelectorTop1" class="cssSelector">
-      <!-- img8 -->
+      
     </div>
     <div id="cssSelectorTop2" class="cssSelector">
-      <!-- img9 -->
+      
     </div>
     <div id="cssSelectorTopRight" class="cssSelector">
-      <!-- img10 -->
+      
     </div>
   </div>
-</div>
+</div>-->
+
+
+
 
 
 <div class="section">
@@ -200,7 +330,7 @@
 </div>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.2.0/anime.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.2.0/anime.js"></script>
 <script>
   var text = [];
   var imgs = [];
@@ -354,5 +484,5 @@
     delay: 1000,
     duration: 2000
   });
-</script>
+</script> -->
 

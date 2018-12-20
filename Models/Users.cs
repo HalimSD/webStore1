@@ -9,13 +9,23 @@ using Microsoft.Extensions.Logging;
 namespace WebApp1.Models
 {
     public class Users : IdentityUser
+
     {
+        public Users() : base() { }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public DateTime BirthDate { get; set; }
+        public string Street { get; set; }
+        public string HouseNumber { get; set; }
+        public string PostalCode { get; set; }
+        public string City { get; set; }
         public ICollection<Bestelling> Bestelling { get; set; }
 
-        // public string FirstName {get;set;}
-        // public string LastName {get;set;}
+      // public string LastName {get;set;}
 
     }
+
+   
     public class BesteldeItem
     {
         public int BesteldeItemId { get; set; }

@@ -36,7 +36,7 @@ namespace WebApp1
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<WebshopContext>(opt => opt.UseNpgsql(@"Host=localhost;Database=database;Username=postgres;Password=hallodoei"));
+            services.AddDbContext<WebshopContext>(opt => opt.UseNpgsql(@"Host=localhost;Database=restore;Username=postgres;Password="));
 
             services.AddSession(options =>
             {
@@ -46,7 +46,9 @@ namespace WebApp1
 
             services.AddIdentity<Users, IdentityRole>()
             .AddEntityFrameworkStores<WebshopContext>()
-            .AddDefaultTokenProviders().AddDefaultUI();
+            .AddDefaultUI()
+            .AddDefaultTokenProviders();
+
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

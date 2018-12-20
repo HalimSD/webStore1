@@ -34,13 +34,7 @@
         }
     }
 
-    ;
-    List<string> AttributeFilterList = new List<string>();
-    foreach (var item in Model.Filters.AttributeFilters)
-    {
-        AttributeFilterList.Add(item.AttributeId.ToString() + "!@#$%^&*" + item.FilterValue);
-        
-    }
+    
  }
 
 <link rel="stylesheet" href="~/css/mainpage.css">
@@ -81,6 +75,18 @@
                         else
                         {
                             <input type="checkbox" name="@("priceRange" + i.ToString())" value="@Model.PriceFilterRange[i]"> @Model.PriceFilterRange[i]<br>                                                                                                                 
+                        }
+                    }
+                    <br><strong>Voorraad</strong><br>
+                    @for (int i = 0; i <= Model.QuantityFilterRange.Length - 1; i++)
+                    {
+                        if (Model.Filters.QuantityRanges.Contains(Model.QuantityFilterRange[i]))
+                        {
+                            <input type="checkbox" name="@("quantityRange" + i.ToString())" value="@Model.QuantityFilterRange[i]" checked> @Model.QuantityFilterRange[i]<br>
+                        }
+                        else
+                        {
+                            <input type="checkbox" name="@("quantityRange" + i.ToString())" value="@Model.QuantityFilterRange[i]"> @Model.QuantityFilterRange[i]<br>
                         }
                     }
                     <hr>
@@ -257,7 +263,7 @@
                 else
                 {
                     <li class="page-item">
-                        <a class="page-link" href="@Url.Action("Filtered", "Category", new{categoryId = Model.CategoryId,pageNumber = (Model.Products.PageNumber - 1),PriceRanges = Model.Filters.PriceRanges,AttributeArray=AttributeFilterList})">Vorige</a>
+                        <a class="page-link" href="@Url.Action("Filtered", "Category", new{categoryId = Model.CategoryId,pageNumber = (Model.Products.PageNumber - 1),Model.Filters.PriceRanges,Model.Filters.QuantityRanges})">Vorige</a>
                     </li>
                 }
                 @for (int i = 0; i < Model.Products.TotalPages; i++)
@@ -265,12 +271,12 @@
                     if ((i + 1) == Model.Products.PageNumber)
                     {
                         <li class="page-item active">
-                            <a class="page-link" href="@Url.Action("Filtered", "Category", new{categoryId = Model.CategoryId,pageNumber = (i + 1),PriceRanges = Model.Filters.PriceRanges,AttributeArray=AttributeFilterList})">@(i + 1) <span class="sr-only">current</span></a>
+                            <a class="page-link" href="@Url.Action("Filtered", "Category", new{categoryId = Model.CategoryId,pageNumber = (i + 1),Model.Filters.PriceRanges,Model.Filters.QuantityRanges})">@(i + 1) <span class="sr-only">current</span></a>
                         </li>
                     }
                     else
                     {
-                        <li class="page-item"><a class="page-link" href="@Url.Action("Filtered", "Category", new{categoryId = Model.CategoryId,pageNumber = (i + 1),PriceRanges = Model.Filters.PriceRanges,AttributeArray=AttributeFilterList})">@(i + 1)</a></li>
+                        <li class="page-item"><a class="page-link" href="@Url.Action("Filtered", "Category", new{categoryId = Model.CategoryId,pageNumber = (i + 1),Model.Filters.PriceRanges,Model.Filters.QuantityRanges})">@(i + 1)</a></li>
                     }
                 }
                 @if (Model.Products.PageNumber == Model.Products.TotalPages)
@@ -282,7 +288,7 @@
                 else
                 {
                     <li class="page-item">
-                        <a class="page-link" href="@Url.Action("Filtered", "Category", new{categoryId = Model.CategoryId,pageNumber = (Model.Products.PageNumber + 1),PriceRanges = Model.Filters.PriceRanges,AttributeArray=AttributeFilterList})" data-form-method="post">Volgende</a>
+                        <a class="page-link" href="@Url.Action("Filtered", "Category", new{categoryId = Model.CategoryId,pageNumber = (Model.Products.PageNumber + 1),Model.Filters.PriceRanges,Model.Filters.QuantityRanges})" data-form-method="post">Volgende</a>
                     </li>
                 }
             </div>

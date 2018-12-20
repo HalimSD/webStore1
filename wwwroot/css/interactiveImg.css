@@ -1,0 +1,67 @@
+div.container {
+    background-color: #ffffff;
+    border-radius: 3px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding: 15px;
+    width: 80%;
+    margin: auto;
+    position:relative;
+    
+}
+.mainImg:hover{
+    transition:hidden 0s linear 0.5s,opacity 0.5s linear;
+    height: 60%;
+    width: 80%;
+    display:block;
+    margin:auto;
+    visibility: hidden;
+}
+.imgContainer{
+ 
+    transition: 
+    all 1s;
+}
+.top{
+    height: 60%;
+    width: 100%;
+    display:block;
+    margin:auto;
+    opacity:1;
+    transition:
+      opacity 0.5s 2s,
+      transform 0.5s 0.5s;
+    position: relative;
+}
+
+.bottom {
+    display: grid;
+    grid-template-columns: repeat(auto-fit ,minmax(250px,2fr));
+    grid-template-rows: repeat(1);
+    width: 100%;
+    gap: 2%;
+    /* ppacity should be 0 */
+    opacity: 1; 
+    transition: 
+    opacity 0.5s 1s,
+    transform 0.5s 1s;
+    position: absolute;
+}
+.top image{
+    z-index: 1;
+}
+.bottom image{
+    z-index: 2;
+}
+.top:hover{
+    opacity: 0; 
+}
+.bottom:hover{
+    opacity: 1;
+}
+.wrapper{
+    display: block;
+    width: 100%;
+}
+.bottom img{
+    width: 100%;
+}

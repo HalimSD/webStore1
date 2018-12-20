@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Scaffolding.Internal;
 using WebApp1.Models;
 
 namespace WebApp1.Controllers.Admin
@@ -85,20 +86,37 @@ namespace WebApp1.Controllers.Admin
             if (price == null) { price = ""; }
             if (stock == null) { stock = ""; }
             if (category == null) { category = ""; }
+            if (discountPrice == null) { discountPrice = ""; }
 
             // Since the pagination helper doesn't have built-in filtering,
             // we'll have to prepare a custom filtered query and pass it to the helper
+            // First we do the string based filtering
             IQueryable<Productwaarde> query =
                 from pw in context.Productwaarde
                 from ps in context.Productsoort
                 where pw.ProductsoortId == ps.Id &&
-                      pw.Id.ToString().Contains(id) &&
                       pw.Title.ToUpper().Contains(name.ToUpper()) &&
-                      pw.Price.ToString().Contains(price) &&
-                      pw.Quantity.ToString().Contains(stock) &&
                       ps.Naam.ToUpper().Contains(category.ToUpper())
                 select pw;
-
+            
+            // Do the number filters
+            if (id != "")
+            {
+                query = from pw in query where pw.Id == int.Parse(id) select pw;
+            }
+            if (price != "")
+            {
+                query = from pw in query where pw.Price == double.Parse(price) select pw;
+            }
+            if (stock != "")
+            {
+                query = from pw in query where pw.Quantity == int.Parse(stock) select pw;
+            }
+            if (discountPrice != "")
+            {
+                query = from pw in query where pw.DiscountedPrice == double.Parse(discountPrice) select pw;
+            }
+            
             // Generate pages from the custom query
             PaginationViewModel<Productwaarde> productPage = pagination.GetPageIQueryable(pageIndex, query);
             

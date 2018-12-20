@@ -19,7 +19,8 @@ namespace WebApp1.Models
                 .HasOne(bc => bc.Parent)
                 .WithMany(c => c.Parents)
                 .HasForeignKey(bc => bc.ParentId);
-        }  
+           
+        }
         public WebshopContext(DbContextOptions<WebshopContext> options)
             : base(options)
         {
@@ -34,6 +35,7 @@ namespace WebApp1.Models
         public DbSet<BesteldeItem> BesteldeItem { get; set; }
         public DbSet<Bestelling> Bestelling { get; set; }
         public DbSet<ParentChild> ParentChild { get; set; }
+       
 
     }
 

@@ -82,14 +82,14 @@ namespace WebApp1.Models
             {
                 categoryId = GetRootParentId();
             }
-
+            List<int> categoryIdList = GetProductCategoryIds((int)categoryId);
             viewModel.CategoryName =
                 (from ps in context.Productsoort where ps.Id == categoryId select ps.Naam).FirstOrDefault();
             
             IQueryable<Productwaarde> productsQuery =
             (
                 from pw in context.Productwaarde
-                where pw.ProductsoortId == categoryId
+                where categoryIdList.Contains(pw.ProductsoortId)
                 select pw
             );
            
@@ -272,6 +272,30 @@ namespace WebApp1.Models
             return ranges;
         }
 
+        private List<int> GetProductCategoryIds(int id)
+        {
+            List<int> idArray = new List<int>();
+            idArray.Add(id);
+            int[] subCount =
+            (
+                from pc in context.ParentChild
+                where pc.ParentId == id
+                select pc.ChildId
+            ).ToArray();
+
+                     
+            foreach (int subId in subCount)
+            {
+                var list = GetProductCategoryIds(subId);
+                foreach (int item in list)
+                {
+                    idArray.Add(item);
+                }
+            }
+
+            return idArray;
+        }
+        
         private double[] GetMinMaxPrice(string range)
         {
             double[] rangeArray = new double[2];

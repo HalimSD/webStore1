@@ -46,7 +46,9 @@ namespace WebApp1
 
             services.AddIdentity<Users, IdentityRole>()
             .AddEntityFrameworkStores<WebshopContext>()
-            .AddDefaultTokenProviders().AddDefaultUI();
+            .AddDefaultUI()
+            .AddDefaultTokenProviders();
+
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

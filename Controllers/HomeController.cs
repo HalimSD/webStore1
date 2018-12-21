@@ -19,10 +19,6 @@ namespace klaas.Controllers
         protected SignInManager<Users> mSignInManager;
         private readonly WebshopContext _context;
         
-        // Defines how many products is displayed foreach page
-        private readonly int maxPageSize = 9;
-       
-
          public HomeController(
             
             UserManager<Users> userManager,

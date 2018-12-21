@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Primitives;
 using Org.BouncyCastle.Ocsp;
 using WebApp1.Models;
 
@@ -13,6 +16,7 @@ namespace WebApp1.Controllers
     {
         private readonly int maxPageSize = 9;
         private readonly WebshopContext context;
+        private readonly string sessionFiltersKey = "categoryFilters";
         private CategoryViewModelHelper helper;
         
         public CategoryController(WebshopContext context)
@@ -30,11 +34,12 @@ namespace WebApp1.Controllers
                 pageNumber = 1;
             }
 
+            HttpContext.Session.Remove(sessionFiltersKey);
             CategoryViewModel model = helper.CreateViewModel(categoryId, (int) pageNumber);
             return View(model);
         }
         
-        public IActionResult Filtered(int? categoryId, int? pageNumber, CategoryFilterModel filters, List<string> AttributeArray = null)
+        public IActionResult Filtered(int? categoryId, int? pageNumber, CategoryFilterModel filters, bool useSessionFilters = false)
         {
             
             if (pageNumber == null)
@@ -42,33 +47,18 @@ namespace WebApp1.Controllers
                 pageNumber = 1;
             }
 
-            if (Request.Method == "POST")
+            if (HttpContext.Request.Query.ContainsKey("priceCheckbox"))
             {
-                List<string> priceRanges = new List<string>();
-                for (int i = 0; i <= 4; i++)
-                {
-                    if (Request.Form.ContainsKey("priceRange" + i))
-                    {
-                        priceRanges.Add(Request.Form["priceRange" + i]);
-                    }
-                }
-                List<string> quantityRanges = new List<string>();
-                for (int i = 0; i <= 4; i++)
-                {
-                    if (Request.Form.ContainsKey("quantityRange" + i))
-                    {
-                        quantityRanges.Add(Request.Form["quantityRange" + i]);
-                    }
-                }
-
-                if (filters.PriceRanges == null && priceRanges.Any())
-                {
-                    filters.PriceRanges = priceRanges.ToArray();
-                }
-                if (filters.QuantityRanges == null && quantityRanges.Any())
-                {
-                    filters.QuantityRanges = quantityRanges.ToArray();
-                }
+                filters.PriceRanges = HttpContext.Request.Query["priceCheckbox"].ToArray();
+            }
+            if (HttpContext.Request.Query.ContainsKey("quantityCheckbox"))
+            {
+                filters.QuantityRanges = HttpContext.Request.Query["quantityCheckbox"].ToArray();
+            }
+            
+            if (useSessionFilters)
+            {
+                filters = HttpContext.Session.Get<CategoryFilterModel>(sessionFiltersKey);
             }
             
             if (filters.IsEmpty)
@@ -81,9 +71,41 @@ namespace WebApp1.Controllers
             }
             
             CategoryViewModel model = helper.CreateViewModel(categoryId, (int) pageNumber, filters);
-            return View(model);
+            HttpContext.Session.Set(sessionFiltersKey, model.Filters);
+            return View("Index", model);
         }
 
+        /// <summary>
+        /// Handles pagination requests
+        /// if the user goes to a different page whilst there is filter data in session,
+        /// it will redirect it to the Filtered action and force it to use those filters.
+        /// Else it will simply redirect to Index action.
+        /// </summary>
+        /// <param name="id">ID value of the category</param>
+        /// <param name="pageIndex">Number of the page that has to be loaded</param>
+        /// <returns></returns>
+        public IActionResult GotoPage(int? id, int? pageIndex)
+        {
+            if (id == null) return NotFound();
+            if (pageIndex == null) return NotFound();
+            
+            CategoryFilterModel sessionFilter = HttpContext.Session.Get<CategoryFilterModel>(sessionFiltersKey);
+            if (sessionFilter != null)
+            {
+                return RedirectToAction("Filtered", "Category", new
+                {
+                    categoryId = id,
+                    pageNumber = pageIndex,
+                    useSessionFilters = true
+                });
+            }
+            return RedirectToAction("Index", "Category", new
+            {
+                categoryId = id,
+                pageNumber = pageIndex
+            });
+        }
+      
         public IActionResult Search(string search, int? pageNumber)
         {
             if (pageNumber == null)

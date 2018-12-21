@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore.Internal;
 using Org.BouncyCastle.Crypto.Agreement.Srp;
@@ -37,6 +39,7 @@ namespace WebApp1.Models
         // Used to check if Filter options are empty!
         public bool IsEmpty
         {
+            // Check if all fields of this model are null
             get
             {
                 bool emptyPrice = PriceRanges == null && QuantityRanges == null;
@@ -81,204 +84,53 @@ namespace WebApp1.Models
         {
             CategoryViewModel viewModel = new CategoryViewModel();
             PaginationHelper<Productwaarde> productsPage = new PaginationHelper<Productwaarde>(maxPageSize,context.Productwaarde);
-
+            
+            // If no id was provided, we will display all products
             if (categoryId == null)
             {
                 categoryId = GetRootParentId();
             }
+            
+            // Get list of categories where we have to retrieve products from
             List<int> categoryIdList = GetProductCategoryIds((int)categoryId);
+            
             viewModel.CategoryName =
                 (from ps in context.Productsoort where ps.Id == categoryId select ps.Naam).FirstOrDefault();
             
+            // Retrieve all products that belong to one of the categories
             IQueryable<Productwaarde> productsQuery =
             (
                 from pw in context.Productwaarde
                 where categoryIdList.Contains(pw.ProductsoortId)
                 select pw
             );
-           
+            
             viewModel.PriceFilterRange = GetPriceFilterRange(productsQuery);
             viewModel.QuantityFilterRange = GetQuantityFilterRange(productsQuery);
             
             // Apply filters if controller provided us with one
-            if (filters != null)
-            {
-                // If any of the productwaarde filters have been applied,
-                // the resulting products will be stored here
-                IQueryable<Productwaarde> filteredQuery = null;
-                // The result of applying attribute filter is stored in this
-                var filteredAttributeQuery = productsQuery.Take(0);
-                // Indicates if we did a attribute filter
-                bool attributeFilterPeformed = false;
-                // Indicates if we did a general (productwaarde) filter
-                bool filterPeformed = false;
+            productsQuery = FilterAttributes(filters, productsQuery);
+            productsQuery = FilterPrice(filters, productsQuery);
+            productsQuery = FilterQuantity(filters, productsQuery);
                 
-                /*
-                 * This is how the filtering works:
-                 * We get all products (stored in productQuery) and we filter it on attributes
-                 * The result of this is stored in filteredAttributeQuery
-                 * 
-                 * Even if no attribute filters were applied, we will continue to use filteredAttributeQuery
-                 * It will simply contain all the products of productQuery in that case!
-                 * 
-                 * Then we do all the general filters (price, stock, etc). Result is stored in filteredQuery
-                 * At the end, we peform a few checks and let the pagination generate the data
-                 */
-                
-                
-                /*
-                
-                // TODO: Implement new attribute filter
-                
-                if (filters.AttributeFilters != null)
-                {
-                    foreach (AttributeFilter item in filters.AttributeFilters)
-                    {
-                        if (item.FilterValue != null)
-                        {
-                            attributeFilterPeformed = true;
-                            filteredAttributeQuery = filteredAttributeQuery.Union(
-                                from attw in context.Attribuutwaarde
-                                from pw in productsQuery
-                                where attw.ProductwaardeId == pw.Id &&
-                                      attw.AttribuutsoortId == item.AttributeId &&
-                                      attw.Waarde.ToUpper().Contains(item.FilterValue.ToUpper())
-                                select pw
-                            );
-                        }
-                    }
-                }
-                */
-
-                if (!attributeFilterPeformed)
-                {
-                    filteredAttributeQuery = productsQuery;
-                }
-                
-                // Apply the price range filter
-                if (filters.PriceRanges != null)
-                {
-                    var bufferQuery = productsQuery.Take(0);
-                    bool containsValidFilter = false;
-                    foreach (string item in filters.PriceRanges)
-                    {
-                        if (item.ToUpper() != "FALSE")
-                        {
-                            // This bool is used to check if we indeed did filtering 
-                            containsValidFilter = true;
-                            
-                            // Get the price range that is used in the filter
-                            double[] range = GetMinMaxPrice(item);
-
-                            // First we check the products with discount
-                            var discountQuery =
-                                from p in filteredAttributeQuery
-                                where p.DiscountedPrice != -1 &&
-                                      p.DiscountedPrice >= range[0] &&
-                                      p.DiscountedPrice <= range[1]
-                                select p;
-
-                            // Now we check the products that aren't in discount!
-                            // Savvy?
-                            bufferQuery = bufferQuery.Union(
-                                (
-                                    from p in filteredAttributeQuery
-                                    where p.DiscountedPrice == -1 &&
-                                          p.Price >= range[0] &&
-                                          p.Price <= range[1]
-                                    select p
-                                ).Union(discountQuery)
-                            );
-                        }
-                    }
-
-                    if (containsValidFilter)
-                    {
-                        filteredQuery = bufferQuery;
-                        filterPeformed = true;
-                    }
-                }
-                else
-                {
-                    filters.PriceRanges = new string[0];
-                }
-                
-                // Apply quantity filter
-                if (filters.QuantityRanges != null)
-                {
-                    var bufferQuery = productsQuery.Take(0);
-                    bool containsValidFilter = false;
-                    foreach (string item in filters.QuantityRanges)
-                    {
-                        if (item.ToUpper() != "FALSE")
-                        {
-                            // This bool is used to check if we indeed did filtering 
-                            containsValidFilter = true;
-                            
-                            // Get the price range that is used in the filter
-                            int[] range = GetQuantityRangeFromString(item);
-
-                            // Now we check the products that match the filter requirement
-                            if (filterPeformed)
-                            {
-                                bufferQuery = bufferQuery.Union(
-                                    from p in filteredQuery
-                                    where p.Quantity >= range[0] &&
-                                          p.Quantity <= range[1]
-                                    select p
-                                );
-                            }
-                            else
-                            {
-                                bufferQuery = bufferQuery.Union(
-                                    from p in filteredAttributeQuery
-                                    where p.Quantity >= range[0] &&
-                                          p.Quantity <= range[1]
-                                    select p
-                                );
-                            }
-                        }
-                    }
-                    if (containsValidFilter)
-                    {
-                        filteredQuery = bufferQuery;
-                        filterPeformed = true;
-                    }
-                }
-                else
-                {
-                    filters.QuantityRanges = new string[0];
-                }
-
-
-                if (filterPeformed)
-                {
-                    viewModel.Products = productsPage.GetPageIQueryable(pageNumber, filteredQuery);
-                }
-                else
-                {
-                    viewModel.Products = productsPage.GetPageIQueryable(pageNumber, filteredAttributeQuery);
-                }
-                viewModel.Filters = filters;
-            }
+            viewModel.Filters = filters;
+            viewModel.Products = productsPage.GetPageIQueryable(pageNumber, productsQuery);
             
             // Get the attributes of that category
             List<string[]> attributes = new List<string[]>();
             var att =
                 (from atts in context.Attribuutsoort where atts.ProductsoortId == categoryId select atts).ToList();
-
+            
+            // And place that data into an 2D array
+            // Each element is an array that contains Attribute name and ID
             foreach (var attribute in att)
             {
                 attributes.Add(new []{attribute.Attrbuut, attribute.Id.ToString()});
             }
 
-            viewModel.Attributes = attributes;
-            // Get the products incase the filter section already didn't
-            if (viewModel.Products == null)
-            {
-                viewModel.Products = productsPage.GetPageIQueryable(pageNumber, productsQuery);
-            }
             
+            // Populate the view model with the needed data
+            viewModel.Attributes = attributes;            
             viewModel.Categories =
             (
                 from ps in context.Productsoort
@@ -294,6 +146,11 @@ namespace WebApp1.Models
             return viewModel;
         }
 
+        /// <summary>
+        /// Get the root category, meaning the category that is at the top.
+        /// This category is the main parent of all categories
+        /// </summary>
+        /// <returns>ID of the root category</returns>
         public int GetRootParentId()
         {
             return
@@ -350,7 +207,7 @@ namespace WebApp1.Models
             double rangeIncr = maxPrice / 5;
             for (int i = 0; i <= ranges.Length-1; i++)
             {
-                ranges[i] = string.Format("€{0} - €{1}", rangeIncr * i, rangeIncr * (i+1));
+                ranges[i] = $"€{rangeIncr * i} - €{rangeIncr * (i + 1)}";
             }
 
             return ranges;
@@ -431,6 +288,117 @@ namespace WebApp1.Models
             }
 
             return rangeArray;
+        }
+
+        private IQueryable<Productwaarde> FilterPrice(CategoryFilterModel filters, IQueryable<Productwaarde> query)
+        {
+            // Error check
+            if (filters == null) return query;
+            if (filters.PriceRanges == null)
+            {
+                filters.PriceRanges = new string[0];
+                return query;
+            }
+            
+            bool filtered = false;
+            var filteredQuery = query.Take(0);
+            foreach (string item in filters.PriceRanges)
+            {
+                if (item.ToUpper() != "FALSE")
+                {
+                    // This bool is used to check if we indeed did filtering 
+                    filtered = true;
+
+                    // Get the price range that is used in the filter
+                    double[] range = GetMinMaxPrice(item);
+
+                    // First we check the products with discount
+                    var discountQuery =
+                        from p in query
+                        where p.DiscountedPrice != -1 &&
+                              p.DiscountedPrice >= range[0] &&
+                              p.DiscountedPrice <= range[1]
+                        select p;
+
+                    // Now we check the products that aren't in discount!
+                    // Savvy?
+                    filteredQuery = filteredQuery.Union(
+                        (
+                            from p in query
+                            where p.DiscountedPrice == -1 &&
+                                  p.Price >= range[0] &&
+                                  p.Price <= range[1]
+                            select p
+                        ).Union(discountQuery)
+                    );
+                }
+            }
+            
+            if (filtered) return filteredQuery;
+            return query;
+        }
+
+        private IQueryable<Productwaarde> FilterQuantity(CategoryFilterModel filters, IQueryable<Productwaarde> query)
+        {
+            // Error check
+            if (filters == null) return query;
+            if (filters.QuantityRanges == null)
+            {
+                filters.QuantityRanges = new string[0];
+                return query;
+            }
+            
+            bool filtered = false;
+            var filteredQuery = query.Take(0);
+            foreach (string item in filters.QuantityRanges)
+            {
+                if (item.ToUpper() != "FALSE")
+                {
+                    // This bool is used to check if we indeed did filtering 
+                    filtered = true;
+                            
+                    // Get the price range that is used in the filter
+                    int[] range = GetQuantityRangeFromString(item);
+
+                    // Now we check the products that match the filter requirement
+                    filteredQuery = filteredQuery.Union(
+                        from p in query
+                        where p.Quantity >= range[0] &&
+                              p.Quantity <= range[1]
+                        select p
+                    );
+                }
+            }
+            
+            if (filtered) return filteredQuery;
+            return query;
+        }
+        
+        private IQueryable<Productwaarde> FilterAttributes(CategoryFilterModel filters, IQueryable<Productwaarde> query)
+        {
+            if (filters == null) return query;
+            if (filters.AttributeFilters == null) return query;
+            
+            bool filtered = false;
+            var filteredQuery = query.Take(0);
+            foreach (AttributeFilter item in filters.AttributeFilters)
+            {
+                if (item.FilterValue != null)
+                {
+                    filtered = true;
+                    filteredQuery = filteredQuery.Union(
+                        from attw in context.Attribuutwaarde
+                        from pw in query
+                        where attw.ProductwaardeId == pw.Id &&
+                              attw.AttribuutsoortId == item.AttributeId &&
+                              attw.Waarde.ToUpper().Contains(item.FilterValue.ToUpper())
+                        select pw
+                    );
+                }
+            }
+
+            if (filtered) return filteredQuery;
+            return query;
         }
     }
 }

@@ -63,20 +63,36 @@
     <div id="categoryArea" style="margin-top: 15px;">
         <div class="categoryTitle">Filteren</div>
         <hr>
-        <form asp-action="Filtered" method="post" class="text-center">
+        <form asp-action="Filtered" method="get" class="text-center">
             <div>
                 <strong>Prijs</strong><br>
                 <input type="hidden" asp-for="CategoryId" value="@Model.CategoryId"/>
                 @for (int i = 0; i <= Model.PriceFilterRange.Length - 1; i++)
                 {
-                    <input type="checkbox" asp-for="Filters.PriceRanges[i]" value="@Model.PriceFilterRange[i]">
-                    @Model.PriceFilterRange[i]<br>
+                    if (Model.Filters?.PriceRanges != null && Model.Filters.PriceRanges.Contains(Model.PriceFilterRange[i]))
+                    {
+                        <input type="checkbox" name="priceCheckbox" value="@Model.PriceFilterRange[i]" checked>
+                        @Model.PriceFilterRange[i]<br>
+                    }
+                    else
+                    {
+                        <input type="checkbox" name="priceCheckbox" value="@Model.PriceFilterRange[i]">
+                        @Model.PriceFilterRange[i]<br>
+                    }
                 }
                 <br><strong>Voorraad</strong><br>
                 @for (int i = 0; i <= Model.QuantityFilterRange.Length - 1; i++)
                 {
-                    <input type="checkbox" asp-for="Filters.QuantityRanges[i]" value="@Model.QuantityFilterRange[i]">
-                    @Model.QuantityFilterRange[i]<br>
+                    if (Model.Filters?.QuantityRanges != null && Model.Filters.QuantityRanges.Contains(Model.QuantityFilterRange[i]))
+                    {
+                        <input type="checkbox" name="quantityCheckbox" value="@Model.QuantityFilterRange[i]" checked>
+                        @Model.QuantityFilterRange[i]<br>
+                    }
+                    else
+                    {
+                        <input type="checkbox" name="quantityCheckbox" value="@Model.QuantityFilterRange[i]">
+                        @Model.QuantityFilterRange[i]<br>
+                    }
                 }
                 <hr>
                 @if (Model.Attributes.Any())
@@ -249,7 +265,7 @@
                 else
                 {
                     <li class="page-item">
-                        <a class="page-link" asp-action="Index" asp-route-categoryId="@Model.CategoryId" asp-route-pageNumber="@(Model.Products.PageNumber - 1)">Vorige</a>
+                        <a class="page-link" asp-action="GotoPage" asp-route-id="@Model.CategoryId" asp-route-pageIndex="@(Model.Products.PageNumber - 1)">Vorige</a>
                     </li>
                 }
                 @for (int i = 0; i < Model.Products.TotalPages; i++)
@@ -257,12 +273,12 @@
                     if ((i + 1) == Model.Products.PageNumber)
                     {
                         <li class="page-item active">
-                            <a class="page-link" asp-action="Index" asp-route-categoryId="@Model.CategoryId" asp-route-pageNumber="@(i + 1)">@(i + 1) <span class="sr-only">current</span></a>
+                            <a class="page-link" asp-action="GotoPage"  asp-route-id="@Model.CategoryId" asp-route-pageIndex="@(i + 1)">@(i + 1) <span class="sr-only">current</span></a>
                         </li>
                     }
                     else
                     {
-                        <li class="page-item"><a class="page-link" asp-action="Index" asp-route-categoryId="@Model.CategoryId" asp-route-pageNumber="@(i + 1)">@(i + 1)</a></li>
+                        <li class="page-item"><a class="page-link" asp-action="GotoPage"  asp-route-id="@Model.CategoryId" asp-route-pageIndex="@(i + 1)">@(i + 1)</a></li>
                     }
                 }
                 @if (Model.Products.PageNumber == Model.Products.TotalPages)
@@ -274,7 +290,7 @@
                 else
                 {
                     <li class="page-item">
-                        <a class="page-link" asp-action="Index" asp-route-categoryId="@Model.CategoryId" asp-route-pageNumber="@(Model.Products.PageNumber + 1)">Volgende</a>
+                        <a class="page-link" asp-action="GotoPage"  asp-route-id="@Model.CategoryId" asp-route-pageIndex="@(Model.Products.PageNumber + 1)">Volgende</a>
                     </li>
                 }
             </div>

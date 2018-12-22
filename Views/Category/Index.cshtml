@@ -107,13 +107,17 @@
                     <hr>
                 }
                 <button class="btn btn-outline-success" type="submit">Filter</button>
+                <br><a href="@Url.Action("Index", "Category")"> Filters ongedaan maken</a>
             </div>
         </form>
     </div>
 </div>
     <div class="col-10">
+        @if (Model.Products.Data.Any())
+        {
         <div class="container" id="productsArea">
             <h4>@Model.CategoryPath</h4>
+            @(Model.Products.TotalDataCount + " resultaten")
             <div class="row" id="products">
                 <div class="col-sm">
                     @foreach (Productwaarde item in col0Items)
@@ -295,7 +299,31 @@
                 }
             </div>
         </div>
+        }
+        else
+        {
+            <div class="container" id="noResultsArea">
+                <h4 style="text-align: left;">@Model.CategoryPath</h4>
+                <br>
+                <img id="noResultsImg" src="~/images/EmptyResult.png">
+                <br>
+                <h2>Wij hebben geen producten kunnen vinden!</h2>
+                @if (Model.Filters == null)
+                {
+                    <br>
+                    <strong>Er zijn momenteel geen producten beschikbaar voor deze categorie.</strong><br>
+                    <strong>Probeer het later nog eens!</strong>
+                }
+                else
+                {
+                    <br>
+                    <strong>Er zijn geen producten die binnen uw gekozen filters zitten.</strong>
 
+                }
+                <br>
+                <a href="@Url.Action("Index", "Category")">Terug naar alle producten</a>
+            </div>
+        }
     </div>
 
 </div>

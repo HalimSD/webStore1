@@ -7,90 +7,97 @@
 
 <link rel="stylesheet" href="~/css/interactiveimage.css">
 <link rel="stylesheet" href="~/css/mainpage.css">
-<link rel="stylesheet" href="~/css/image.css">
 <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <div class="section">
   <h1>Welkom bij de webshop!</h1>
 
+<div class="vesselContainer">
+  
+  <img src="~/images/vessel.png" class="vessel">
 
-<img src="~/images/vessel.png" class="vessel">
+    <div class="popupContainer">
+      <div class="popup" onclick="togglePopup1()" id="cat0">
+        <div class="sel popuptext" id="myPopup1">
+          <div class="catImage">
+            <img src="~/images/boat.png" class="categoryImage" >
+          </div>
+          <div id="menu0" class="menu"></div>
+        </div>
 
-<div class="popup" onclick="togglePopup1()" id="cat0">
- 
-    <div class="sel popuptext" id="myPopup1">
-      <div id="menu" class="menu"></div>
+        <img src="~/images/circle.png" class="category" >
+      </div>
     </div>
 
-  <img src="~/images/circle.png" class="category" >
+    <div class="popupContainer">
+      <div class="popup" onclick="togglePopup2()" id="cat1">
+        <div class="sel popuptext" id="myPopup2">
+          <div class="catImage">
+            <img src="~/images/boat.png" class="categoryImage" >
+          </div>
+          <div id="menu1" class="menu"></div>
+        </div>
+
+        <img src="~/images/circle.png" class="category" >
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="popup" onclick="togglePopup2()" id="cat1">
-    <div class="sel popuptext" id="myPopup2">
-      <div id="menu2" class="menu"></div>
-    </div>
-<img src="~/images/circle.png" class="category">
-</div>
-</div>
 <script>
 
 function menuToElement(menu) {
     const ul = document.createElement("ul");
     ul.className = "imageDropdownUl";
-    for (const item of menu) {
-      
+    for (const item of menu) { 
         const li = document.createElement("li");
         if (Object(item) === item) {
-            li.textContent = item.text + ' \u25BD';         
+            const span = document.createElement("span");
+            span.className  = "fas fa-plus-circle";
+            li.textContent = item.text + " "; //'\u25BD'        
             li.className = "btn btn-primary";
-            
-            li.appendChild(menuToElement(item.children));
-            
-
+            li.appendChild(span);
+            li.appendChild(menuToElement(item.children));            
         } else {
-            
             const a = document.createElement("a");
             li.appendChild(a);
             a.textContent = item;
             a.className = "btn btn-secondary";
         }
         ul.appendChild(li);
-        //console.log(menu);
     }
-    
     return ul;
-   
 }
 
- 
-
 var categories = [{ 
-    text: "engine",
-    children: ["marco",2,3,5,7,9, { 
-        text: "piston",
-        children: [4,5,6, { 
-        text: "piston",
-        children: [4,5,6]
-    }]
-    },10,11,12]   
+    text: "Stuursystemen",
+    children: ["Boegschroeven","Electronisch Stuursysteem","Stuurwielen", { 
+        text: "Roerbeslag",
+        children: ["Roerbeslag","Spiegelbeslag","Overige",{
+    text: "Motoren en toebehoren",
+    children: ["brandstoftoebehoren","Meters","Oliepompen"]
+}]
+    }]   
 }, {
-    text: "tire",
-    children: [7,8,9]
+    text: "Motoren en toebehoren",
+    children: ["brandstoftoebehoren","Meters","Oliepompen"]
 }];
 
-console.log(categories[0]);
+for (i = 0; i < categories.length; i++){
+    var newMenu = new Array(categories[i]);
+    const ul = menuToElement(newMenu);
+    document.getElementById("menu" + i).appendChild(ul);
+}
 
-var engine = [categories[0]];
-var tire = [categories[1]];
+//var engine = [categories[0]];
+//var tire = [categories[1]];
 
-const ul = menuToElement(engine);
-document.getElementById("menu").appendChild(ul);
+//const ul = menuToElement(engine);
+//document.getElementById("menu").appendChild(ul);
 
-const ul2 = menuToElement(tire);
-document.getElementById("menu2").appendChild(ul2);
+//const ul2 = menuToElement(tire);
+//document.getElementById("menu2").appendChild(ul2);
 
 
 </script>
@@ -110,10 +117,12 @@ function togglePopup2() {
     popup.classList.toggle("show");
 }
 
-
+//categories and subcategories onclick function
 $(".btn-primary").on('click', function(event){  
     event.stopImmediatePropagation();
     $(this).children('.imageDropdownUl').toggle();
+    var text = this.firstChild.nodeValue;
+    console.log(text);
 });
 
 
@@ -141,8 +150,7 @@ $('body').click(function (e) {
 
 </script>
 
-
-
+<link rel="stylesheet" href="~/css/image.css">
 
 
 
@@ -495,4 +503,5 @@ $('body').click(function (e) {
     duration: 2000
   });
 </script> -->
+
 

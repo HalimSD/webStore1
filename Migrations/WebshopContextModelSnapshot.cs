@@ -201,6 +201,8 @@ namespace WebApp1.Migrations
 
                     b.Property<DateTime>("Date");
 
+                    b.Property<double>("ShippingFee");
+
                     b.Property<string>("Status");
 
                     b.Property<string>("UserId");

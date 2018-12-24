@@ -77,14 +77,17 @@
 
 li.btn-primary > ul {
 	display: none;
+	
 }
 
-li > ul.imageDropdownUl {
-	float: left;	
+li> ul.imageDropdownUl {
+	/* float: left; */
+
 }
 
 .btn{
 	text-align: left;
+	
 }
 
 .imageDropdown{
@@ -131,7 +134,9 @@ li > ul.imageDropdownUl {
 }
 
 .menu{
-	padding-right: 50px;
+	
+	padding-left:25px; 
+	padding-right:25px; 
 	overflow:auto;
 	max-height:300px;
 }
@@ -139,4 +144,3 @@ li > ul.imageDropdownUl {
 .catImage{
 	padding: 10px;
 }
-

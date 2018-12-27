@@ -19,6 +19,7 @@ nav.navbar {
 }
 
 div.footer{
+    font-family: monospace;
     width: 99%;
     height: 175px; 
     background-color: #ffffff;
@@ -30,6 +31,7 @@ div.footer{
     margin-bottom: 1%;
     margin-top: 1%;
 }
+
 
 li{
     list-style-type: none;

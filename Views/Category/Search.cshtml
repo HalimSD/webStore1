@@ -1,8 +1,14 @@
-@using WebApp1.Models;
 @model WebApp1.Models.CategoryViewModel
 
 @{
-    ViewData["Title"] = Model.CategoryName;
+    if (Model.Products.Data.Any())
+    {
+        ViewData["Title"] = Model.Products.TotalDataCount + " resultaten";
+    }
+    else
+    {
+        ViewData["Title"] = "Geen resultaten!";
+    }
 
     // The code below is used to populate the product page
     // The product page itself consists of 3 columns

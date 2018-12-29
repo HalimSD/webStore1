@@ -1,4 +1,5 @@
 @using Org.BouncyCastle.Asn1.Cms
+@using WebApp1.Controllers
 @using WebApp1.Models
 @model WebApp1.Models.Productwaarde
 @{
@@ -8,11 +9,28 @@
     string imagePath = "/images/products/" + product.Image;
     int attributeIndex = 0;
     int attributeCount = attributes.Count();
+
+    var msg = ViewBag.resultMsg;
 }
 <link rel="stylesheet" href="~/css/edit_product.css">
 <div class="pageRoot">
     <h2>Product Bewerken</h2>
     <hr>
+    @if (msg == EditProductController.ResultMsg.Failed)
+    {
+        <div class="alert-red">
+            <span class="closeBtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+            <strong>Fout!</strong> Er is iets foutgegaan bij het bewerken!
+        </div>
+    }
+    @if (msg == EditProductController.ResultMsg.Success)
+    {
+        <div class="alert-green">
+            <span class="closeBtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+            <strong>Succes!</strong> Het bewerken is voltooid!
+        </div>
+    }
+    <br>
     <form action="@Url.Action("Edit", "EditProduct")" method="post" enctype="multipart/form-data">
         <input type="hidden" name="Id" value="@product.Id" />
         <input type="hidden" name="Image" value="@product.Image" />
@@ -30,19 +48,21 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="DiscountedPrice" class="control-label">Korting prijs</label>
-                    <input asp-for="DiscountedPrice" class="form-control" placeholder="Korting prijs" value="@product.DiscountedPrice"/>
                     @if (product.DiscountedPrice == -1)
                     {
-                        <input type="checkbox" name="setDiscount" value="true"/>@("Korting Inschakelen")<br>
-                    }
+                        <input asp-for="DiscountedPrice" class="form-control" placeholder="Korting prijs" value="0"/>
+                        <input type="checkbox" name="setDiscount" value="true"/> @("Korting Inschakelen")<br>
+                        }
                     else
                     {
-                        <input type="checkbox" name="setDiscount" value="true" checked/>@("Korting Inschakelen")<br> 
+                        <input asp-for="DiscountedPrice" class="form-control" placeholder="Korting prijs" value="@product.DiscountedPrice"/>
+                        <input type="checkbox" name="setDiscount" value="true" checked/> @("Korting Inschakelen")<br> 
                     }
                     <span asp-validation-for="DiscountedPrice" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <input name="img" type="file" Class="form-control" value="@product.Image"/>
+                    <label class="form-label-file">Product foto</label><br>
+                    <input name="img" class="form-control-file" type="file" value="@product.Image"/>
                 </div>
             </div>
             <div class="col-6">
@@ -73,7 +93,7 @@
             attributeIndex++;
         }
         <div class="form-group">
-            <input type="submit" value="Opslaan" class="btn btn-default"/>
+            <input type="submit" value="Opslaan" class="btn btn-primary"/>
         </div>
     </form>
 </div>

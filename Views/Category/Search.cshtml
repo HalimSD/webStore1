@@ -1,8 +1,14 @@
-@using WebApp1.Models;
 @model WebApp1.Models.CategoryViewModel
 
-@{      
-    ViewData["Title"] = Model.CategoryName;
+@{
+    if (Model.Products.Data.Any())
+    {
+        ViewData["Title"] = Model.Products.TotalDataCount + " resultaten";
+    }
+    else
+    {
+        ViewData["Title"] = "Geen resultaten!";
+    }
 
     // The code below is used to populate the product page
     // The product page itself consists of 3 columns
@@ -11,7 +17,7 @@
     List<Productwaarde> col0Items = new List<Productwaarde>();
     List<Productwaarde> col1Items = new List<Productwaarde>();
     List<Productwaarde> col2Items = new List<Productwaarde>();
-    
+
     int currentColumn = 0;
     foreach (Productwaarde item in Model.Products.Data)
     {
@@ -32,199 +38,216 @@
                 break;
         }
     }
- }
+}
 
 <link rel="stylesheet" href="~/css/mainpage.css">
-<div class="row">
-    <div class="col-10 align-self-center">
-        <div class="container" id="productsArea">
-            <h4>Zoekterm: @Model.CategoryName</h4>
-            <div class="row" id="products">
-                <div class="col-sm">
-                    @foreach (Productwaarde item in col0Items)
-                    {
-                        <div class="card" style="width: 20rem;">
-                            <div class="card-body">
-                                <form action="@Url.Action("Index", "ViewProduct")" method="get">
-                                    <div id="container" class="form-group">
-                                        <img src="@("/images/products/" + item.Image)" id="productImage"><img/>
-                                        <h5 class="card-title">@item.Title</h5>
-                                        <div>
-                                            @if (item.DiscountedPrice != -1)
-                                            {
-                                                <div class="row">
-                                                    <div class="col-4-sm">
-                                                        <div id="disabledPrice">€ @item.Price</div>
-                                                    </div>
-                                                    <div class="col-4-sm" style="margin-left: 15px;">
-                                                        <div id="discountPrice">NU VOOR: € @item.DiscountedPrice</div>
-                                                    </div>
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <div>€ @item.Price</div>
-                                            }
-                                            @if (item.Quantity > 0)
-                                            {
-                                                <div>@string.Format("Voorraad: {0} stuk(ken)",item.Quantity)</div>
-                                            }
-                                            else
-                                            {
-                                                <div id="outOfStock">Geen voorraad beschikbaar!</div>
-                                            }
-                                        </div>
-                                        <input type="hidden" name="id" value='@item.Id'/>
-                                        <input type="submit" class="btn btn-primary" value="Details">
-                                        @if (item.Quantity > 0)
-                                        {
-                                            <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@item.Id" >
-                                        }
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    }
-                </div>
-                <div class="col-sm">
-                    @foreach (Productwaarde item in col1Items)
-                    {
-                        <div class="card" style="width: 20rem;">
-                            <div class="card-body">
-                                <form action="@Url.Action("Index", "ViewProduct")" method="get">
-                                    <div id="container" class="form-group">
-                                        <img src="@("/images/products/" + item.Image)" id="productImage"><img/>
-                                        <h5 class="card-title">@item.Title</h5>
-                                        <div>
-                                            @if (item.DiscountedPrice != -1)
-                                            {
-                                                <div class="row">
-                                                    <div class="col-4-sm">
-                                                        <div id="disabledPrice">€ @item.Price</div>
-                                                    </div>
-                                                    <div class="col-4-sm" style="margin-left: 15px;">
-                                                        <div id="discountPrice">NU VOOR: € @item.DiscountedPrice</div>
-                                                    </div>
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <div>€ @item.Price</div>
-                                            }
-                                            @if (item.Quantity > 0)
-                                            {
-                                                <div>@string.Format("Voorraad: {0} stuk(ken)",item.Quantity)</div>
-                                            }
-                                            else
-                                            {
-                                                <div id="outOfStock">Geen voorraad beschikbaar!</div>
-                                            }
-                                        </div>
-                                        <input type="hidden" name="id" value='@item.Id'/>
-                                        <input type="submit" class="btn btn-primary" value="Details">
-                                        @if (item.Quantity > 0)
-                                        {
-                                            <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@item.Id" >
-                                        }
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    }
-                </div>
-                <div class="col-sm">
-                    @foreach (Productwaarde item in col2Items)
-                    {
-                        <div class="card" style="width: 20rem;">
-                            <div class="card-body">
-                                <form action="@Url.Action("Index", "ViewProduct")" method="get">
-                                    <div id="container" class="form-group">
-                                        <img src="@("/images/products/" + item.Image)" id="productImage"><img/>
-                                        <h5 class="card-title">@item.Title</h5>
-                                        <div>
-                                            @if (item.DiscountedPrice != -1)
-                                            {
-                                                <div class="row">
-                                                    <div class="col-4-sm">
-                                                        <div id="disabledPrice">€ @item.Price</div>
-                                                    </div>
-                                                    <div class="col-4-sm" style="margin-left: 15px;">
-                                                        <div id="discountPrice">NU VOOR: € @item.DiscountedPrice</div>
-                                                    </div>
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <div>€ @item.Price</div>
-                                            }
-                                            @if (item.Quantity > 0)
-                                            {
-                                                <div>@string.Format("Voorraad: {0} stuk(ken)",item.Quantity)</div>
-                                            }
-                                            else
-                                            {
-                                                <div id="outOfStock">Geen voorraad beschikbaar!</div>
-                                            }
-                                        </div>
-                                        <input type="hidden" name="id" value='@item.Id'/>
-                                        <input type="submit" class="btn btn-primary" value="Details">
-                                        @if (item.Quantity > 0)
-                                        {
-                                            <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@item.Id" >
-                                        }
 
+@if (Model.Products.Data.Any())
+{
+    <div class="container" id="productsArea" style="margin-left: auto;">
+        <h4>Zoekterm: @Model.CategoryName</h4>
+        <div class="row" id="products">
+            <div class="col-sm">
+                @foreach (Productwaarde item in col0Items)
+                {
+                    <div class="card" style="width: 20rem;">
+                        <div class="card-body">
+                            <form action="@Url.Action("Index", "ViewProduct")" method="get">
+                                <div id="container" class="form-group">
+                                    <img src="@("/images/products/" + item.Image)" id="productImage"><img/>
+                                    <h5 class="card-title">@item.Title</h5>
+                                    <div>
+                                        @if (item.DiscountedPrice != -1)
+                                        {
+                                            <div class="row">
+                                                <div class="col-4-sm">
+                                                    <div id="disabledPrice">€ @item.Price</div>
+                                                </div>
+                                                <div class="col-4-sm" style="margin-left: 15px;">
+                                                    <div id="discountPrice">NU VOOR: € @item.DiscountedPrice</div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div>€ @item.Price</div>
+                                        }
+                                        @if (item.Quantity > 0)
+                                        {
+                                            <div>@string.Format("Voorraad: {0} stuk(ken)", item.Quantity)</div>
+                                        }
+                                        else
+                                        {
+                                            <div id="outOfStock">Geen voorraad beschikbaar!</div>
+                                        }
                                     </div>
-                                </form>
-                            </div>
+                                    <input type="hidden" name="id" value='@item.Id'/>
+                                    <input type="submit" class="btn btn-primary" value="Details">
+                                    @if (item.Quantity > 0)
+                                    {
+                                        <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@item.Id">
+                                    }
+                                </div>
+                            </form>
                         </div>
-                    }
-                </div>
+                    </div>
+                }
             </div>
-            <div class="pagination">
-                @if (Model.Products.PageNumber == 1)
+            <div class="col-sm">
+                @foreach (Productwaarde item in col1Items)
                 {
-                    <li class="page-item disabled">
-                        <a class="page-link"  tabindex="-1">Vorige</a>
-                    </li>
+                    <div class="card" style="width: 20rem;">
+                        <div class="card-body">
+                            <form action="@Url.Action("Index", "ViewProduct")" method="get">
+                                <div id="container" class="form-group">
+                                    <img src="@("/images/products/" + item.Image)" id="productImage"><img/>
+                                    <h5 class="card-title">@item.Title</h5>
+                                    <div>
+                                        @if (item.DiscountedPrice != -1)
+                                        {
+                                            <div class="row">
+                                                <div class="col-4-sm">
+                                                    <div id="disabledPrice">€ @item.Price</div>
+                                                </div>
+                                                <div class="col-4-sm" style="margin-left: 15px;">
+                                                    <div id="discountPrice">NU VOOR: € @item.DiscountedPrice</div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div>€ @item.Price</div>
+                                        }
+                                        @if (item.Quantity > 0)
+                                        {
+                                            <div>@string.Format("Voorraad: {0} stuk(ken)", item.Quantity)</div>
+                                        }
+                                        else
+                                        {
+                                            <div id="outOfStock">Geen voorraad beschikbaar!</div>
+                                        }
+                                    </div>
+                                    <input type="hidden" name="id" value='@item.Id'/>
+                                    <input type="submit" class="btn btn-primary" value="Details">
+                                    @if (item.Quantity > 0)
+                                    {
+                                        <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@item.Id">
+                                    }
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 }
-                else
+            </div>
+            <div class="col-sm">
+                @foreach (Productwaarde item in col2Items)
                 {
-                    <li class="page-item">
-                        <a class="page-link" asp-action="Search" asp-controller="Category" asp-route-search="@Model.CategoryName" asp-route-pageNumber="@(Model.Products.PageNumber - 1)">Vorige</a>
-                    </li>
-                }
-                @for (int i = 0; i < Model.Products.TotalPages; i++)
-                {
-                    if ((i + 1) == Model.Products.PageNumber)
-                    {
-                        <li class="page-item active">
-                            <a class="page-link" asp-action="Search" asp-controller="Category" asp-route-search="@Model.CategoryName" asp-route-pageNumber="@(i + 1)">@(i + 1) <span class="sr-only">current</span></a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="page-item"><a class="page-link" asp-action="Search" asp-controller="Category" asp-route-search="@Model.CategoryName" asp-route-pageNumber="@(i + 1)">@(i + 1)</a></li>
-                    }
-                }
-                @if (Model.Products.PageNumber == Model.Products.TotalPages)
-                {
-                    <li class="page-item disabled">
-                        <a class="page-link"  tabindex="-1">Volgende</a>
-                    </li>
-                }
-                else
-                {
-                    <li class="page-item">
-                        <a class="page-link" asp-action="Search" asp-controller="Category" asp-route-search="@Model.CategoryName" asp-route-pageNumber="@(Model.Products.PageNumber + 1)">Volgende</a>
-                    </li>
+                    <div class="card" style="width: 20rem;">
+                        <div class="card-body">
+                            <form action="@Url.Action("Index", "ViewProduct")" method="get">
+                                <div id="container" class="form-group">
+                                    <img src="@("/images/products/" + item.Image)" id="productImage"><img/>
+                                    <h5 class="card-title">@item.Title</h5>
+                                    <div>
+                                        @if (item.DiscountedPrice != -1)
+                                        {
+                                            <div class="row">
+                                                <div class="col-4-sm">
+                                                    <div id="disabledPrice">€ @item.Price</div>
+                                                </div>
+                                                <div class="col-4-sm" style="margin-left: 15px;">
+                                                    <div id="discountPrice">NU VOOR: € @item.DiscountedPrice</div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div>€ @item.Price</div>
+                                        }
+                                        @if (item.Quantity > 0)
+                                        {
+                                            <div>@string.Format("Voorraad: {0} stuk(ken)", item.Quantity)</div>
+                                        }
+                                        else
+                                        {
+                                            <div id="outOfStock">Geen voorraad beschikbaar!</div>
+                                        }
+                                    </div>
+                                    <input type="hidden" name="id" value='@item.Id'/>
+                                    <input type="submit" class="btn btn-primary" value="Details">
+                                    @if (item.Quantity > 0)
+                                    {
+                                        <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@item.Id">
+                                    }
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 }
             </div>
         </div>
+        <div class="pagination">
+            @if (Model.Products.PageNumber == 1)
+            {
+                <li class="page-item disabled">
+                    <a class="page-link" tabindex="-1">Vorige</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Search" asp-controller="Category" asp-route-search="@Model.CategoryName" asp-route-pageNumber="@(Model.Products.PageNumber - 1)">Vorige</a>
+                </li>
+            }
+            @for (int i = 0; i < Model.Products.TotalPages; i++)
+            {
+                if ((i + 1) == Model.Products.PageNumber)
+                {
+                    <li class="page-item active">
+                        <a class="page-link" asp-action="Search" asp-controller="Category" asp-route-search="@Model.CategoryName" asp-route-pageNumber="@(i + 1)">
+                            @(i + 1) <span class="sr-only">current</span>
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-action="Search" asp-controller="Category" asp-route-search="@Model.CategoryName" asp-route-pageNumber="@(i + 1)">@(i + 1)</a>
+                    </li>
+                }
+            }
+            @if (Model.Products.PageNumber == Model.Products.TotalPages)
+            {
+                <li class="page-item disabled">
+                    <a class="page-link" tabindex="-1">Volgende</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Search" asp-controller="Category" asp-route-search="@Model.CategoryName" asp-route-pageNumber="@(Model.Products.PageNumber + 1)">Volgende</a>
+                </li>
+            }
+        </div>
     </div>
-    
-</div>
+}
+else
+{
+    <div class="container" id="noResultsArea" style="margin-left: auto;">
+        <h4 style="text-align: left;">@Model.CategoryPath</h4>
+        <br>
+        <img id="noResultsImg" src="~/images/EmptyResults.jpg">
+        <br>
+        <h2>Wij hebben geen producten kunnen vinden!</h2>
+        <br>
+        <strong>Er vallen geen producten binnen uw zoekterm.</strong>
+        <br>
+        <a href="@Url.Action("Index", "Category")">Terug naar alle producten</a>
+    </div>
+}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.2.0/anime.js"></script>
 <script>
-    
+
 </script>

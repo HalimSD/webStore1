@@ -147,6 +147,11 @@ namespace WebApp1.Controllers
             return RedirectToAction("Index", "Category");
         }
         
+        /// <summary>
+        /// This action is an API endpoint used by headerProductsDropDown.js
+        /// to load the main categories in the header
+        /// </summary>
+        /// <returns>JSON result containing category name's and id's</returns>
         public JsonResult GetCategories()
         {
             int parentId = helper.GetRootParentId();

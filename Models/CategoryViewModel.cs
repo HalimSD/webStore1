@@ -155,10 +155,13 @@ namespace WebApp1.Models
         {
             return
             (
-                from ps in context.Productsoort
-                from pc in context.ParentChild
-                where ps.Id != pc.ChildId && ps.Id == pc.ParentId
-                select ps.Id
+                from r in context.ParentChild
+                where 
+                !(
+                    from c in context.ParentChild 
+                    select c.ChildId
+                ).Contains(r.ParentId)
+                select r.ParentId
             ).FirstOrDefault();
         }
         
@@ -250,6 +253,12 @@ namespace WebApp1.Models
             return idArray;
         }
         
+        /// <summary>
+        /// Converts a price range string (e.g. "€500 - €2999")
+        /// and extracts the two numbers from it which will be placed in a double array
+        /// </summary>
+        /// <param name="range">The range string</param>
+        /// <returns>A double array that contains the minimum/maximum price</returns>
         private double[] GetMinMaxPrice(string range)
         {
             double[] rangeArray = new double[2];

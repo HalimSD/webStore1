@@ -21,6 +21,13 @@ namespace WebApp1.Controllers
         private readonly WebshopContext context;
         private readonly IHostingEnvironment appEnvironment;
 
+        public enum ResultMsg
+        {
+            Success,
+            Failed,
+            None
+        }
+
         public EditProductController(WebshopContext context, IHostingEnvironment appEnvironment)
         {
             this.context = context;
@@ -29,14 +36,14 @@ namespace WebApp1.Controllers
         
         [Route("")]
         [Route("Index")]
-        public IActionResult Index(int id)
+        public IActionResult Index(int id, ResultMsg msg = ResultMsg.None)
         {
             Productwaarde product = (from pw in context.Productwaarde where pw.Id == id select pw).FirstOrDefault();           
             if (product == null)
             {
                 return StatusCode(404);
             }
-
+   
             List<ViewProductAttributes> attributes = (
                 from atts in context.Attribuutsoort
                 from attw in context.Attribuutwaarde
@@ -54,81 +61,96 @@ namespace WebApp1.Controllers
 
             ViewBag.EditProduct = product;
             ViewBag.EditProductAttributes = attributes;
+            ViewBag.resultMsg = msg;
             return View();
         }
         
         [HttpPost]
         [Route("Edit")]
         public IActionResult Edit(Productwaarde product, int attributeCount, IFormFile img, bool setDiscount=false)
-        {            
-            // Get all the attributes and update the database with the new values
-            List<ViewProductAttributes> attributes = new List<ViewProductAttributes>();
-            for (int i = 0; i <= attributeCount - 1; i++)
+        {
+            try
             {
-                //int id = int.Parse(Request.Query["attributeId" + i].ToString());
-                int id = int.Parse(Request.Form["attributeId" + i]);
-                string value = Request.Form["attributeValue" + i];
-
-                Attribuutwaarde attribute =
-                    (from attw in context.Attribuutwaarde where attw.Id == id select attw)
-                    .FirstOrDefault();
-
-                attribute.Waarde = value;           
-            }
-            
-            // Get the current values of the produt in db and update it.
-            Productwaarde productModel =
-                (from pw in context.Productwaarde where pw.Id == product.Id select pw).FirstOrDefault();
-
-            if (productModel == null) { return StatusCode(500); }
-
-            productModel.Title = product.Title;
-            productModel.Price = product.Price;
-            productModel.Quantity = product.Quantity;
-            if (!string.IsNullOrWhiteSpace(product.Description))
-            {
-                productModel.Description = product.Description;
-            }
-
-            if (setDiscount)
-            {
-                productModel.DiscountedPrice = product.DiscountedPrice;
-            }
-            else
-            {
-                // Setting discount price to -1 disabled it!
-                productModel.DiscountedPrice = -1;
-            }
-            
-            
-            if (img != null && img.Length > 0)
-            {
-                var file = img;
-                var uploads = Path.Combine(appEnvironment.WebRootPath, "images" + Path.DirectorySeparatorChar + "products");
-                if (file.Length > 0)
+                // Get all the attributes and update the database with the new values
+                List<ViewProductAttributes> attributes = new List<ViewProductAttributes>();
+                for (int i = 0; i <= attributeCount - 1; i++)
                 {
-                    // Create filename that is a unique guid
-                    var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
-                    using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
+                    //int id = int.Parse(Request.Query["attributeId" + i].ToString());
+                    int id = int.Parse(Request.Form["attributeId" + i]);
+                    string value = Request.Form["attributeValue" + i];
+
+                    Attribuutwaarde attribute =
+                        (from attw in context.Attribuutwaarde where attw.Id == id select attw)
+                        .FirstOrDefault();
+
+                    attribute.Waarde = value;
+                }
+
+                // Get the current values of the produt in db and update it.
+                Productwaarde productModel =
+                    (from pw in context.Productwaarde where pw.Id == product.Id select pw).FirstOrDefault();
+
+                if (productModel == null)
+                {
+                    return StatusCode(500);
+                }
+
+                productModel.Title = product.Title;
+                productModel.Price = product.Price;
+                productModel.Quantity = product.Quantity;
+                if (!string.IsNullOrWhiteSpace(product.Description))
+                {
+                    productModel.Description = product.Description;
+                }
+
+                if (setDiscount)
+                {
+                    productModel.DiscountedPrice = product.DiscountedPrice;
+                }
+                else
+                {
+                    // Setting discount price to -1 disabled it!
+                    productModel.DiscountedPrice = -1;
+                }
+
+
+                if (img != null && img.Length > 0)
+                {
+                    var file = img;
+                    var uploads = Path.Combine(appEnvironment.WebRootPath,
+                        "images" + Path.DirectorySeparatorChar + "products");
+                    if (file.Length > 0)
                     {
-                        // Upload to folder and update the image reference in db
-                        file.CopyTo(fileStream);
-                        productModel.Image = fileName;
+                        // Create filename that is a unique guid
+                        var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
+                        using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
+                        {
+                            // Upload to folder and update the image reference in db
+                            file.CopyTo(fileStream);
+                            productModel.Image = fileName;
+                        }
+
                     }
 
-                }
-                // Delete old image
-                if (product.Image != null)
-                {
-                    if (System.IO.File.Exists(Path.Combine(uploads, product.Image)) && product.Image != "default.png")
+                    // Delete old image
+                    if (product.Image != null)
                     {
-                        System.IO.File.Delete(Path.Combine(uploads, product.Image));
-                    }  
-                }              
+                        if (System.IO.File.Exists(Path.Combine(uploads, product.Image)) &&
+                            product.Image != "default.png")
+                        {
+                            System.IO.File.Delete(Path.Combine(uploads, product.Image));
+                        }
+                    }
+                }
+
+                context.SaveChanges();
+                return RedirectToAction("Index", "EditProduct", new {id = product.Id, msg = ResultMsg.Success});
             }
-            
-            context.SaveChanges();
-            return RedirectToAction("Index", "EditProduct", new {id = product.Id});
+            catch (Exception e)
+            {
+                Console.WriteLine("An error occured whilst editing a product (ID={0}) {1}{2}", product.Id, Environment.NewLine, e.Message);
+                return RedirectToAction("Index", "EditProduct", new {id = product.Id, msg = ResultMsg.Failed});
+            }
         }
     }
 }

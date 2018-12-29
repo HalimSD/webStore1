@@ -59,3 +59,32 @@ li{
     width: 60px;
 
 }
+
+.alert-red {
+    padding: 20px;
+    background-color: #f44336;
+    border-radius: 5px;
+    color: white;
+}
+
+.alert-green {
+    padding: 20px;
+    background-color: #4caf50;
+    border-radius: 5px;
+    color: white;
+}
+
+.closeBtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.closeBtn:hover {
+    color: black;
+}

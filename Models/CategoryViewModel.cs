@@ -193,6 +193,8 @@ namespace WebApp1.Models
 
         private string[] GetPriceFilterRange(IQueryable<Productwaarde> query)
         {
+            if (!query.Any()) return new string[5];
+            
             string[] ranges = new string[5];
             double maxPrice = (from pw in query select pw.Price).Max();
             var maxDiscountPriceQuery =
@@ -218,6 +220,8 @@ namespace WebApp1.Models
 
         private string[] GetQuantityFilterRange(IQueryable<Productwaarde> query)
         {
+            if (!query.Any()) return new string[5];
+            
             string[] ranges = new string[5];
             int maxQuantity = (from pw in query select pw.Quantity).Max();
             int rangeIncr = maxQuantity / 5;

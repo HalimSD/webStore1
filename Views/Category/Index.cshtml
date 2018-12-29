@@ -58,57 +58,61 @@
             </form>
         </div>
     }
-    <div id="categoryArea" style="margin-top: 15px;">
-        <div class="categoryTitle">Filteren</div>
-        <hr>
-        <form asp-action="Filtered" method="get" class="text-center">
-            <div>
-                <strong>Prijs</strong><br>
-                <input type="hidden" asp-for="CategoryId" value="@Model.CategoryId"/>
-                @for (int i = 0; i <= Model.PriceFilterRange.Length - 1; i++)
-                {
-                    if (Model.Filters?.PriceRanges != null && Model.Filters.PriceRanges.Contains(Model.PriceFilterRange[i]))
+    @if (Model.Products.Data.Any())
+    {
+        <div id="categoryArea" style="margin-top: 15px;">
+            <div class="categoryTitle">Filteren</div>
+            <hr>
+            <form asp-action="Filtered" method="get" class="text-center">
+                <div>
+                    <strong>Prijs</strong><br>
+                    <input type="hidden" asp-for="CategoryId" value="@Model.CategoryId"/>
+                    @for (int i = 0; i <= Model.PriceFilterRange.Length - 1; i++)
                     {
-                        <input type="checkbox" name="priceCheckbox" value="@Model.PriceFilterRange[i]" checked>
-                        @Model.PriceFilterRange[i]<br>
+                        if (Model.Filters?.PriceRanges != null && Model.Filters.PriceRanges.Contains(Model.PriceFilterRange[i]))
+                        {
+                            <input type="checkbox" name="priceCheckbox" value="@Model.PriceFilterRange[i]" checked>
+                            @Model.PriceFilterRange[i]<br>
+                        }
+                        else
+                        {
+                            <input type="checkbox" name="priceCheckbox" value="@Model.PriceFilterRange[i]">
+                            @Model.PriceFilterRange[i]<br>
+                        }
                     }
-                    else
+                    <br><strong>Voorraad</strong><br>
+                    @for (int i = 0; i <= Model.QuantityFilterRange.Length - 1; i++)
                     {
-                        <input type="checkbox" name="priceCheckbox" value="@Model.PriceFilterRange[i]">
-                        @Model.PriceFilterRange[i]<br>
-                    }
-                }
-                <br><strong>Voorraad</strong><br>
-                @for (int i = 0; i <= Model.QuantityFilterRange.Length - 1; i++)
-                {
-                    if (Model.Filters?.QuantityRanges != null && Model.Filters.QuantityRanges.Contains(Model.QuantityFilterRange[i]))
-                    {
-                        <input type="checkbox" name="quantityCheckbox" value="@Model.QuantityFilterRange[i]" checked>
-                        @Model.QuantityFilterRange[i]<br>
-                    }
-                    else
-                    {
-                        <input type="checkbox" name="quantityCheckbox" value="@Model.QuantityFilterRange[i]">
-                        @Model.QuantityFilterRange[i]<br>
-                    }
-                }
-                <hr>
-                @if (Model.Attributes.Any())
-                {
-                    <strong>Attributen</strong><br>
-                    for (int i = 0; i <= Model.Attributes.Count - 1; i++)
-                    {
-                        <input type="hidden" asp-for="Filters.AttributeFilters[i].AttributeId" value="@Model.Attributes[i][1]">
-                        <label>@Model.Attributes[i][0]</label>
-                        <input class="form-control" type="text" asp-for="Filters.AttributeFilters[i].FilterValue">
+                        if (Model.Filters?.QuantityRanges != null && Model.Filters.QuantityRanges.Contains(Model.QuantityFilterRange[i]))
+                        {
+                            <input type="checkbox" name="quantityCheckbox" value="@Model.QuantityFilterRange[i]" checked>
+                            @Model.QuantityFilterRange[i]<br>
+                        }
+                        else
+                        {
+                            <input type="checkbox" name="quantityCheckbox" value="@Model.QuantityFilterRange[i]">
+                            @Model.QuantityFilterRange[i]<br>
+                        }
                     }
                     <hr>
-                }
-                <button class="btn btn-outline-success" type="submit">Filter</button>
-                <br><a href="@Url.Action("Index", "Category")"> Filters ongedaan maken</a>
-            </div>
-        </form>
-    </div>
+                    @if (Model.Attributes.Any())
+                    {
+                        <strong>Attributen</strong>
+                        <br>
+                        for (int i = 0; i <= Model.Attributes.Count - 1; i++)
+                        {
+                            <input type="hidden" asp-for="Filters.AttributeFilters[i].AttributeId" value="@Model.Attributes[i][1]">
+                            <label>@Model.Attributes[i][0]</label>
+                            <input class="form-control" type="text" asp-for="Filters.AttributeFilters[i].FilterValue">
+                        }
+                        <hr>
+                    }
+                    <button class="btn btn-outline-success" type="submit">Filter</button>
+                    <br><a href="@Url.Action("Index", "Category")"> Filters ongedaan maken</a>
+                </div>
+            </form>
+        </div>
+    }
 </div>
 <div class="col-10">
 @if (Model.Products.Data.Any())
@@ -257,7 +261,7 @@
                 }
             </div>
         </div>
-        <div class="pagination">
+        <div class="pagination flex-wrap">
             @if (Model.Products.PageNumber == 1)
             {
                 <li class="page-item disabled">
@@ -313,7 +317,8 @@ else
         @if (Model.Filters == null)
         {
             <br>
-            <strong>Er zijn momenteel geen producten beschikbaar voor deze categorie.</strong><br>
+            <strong>Er zijn momenteel geen producten beschikbaar voor deze categorie.</strong>
+            <br>
             <strong>Probeer het later nog eens!</strong>
         }
         else

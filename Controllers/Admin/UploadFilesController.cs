@@ -87,7 +87,7 @@ namespace Controllers
                 _context.SaveChanges();
 
                 var extrattributen = new List<string>();
-                for (int recor = 6; recor < record.Headers.Length; recor++)
+                for (int recor = 6; recor < record.ColumnCount; recor++)
                 {
                     extrattributen.Add(record[recor]);
                 }
@@ -115,14 +115,32 @@ namespace Controllers
 
                 for (int index = 0; index < atributenidarray.Length; index++)
                 {
-                    Attribuutwaarde attribuutwaarde = new Attribuutwaarde
+                    // If CSV didn't contain enough attribute values for all attributes,
+                    // we'll use "N/A" as attribute value for the remaining attributes
+                    try
                     {
-                        ProductwaardeId = productwid,
-                        AttribuutsoortId = atributenidarray[index],
-                        Waarde = extraatributenarray[index]
-                    };
-                    _context.Attribuutwaarde.Add(attribuutwaarde);
-                    _context.SaveChanges();
+                        Attribuutwaarde attribuutwaarde = new Attribuutwaarde
+                        {
+                            ProductwaardeId = productwid,
+                            AttribuutsoortId = atributenidarray[index],
+                            Waarde = extraatributenarray[index]
+                        };
+                        
+                        _context.Attribuutwaarde.Add(attribuutwaarde);
+                        _context.SaveChanges();
+                    }
+                    catch (IndexOutOfRangeException)
+                    {
+                        Attribuutwaarde attribuutwaarde = new Attribuutwaarde
+                        {
+                            ProductwaardeId = productwid,
+                            AttribuutsoortId = atributenidarray[index],
+                            Waarde = "N/A"
+                        };
+                        
+                        _context.Attribuutwaarde.Add(attribuutwaarde);
+                        _context.SaveChanges();
+                    }
                 }
             }
 

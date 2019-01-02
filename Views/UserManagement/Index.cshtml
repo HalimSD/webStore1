@@ -13,6 +13,7 @@
             <th>Email</th>
             <th>Roles</th>
             <th>Options</th>
+            <th>Update</th>
         </tr>
         </thead>
         <tbody>
@@ -22,6 +23,7 @@
                 <td>@user.Email</td>
                 <td>@(string.Join(",", await userManager.GetRolesAsync(user)))</td>
                 <td><a asp-controller="UserManagement" asp-action="AddRole" asp-route-id="@user.Id">Add Role</a></td>
+                <td><a asp-controller="UserManagement" asp-action="updateInfo" asp-route-id="@user.Id">Update</a></td>
             </tr>
         }
         </tbody>

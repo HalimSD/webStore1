@@ -38,6 +38,9 @@ namespace WebApp1
 
             services.AddDbContext<WebshopContext>(opt => opt.UseNpgsql(@"Host=localhost;Database=restore;Username=postgres;Password=1.Halimsd"));
 
+    //         services.Configure<SecurityStampValidatorOptions>(options => 
+    // options.ValidationInterval = TimeSpan.FromSeconds(10));
+
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);

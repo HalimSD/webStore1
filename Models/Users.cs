@@ -21,11 +21,11 @@ namespace WebApp1.Models
         public string City { get; set; }
         public ICollection<Bestelling> Bestelling { get; set; }
 
-      // public string LastName {get;set;}
+        // public string LastName {get;set;}
 
     }
 
-   
+
     public class BesteldeItem
     {
         public int BesteldeItemId { get; set; }
@@ -72,7 +72,18 @@ namespace WebApp1.Models
             }
         }
     }
-
+    public class UserEdit
+    {
+        public string UserId { get; set; }
+        public string Email { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public DateTime BirthDate { get; set; }
+        public string Street { get; set; }
+        public string HouseNumber { get; set; }
+        public string PostalCode { get; set; }
+        public string City { get; set; }
+    }
     public class UserManagementAddRole
     {
         public string UserId { get; set; }

@@ -18,6 +18,12 @@ namespace WebApp1.Models
         public string Street { get; set; }
         public string HouseNumber { get; set; }
         public string PostalCode { get; set; }
+
+        public string Gender{get; set;}
+
+        public int TelephoneNumber{get; set;}
+
+        public string Country{get; set;}
         public string City { get; set; }
         public ICollection<Bestelling> Bestelling { get; set; }
 
@@ -45,6 +51,7 @@ namespace WebApp1.Models
         public int BestellingId { get; set; }
         public DateTime Date { get; set; }
         public string Status { get; set; }
+        public double ShippingFee { get; set; }
         public ICollection<BesteldeItem> BesteldeItem { get; set; }
         public string UserId { get; set; }
         public virtual Users User { get; set; }

@@ -12,6 +12,7 @@ using System.IO;
 using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Hosting;
 using System;
+using Microsoft.EntityFrameworkCore.Scaffolding.Internal;
 
 namespace WebApp1.Controllers
 {
@@ -49,6 +50,7 @@ namespace WebApp1.Controllers
             {
                 ViewBag.cart = cart;
                 ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
+                ViewBag.shippingCost = CalculateShippingCost(ViewBag.total);
                 ViewData["cart"] = cart;
 
             }
@@ -224,11 +226,13 @@ namespace WebApp1.Controllers
             {
                 ViewBag.cart = cart;
                 ViewBag.total = cart.Sum(items => items.Product.Price * items.Quantity);
+                ViewBag.total = CalculateShippingCost(ViewBag.total) + ViewBag.total;
                 Bestelling bestelling = new Bestelling();
                 Productwaarde productwaarde = new Productwaarde();
-                bestelling.Status = "OnderWeg";
+                bestelling.Status = "Onderweg";
                 bestelling.Date = DateTime.Today;
                 bestelling.UserId = _userManager.GetUserId(User);
+                bestelling.ShippingFee = CalculateShippingCost(cart.Sum(items => items.Product.Price * items.Quantity));
                 _context.Add(bestelling);
                 _context.SaveChanges();
                 foreach (var i in cart)
@@ -330,7 +334,11 @@ namespace WebApp1.Controllers
                                 Image = b.Image
                             }
             ).ToList();
+            
             ViewBag.besteldeItem = besteldeItem;
+            ViewBag.shippingFee = (from b in _context.Bestelling where b.BestellingId == id select b.ShippingFee)
+                .FirstOrDefault();
+            
             return View();
         }
         [Route("oldOrders")]
@@ -469,6 +477,30 @@ namespace WebApp1.Controllers
 
             // return File(file, "application/pdf");
             return RedirectToAction("checkOut", "Cart");
+        }
+        
+        /// <summary>
+        /// Calculate the shipping cost based on the total price!
+        /// If price is less than 5, costs will be zero.
+        /// The shopping costs will be 10% of the total price with a max of 100
+        /// </summary>
+        /// <param name="totalPrice">Total price of the order</param>
+        /// <returns>shipping cost</returns>
+        private double CalculateShippingCost(double totalPrice)
+        {
+            if (totalPrice < 5) return 0;
+            
+            double shipping;
+            if (totalPrice * 0.1 > 100)
+            {
+                shipping = 100;
+            }
+            else
+            {
+                shipping = totalPrice * 0.1;
+            }
+
+            return shipping;
         }
     }
 

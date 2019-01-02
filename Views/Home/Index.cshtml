@@ -1,58 +1,184 @@
 ﻿@using WebApp1.Models
-@model IEnumerable<WebApp1.Models.Productwaarde>
+@model WebApp1.Models.Datastructure
 @{
     ViewData["Title"] = "Home Page";
-    List<Productwaarde> products = Model.ToList();
+    List<Productwaarde> products = Model.productwaardes.ToList();
 }
 
 <link rel="stylesheet" href="~/css/interactiveimage.css">
 <link rel="stylesheet" href="~/css/mainpage.css">
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
 <div class="section">
   <h1>Welkom bij de webshop!</h1>
-  <a class="btn btn-primary" value="IMG" asp-controller="interactiveImg" asp-action="Index" >IMG</a>
 
-</div>
+<div class="vesselContainer">
+  
+  <img src="~/images/vessel.png" class="vessel">
 
-<!-- Interactive Image         -->
-<div id="mainDiv">
-  <h3>Uitgelichte producten</h3>
-  <div class='circle-container container' id="containerDiv">
+    <div class="popupContainer">
+      <div class="popup" onclick="togglePopup1()" id="cat0">
+        <div class="sel popuptext" id="myPopup1">
+          <div class="catImage">
+            <img src="~/images/boat.png" class="categoryImage" >
+          </div>
+          <div id="menu" class="menu"></div>
+        </div>
 
-    <a href='https://localhost:5001/Home/Mainpage' class='center' id='middle'><img src='~/images/boat.png'></a>
-    <div id="cssSelectorRight" class="cssSelector">
-      <!-- img1 -->
+        <img src="~/images/circle.png" class="category" >
+      </div>
     </div>
-    <div id="cssSelectorBottomRight" class="cssSelector">
-      <!-- img2 -->
-    </div>
-    <div id="cssSelectorBottom1" class="cssSelector">
-      <!-- img3 -->
-    </div>
-    <div id="cssSelectorBottom2" class="cssSelector">
-      <!-- img4 -->
-    </div>
-    <div id="cssSelectorBottomLeft" class="cssSelector">
-      <!-- img5 -->
-    </div>
-    <div id="cssSelectorLeft" class="cssSelector">
-      <!-- img6s -->
-    </div>
-    <div id="cssSelectorTopLeft" class="cssSelector">
-      <!-- img7 -->
-    </div>
-    <div id="cssSelectorTop1" class="cssSelector">
-      <!-- img8 -->
-    </div>
-    <div id="cssSelectorTop2" class="cssSelector">
-      <!-- img9 -->
-    </div>
-    <div id="cssSelectorTopRight" class="cssSelector">
-      <!-- img10 -->
+
+    <div class="popupContainer">
+      <div class="popup" onclick="togglePopup2()" id="cat1">
+        <div class="sel popuptext" id="myPopup2">
+          <div class="catImage">
+            <img src="~/images/boat.png" class="categoryImage" >
+          </div>
+          <div id="menu2" class="menu"></div>
+        </div>
+
+        <img src="~/images/circle.png" class="category" >
+      </div>
     </div>
   </div>
 </div>
 
+<script>
+
+function menuToElement(item) {
+        const li = document.createElement("li");
+        if (item.children.length>0) {
+            li.textContent = item.name + " "; //'\u25BD';
+            li.className = "btn btn-primary";
+            const span = document.createElement("span");
+            span.className  = "fas fa-plus-circle";
+            li.appendChild(span);
+            const ul = document.createElement("ul");
+            ul.className = "imageDropdownUl";
+            for (var i=0; i<item.children.length; i++) {
+              var child = item.children[i];
+              console.log(item);
+              ul.appendChild(menuToElement(child));
+            }  
+
+            li.appendChild(ul);
+            
+        } else {
+        
+            const a = document.createElement("a");
+            li.appendChild(a);
+            a.textContent = item.name;
+            a.className = "btn btn-secondary";
+        }
+
+      return li;
+
+
+    return ul;
+}
+
+ 
+/*
+var categories = [{ 
+    text: "engine",
+    children: ["marco",2,3,5,7,9, { 
+        text: "piston1",
+        children: [4,5,6, { 
+          text: "piston2",
+          children: [4,5,6, {
+            text: "piston3",
+            children: [4,5,6, {
+              text: "piston4",
+              children: [4,5,6]           
+            }]
+          }]
+      }]   
+    }]   
+}, {
+    text: "tire",
+    children: [7,8,9]
+}]; 
+*/
+var categories = @Html.Raw(Json.Serialize(Model.kaas));
+
+console.log(categories);
+for (const item of categories.children){
+if (item.name == "Zeilboot"){
+  const ul = menuToElement(item);
+  document.getElementById("menu").appendChild(ul);
+}
+else if (item.name == "Roeiboot"){
+  const ul2 = menuToElement(item);
+  document.getElementById("menu2").appendChild(ul2);
+}
+}
+
+//var engine = [categories[0]];
+//console.log(engine);
+//var tire = [categories[1]];
+
+
+
+//const ul = menuToElement(categories);
+//document.getElementById("menu").appendChild(ul);
+
+//const ul2 = menuToElement(tire);
+//document.getElementById("menu2").app, endChild(ul2);
+
+
+</script>
+
+
+<script>
+
+//When the user clicks on <div>, open the popup
+for (const item of categories.children){
+function togglePopup1() {
+    var popup = document.getElementById("myPopup1");
+    popup.classList.toggle("show");
+}
+
+function togglePopup2() {
+    var popup = document.getElementById("myPopup2");
+    popup.classList.toggle("show");
+}
+
+//categories and subcategories onclick function
+$(".btn-primary").on('click', function(event){  
+    event.stopImmediatePropagation();
+    $(this).children('.imageDropdownUl').toggle();
+    var text = this.firstChild.nodeValue;
+    console.log(text);
+});
+
+
+
+//dropdown in popup
+var txt = $('.txt'),
+    options = $('.options');
+
+txt.click(function (e) {
+    var dropId = $(this).attr("id");
+    e.stopPropagation();
+
+
+    var content = $(e.target).text();
+    console.log(content);
+    $('#'+ item.text).show(); 
+});
+
+
+$('body').click(function (e) {
+    options.hide();
+});
+}
+
+
+</script>
+
+<link rel="stylesheet" href="~/css/image.css">
 
 <div class="section">
   <h3>Onlangs toegevoegd</h3>
@@ -201,160 +327,4 @@
   </div>
 </div>
 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.2.0/anime.js"></script>
-<script>
-  var text = [];
-  var imgs = [];
-
-  @foreach (var item in Model)
-  {
-    if (item.DiscountedPrice != -1)
-    {
-      @:text.push("@item.Title");
-    } 
-  }
-
-  @foreach (var item in Model)
-  {
-    if (item.DiscountedPrice != -1)
-    {
-      @:imgs.push('/images/products/' + "@item.Image");
-    } 
-  }
-
-  var container = document.getElementsByClassName('imgDiv');
-  var container2 = document.getElementsByClassName('textDiv');
-  var divContainer = document.getElementsByClassName('cssSelector');
-  var aContainer = document.getElementsByClassName('category');
-
-  count = 0;
-
-  for(var i=0; i<container.length+1; i++) {
-
-    if (imgs[i]!=null && text[i]!=null){
-
-      var a = document.createElement('a');
-      a.href = "https://localhost:5001/ViewProduct?id="+(i+1).toString();
-      a.className = "category";
-      a.id = "deg" + count;
-      divContainer[i].appendChild(a);
-
-      var divInA = document.createElement('div');
-      divInA.className = "textDiv";
-      var divInA2 = document.createElement('div');
-      divInA2.className = "imgDiv";
-
-      aContainer[i].appendChild(divInA);
-      aContainer[i].appendChild(divInA2);
-
-      var img = document.createElement('img');
-      img.src = imgs[i];
-      var h = document.createElement('span');
-      var t = document.createTextNode(text[i]);
-      container[i].appendChild(img);
-      container2[i].appendChild(t);
-    
-      count = count + 36;
-    }
-  }
-
-  var cssSelectorRight = anime({
-    targets: '#cssSelectorRight',
-    translateX: "9em",
-    opacity: 1,
-    easing: 'linear',
-    delay: 1000,
-    duration: 2000
-  });
-
-  var cssSelectorLeft = anime({
-    targets: '#cssSelectorLeft',
-    translateX: "-9em",
-    opacity: 1,
-    easing: 'linear',
-    delay: 1000,
-    duration: 2000
-  });
-
-  var cssSelectorBottomRight = anime({
-    targets: '#cssSelectorBottomRight',
-    translateX: "4em",
-    translateY: "9em",
-    opacity: 1,
-    easing: 'linear',
-    delay: 1000,
-    duration: 2000
-  });
-
-  var cssSelectorBottomLeft = anime({
-    targets: '#cssSelectorBottomLeft',
-    translateX: "-4em",
-    translateY: "9em",
-    opacity: 1,
-    easing: 'linear',
-    delay: 1000,
-    duration: 2000
-  });
-
-  var cssSelectorTopLeft = anime({
-    targets: '#cssSelectorTopLeft',
-    translateX: "-4em",
-    translateY: "-9em",
-    opacity: 1,
-    easing: 'linear',
-    delay: 1000,
-    duration: 2000
-  });
-
-  var cssSelectorTopRight = anime({
-    targets: '#cssSelectorTopRight',
-    translateX: "4em",
-    translateY: "-9em",
-    opacity: 1,
-    easing: 'linear',
-    delay: 1000,
-    duration: 2000
-  });
-
-  var cssSelectorBottom1 = anime({
-    targets: '#cssSelectorBottom1',
-    translateX: "1em",
-    translateY: "9em",
-    opacity: 1,
-    easing: 'linear',
-    delay: 1000,
-    duration: 2000
-  });
-
-  var cssSelectorBottom2 = anime({
-    targets: '#cssSelectorBottom2',
-    translateX: "-1em",
-    translateY: "9em",
-    opacity: 1,
-    easing: 'linear',
-    delay: 1000,
-    duration: 2000
-  });
-
-  var cssSelectorTop1 = anime({
-    targets: '#cssSelectorTop1',
-    translateX: "-1em",
-    translateY: "-9em",
-    opacity: 1,
-    easing: 'linear',
-    delay: 1000,
-    duration: 2000
-  });
-
-  var cssSelectorTop2 = anime({
-    targets: '#cssSelectorTop2',
-    translateX: "1em",
-    translateY: "-9em",
-    opacity: 1,
-    easing: 'linear',
-    delay: 1000,
-    duration: 2000
-  });
-</script>
 

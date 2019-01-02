@@ -1,5 +1,9 @@
 @using WebApp1.Models
 @model WebApp1.Models.Productwaarde
+@{
+    ViewData["Title"] = "Winkelmand";
+}
+
 <link rel="stylesheet" href="~/css/shopping_cart.css">
 <div class="pageRoot">
     <h3>Winkelmand</h3>
@@ -12,7 +16,7 @@
             <th>Prijs</th>
             <th>Foto</th>
             <th></th>
-            <th>Subtotaal</th>
+            <th>Prijs</th>
         </tr>
         @foreach (var item in ViewBag.cart)
         {
@@ -34,13 +38,25 @@
                 <td>@item.Product.Price</td>
                 <td><img src="~/images/products/@item.Product.Image" width="60" id="productImage"><img/></td>
                 <td><a  asp-controller="cart" asp-action="Remove" asp-route-id="@item.Product.Id" >Verwijderen</a></td>
-                <td>@(item.Product.Price * quantity)</td>
+                <td>€@(item.Product.Price * quantity)</td>
             </tr>
         }
         <tr>
+            <td align="right" colspan="6">Sub-Totaal</td>
+            <td>
+                €@ViewBag.total
+            </td>
+        </tr>
+        <tr>
+            <td align="right" colspan="6">Verzendkosten</td>
+            <td>
+                €@ViewBag.shippingCost
+            </td>
+        </tr>
+        <tr>
             <td align="right" colspan="6">Totaal</td>
             <td>
-                @ViewBag.total
+                €@(ViewBag.total + ViewBag.shippingCost)
             </td>
         </tr>
     </table>

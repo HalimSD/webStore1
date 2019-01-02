@@ -69,28 +69,43 @@ namespace WebApp1.Areas.Identity.Pages.Account
 
             [Required]
             [DataType(DataType.Date)]
-            [Display(Name = "BirthDate")]
+            [Display(Name = "Geboortedatum")]
             public DateTime BirthDate { get; set; }
 
             [Required]
             [DataType(DataType.Text)]
-            [Display(Name = "Street")]
+            [Display(Name = "Straat")]
             public string Street { get; set; }
 
             [Required]
             [DataType(DataType.Text)]
-            [Display(Name = "HouseNumber")]
+            [Display(Name = "Huisnummer")]
             public string HouseNumber { get; set; }
 
             [Required]
             [DataType(DataType.Text)]
-            [Display(Name = "PostalCode")]
+            [Display(Name = "Postcode")]
             public string PostalCode { get; set; }
 
             [Required]
             [DataType(DataType.Text)]
-            [Display(Name = "City")]
+            [Display(Name = "Stad")]
             public string City { get; set; }
+
+            
+            [DataType(DataType.Text)]
+            [Display(Name = "Geslacht")]
+            public string Gender { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Land")]
+            public string Country { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Telefoonnummer")]
+            public int TelephoneNumber { get; set; }
         }
 
         public void OnGet(string returnUrl = null)
@@ -113,6 +128,11 @@ namespace WebApp1.Areas.Identity.Pages.Account
                  PostalCode = Input.PostalCode,
                  HouseNumber = Input.HouseNumber,
                  BirthDate = Input.BirthDate,
+                 Gender = Input.Gender,
+                 Country = Input.Country,
+                 TelephoneNumber = Input.TelephoneNumber,
+
+
                  
                  };
                 var result = await _userManager.CreateAsync(user, Input.Password);

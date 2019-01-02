@@ -1,19 +1,44 @@
+@using Controllers
 <link rel="stylesheet" href="~/css/product_creation_generic.css">
 <div class="pageRoot">
-    <div class="row">
-        <form method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <div class="col-md-10">
-                    <p>Upload one or more files using this form:</p>
-                    <input type="file" name="files" multiple />
-                </div>
+    <h2>Meerdere producten uploaden</h2>
+    <hr>
+    @switch (ViewBag.resultMsg)
+    {
+        case UploadFilesController.ResultMessage.FailedUploading:
+            <div class="alert-red">
+                <span class="closeBtn" onclick="this.parentElement.style.display = 'none';">&times;</span>
+                <strong>Fout!</strong> Er is iets foutgegaan bij het uploaden van het bestand!
             </div>
-            <div class="form-group">
-                <div class="col-md-10">
-                    <input type="submit" value="Upload" />
-                </div>
+            break;
+        case UploadFilesController.ResultMessage.FailedParsing:
+            <div class="alert-red">
+                <span class="closeBtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+                <strong>Fout!</strong> Er is iets foutgegaan bij lezen van het bestand!
             </div>
-        </form>
-        @ViewData["Message"]
-    </div>
+            break;
+        case UploadFilesController.ResultMessage.Done:
+            <div class="alert-green">
+                <span class="closeBtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+                <strong>Succes!</strong> Er zijn @ViewBag.addedProductCount producten toegevoegd!
+            </div>
+            break;
+    }
+    <p>
+        Via deze pagina kunt u meerdere producten tegelijk toevoegen via een CSV bestand.<br>
+        Afhankelijk van de grootte van het CSV bestand kan het toevoegen nogal wat tijd in beslag nemen.
+    </p>
+    <p>
+        <strong>Let op:</strong><br>
+        Voordat u een CSV bestand upload moet u ervoor zorgen dat het de volgende indeling heeft:<br>
+        <i>Categorie, Naam, Prijs, Beschrijving, Voorraad, Foto bestandsnaam, attribuut 1, attribuut 2, etc</i><br>
+        Ook moeten de relevante categorieën al aangemaakt zijn met de juiste hoeveelheid attributen!
+    </p>
+    <form method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <p>Kies een CSV bestand en klik op 'Uploaden':</p>
+            <input type="file" class="form-control-file" name="files" multiple style="width: 50%;" required/><br>
+            <button type="submit" class="btn btn-primary">Uploaden</button>
+        </div>
+    </form>
 </div>

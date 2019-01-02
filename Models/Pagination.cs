@@ -12,6 +12,7 @@ namespace WebApp1.Models
         public int PageNumber { get; set; }
         public int TotalPages { get; set; }
         public int PageSize { get; set; }
+        public int TotalDataCount { get; set; }
         public List<T> Data { get; set; }
     }
 
@@ -57,6 +58,7 @@ namespace WebApp1.Models
                 PageNumber = pageNumber,
                 TotalPages = TotalPages,
                 PageSize = PageSize,
+                TotalDataCount = (from i in dbSet select i).Count(),
                 Data = (from i in dbSet select i).Skip(skip).Take(PageSize).ToList()
             };
             return model;
@@ -85,6 +87,7 @@ namespace WebApp1.Models
                 PageNumber = pageNumber,
                 TotalPages = totalPages,
                 PageSize = PageSize,
+                TotalDataCount = query.Count(),
                 Data = query.Skip(skip).Take(PageSize).ToList()
             };
             return model;

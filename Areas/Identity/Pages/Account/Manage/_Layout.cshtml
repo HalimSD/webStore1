@@ -1,11 +1,14 @@
 ﻿@{ 
-    Layout = "/Areas/Identity/Pages/_Layout.cshtml";
+    Layout = "/Views/Shared/_Layout.cshtml";
 }
+<link rel="stylesheet" href="~/css/edit_product.css">
 
-<h2>Manage your account</h2>
+
+<div class="pageRoot"> 
+<h2>Mijn Profiel</h2>
 
 <div>
-    <h4>Change your account settings</h4>
+    <h4>Verander uw account instellingen</h4>
     <hr />
     <div class="row">
         <div class="col-md-3">
@@ -15,6 +18,7 @@
             @RenderBody()
         </div>
     </div>
+</div>
 </div>
 
 @section Scripts {

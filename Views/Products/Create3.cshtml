@@ -6,6 +6,8 @@
 
 <link rel="stylesheet" href="~/css/product_creation_generic.css">
 <script type='text/javascript'>
+
+
 	var i=0;
         function addFields(){
             var container = document.getElementById("container");
@@ -34,7 +36,7 @@
 				radioN.type = "radio";
                 radioN.id = "newcustom["+i+"].extraAtribute.Type";
 				radioN.name = "newcustom["+i+"].extraAtribute.Type";
-                
+                radioN.checked = true;
 				radioN.value = "number";
     
 
@@ -118,6 +120,7 @@
                     <div class="form-group">
                         <label class="control-label">@item.Attrbuut</label>
                         <input type="text"  class="form-control" name="Attribuutsoorts[@i].Attribuutwaarde[0].Waarde"/>
+                        <span asp-validation-for="Attribuutsoorts[@i].Attribuutwaarde[0].Waarde" class="text-danger"></span>
                     </div>
 
                     <div class="form-group">
@@ -125,16 +128,32 @@
                     </div>
                     i = i +1;
                     }
-                    @for (var a = 0; a < Model.AcustomAtributes.Count; a++)
+                    <label class="control-label">Categorie attributen</label>
+                    @for (var a = 0; a < Model.AcustomAtributesproductsoort.Count; a++)
                     {
                         <div class="form-group">
-                        <input type="checkbox" asp-for="@Model.AcustomAtributes[a].selected"  />@Model.AcustomAtributes[a].customAtribute.Attrbuut
+                        <input type="checkbox" asp-for="@Model.AcustomAtributesproductsoort[a].selected"  />@Model.AcustomAtributesproductsoort[a].customAtribute.Attrbuut
                          </div>
                          <div class="form-group">
-                        <input type="hidden" asp-for="@Model.AcustomAtributes[a].customAtribute.Attrbuut" />
+                        <input type="hidden" asp-for="@Model.AcustomAtributesproductsoort[a].customAtribute.Attrbuut" />
                         </div> 
                          <div class="form-group">
-                        <input type="text" asp-for="@Model.AcustomAtributes[a].cattribuutwaarde.Waarde" />
+                        <input type="text" asp-for="@Model.AcustomAtributesproductsoort[a].cattribuutwaarde.Waarde" />
+                        </div>
+                        <hr>    
+                                                                                                      
+                    }
+                    <label class="control-label">Alle attributen</label>
+                    @for (var a = 0; a < Model.AcustomAtributesall.Count; a++)
+                    {
+                        <div class="form-group">
+                        <input type="checkbox" asp-for="@Model.AcustomAtributesall[a].selected"  />@Model.AcustomAtributesall[a].customAtribute.Attrbuut
+                         </div>
+                         <div class="form-group">
+                        <input type="hidden" asp-for="@Model.AcustomAtributesall[a].customAtribute.Attrbuut" />
+                        </div> 
+                         <div class="form-group">
+                        <input type="text" asp-for="@Model.AcustomAtributesall[a].cattribuutwaarde.Waarde" />
                         </div>
                         <hr>    
                                                                                                       

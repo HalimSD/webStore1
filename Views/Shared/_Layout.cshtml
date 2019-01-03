@@ -46,12 +46,11 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mijn Account</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Mijn Profiel</a>
+                    <a class="dropdown-item" href="@Url.Action("updateInfo", "userManagement")" >Mijn Profiel</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="@Url.Action("Index", "Favorites")">Favorieten</a>
                     <a class="dropdown-item" href="@Url.Action("oldOrders", "Cart")">Bestelgeschiedenis</a>
                     <a class="dropdown-item" href="@Url.Action("Index", "Cart")">Winkelmand</a>
-                    <a class="dropdown-item" href="@Url.Action("Index", "userdetail")">user detail</a>
                 </div>
             </li>
         }

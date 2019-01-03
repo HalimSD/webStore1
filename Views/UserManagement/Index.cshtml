@@ -14,6 +14,8 @@
             <th>Roles</th>
             <th>Options</th>
             <th>Update</th>
+            <th>Delete</th>
+            <th>Password</th>
         </tr>
         </thead>
         <tbody>
@@ -23,7 +25,10 @@
                 <td>@user.Email</td>
                 <td>@(string.Join(",", await userManager.GetRolesAsync(user)))</td>
                 <td><a asp-controller="UserManagement" asp-action="AddRole" asp-route-id="@user.Id">Add Role</a></td>
-                <td><a asp-controller="UserManagement" asp-action="updateInfo" asp-route-id="@user.Id">Update</a></td>
+                <td><a asp-controller="UserManagement" asp-action="updateInfoAdmin" asp-route-id="@user.Id">Update</a></td>
+                <td><a asp-controller="UserManagement" asp-action="DeleteUser" asp-route-id="@user.Id">Delete</a></td>
+                <td><a asp-controller="usermanagement" asp-action="ResetUserPassword" asp-route-id="@user.Id">Reset Password</a></td> 
+           
             </tr>
         }
         </tbody>

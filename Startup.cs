@@ -16,6 +16,8 @@ using DinkToPdf.Contracts;
 using DinkToPdf;
 using WebApp1.Controllers;
 using System.IO;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using WebPWrecover.Services;
 
 namespace WebApp1
 {
@@ -36,10 +38,10 @@ namespace WebApp1
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<WebshopContext>(opt => opt.UseNpgsql(@"Host=localhost;Database=webShop;Username=postgres;Password=123"));
+            services.AddDbContext<WebshopContext>(opt => opt.UseNpgsql(@"Host=localhost;Database=webShop;Username=postgres;Password="));
 
-    //         services.Configure<SecurityStampValidatorOptions>(options => 
-    // options.ValidationInterval = TimeSpan.FromSeconds(10));
+            //         services.Configure<SecurityStampValidatorOptions>(options => 
+            // options.ValidationInterval = TimeSpan.FromSeconds(10));
 
             services.AddSession(options =>
             {
@@ -47,14 +49,21 @@ namespace WebApp1
                 options.Cookie.HttpOnly = true;
             });
 
-            services.AddIdentity<Users, IdentityRole>()
+            services.AddIdentity<Users, IdentityRole>(config =>
+                {
+                    config.SignIn.RequireConfirmedEmail = true;
+                }
+            )
             .AddEntityFrameworkStores<WebshopContext>()
             .AddDefaultUI()
             .AddDefaultTokenProviders();
 
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.Configure<AuthMessageSenderOptions>(Configuration);
+            services.AddSingleton<IEmailSender, EmailSender>();
+
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, WebshopContext context)
@@ -81,7 +90,7 @@ namespace WebApp1
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-             using (var serviceScope = app.ApplicationServices.CreateScope())
+            using (var serviceScope = app.ApplicationServices.CreateScope())
             {
                 var userRole = app.ApplicationServices.CreateScope().ServiceProvider.GetService<RoleManager<IdentityRole>>();
                 new Roles(userRole).Seed();

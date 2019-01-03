@@ -19,6 +19,7 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.0-preview1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.6" PrivateAssets="All" />
     <PackageReference Include="Npgsql" Version="4.0.3" />
+    <PackageReference Include="SendGrid" Version="9.10.0" />
   </ItemGroup>
     <ItemGroup>
         <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />

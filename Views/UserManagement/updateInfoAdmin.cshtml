@@ -1,0 +1,66 @@
+@model UserEdit
+
+@{
+    ViewData["Title"] = "Register";
+}
+<link rel="stylesheet" href="~/css/product_creation_generic.css">
+
+<div class="pageRoot">
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="updateInfoAdmin" method="post">
+            <h4>Update Account Info.</h4>
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input asp-for="UserId" type="hidden" />
+            <div class="form-group">
+                <label asp-for="FirstName"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for=" LastName"></label>
+                <input asp-for=" LastName" class="form-control" />
+                <span asp-validation-for=" LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for=" Street"></label>
+                <input asp-for=" Street" class="form-control" />
+                <span asp-validation-for=" Street" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for=" City"></label>
+                <input asp-for=" City" class="form-control" />
+                <span asp-validation-for=" City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for=" BirthDate"></label>
+                <input asp-for=" BirthDate" class="form-control" />
+                <span asp-validation-for=" BirthDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for=" PostalCode"></label>
+                <input asp-for=" PostalCode" class="form-control" />
+                <span asp-validation-for=" PostalCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for=" HouseNumber"></label>
+                <input asp-for=" HouseNumber" class="form-control" />
+                <span asp-validation-for=" HouseNumber" class="text-danger"></span>
+            </div> 
+            <div class="form-group">
+                <label asp-for=" Email"></label>
+                <input asp-for=" Email" class="form-control" />
+                <span asp-validation-for=" Email" class="text-danger"></span>
+            </div>
+             <input type="submit" class="btn btn-success" value="Save" />
+          
+
+        </form>
+
+    </div>
+</div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

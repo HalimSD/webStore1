@@ -1,0 +1,15 @@
+@model IEnumerable<WebApp1.Models.Users>
+@{
+    ViewData["Title"] = "Product Lijst";
+}
+
+<link rel="stylesheet" href="~/css/product_creation_generic.css">
+<link rel="stylesheet" href="~/css/shopping_cart.css">
+<div class="pageRoot" style="margin-left: 10%; margin-right: 10%;">
+
+ @foreach (var item in Model)
+ {
+     <div>@item.FirstName</div>
+ }
+
+</div>

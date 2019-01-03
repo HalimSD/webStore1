@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -53,9 +54,25 @@ namespace WebApp1.Controllers.Admin
             {
                 return NotFound();
             }
+
+            Findchildren(category.Id);
             context.Productsoort.Remove(category);
             context.SaveChanges();
             return RedirectToAction("Index", "CategoryList");
+        }
+         public void Findchildren(int id)
+        {
+            var parent = (from p in context.Productsoort where p.Id == id select p).FirstOrDefault();
+            
+            var children = from c in context.ParentChild 
+                            where c.ParentId ==id select c;
+            context.Productsoort.Remove(parent);
+            foreach (var c in children){
+              
+              Findchildren(c.ChildId);
+                
+            } 
+            
         }
         
         [Route("GetData")]

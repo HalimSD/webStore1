@@ -58,10 +58,10 @@ namespace klaas.Controllers
             //         root = item; 
             //     }
             // }
+             var main = new Datastructure();
             var result =  from m in _context.Productwaarde select m;
-            var kaas = CreateSubTree(root1);
-            var main = new Datastructure();
-            main.kaas=kaas;
+            if (root1 != 0){main.kaas = CreateSubTree(root1);}
+            
             main.productwaardes = result;
             
 
@@ -71,8 +71,8 @@ namespace klaas.Controllers
         }
          public Node CreateSubTree(int id)
         {
-            var parent = (from p in _context.Productsoort where p.Id == id select p.Naam).FirstOrDefault();
-            var subtree = new Node(parent);
+            var parent = (from p in _context.Productsoort where p.Id == id select p).FirstOrDefault();
+            var subtree = new Node(parent.Naam,parent.Image);
             var children = from c in _context.ParentChild where c.ParentId ==id select c;
             foreach (var c in children){
               subtree.Add(CreateSubTree(c.ChildId));
@@ -91,26 +91,30 @@ namespace klaas.Controllers
             return View(main);
         }
          
-        public class Node
+         public class Node
         {
             public string name {get; set;}
+
+            public string image {get;set;}
             public List<Node> children {get; set;}
 
-            public Node(string n)
+            public Node(string n, string i)
             {
                 name = n;
+                image = i;
                 children = new List<Node>(); 
             }
 
-            public Node(string n, List<Node> l)
+            public Node(string n, string i, List<Node> l)
             {
                 name = n;
+                image = i;
                 children = l; 
             }
 
-            public void Add(string n)
+            public void Add(string n, string i)
             {
-                children.Add(new Node(n));
+                children.Add(new Node(n,i));
             }
 
             public void Add(Node n)

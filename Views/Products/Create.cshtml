@@ -22,8 +22,23 @@
             input.value="";
             input.placeholder="Attribuut Naam";
 
-                
 
+            var radioN = document.createElement("input");
+				radioN.type = "radio";
+                radioN.id = "productsoort.Attribuutsoort["+i+"].Type";
+				radioN.name = "productsoort.Attribuutsoort["+i+"].Type";
+                radioN.checked = true;
+				radioN.value = "number";
+    
+
+             var radioS = document.createElement("input");
+				radioS.type = "radio";
+                radioS.id = "productsoort.Attribuutsoort["+i+"].Type";
+				radioS.name = "productsoort.Attribuutsoort["+i+"].Type";
+				radioS.value = "string";
+                
+                
+            /*
             var input2 = document.createElement("input");
             input2.name= "productsoort.Attribuutsoort["+i+"].Type";
             input2.setAttribute("class", "form-control");
@@ -32,11 +47,16 @@
             input2.value="";
             input2.placeholder="Type";
             input2.style.marginTop = "10px";
+            */
 
             
                
             container.appendChild(input);
-            container.appendChild(input2);
+            container.appendChild(document.createTextNode("Getal"));
+            container.appendChild(radioN);
+            container.appendChild(document.createElement("br"));
+             container.appendChild(document.createTextNode("Tekst"));
+            container.appendChild(radioS);
             // Append a line break 
             container.appendChild(document.createElement("br"));
             i++;
@@ -52,13 +72,17 @@
                 
                   
             
-        
-    <form asp-action="Create">
+     @ViewData["message"]   
+    <form asp-action="Create" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
             <label asp-for="@Model.productsoort.Naam" class="control-label"></label>
             <input asp-for="@Model.productsoort.Naam" class="form-control" placeholder="Categorie Naam"/>
             <span asp-validation-for="@Model.productsoort.Naam" class="text-danger"></span>
+        </div>
+         <div class="form-group">
+                <input asp-for="@Model.productsoort.Image" type="file" Class="form-control" placeholder="Image"/>
+                <span asp-validation-for="@Model.productsoort.Image" class="text-danger"></span>
         </div>
        <div id="categoryFormContent" class = "checkbox checkboxlist">
            <p>Kies de bovenliggende categorie(n) uit de onderstaande lijst</p>

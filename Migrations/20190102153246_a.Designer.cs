@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebApp1.Models;
@@ -9,9 +10,10 @@ using WebApp1.Models;
 namespace WebApp1.Migrations
 {
     [DbContext(typeof(WebshopContext))]
-    partial class WebshopContextModelSnapshot : ModelSnapshot
+    [Migration("20190102153246_a")]
+    partial class a
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -296,15 +298,9 @@ namespace WebApp1.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-<<<<<<< HEAD
-                    b.Property<string>("Naam");
-
-                    b.Property<bool>("RootParent");
-=======
                     b.Property<string>("Image");
 
                     b.Property<string>("Naam");
->>>>>>> bdf0d91a18b5a952b390ec43b5a5f5066326c8bb
 
                     b.HasKey("Id");
 

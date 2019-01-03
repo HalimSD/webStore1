@@ -50,7 +50,15 @@
 function menuToElement(item) {
         const li = document.createElement("li");
         if (item.children.length>0) {
-            li.textContent = item.name + " "; //'\u25BD';
+            li.textContent = item.name + " ";
+            li.appendChild(document.createElement("br"));
+            var _img=document.createElement('img');
+            _img.id="~/images/products" + item.image;
+            _img.src="images/products/" + item.image;
+             _img.style.height = '100px';
+             _img.style.width = '100px';
+            li.appendChild(_img);
+            //li.src= item.Image //'\u25BD';
             li.className = "btn btn-primary";
             const span = document.createElement("span");
             span.className  = "fas fa-plus-circle";
@@ -66,11 +74,19 @@ function menuToElement(item) {
             li.appendChild(ul);
             
         } else {
-        
+            li.appendChild(document.createElement("br"));
             const a = document.createElement("a");
             li.appendChild(a);
             a.textContent = item.name;
             a.className = "btn btn-secondary";
+            li.appendChild(document.createElement("br"));
+            var _img=document.createElement('img');
+            _img.id="~/images/products" + item.image;
+            _img.src="images/products/" + item.image;
+             _img.style.height = '100px';
+             _img.style.width = '100px';
+            li.appendChild(_img);
+            
         }
 
       return li;
@@ -177,6 +193,7 @@ $('body').click(function (e) {
 
 
 </script>
+
 
 <link rel="stylesheet" href="~/css/image.css">
 

@@ -49,7 +49,8 @@ public class Productsoort
   {
     public int Id { get; set; }
     public string Naam { get; set; }
-    public bool RootParent { get; set; }
+   
+    public string Image { get; set; }
     //public int ProductclassID{get;set;}
     public List<Attribuutsoort> Attribuutsoort  { get; set; }
     public List<Productwaarde> Productwaarde  { get; set; }

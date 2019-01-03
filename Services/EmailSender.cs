@@ -27,7 +27,6 @@ namespace WebPWrecover.Services
 
         public Task Execute(string apiKey, string subject, string message, string email)
         {
-            // apiKey = "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";
             var client = new SendGridClient(apiKey);
             var msg = new SendGridMessage()
             {

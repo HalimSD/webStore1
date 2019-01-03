@@ -13,7 +13,6 @@ using System;
 
 namespace ContosoRTM.Controllers
 {
-    [Authorize(Roles = "Admin")]
     public class UserManagementController : Controller
     {
         private readonly WebshopContext _dbContext;
@@ -29,6 +28,8 @@ namespace ContosoRTM.Controllers
             _userManager = userManager;
             _roleManager = roleManager;
         }
+
+        // [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Index()
         {
@@ -44,7 +45,7 @@ namespace ContosoRTM.Controllers
             return View(vm);
         }
 
-        [Authorize(Roles = "Admin")]
+        // [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> AddRole(string id)
         {

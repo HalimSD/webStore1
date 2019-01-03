@@ -84,6 +84,9 @@ namespace WebApp1.Controllers
             else if (message == 2){
                 ViewData["message"] = "Kies een uniek attribuut";
             }
+            else if (message == 3){
+                ViewData["message"] = "Er is al een Root gekozen, vink een checkbox aan";
+            }
             var parents = from m in _context.Productsoort select new WebApp1.Models.AddCategory.Parent(){Productsoorts = m, selected = false };
             var childs = from m in _context.Productsoort select new WebApp1.Models.AddCategory.Child(){Productsoorts = m, selected = false };
              var main = new WebApp1.Models.AddCategory();
@@ -107,6 +110,20 @@ namespace WebApp1.Controllers
                 if (productsoortexists.Any()){
                         return RedirectToAction("Create", new{message = 1});
                     } 
+                
+                //check for empty parent
+                if (parents.Count()>0){ 
+                    var parentlistempty = true;
+                    for (var i = 0; i<parents.Count(); i++ ){
+                        if(parents[i].selected == true){
+                            parentlistempty = false;
+                        }
+                    }
+                    if (parentlistempty == true){
+                        return RedirectToAction("Create", new{message = 3});
+                    }
+                }
+               
             
                 // check attribuut dubbel in lijst
                 if(productsoort.Attribuutsoort!= null){ var attribuutinlijst = productsoort.Attribuutsoort

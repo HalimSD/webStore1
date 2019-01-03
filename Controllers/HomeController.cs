@@ -9,6 +9,7 @@ using WebApp1.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.EntityFrameworkCore.Scaffolding.Internal;
 using Org.BouncyCastle.Crypto.Signers;
 
 namespace klaas.Controllers
@@ -130,6 +131,29 @@ namespace klaas.Controllers
         {
             return RedirectToAction("Index", "Category");
         }
-     
+
+        /// <summary>
+        /// Get the item count in favorites for the current User
+        /// </summary>
+        /// <returns>Favorites item count. Or returns -1 if not signed in</returns>
+        public int GetFavoriteCount()
+        {
+            if (!User.Identity.IsAuthenticated) return -1;
+            string userId = mUserManager.GetUserId(User);
+            return (from f in _context.Favorites where f.UserId == userId select f).Count();
+        }
+
+        
+        /// <summary>
+        /// Return the item count in the cart
+        /// </summary>
+        /// <returns>Cart item count</returns>
+        public int GetCartCount()
+        {
+            List<Item> cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
+            if (cart == null) return 0;
+
+            return cart.Count();
+        }
     }
 }

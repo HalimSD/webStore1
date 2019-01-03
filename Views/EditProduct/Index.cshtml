@@ -20,14 +20,14 @@
     {
         <div class="alert-red">
             <span class="closeBtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-            <strong>Fout!</strong> Er is iets foutgegaan bij het bewerken!
+            <i class="material-icons">error</i>   Er is iets foutgegaan bij het bewerken!
         </div>
     }
     @if (msg == EditProductController.ResultMsg.Success)
     {
         <div class="alert-green">
             <span class="closeBtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-            <strong>Succes!</strong> Het bewerken is voltooid!
+            <i class="material-icons">done_outline</i>   Het bewerken is voltooid!
         </div>
     }
     <br>

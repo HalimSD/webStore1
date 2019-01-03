@@ -1,4 +1,7 @@
 @using Controllers
+@{
+    ViewData["Title"] = "CSV Upload";
+}
 <link rel="stylesheet" href="~/css/product_creation_generic.css">
 <div class="pageRoot">
     <h2>Meerdere producten uploaden</h2>
@@ -8,19 +11,19 @@
         case UploadFilesController.ResultMessage.FailedUploading:
             <div class="alert-red">
                 <span class="closeBtn" onclick="this.parentElement.style.display = 'none';">&times;</span>
-                <strong>Fout!</strong> Er is iets foutgegaan bij het uploaden van het bestand!
+                <i class="material-icons">error</i>   Er is iets foutgegaan bij het uploaden van het bestand!
             </div>
             break;
         case UploadFilesController.ResultMessage.FailedParsing:
             <div class="alert-red">
-                <span class="closeBtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-                <strong>Fout!</strong> Er is iets foutgegaan bij lezen van het bestand!
+                <span class="closeBtn" onclick="this.parentElement.style.display = 'none';">&times;</span>
+                <i class="material-icons">error</i>   Er is iets foutgegaan bij lezen van het bestand!
             </div>
             break;
         case UploadFilesController.ResultMessage.Done:
             <div class="alert-green">
-                <span class="closeBtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-                <strong>Succes!</strong> Er zijn @ViewBag.addedProductCount producten toegevoegd!
+                <span class="closeBtn" onclick="this.parentElement.style.display = 'none';">&times;</span>
+                <i class="material-icons">done_outline</i>   Er zijn @ViewBag.addedProductCount producten toegevoegd!
             </div>
             break;
     }

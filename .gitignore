@@ -6,3 +6,4 @@ bin
 obj
 /wwwroot/images/products/*
 !/wwwroot/images/products/default.png
+Apikey.json

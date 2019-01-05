@@ -296,9 +296,9 @@ namespace WebApp1.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Naam");
+                    b.Property<string>("Image");
 
-                    b.Property<bool>("RootParent");
+                    b.Property<string>("Naam");
 
                     b.HasKey("Id");
 

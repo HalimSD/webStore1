@@ -59,7 +59,7 @@ namespace ContosoRTM.Controllers
             return View(vm);
         }
 
-        // [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddRole(UserManagementAddRole rvm)
         {

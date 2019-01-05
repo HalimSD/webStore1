@@ -10,8 +10,8 @@ using WebApp1.Models;
 namespace WebApp1.Migrations
 {
     [DbContext(typeof(WebshopContext))]
-    [Migration("20190102115413_news")]
-    partial class news
+    [Migration("20190104104426_dsdads")]
+    partial class dsdads
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -298,9 +298,9 @@ namespace WebApp1.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Naam");
+                    b.Property<string>("Image");
 
-                    b.Property<bool>("RootParent");
+                    b.Property<string>("Naam");
 
                     b.HasKey("Id");
 

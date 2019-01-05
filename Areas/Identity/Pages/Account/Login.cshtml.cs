@@ -17,11 +17,13 @@ namespace WebApp1.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly SignInManager<Users> _signInManager;
+          private readonly UserManager<Users> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<Users> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<Users> signInManager, ILogger<LoginModel> logger,UserManager<Users> userManager)
         {
             _signInManager = signInManager;
+            _userManager = userManager ;
             _logger = logger;
         }
 
@@ -69,12 +71,17 @@ namespace WebApp1.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
-
+            var user = await _userManager.FindByEmailAsync(Input.Email);
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
+                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                if (!await _userManager.IsEmailConfirmedAsync(user))
+                {
+                     ModelState.AddModelError(string.Empty, "Ongeldige inlogpoging. Controleer uw e-mailadres om dit te bevestigen voordat u inlogt.");
+                    return Page();
+                }
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");

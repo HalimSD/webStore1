@@ -27,15 +27,16 @@ namespace WebPWrecover.Services
 
         public Task Execute(string apiKey, string subject, string message, string email)
         {
-            string api1 = "SG.xvo47wxsSfSE2ibG";
-            string api2 = "j9L4qg.0hvj7-sWdhGg8";
-            string api3 = "3nW4pKUkV9uvktI3Mc";
-            string api4 = "yjwoexXLWCg0";
-            apiKey = api1+ api2 + api3 + api4;
+            string api1 = "SG.P7RtRsyNSlWQ";
+            string api2 = "uSCP2fDqvQ.6";
+            string api3 = "cJ4QvUWqLpzE755nkQ-G";
+            string api4 = "Bcc2YJvngOm85TUwEHEPvk";
+           
+            apiKey = api1 + api2 + api3 + api4;
             var client = new SendGridClient(apiKey);
             var msg = new SendGridMessage()
             {
-                From = new EmailAddress("testprojecthr@gmail.com", "Halim"),
+                From = new EmailAddress("testprojecthr@gmail.com", "Banana Boat"),
                 Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message

@@ -297,7 +297,7 @@ namespace WebApp1.Controllers
                 var email = model.Email;
                 var message = new MimeMessage();
 
-                message.From.Add(new MailboxAddress("WebShop", "testprojecthr@gmail.com"));
+                message.From.Add(new MailboxAddress("Banana Boat", "testprojecthr@gmail.com"));
                 message.To.Add(new MailboxAddress(email));
                 message.Subject = "Your order";
                 var builder = new BodyBuilder();
@@ -369,7 +369,7 @@ namespace WebApp1.Controllers
         {
             var message = new MimeMessage();
 
-            message.From.Add(new MailboxAddress("WebShop", "testprojecthr@gmail.com"));
+            message.From.Add(new MailboxAddress("Banana Boat", "testprojecthr@gmail.com"));
             message.To.Add(new MailboxAddress(_userManager.GetUserName(User)));
             message.Subject = "Your order";
             var builder = new BodyBuilder();

@@ -20,7 +20,7 @@ nav.navbar {
 
 div.footer{
     font-family: monospace;
-    width: 99%;
+    width: 98%;
     height: 175px; 
     background-color: #ffffff;
     border-radius: 3px;
@@ -89,4 +89,9 @@ li{
 
 .closeBtn:hover {
     color: black;
+}
+
+.footerLi{
+    
+    margin-left: -40px;
 }

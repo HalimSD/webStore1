@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace WebApp1.Migrations
 {
-    public partial class news : Migration
+    public partial class dsdads : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -78,7 +78,7 @@ namespace WebApp1.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Naam = table.Column<string>(nullable: true),
-                    RootParent = table.Column<bool>(nullable: false)
+                    Image = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

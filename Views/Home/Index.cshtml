@@ -47,6 +47,12 @@
 
 <script>
 
+function otherPage(id) {
+  window.location = "/Category?categoryId=" + id
+}
+
+
+
 function menuToElement(item) {
         const li = document.createElement("li");
         if (item.children.length>0) {
@@ -55,6 +61,7 @@ function menuToElement(item) {
             var _img=document.createElement('img');
             _img.id="~/images/products" + item.image;
             _img.src="images/products/" + item.image;
+            _img.onclick = function() {otherPage(item.id)};
              _img.style.height = '100px';
              _img.style.width = '100px';
             li.appendChild(_img);
@@ -78,11 +85,13 @@ function menuToElement(item) {
             const a = document.createElement("a");
             li.appendChild(a);
             a.textContent = item.name;
+            a.onclick = "hi()";
             a.className = "btn btn-secondary";
             li.appendChild(document.createElement("br"));
             var _img=document.createElement('img');
             _img.id="~/images/products" + item.image;
             _img.src="images/products/" + item.image;
+             _img.onclick = function() {otherPage(item.id)};
              _img.style.height = '100px';
              _img.style.width = '100px';
             li.appendChild(_img);

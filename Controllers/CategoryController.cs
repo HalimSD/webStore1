@@ -36,6 +36,7 @@ namespace WebApp1.Controllers
 
             HttpContext.Session.Remove(sessionFiltersKey);
             CategoryViewModel model = helper.CreateViewModel(categoryId, (int) pageNumber);
+            if (model == null) return NotFound(); 
             return View(model);
         }
         
@@ -71,6 +72,7 @@ namespace WebApp1.Controllers
             }
             
             CategoryViewModel model = helper.CreateViewModel(categoryId, (int) pageNumber, filters);
+            if (model == null) return NotFound(); 
             HttpContext.Session.Set(sessionFiltersKey, model.Filters);
             return View("Index", model);
         }
@@ -155,6 +157,7 @@ namespace WebApp1.Controllers
         public JsonResult GetCategories()
         {
             int parentId = helper.GetRootParentId();
+            if (parentId == -1) return new JsonResult(parentId);
             List<List<string>> json =
             (
                 from ps in context.Productsoort

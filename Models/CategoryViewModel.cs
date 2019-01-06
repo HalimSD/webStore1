@@ -95,6 +95,7 @@ namespace WebApp1.Models
             if (categoryId == null)
             {
                 categoryId = GetRootParentId();
+                if (categoryId == -1) return null;
             }
 
             // Get list of categories where we have to retrieve products from
@@ -120,6 +121,7 @@ namespace WebApp1.Models
             productsQuery = FilterQuantity(filters, productsQuery);
 
             viewModel.Filters = filters;
+            productsQuery = productsQuery.OrderBy(p => p.ProductsoortId);
             viewModel.Products = productsPage.GetPageIQueryable(pageNumber, productsQuery);
 
             // Get the attributes of that category
@@ -154,11 +156,32 @@ namespace WebApp1.Models
 
         /// <summary>
         /// Get the root category, meaning the category that is at the top.
-        /// This category is the main parent of all categories
+        /// This category is the main parent of all categories.
+        /// If there is no ParentChild structure and there is only 1 category,
+        /// then it will return that ID.
+        ///
+        /// If there is no ParentChild, but there is more than 2 categories (which shouldn't happen)
+        /// then it will return -1
         /// </summary>
-        /// <returns>ID of the root category</returns>
+        /// <returns>Category ID</returns>
         public int GetRootParentId()
         {
+            bool containsParentChildRows = (from pc in context.ParentChild select pc).Any();
+            int containsCategoryRowCount = (from ps in context.Productsoort select ps).Count();
+            if (!containsParentChildRows)
+            {
+                if (containsCategoryRowCount == 1)
+                {
+                    var res = (from ps in context.Productsoort select ps.Id).FirstOrDefault();
+                    return res;
+                }
+
+                if (containsCategoryRowCount <= 0 || containsCategoryRowCount > 0)
+                {
+                    return -1;
+                }
+            }
+            
             return
             (
                 from r in context.ParentChild

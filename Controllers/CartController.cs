@@ -100,7 +100,7 @@ namespace WebApp1.Controllers
         }
 
 
-        [Route("buy/{id}")]
+        [Route("buy")]
         public IActionResult Buy(int id, string action = "Mainpage", string controller = "Home")
         {
             if (SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart") == null)

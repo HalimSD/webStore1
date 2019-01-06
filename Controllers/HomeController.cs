@@ -73,7 +73,7 @@ namespace klaas.Controllers
          public Node CreateSubTree(int id)
         {
             var parent = (from p in _context.Productsoort where p.Id == id select p).FirstOrDefault();
-            var subtree = new Node(parent.Naam,parent.Image);
+            var subtree = new Node(parent.Naam,parent.Image,parent.Id);
             var children = from c in _context.ParentChild where c.ParentId ==id select c;
             foreach (var c in children){
               subtree.Add(CreateSubTree(c.ChildId));
@@ -97,25 +97,28 @@ namespace klaas.Controllers
             public string name {get; set;}
 
             public string image {get;set;}
+            public int id{get;set;}
             public List<Node> children {get; set;}
 
-            public Node(string n, string i)
+            public Node(string n, string i, int d)
             {
                 name = n;
                 image = i;
+                id = d;
                 children = new List<Node>(); 
             }
 
-            public Node(string n, string i, List<Node> l)
+            public Node(string n, string i, int d, List<Node> l)
             {
                 name = n;
                 image = i;
+                id = d;
                 children = l; 
             }
 
-            public void Add(string n, string i)
+            public void Add(string n, string i, int d)
             {
-                children.Add(new Node(n,i));
+                children.Add(new Node(n,i,d));
             }
 
             public void Add(Node n)

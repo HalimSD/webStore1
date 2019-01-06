@@ -90,3 +90,21 @@ li{
 .closeBtn:hover {
     color: black;
 }
+
+.inline-icon {
+    vertical-align: bottom;
+    font-size: 18px !important;
+}
+
+a.paginationJumpTo {
+    margin-left: 15px;
+}
+
+a.paginationJumpTo>i {
+    line-height: unset;
+}
+
+a.paginationJumpTo:hover {
+    cursor: pointer;
+    transition: 0.1s;
+}

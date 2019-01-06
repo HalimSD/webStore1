@@ -18,9 +18,37 @@ nav.navbar {
     margin-left: 10px;
 }
 
+html {
+    height: 100%;
+    box-sizing: border-box;
+  }
+  
+  *,
+  *:before,
+  *:after {
+    box-sizing: inherit;
+  }
+  
+  body {
+    position: relative;
+    margin: 0;
+    padding-bottom: 10rem;
+    min-height: 100%;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+  }
+
+  a{
+      color: inherit;
+  }
+
+  a:hover{
+    color: inherit;
+  }
+
 div.footer{
+
     font-family: monospace;
-    width: 99%;
+    width: 98%;
     height: 175px; 
     background-color: #ffffff;
     border-radius: 3px;
@@ -30,6 +58,8 @@ div.footer{
     margin-right: 1%;
     margin-bottom: 1%;
     margin-top: 1%;
+    position: absolute;
+    bottom: 0;
 }
 
 
@@ -43,14 +73,22 @@ li{
 } */
 
 .footerItemContainer{
-    width: 50%;
-    margin: 0 auto;
+    margin: auto;
+    width:50%;
     
 }
 
 .footerItem {
-    float: left;
-    padding-right: 50px;
+    
+    float:left;
+ width:49.9%;
+    
+}
+.footerItem2 {
+    
+    
+    
+    
 }
 
 
@@ -89,6 +127,11 @@ li{
 
 .closeBtn:hover {
     color: black;
+}
+
+.footerLi{
+    
+    margin-left: -40px;
 }
 
 .inline-icon {

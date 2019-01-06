@@ -17,13 +17,13 @@ namespace WebApp1.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly SignInManager<Users> _signInManager;
-          private readonly UserManager<Users> _userManager;
+        private readonly UserManager<Users> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<Users> signInManager, ILogger<LoginModel> logger,UserManager<Users> userManager)
+        public LoginModel(SignInManager<Users> signInManager, ILogger<LoginModel> logger, UserManager<Users> userManager)
         {
             _signInManager = signInManager;
-            _userManager = userManager ;
+            _userManager = userManager;
             _logger = logger;
         }
 
@@ -71,23 +71,42 @@ namespace WebApp1.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
+
             var user = await _userManager.FindByEmailAsync(Input.Email);
             if (ModelState.IsValid)
             {
+                Users userid = await _userManager.FindByEmailAsync(Input.Email);
+                if (userid != null)
+                {
+                    bool userConfirm = await _userManager.IsEmailConfirmedAsync(userid);
+                    if (userConfirm == false)
+                    {
+
+                        ModelState.AddModelError(string.Empty, "Ongeldige inlogpoging. Controleer uw e-mailadres om dit te bevestigen voordat u inlogt.");
+                        return Page();
+
+                    }
+                    else
+                    {
+                        var result1 = await _signInManager.PasswordSignInAsync(Input.Email,
+                                   Input.Password, Input.RememberMe, lockoutOnFailure: true);
+                    }
+                }
+var result = await _signInManager.PasswordSignInAsync(Input.Email,
+                                   Input.Password, Input.RememberMe, lockoutOnFailure: true);
+               
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                if (await _userManager.IsEmailConfirmedAsync(user) && result.Succeeded)
+
+                if (result.Succeeded)
                 {
-                     _logger.LogInformation("User logged in.");
+                    _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
-                    
                 }
-                if (!await _userManager.IsEmailConfirmedAsync(user))
-                {
-                    ModelState.AddModelError(string.Empty, "Ongeldige inlogpoging. Controleer uw e-mailadres om dit te bevestigen voordat u inlogt.");
-                    return Page();
-                }
+                // This doesn't count login failures towards account lockout
+                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+
+
                 if (result.RequiresTwoFactor)
                 {
                     return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });

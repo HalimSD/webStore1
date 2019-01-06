@@ -121,6 +121,7 @@ namespace WebApp1.Models
             productsQuery = FilterQuantity(filters, productsQuery);
 
             viewModel.Filters = filters;
+            productsQuery = productsQuery.OrderBy(p => p.ProductsoortId);
             viewModel.Products = productsPage.GetPageIQueryable(pageNumber, productsQuery);
 
             // Get the attributes of that category

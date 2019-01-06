@@ -112,14 +112,21 @@ li> ul.imageDropdownUl {
 	z-index: 1;
 	position: relative;
 	left: 200px;
-	bottom: 50px;
+	bottom: 200px;
 }
 
 #cat1{
 	z-index: 1;
 	position: relative;
-	left: 300px;
-	bottom: 200px;
+	left: 400px;
+	bottom: 250px;
+}
+
+#cat2{
+	z-index: 1;
+	position: relative;
+	left: 600px;
+	bottom: 300px;
 }
 
 .category{
@@ -165,4 +172,16 @@ li> ul.imageDropdownUl {
 .borderBottom{
 	border: 1px solid black;
 	border-spacing: 15px 50px;
+	background-color: #6991b4;
+}
+
+.imgEffect{
+	opacity: 1;
+	transition: opacity .25s ease-in-out;
+	-moz-transition: opacity .25s ease-in-out;
+	-webkit-transition: opacity .25s ease-in-out;
+}
+
+.imgEffect:hover{
+	opacity: 0.5;
 }

@@ -26,7 +26,7 @@
           <div id="menu" class="menu"></div>
         </div>
 
-        <img src="~/images/circle.png" class="category" >
+        <img src="~/images/circle.png" class="category" id="catImg1">
       </div>
     </div>
 
@@ -39,11 +39,27 @@
           <div id="menu2" class="menu"></div>
         </div>
 
-        <img src="~/images/circle.png" class="category" >
+        <img src="~/images/circle.png" class="category" id="catImg2">
       </div>
     </div>
+
+    <div class="popupContainer">
+      <div class="popup" onclick="togglePopup3()" id="cat2">
+        <div class="sel popuptext" id="myPopup3">
+          <div class="catImage">
+            <img src="~/images/boat.png" class="categoryImage" id="topImg3">
+          </div>
+          <div id="menu3" class="menu"></div>
+        </div>
+
+        <img src="~/images/circle.png" class="category" id="catImg3">
+      </div>
+    </div>
+
   </div>
 </div>
+
+
 
 <script>
 
@@ -63,6 +79,7 @@ function menuToElement(item) {
             li.appendChild(boxDiv);
             //li.appendChild(document.createElement("br"));
             var _img=document.createElement('img');
+            _img.className = "imgEffect";
             _img.id="~/images/products" + item.image;
             _img.src="images/products/" + item.image;
             _img.onclick = function() {otherPage(item.id)};
@@ -94,6 +111,8 @@ function menuToElement(item) {
             const a = document.createElement("a");
             a.textContent = " " + item.name + " ";
             a.onclick = "hi()";
+            li.id = "~/images/products" + item.image;
+            li.onclick = function() {otherPage(item.id)};
             li.className = "aTag";
             //li.appendChild(document.createElement("br"));
             var _img=document.createElement('img');
@@ -119,7 +138,6 @@ var categories = @Html.Raw(Json.Serialize(Model.kaas));
 console.log(categories);
 for (const item of categories.children){
 if (item.name == "Zeilboot"){
-
 const ul = menuToElement(item);
   document.getElementById("menu").appendChild(ul);
   
@@ -128,16 +146,13 @@ else if (item.name == "Roeiboot"){
   const ul2 = menuToElement(item);
   document.getElementById("menu2").appendChild(ul2);
 }
+
+else if (item.name == "Schip"){
+  const ul3 = menuToElement(item);
+  document.getElementById("menu3").appendChild(ul3);
 }
 
-$( "span" ).each(function( index ) {
-  console.log( index + ": " + $( this ).text() );
-});
-
-
-//var engine = [categories[0]];
-//console.log(engine);
-//var tire = [categories[1]];
+}
 
 
 
@@ -150,19 +165,23 @@ $( "span" ).each(function( index ) {
 
 //When the user clicks on <div>, open the popup
 for (const item of categories.children){
+
 function togglePopup1() {
     var popup = document.getElementById("myPopup1");
     popup.classList.toggle("show");
     $('.imageDropdownUl').css("display", "none");
     $('#myPopup1').show();
     $('#myPopup2').hide();
+    $('#myPopup3').hide();
     
     //reset image
     var image = "/images/boat.png";
     var topImage = document.getElementById("topImg1");
     var topImage2 = document.getElementById("topImg2");
+    var topImage3 = document.getElementById("topImg3");
     topImage.src = image;
     topImage2.src = image;
+    topImage3.src = image;
 
 }
 
@@ -172,13 +191,34 @@ function togglePopup2() {
     $('.imageDropdownUl').css("display", "none");
     $('#myPopup2').show();
     $('#myPopup1').hide();
+    $('#myPopup3').hide();
 
     //reset image
     var image = "/images/boat.png";
     var topImage = document.getElementById("topImg1");
     var topImage2 = document.getElementById("topImg2");
+    var topImage3 = document.getElementById("topImg3");
     topImage.src = image;
     topImage2.src = image;
+    topImage3.src = image;
+}
+
+function togglePopup3() {
+    var popup = document.getElementById("myPopup3");
+    popup.classList.toggle("show");
+    $('.imageDropdownUl').css("display", "none");
+    $('#myPopup3').show();
+    $('#myPopup1').hide();
+    $('#myPopup2').hide();
+
+    //reset image
+    var image = "/images/boat.png";
+    var topImage = document.getElementById("topImg1");
+    var topImage2 = document.getElementById("topImg2");
+    var topImage3 = document.getElementById("topImg3");
+    topImage.src = image;
+    topImage2.src = image;
+    topImage3.src = image;
 }
 
 //categories and subcategories onclick function
@@ -218,15 +258,33 @@ $('body').click(function (e) {
 }
 
 //picture on click
-$(".borderBottom").on('click', function(event){  
-    
-    var text = this.firstChild.src;
+$(".borderBottom").on('click', function(event){   
+    var pic = this.firstChild.src;
     var topImage = document.getElementById("topImg1");
     var topImage2 = document.getElementById("topImg2");
-    topImage.src = text;
-    topImage2.src = text;
-
+    var topImage3 = document.getElementById("topImg3");
+    topImage.src = pic;
+    topImage2.src = pic;
+    topImage3.src = pic;  
 });
+
+//category 1 image
+var category1 = document.getElementById("menu");
+menuSrc = category1.firstChild.firstChild.firstChild.src
+var catImg1 = document.getElementById("catImg1");
+catImg1.src = menuSrc;
+
+//category 2 image
+var category2 = document.getElementById("menu2");
+menuSrc2 = category2.firstChild.firstChild.firstChild.src
+var catImg1 = document.getElementById("catImg2");
+catImg2.src = menuSrc2;
+
+//category 3 image
+var category3 = document.getElementById("menu3");
+menuSrc3 = category3.firstChild.firstChild.firstChild.src
+var catImg1 = document.getElementById("catImg3");
+catImg3.src = menuSrc3;
 
 </script>
 

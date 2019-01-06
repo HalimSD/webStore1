@@ -77,15 +77,16 @@ namespace WebApp1.Areas.Identity.Pages.Account
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                if (await _userManager.IsEmailConfirmedAsync(user) && result.Succeeded)
+                {
+                     _logger.LogInformation("User logged in.");
+                    return LocalRedirect(returnUrl);
+                    
+                }
                 if (!await _userManager.IsEmailConfirmedAsync(user))
                 {
-                     ModelState.AddModelError(string.Empty, "Ongeldige inlogpoging. Controleer uw e-mailadres om dit te bevestigen voordat u inlogt.");
+                    ModelState.AddModelError(string.Empty, "Ongeldige inlogpoging. Controleer uw e-mailadres om dit te bevestigen voordat u inlogt.");
                     return Page();
-                }
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
                 {

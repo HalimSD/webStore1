@@ -68,7 +68,11 @@ namespace Controllers
             try
             {
                 string text = System.IO.File.ReadAllText(filePath);
-                foreach (var record in CsvReader.ReadFromText(text))
+                CsvOptions options = new CsvOptions
+                {
+                    HeaderMode = HeaderMode.HeaderAbsent
+                };
+                foreach (var record in CsvReader.ReadFromText(text, options))
                 {
                     int id = 0;
                     //productsoortnaam

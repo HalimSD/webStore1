@@ -66,7 +66,7 @@ namespace WebApp1
                 app.UseDatabaseErrorPage();
             }
             else
-            {
+            {   
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }

@@ -224,37 +224,42 @@ namespace WebApp1.Controllers
             }
             else
             {
-                ViewBag.cart = cart;
-                ViewBag.total = cart.Sum(items => items.Product.Price * items.Quantity);
-                ViewBag.total = CalculateShippingCost(ViewBag.total) + ViewBag.total;
-                Bestelling bestelling = new Bestelling();
-                Productwaarde productwaarde = new Productwaarde();
-                bestelling.Status = "Onderweg";
-                bestelling.Date = DateTime.Today;
-                bestelling.UserId = _userManager.GetUserId(User);
-                bestelling.ShippingFee = CalculateShippingCost(cart.Sum(items => items.Product.Price * items.Quantity));
-                _context.Add(bestelling);
-                _context.SaveChanges();
-                foreach (var i in cart)
-                {
-                    BesteldeItem besteldeItem = new BesteldeItem
-                    {
-                        Quantity = i.Quantity,
-                        Price = i.Product.Price * i.Quantity,
-                        Image = i.Product.Image,
-                        Title = i.Product.Title,
-                        BestellingId = bestelling.BestellingId,
-                        ProductwaardeId = i.Product.Id
-                    };
-                    _context.Add(besteldeItem);
-                    _context.SaveChanges();
-                }
+
                 if (_userManager.GetUserName(User) == null)
                 {
                     return View("sendOrderMail");
                 }
             }
             return View("checkOut");
+        }
+        public void bestellingPlaatsen()
+        {
+            var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
+            ViewBag.cart = cart;
+            ViewBag.total = cart.Sum(items => items.Product.Price * items.Quantity);
+            ViewBag.total = CalculateShippingCost(ViewBag.total) + ViewBag.total;
+            Bestelling bestelling = new Bestelling();
+            Productwaarde productwaarde = new Productwaarde();
+            bestelling.Status = "Onderweg";
+            bestelling.Date = DateTime.Today;
+            bestelling.UserId = _userManager.GetUserId(User);
+            bestelling.ShippingFee = CalculateShippingCost(cart.Sum(items => items.Product.Price * items.Quantity));
+            _context.Add(bestelling);
+            _context.SaveChanges();
+            foreach (var i in cart)
+            {
+                BesteldeItem besteldeItem = new BesteldeItem
+                {
+                    Quantity = i.Quantity,
+                    Price = i.Product.Price * i.Quantity,
+                    Image = i.Product.Image,
+                    Title = i.Product.Title,
+                    BestellingId = bestelling.BestellingId,
+                    ProductwaardeId = i.Product.Id
+                };
+                _context.Add(besteldeItem);
+                _context.SaveChanges();
+            }
         }
         public void increaseQuantity(int id)
         {
@@ -334,11 +339,11 @@ namespace WebApp1.Controllers
                                 Image = b.Image
                             }
             ).ToList();
-            
+
             ViewBag.besteldeItem = besteldeItem;
             ViewBag.shippingFee = (from b in _context.Bestelling where b.BestellingId == id select b.ShippingFee)
                 .FirstOrDefault();
-            
+
             return View();
         }
         [Route("oldOrders")]
@@ -367,6 +372,7 @@ namespace WebApp1.Controllers
         [Route("pay")]
         public IActionResult pay()
         {
+            bestellingPlaatsen();
             var message = new MimeMessage();
 
             message.From.Add(new MailboxAddress("Banana Boat", "testprojecthr@gmail.com"));
@@ -478,7 +484,7 @@ namespace WebApp1.Controllers
             // return File(file, "application/pdf");
             return RedirectToAction("checkOut", "Cart");
         }
-        
+
         /// <summary>
         /// Calculate the shipping cost based on the total price!
         /// If price is less than 5, costs will be zero.
@@ -489,7 +495,7 @@ namespace WebApp1.Controllers
         private double CalculateShippingCost(double totalPrice)
         {
             if (totalPrice < 5) return 0;
-            
+
             double shipping;
             if (totalPrice * 0.1 > 100)
             {

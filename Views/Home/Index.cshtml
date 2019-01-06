@@ -21,7 +21,7 @@
       <div class="popup" onclick="togglePopup1()" id="cat0">
         <div class="sel popuptext" id="myPopup1">
           <div class="catImage">
-            <img src="~/images/boat.png" class="categoryImage" >
+            <img src="~/images/boat.png" class="categoryImage" id="topImg1">
           </div>
           <div id="menu" class="menu"></div>
         </div>
@@ -34,7 +34,7 @@
       <div class="popup" onclick="togglePopup2()" id="cat1">
         <div class="sel popuptext" id="myPopup2">
           <div class="catImage">
-            <img src="~/images/boat.png" class="categoryImage" >
+            <img src="~/images/boat.png" class="categoryImage" id="topImg2">
           </div>
           <div id="menu2" class="menu"></div>
         </div>
@@ -55,21 +55,30 @@ function otherPage(id) {
 
 function menuToElement(item) {
         const li = document.createElement("li");
+       
         if (item.children.length>0) {
-            li.textContent = item.name + " ";
-            li.appendChild(document.createElement("br"));
+
+            var boxDiv=document.createElement('div');
+            boxDiv.className="borderBottom";
+            li.appendChild(boxDiv);
+            //li.appendChild(document.createElement("br"));
             var _img=document.createElement('img');
             _img.id="~/images/products" + item.image;
             _img.src="images/products/" + item.image;
             _img.onclick = function() {otherPage(item.id)};
-             _img.style.height = '100px';
-             _img.style.width = '100px';
-            li.appendChild(_img);
+             _img.style.height = '64px';
+             _img.style.width = '64px';
+            boxDiv.appendChild(_img);
+            const catSpan = document.createElement("span");
+            catSpan.textContent = item.name + " ";
+            boxDiv.appendChild(catSpan);
+            
+
             //li.src= item.Image //'\u25BD';
             li.className = "btn btn-primary";
             const span = document.createElement("span");
             span.className  = "fas fa-plus-circle";
-            li.appendChild(span);
+            boxDiv.appendChild(span);
             const ul = document.createElement("ul");
             ul.className = "imageDropdownUl";
             for (var i=0; i<item.children.length; i++) {
@@ -81,64 +90,50 @@ function menuToElement(item) {
             li.appendChild(ul);
             
         } else {
-            li.appendChild(document.createElement("br"));
+            //li.appendChild(document.createElement("br"));
             const a = document.createElement("a");
-            li.appendChild(a);
-            a.textContent = item.name;
+            a.textContent = " " + item.name + " ";
             a.onclick = "hi()";
-            a.className = "btn btn-secondary";
-            li.appendChild(document.createElement("br"));
+            li.className = "aTag";
+            //li.appendChild(document.createElement("br"));
             var _img=document.createElement('img');
             _img.id="~/images/products" + item.image;
             _img.src="images/products/" + item.image;
              _img.onclick = function() {otherPage(item.id)};
-             _img.style.height = '100px';
-             _img.style.width = '100px';
+             _img.style.height = '64px';
+             _img.style.width = '64px';
             li.appendChild(_img);
-            
+            //load a tag after images so image is shown first
+            li.appendChild(a);
         }
 
       return li;
 
 
     return ul;
+
 }
 
- 
-/*
-var categories = [{ 
-    text: "engine",
-    children: ["marco",2,3,5,7,9, { 
-        text: "piston1",
-        children: [4,5,6, { 
-          text: "piston2",
-          children: [4,5,6, {
-            text: "piston3",
-            children: [4,5,6, {
-              text: "piston4",
-              children: [4,5,6]           
-            }]
-          }]
-      }]   
-    }]   
-}, {
-    text: "tire",
-    children: [7,8,9]
-}]; 
-*/
 var categories = @Html.Raw(Json.Serialize(Model.kaas));
 
 console.log(categories);
 for (const item of categories.children){
 if (item.name == "Zeilboot"){
-  const ul = menuToElement(item);
+
+const ul = menuToElement(item);
   document.getElementById("menu").appendChild(ul);
+  
 }
 else if (item.name == "Roeiboot"){
   const ul2 = menuToElement(item);
   document.getElementById("menu2").appendChild(ul2);
 }
 }
+
+$( "span" ).each(function( index ) {
+  console.log( index + ": " + $( this ).text() );
+});
+
 
 //var engine = [categories[0]];
 //console.log(engine);
@@ -153,30 +148,52 @@ else if (item.name == "Roeiboot"){
 //document.getElementById("menu2").app, endChild(ul2);
 
 
-</script>
-
-
-<script>
-
 //When the user clicks on <div>, open the popup
 for (const item of categories.children){
 function togglePopup1() {
     var popup = document.getElementById("myPopup1");
     popup.classList.toggle("show");
+    $('.imageDropdownUl').css("display", "none");
+    $('#myPopup1').show();
+    $('#myPopup2').hide();
+    
+    //reset image
+    var image = "/images/boat.png";
+    var topImage = document.getElementById("topImg1");
+    var topImage2 = document.getElementById("topImg2");
+    topImage.src = image;
+    topImage2.src = image;
+
 }
 
 function togglePopup2() {
     var popup = document.getElementById("myPopup2");
     popup.classList.toggle("show");
+    $('.imageDropdownUl').css("display", "none");
+    $('#myPopup2').show();
+    $('#myPopup1').hide();
+
+    //reset image
+    var image = "/images/boat.png";
+    var topImage = document.getElementById("topImg1");
+    var topImage2 = document.getElementById("topImg2");
+    topImage.src = image;
+    topImage2.src = image;
 }
 
 //categories and subcategories onclick function
 $(".btn-primary").on('click', function(event){  
     event.stopImmediatePropagation();
     $(this).children('.imageDropdownUl').toggle();
-    var text = this.firstChild.nodeValue;
-    console.log(text);
+    console.log(this.id);
+    //var container = $(".borderBottom").parents();
+    //console.log(container);
+    //var paling = this.parentNode.parentNode.parentNode;
+    //console.log(paling);
+    //console.log(this.item.name)
+  
 });
+
 
 
 
@@ -200,6 +217,16 @@ $('body').click(function (e) {
 });
 }
 
+//picture on click
+$(".borderBottom").on('click', function(event){  
+    
+    var text = this.firstChild.src;
+    var topImage = document.getElementById("topImg1");
+    var topImage2 = document.getElementById("topImg2");
+    topImage.src = text;
+    topImage2.src = text;
+
+});
 
 </script>
 

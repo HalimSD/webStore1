@@ -38,11 +38,7 @@ namespace WebApp1
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-<<<<<<< HEAD
             services.AddDbContext<WebshopContext>(opt => opt.UseNpgsql(@"Host=localhost;Database=database;Username=postgres;Password=hallodoei"));
-=======
-            services.AddDbContext<WebshopContext>(opt => opt.UseNpgsql(@"Host=localhost;Database=webShop;Username=postgres;Password="));
->>>>>>> ac46989cc4d413302cab28d21629b99c662e8cf7
 
             services.AddSession(options =>
             {

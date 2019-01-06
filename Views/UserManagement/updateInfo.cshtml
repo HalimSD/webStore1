@@ -10,21 +10,21 @@
 <div class="row">
     <div class="col-md-6">
         <form asp-action="updateInfo" method="post">
-            <h4>Update Account Info.</h4>
+            <h4>Persoonlijke gegevens veranderen</h4>
             <div asp-validation-summary="All" class="text-danger"></div>
             <input asp-for="UserId" type="hidden" />
             <div class="form-group">
-                <label asp-for="FirstName"></label>
+                <label asp-for="FirstName">Voornaam</label>
                 <input asp-for="FirstName" class="form-control" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for=" LastName"></label>
+                <label asp-for=" LastName">Achternaam</label>
                 <input asp-for=" LastName" class="form-control" />
                 <span asp-validation-for=" LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for=" Street"></label>
+                <label asp-for=" Street">Straat</label>
                 <input asp-for=" Street" class="form-control" />
                 <span asp-validation-for=" Street" class="text-danger"></span>
             </div>
@@ -34,29 +34,29 @@
                 <span asp-validation-for=" City" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for=" BirthDate"></label>
+                <label asp-for=" BirthDate">Geboortedatum</label>
                 <input asp-for=" BirthDate" class="form-control" />
                 <span asp-validation-for=" BirthDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for=" PostalCode"></label>
+                <label asp-for=" PostalCode">Postcode</label>
                 <input asp-for=" PostalCode" class="form-control" />
                 <span asp-validation-for=" PostalCode" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for=" HouseNumber"></label>
+                <label asp-for=" HouseNumber">Huisnummer</label>
                 <input asp-for=" HouseNumber" class="form-control" />
                 <span asp-validation-for=" HouseNumber" class="text-danger"></span>
             </div> 
             <div class="form-group">
-                <label asp-for=" Email"></label>
+                <label asp-for=" Email">Email</label>
                 <input asp-for=" Email" class="form-control" />
                 <span asp-validation-for=" Email" class="text-danger"></span>
             </div>
                    
-            <a asp-area="Identity" asp-page="/Account/Manage/Index">Verder Instellingen</a>
+            <a asp-area="Identity" asp-page="/Account/Manage/Index">Geavanceerde instellingen</a>
             <br>
-             <input type="submit" class="btn btn-success" value="Save" />
+             <input type="submit" class="btn btn-primary" value="Save" />
 
         </form>
     </div>

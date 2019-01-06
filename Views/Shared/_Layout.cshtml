@@ -49,9 +49,10 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="@Url.Action("updateInfo", "userManagement")" >Mijn Profiel</a>
                     <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="@Url.Action("Index", "Cart")" id="cartLink">Winkelmand</a>
                     <a class="dropdown-item" href="@Url.Action("Index", "Favorites")" id="favoritesLink">Favorieten</a>
                     <a class="dropdown-item" href="@Url.Action("oldOrders", "Cart")">Bestelgeschiedenis</a>
-                    <a class="dropdown-item" href="@Url.Action("Index", "Cart")" id="cartLink">Winkelmand</a>
+                    
                 </div>
             </li>
         }
@@ -124,22 +125,22 @@
         <div class="footerItem">
             <ul>
                 <li>
-                    <b><a>Klantenservice</a></b>
+                    <b><a asp-action="Klantenservice" asp-controller="FooterPages">Klantenservice</a></b>
                     <ul>
-                        <li>
-                            <a>Contact</a>
+                        <li class="footerLi">
+                            <a asp-action="Contact" asp-controller="FooterPages">Contact</a>
                         </li>
-                        <li>
-                            <a>Bestellen & Leveren</a>
+                        <li class="footerLi">
+                            <a asp-action="Bestellen" asp-controller="FooterPages">Bestellen & Leveren</a>
                         </li>
-                        <li>
-                            <a>Betalen</a>
+                        <li class="footerLi">
+                            <a asp-action="Betalen" asp-controller="FooterPages">Betalen</a>
                         </li>
-                        <li>
-                            <a>Retourneren</a>
+                        <li class="footerLi">
+                            <a asp-action="Retourneren" asp-controller="FooterPages">Retourneren</a>
                         </li>
-                        <li>
-                            <a>Garantie & Reparatie</a>
+                        <li class="footerLi">
+                            <a asp-action="Garantie" asp-controller="FooterPages">Garantie & Reparatie</a>
                         </li>
                     </ul>
                 </li>
@@ -148,10 +149,10 @@
         <div class="footerItem">
             <ul>
                 <li>
-                    <b><a>Over Ons</a></b>
+                    <b><a asp-action="Over" asp-controller="FooterPages">Over Ons</a></b>
                     <ul>
-                        <li>
-                            <a>De voordelen van SailingBoys</a>
+                        <li class="footerLi">
+                            <a asp-action="Voordelen" asp-controller="FooterPages">De voordelen van Banana Boat</a>
                         </li>
                     </ul>
                 </li>

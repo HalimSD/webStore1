@@ -70,9 +70,9 @@
         }
     </script> 
 <div class="pageRoot">
-    <h2>Create</h2>
+    <h2>Product aanmaken</h2>
 
-    <h4>Products</h4>
+    <h4>Producten</h4>
     <hr />
 
    
@@ -81,17 +81,17 @@
             <form asp-action="Create3" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="productwaarde.Title" class="control-label"></label>
+                    <label asp-for="productwaarde.Title" class="control-label">Titel</label>
                     <input asp-for="productwaarde.Title" class="form-control" placeholder="Title"/>
                     <span asp-validation-for="productwaarde.Title" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="productwaarde.Price" class="control-label"></label>
+                    <label asp-for="productwaarde.Price" class="control-label">Prijs</label>
                     <input asp-for="productwaarde.Price" class="form-control" placeholder="Price"/>
                     <span asp-validation-for="productwaarde.Price" class="text-danger"></span>
                 </div>
                  <div class="form-group">
-                    <label asp-for="productwaarde.Quantity" class="control-label"></label>
+                    <label asp-for="productwaarde.Quantity" class="control-label">Kwantiteit</label>
                     <input asp-for="productwaarde.Quantity" class="form-control" placeholder="Quantity"/>
                     <span asp-validation-for="productwaarde.Quantity" class="text-danger"></span>
                 </div>
@@ -104,7 +104,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="productwaarde.Description" class="control-label"></label>
+                    <label asp-for="productwaarde.Description" class="control-label">Beschrijving</label>
                     <input asp-for="productwaarde.Description" class="form-control" placeholder="Description"/>
                     <span asp-validation-for="productwaarde.Description" class="text-danger"></span>
                 </div>
@@ -161,10 +161,10 @@
                 
                  <div id="container" class="form-group"></div>
                  <div class="form-group">
-                    <input id="AddAtribute" class="btn" type="button" value="Voeg Custom attribuut toe" onclick="addFields()" />
+                    <input id="AddAtribute" class="btn btn-primary" type="button" value="Voeg Custom attribuut toe" onclick="addFields()" />
                  </div>
                 <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-default" />
+                    <input type="submit" value="Create" class="btn btn-primary" />
                 </div>
                 
             
@@ -173,7 +173,7 @@
     </div>
 
     <div>
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Create">Terug naar product categorien</a>
     </div>
 </div>
 @section Scripts {

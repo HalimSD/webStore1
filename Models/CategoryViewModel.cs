@@ -21,8 +21,8 @@ namespace WebApp1.Models
 
         public List<Productsoort> Categories { get; set; }
 
-        // Index 0 = attribute name, Index 1 = attribute id
-        public List<string[]> Attributes { get; set; }
+        // Index 0 = name, Index 1 = id, Index 2 = type
+        public List<AttributeFilter> Attributes { get; set; }
         public CategoryFilterModel Filters { get; set; }
 
         // The fields below are used to display the correct filter options
@@ -71,6 +71,9 @@ namespace WebApp1.Models
     public class AttributeFilter
     {
         public int AttributeId { get; set; }
+        public string AttributeName { get; set; }
+        public string[] FilterRanges { get; set; }
+        public string Type { get; set; }
         public string FilterValue { get; set; }
     }
 
@@ -124,21 +127,26 @@ namespace WebApp1.Models
             productsQuery = productsQuery.OrderBy(p => p.ProductsoortId);
             viewModel.Products = productsPage.GetPageIQueryable(pageNumber, productsQuery);
 
-            // Get the attributes of that category
-            List<string[]> attributes = new List<string[]>();
-            var att =
-                (from atts in context.Attribuutsoort where atts.ProductsoortId == categoryId select atts).ToList();
+            // Get the attributes of that category 
+            List<AttributeFilter> att =
+                (from atts in context.Attribuutsoort
+                    where atts.ProductsoortId == categoryId
+                    select new AttributeFilter
+                    {
+                        AttributeName = atts.Attrbuut, AttributeId = atts.Id, Type = atts.Type
+                     }).ToList();
 
-            // And place that data into an 2D array
-            // Each element is an array that contains Attribute name and ID
             foreach (var attribute in att)
             {
-                attributes.Add(new[] {attribute.Attrbuut, attribute.Id.ToString()});
+                if (attribute.Type == "number")
+                {
+                    attribute.FilterRanges = GetNumberAttributeFilterRange(productsQuery, attribute.AttributeId);
+                }
             }
 
 
             // Populate the view model with the needed data
-            viewModel.Attributes = attributes;
+            viewModel.Attributes = att;
             viewModel.Categories =
             (
                 from ps in context.Productsoort
@@ -181,7 +189,7 @@ namespace WebApp1.Models
                     return -1;
                 }
             }
-            
+
             return
             (
                 from r in context.ParentChild
@@ -272,6 +280,37 @@ namespace WebApp1.Models
             for (int i = 0; i <= ranges.Length - 1; i++)
             {
                 ranges[i] = string.Format("{0} stukken - {1} stukken", rangeIncr * i, rangeIncr * (i + 1));
+            }
+
+            return ranges;
+        }
+
+        private string[] GetNumberAttributeFilterRange(IQueryable<Productwaarde> query, int attributeId)
+        {
+            if (!query.Any()) return new string[0];
+
+            int[] attributeValues =
+            (
+                from attw in context.Attribuutwaarde
+                where attw.AttribuutsoortId == attributeId
+                select int.Parse(attw.Waarde)
+            ).ToArray();         
+            if (!attributeValues.Any()) return new string[0];
+            
+            // Detirmine how many ranges will be created
+            // Max is 5
+            int rangeOptions = attributeValues.Length;
+            if (rangeOptions > 5) rangeOptions = 5;
+            
+            
+            string[] ranges = new string[rangeOptions];
+            double maxValue = attributeValues.Max();
+            double minValue = attributeValues.Min();
+
+            double rangeIncr = (maxValue - minValue) / rangeOptions;
+            for (int i = 0; i <= ranges.Length - 1; i++)
+            {
+                ranges[i] = $"{(int)(minValue + (rangeIncr * i))} - {(int)(minValue + (rangeIncr * (i + 1)))}";
             }
 
             return ranges;

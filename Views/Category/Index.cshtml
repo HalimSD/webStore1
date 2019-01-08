@@ -100,11 +100,24 @@
                     {
                         <strong>Attributen</strong>
                         <br>
-                        for (int i = 0; i <= Model.Attributes.Count - 1; i++)
+                        for (int i = 0; i < Model.Attributes.Count(); i++)
                         {
-                            <input type="hidden" asp-for="Filters.AttributeFilters[i].AttributeId" value="@Model.Attributes[i][1]">
-                            <label>@Model.Attributes[i][0]</label>
-                            <input class="form-control" type="text" asp-for="Filters.AttributeFilters[i].FilterValue">
+                            if (Model.Attributes[i].Type == "string")
+                            {
+                                <input type="hidden" asp-for="Filters.AttributeFilters[i].AttributeId" value="@Model.Attributes[i].AttributeId">
+                                <label>@Model.Attributes[i].AttributeName</label>
+                                <input class="form-control" type="text" asp-for="Filters.AttributeFilters[i].FilterValue"><br>
+                            }
+                            else
+                            {
+                                <input type="hidden" name="@("attributeCheckBoxId" + i)" value="@Model.Attributes[i].AttributeId">
+                                <label>@Model.Attributes[i].AttributeName</label><br>
+                                foreach (var range in Model.Attributes[i].FilterRanges)
+                                {
+                                    <input type="checkbox" name="@("attributeCheckBoxValue" + i)" value="@range">
+                                    @range<br>
+                                }
+                            }
                         }
                         <hr>
                     }

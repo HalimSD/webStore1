@@ -47,19 +47,37 @@ namespace WebApp1.Controllers
             {
                 pageNumber = 1;
             }
-
-            if (HttpContext.Request.Query.ContainsKey("priceCheckbox"))
-            {
-                filters.PriceRanges = HttpContext.Request.Query["priceCheckbox"].ToArray();
-            }
-            if (HttpContext.Request.Query.ContainsKey("quantityCheckbox"))
-            {
-                filters.QuantityRanges = HttpContext.Request.Query["quantityCheckbox"].ToArray();
-            }
-            
+          
             if (useSessionFilters)
             {
                 filters = HttpContext.Session.Get<CategoryFilterModel>(sessionFiltersKey);
+            }
+            else
+            {
+                if (HttpContext.Request.Query.ContainsKey("priceCheckbox"))
+                {
+                    filters.PriceRanges = HttpContext.Request.Query["priceCheckbox"].ToArray();
+                }
+                if (HttpContext.Request.Query.ContainsKey("quantityCheckbox"))
+                {
+                    filters.QuantityRanges = HttpContext.Request.Query["quantityCheckbox"].ToArray();
+                } 
+                
+                // Retrieve the filter options for the number attributes
+                bool stop = false;
+                for (int i = 0; !stop; i++)
+                {
+                    if (HttpContext.Request.Query.ContainsKey("attributeCheckBoxId" + i) && HttpContext.Request.Query.ContainsKey("attributeCheckBoxValue" + i))
+                    {
+                        AttributeFilter currentFilter = new AttributeFilter()
+                        {
+                            AttributeId = int.Parse(HttpContext.Request.Query["attributeCheckBoxId" + i]),
+                            FilterRanges = HttpContext.Request.Query["attributeCheckBoxId" + i].ToArray()
+                        };
+                        filters.AttributeFilters.Add(currentFilter);
+                    }
+                    else stop = true;
+                }
             }
             
             if (filters.IsEmpty)

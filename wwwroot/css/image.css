@@ -1,11 +1,13 @@
 .category{
 	width: 50px;
 	height: 50px;
+	
 }
 
 .categoryImage{
 	width: 50px;
 	height: 50px;
+	
 }
 
 /* Popup container */
@@ -27,7 +29,8 @@
 	border-radius: 6px;
 	position: absolute;
 	z-index: 1;
-	top: 125%;
+	top: -150%;
+	left: 100%;
   }
   
   /* Popup arrow */
@@ -103,7 +106,7 @@ li.btn-primary > ul {
 } */
 
 #cat0{
-	z-index: 1;
+	z-index: 2;
 	position: relative;
 	left: 200px;
 	bottom: 200px;
@@ -117,7 +120,7 @@ li.btn-primary > ul {
 }
 
 #cat2{
-	z-index: 1;
+	z-index: 0;
 	position: relative;
 	left: 600px;
 	bottom: 300px;

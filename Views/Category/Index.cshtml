@@ -338,7 +338,7 @@
                 <a class="page-link" asp-action="GotoPage" asp-route-id="@Model.CategoryId" asp-route-pageIndex="@Model.Products.TotalPages" data-toggle="tooltip" data-placement="top" title="Naar einde">»</a>
             </li>
         }
-        <a id="paginationJumpTo" class="paginationJumpTo"  role="button" title='<p class="text-center">Spring naar pagina:</p>' data-toggle="popover" data-placement="top" data-html="true" data-content="">
+        <a id="categoryPageJumper" class="paginationJumpTo"  role="button" title='Spring naar pagina:' data-toggle="popover" data-placement="top" data-html="true" data-content="">
             Pagina @Model.Products.PageNumber van @Model.Products.TotalPages
             <i class="inline-icon material-icons">
                 arrow_drop_down
@@ -401,5 +401,3 @@ else
 </div>
 
 </div>
-
-<script type="module" src="~/js/categoryPopover.js"></script>

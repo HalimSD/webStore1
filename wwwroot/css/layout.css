@@ -46,7 +46,6 @@ a.footerLink:hover {
 
 div.footer {
 
-    font-family: monospace;
     width: 98%;
     height: 175px;
     background-color: #ffffff;
@@ -83,12 +82,6 @@ li {
     width: 49.9%;
 
 }
-
-.footerItem2 {
-
-
-}
-
 
 #siteLogo {
 

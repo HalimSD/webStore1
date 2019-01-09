@@ -98,7 +98,7 @@ namespace ContosoRTM.Controllers
                 City = appUser.City,
                 Gender = appUser.Gender,
                 TelephoneNumber = appUser.TelephoneNumber
-                
+
             };
             return View(user);
         }
@@ -156,7 +156,7 @@ namespace ContosoRTM.Controllers
                 City = appUser.City,
                 Gender = appUser.Gender,
                 TelephoneNumber = appUser.TelephoneNumber
-                
+
             };
             return View(user);
         }
@@ -165,7 +165,7 @@ namespace ContosoRTM.Controllers
         [HttpPost]
         public async Task<IActionResult> updateInfoAdmin(UserEdit model)
         {
-            Users user = await  _userManager.FindByIdAsync(model.UserId);
+            Users user = await _userManager.FindByIdAsync(model.UserId);
             user.Id = model.UserId;
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
@@ -201,7 +201,7 @@ namespace ContosoRTM.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> ResetUserPassword(string id)
         {
-             Users appUser = await _userManager.FindByIdAsync(id);
+            Users appUser = await _userManager.FindByIdAsync(id);
             UserEdit user = new UserEdit()
             {
                 UserId = appUser.Id,
@@ -215,7 +215,7 @@ namespace ContosoRTM.Controllers
                 PostalCode = appUser.PostalCode,
                 City = appUser.City,
             };
-           
+
             return View(user);
         }
 
@@ -226,8 +226,8 @@ namespace ContosoRTM.Controllers
             if (ModelState.IsValid)
             {
                 var x = await _userManager.FindByIdAsync(model.UserId);
-                    await _userManager.RemovePasswordAsync(x);
-                    await _userManager.AddPasswordAsync(x, model.Password);
+                await _userManager.RemovePasswordAsync(x);
+                await _userManager.AddPasswordAsync(x, model.Password);
 
 
                 TempData["Message"] = "Password successfully reset to " + model.Password;
@@ -245,6 +245,12 @@ namespace ContosoRTM.Controllers
         public async Task<IActionResult> DeleteUser(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
+            var x = (from p in _dbContext.Bestelling where p.UserId == id select p).ToList();
+            foreach (var item in x.ToList())
+            {
+                x.Remove(item);
+            }
+           
             await _userManager.DeleteAsync(user);
             return RedirectToAction("Index");
         }

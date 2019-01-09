@@ -25,14 +25,14 @@
             </div>
             @if(Model.Gender == "male"){
                 <div class="form-group">
-                <label asp-for="Geslacht">Geslacht</label><br>   
+                <label asp-for="Gender">Geslacht</label><br>   
                 <input type="radio" name="gender" value="male" checked> Meneer<br>
                 <input type="radio" name="gender" value="female"> Mevrouw<br>
                 <span asp-validation-for="Gender" class="text-danger"></span>
             </div>
             }else{
                 <div class="form-group">
-                <label asp-for="Geslacht">Geslacht</label><br>   
+                <label asp-for="Gender">Geslacht</label><br>   
                 <input type="radio" name="gender" value="male"> Meneer<br>
                 <input type="radio" name="gender" value="female" checked> Mevrouw<br>
                 <span asp-validation-for="Gender" class="text-danger"></span>

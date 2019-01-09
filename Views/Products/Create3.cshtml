@@ -6,7 +6,16 @@
 
 <link rel="stylesheet" href="~/css/product_creation_generic.css">
 <script type='text/javascript'>
+    function shhow(s){
+        console.log("henk");
+        if (document.getElementById(s).style.display == "block"){
+            document.getElementById(s).style.display = "none";
+        }
+        else{
+            document.getElementById(s).style.display = "block";
+        }
 
+    }
 
 	var i=0;
         function addFields(){
@@ -19,7 +28,7 @@
                 
 				
             // Create an <input> element, set its type and name attributes
-            container.appendChild(document.createTextNode("Attribute "+ i));
+            container.appendChild(document.createTextNode("Custom Atribute "+ i));
 
             var input = document.createElement("input");
             input.name= "newcustom["+i+"].extraAtribute.Attrbuut";
@@ -128,7 +137,7 @@
                     </div>
                     i = i +1;
                     }
-                    <label class="control-label">Categorie attributen</label>
+                    <label class="control-label">Custom cat attributen</label>
                     @for (var a = 0; a < Model.AcustomAtributesproductsoort.Count; a++)
                     {
                         <div class="form-group">
@@ -143,19 +152,30 @@
                         <hr>    
                                                                                                       
                     }
-                    <label class="control-label">Alle attributen</label>
+                    <label class="control-label">Alle custom attributen</label>
                     @for (var a = 0; a < Model.AcustomAtributesall.Count; a++)
                     {
+                        
+                        <br><label class="control-label">@Model.AcustomAtributesall[a].productSoort.Naam</label>
+                         <div class="form-group">
+                         <input id="show" class="btn btn-primary" type="button" value="Show attributes" onclick="shhow(@a)" />
+                        </div>
+                        <div id="@a" style="display: none;">
+                        @for (var aa = 0; aa < Model.AcustomAtributesall[a].customAtributes.Count; aa++)
+                        {
                         <div class="form-group">
-                        <input type="checkbox" asp-for="@Model.AcustomAtributesall[a].selected"  />@Model.AcustomAtributesall[a].customAtribute.Attrbuut
+                        <input type="checkbox" asp-for="@Model.AcustomAtributesall[a].selected"  />@Model.AcustomAtributesall[a].customAtributes[aa].Attrbuut
                          </div>
                          <div class="form-group">
-                        <input type="hidden" asp-for="@Model.AcustomAtributesall[a].customAtribute.Attrbuut" />
+                        <input type="hidden" asp-for="@Model.AcustomAtributesall[a].customAtributes[aa].Attrbuut" />
                         </div> 
                          <div class="form-group">
-                        <input type="text" asp-for="@Model.AcustomAtributesall[a].cattribuutwaarde.Waarde" />
+                        <input type="text" asp-for="@Model.AcustomAtributesall[a].cattribuutwaarde[aa].Waarde" />
                         </div>
-                        <hr>    
+                        
+                        <hr>   
+                        } 
+                        </div>
                                                                                                       
                     }
                 

@@ -47,19 +47,53 @@ namespace WebApp1.Controllers
             {
                 pageNumber = 1;
             }
-
-            if (HttpContext.Request.Query.ContainsKey("priceCheckbox"))
-            {
-                filters.PriceRanges = HttpContext.Request.Query["priceCheckbox"].ToArray();
-            }
-            if (HttpContext.Request.Query.ContainsKey("quantityCheckbox"))
-            {
-                filters.QuantityRanges = HttpContext.Request.Query["quantityCheckbox"].ToArray();
-            }
-            
+          
             if (useSessionFilters)
             {
                 filters = HttpContext.Session.Get<CategoryFilterModel>(sessionFiltersKey);
+            }
+            else
+            {
+                if (HttpContext.Request.Query.ContainsKey("priceCheckbox"))
+                {
+                    filters.PriceRanges = HttpContext.Request.Query["priceCheckbox"].ToArray();
+                }
+                if (HttpContext.Request.Query.ContainsKey("quantityCheckbox"))
+                {
+                    filters.QuantityRanges = HttpContext.Request.Query["quantityCheckbox"].ToArray();
+                } 
+                
+                // Retrieve the filter options for the number attributes
+                // First we count how many relevant keys there are
+                filters.AttributeFilters = new List<AttributeFilter>();
+                foreach (string key in HttpContext.Request.Query.Keys)
+                {
+                    if (key.Contains("AttributeId"))
+                    {
+                        int index = int.Parse(key.Replace("AttributeId", String.Empty));
+                        if (HttpContext.Request.Query.ContainsKey("AttributeCheckboxValue" + index))
+                        {
+                            AttributeFilter currentFilter = new AttributeFilter()
+                            {
+                                AttributeId = int.Parse(HttpContext.Request.Query["AttributeId" + index]),
+                                FilterRanges = HttpContext.Request.Query["AttributeCheckboxValue" + index].ToArray(),
+                                Type = "number"
+                            };
+                            filters.AttributeFilters.Add(currentFilter);
+                        }
+
+                        if (HttpContext.Request.Query.ContainsKey("AttributeInputValue" + index))
+                        {
+                            AttributeFilter currentFilter = new AttributeFilter()
+                            {
+                                AttributeId = int.Parse(HttpContext.Request.Query["AttributeId" + index]),
+                                FilterValue = HttpContext.Request.Query["AttributeInputValue" + index],
+                                Type = "string"
+                            };
+                            filters.AttributeFilters.Add(currentFilter);
+                        }
+                    }
+                }
             }
             
             if (filters.IsEmpty)

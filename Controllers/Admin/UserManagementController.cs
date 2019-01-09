@@ -95,7 +95,10 @@ namespace ContosoRTM.Controllers
                 HouseNumber = appUser.HouseNumber,
                 Street = appUser.Street,
                 PostalCode = appUser.PostalCode,
-                City = appUser.City
+                City = appUser.City,
+                Gender = appUser.Gender,
+                TelephoneNumber = appUser.TelephoneNumber
+                
             };
             return View(user);
         }
@@ -114,6 +117,8 @@ namespace ContosoRTM.Controllers
             user.City = model.City;
             user.Email = model.Email;
             user.UserName = model.Email;
+            user.Gender = model.Gender;
+            user.TelephoneNumber = model.TelephoneNumber;
 
             if (ModelState.IsValid)
             {
@@ -149,6 +154,8 @@ namespace ContosoRTM.Controllers
                 Street = appUser.Street,
                 PostalCode = appUser.PostalCode,
                 City = appUser.City,
+                Gender = appUser.Gender,
+                TelephoneNumber = appUser.TelephoneNumber
                 
             };
             return View(user);
@@ -169,6 +176,8 @@ namespace ContosoRTM.Controllers
             user.City = model.City;
             user.Email = model.Email;
             user.UserName = model.Email;
+            user.TelephoneNumber = model.TelephoneNumber;
+            user.Gender = model.Gender;
 
 
             if (ModelState.IsValid)

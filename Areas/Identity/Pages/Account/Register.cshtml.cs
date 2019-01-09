@@ -92,18 +92,21 @@ namespace WebApp1.Areas.Identity.Pages.Account
             [Display(Name = "Stad")]
             public string City { get; set; }
 
-            
+            [Required]
             [DataType(DataType.Text)]
             [Display(Name = "Geslacht")]
             public string Gender { get; set; }
 
+            [StringLength(20, ErrorMessage = "De {0} naam moet minimaal {2} en maximaal {1} characters zijn.", MinimumLength = 4)]
             [Required]
             [DataType(DataType.Text)]
             [Display(Name = "Land")]
             public string Country { get; set; }
 
             [Required]
-            [DataType(DataType.Text)]
+            [DataType(DataType.PhoneNumber)]
+            [StringLength(13, ErrorMessage = "Het {0} moet minimaal {2} en maximaal {1} nummers zijn.", MinimumLength = 10)]
+            [RegularExpression(@"([0-9]+)", ErrorMessage = "Moet een nummer zijn.")]
             [Display(Name = "Telefoonnummer")]
             public int TelephoneNumber { get; set; }
         }
@@ -118,23 +121,24 @@ namespace WebApp1.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new Users 
-                { UserName = Input.Email,
-                 Email = Input.Email,
-                 FirstName = Input.FirstName,
-                 LastName = Input.LastName,
-                 City = Input.City,
-                 Street = Input.Street,
-                 PostalCode = Input.PostalCode,
-                 HouseNumber = Input.HouseNumber,
-                 BirthDate = Input.BirthDate,
-                 Gender = Input.Gender,
-                 Country = Input.Country,
-                 TelephoneNumber = Input.TelephoneNumber,
+                var user = new Users
+                {
+                    UserName = Input.Email,
+                    Email = Input.Email,
+                    FirstName = Input.FirstName,
+                    LastName = Input.LastName,
+                    City = Input.City,
+                    Street = Input.Street,
+                    PostalCode = Input.PostalCode,
+                    HouseNumber = Input.HouseNumber,
+                    BirthDate = Input.BirthDate,
+                    Gender = Input.Gender,
+                    Country = Input.Country,
+                    TelephoneNumber = Input.TelephoneNumber,
 
 
-                 
-                 };
+
+                };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

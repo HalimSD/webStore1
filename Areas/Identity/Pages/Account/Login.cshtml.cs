@@ -76,22 +76,22 @@ namespace WebApp1.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 Users userid = await _userManager.FindByEmailAsync(Input.Email);
-                // if (userid != null)
-                // {
-                //     bool userConfirm = await _userManager.IsEmailConfirmedAsync(userid);
-                //     if (userConfirm == false)
-                //     {
+                if (userid != null)
+                {
+                    bool userConfirm = await _userManager.IsEmailConfirmedAsync(userid);
+                    if (userConfirm == false)
+                    {
 
-                //         ModelState.AddModelError(string.Empty, "Ongeldige inlogpoging. Controleer uw e-mailadres om dit te bevestigen voordat u inlogt.");
-                //         return Page();
+                        ModelState.AddModelError(string.Empty, "Ongeldige inlogpoging. Controleer uw e-mailadres om dit te bevestigen voordat u inlogt.");
+                        return Page();
 
-                //     }
-                //     else
-                //     {
-                //         var result1 = await _signInManager.PasswordSignInAsync(Input.Email,
-                //                    Input.Password, Input.RememberMe, lockoutOnFailure: true);
-                //     }
-                // }
+                    }
+                    else
+                    {
+                        var result1 = await _signInManager.PasswordSignInAsync(Input.Email,
+                                   Input.Password, Input.RememberMe, lockoutOnFailure: true);
+                    }
+                }
 var result = await _signInManager.PasswordSignInAsync(Input.Email,
                                    Input.Password, Input.RememberMe, lockoutOnFailure: true);
                

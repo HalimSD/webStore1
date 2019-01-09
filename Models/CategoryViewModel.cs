@@ -44,21 +44,21 @@ namespace WebApp1.Models
         {
             get
             {
-                bool empty = true;
+                bool containsFilters = false;
                 if (AttributeFilters == null) return false;
                 foreach (AttributeFilter attributeFilter in AttributeFilters)
                 {
                     if (attributeFilter.Type == "number")
                     {
-                        empty = attributeFilter.FilterRanges != null;
+                        containsFilters = attributeFilter.FilterRanges != null;
                     }
                     else
                     {
-                        empty = !string.IsNullOrWhiteSpace(attributeFilter.FilterValue);
+                        containsFilters = !string.IsNullOrWhiteSpace(attributeFilter.FilterValue);
                     }
                 }
 
-                return !empty;
+                return containsFilters;
             }
         }
 
@@ -78,13 +78,16 @@ namespace WebApp1.Models
                         {
                             if (!string.IsNullOrEmpty(item.FilterValue)) empty = false;
                         }
-                        if (item.Type == "number") {
+
+                        if (item.Type == "number")
                         {
-                            foreach (string range in item.FilterRanges)
                             {
-                                if (range != "false") empty = false;
+                                foreach (string range in item.FilterRanges)
+                                {
+                                    if (range != "false") empty = false;
+                                }
                             }
-                        }}
+                        }
                     }
                 }
                 else
@@ -465,8 +468,8 @@ namespace WebApp1.Models
                     // Now we check the products that match the filter requirement
                     filteredQuery = filteredQuery.Union(
                         from p in query
-                        where p.Quantity >= (int)range[0] &&
-                              p.Quantity <= (int)range[1]
+                        where p.Quantity >= (int) range[0] &&
+                              p.Quantity <= (int) range[1]
                         select p
                     );
                 }
@@ -486,7 +489,6 @@ namespace WebApp1.Models
             foreach (AttributeFilter item in filters.AttributeFilters)
             {
                 if (item.FilterValue == null && item.FilterRanges == null) continue;
-                filtered = true;
                 switch (item.Type)
                 {
                     case "number":
@@ -503,8 +505,7 @@ namespace WebApp1.Models
                                       Convert.ToInt32(attw.Waarde) <= rangeValues[1]
                                 select pw
                             );
-
-                            
+                            filtered = true;
                         }
 
                         break;
@@ -518,6 +519,7 @@ namespace WebApp1.Models
                                   attw.Waarde.ToUpper().Contains(item.FilterValue.ToUpper())
                             select pw
                         );
+                        filtered = true;
                         break;
                 }
             }

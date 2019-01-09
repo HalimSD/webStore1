@@ -105,7 +105,6 @@ namespace WebApp1.Areas.Identity.Pages.Account
 
             [Required]
             [DataType(DataType.PhoneNumber)]
-            [StringLength(13, ErrorMessage = "Het {0} moet minimaal {2} en maximaal {1} nummers zijn.", MinimumLength = 10)]
             [RegularExpression(@"([0-9]+)", ErrorMessage = "Moet een nummer zijn.")]
             [Display(Name = "Telefoonnummer")]
             public int TelephoneNumber { get; set; }

@@ -50,11 +50,17 @@ namespace WebApp1.Models
                 {
                     if (attributeFilter.Type == "number")
                     {
-                        containsFilters = attributeFilter.FilterRanges != null;
+                        if (attributeFilter.FilterRanges != null)
+                        {
+                            containsFilters = true;
+                        }
                     }
-                    else
+                    if (attributeFilter.Type == "string")
                     {
-                        containsFilters = !string.IsNullOrWhiteSpace(attributeFilter.FilterValue);
+                        if (!string.IsNullOrWhiteSpace(attributeFilter.FilterValue))
+                        {
+                            containsFilters = true;
+                        }
                     }
                 }
 

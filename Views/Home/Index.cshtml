@@ -137,88 +137,120 @@ var categories = @Html.Raw(Json.Serialize(Model.kaas));
 
 console.log(categories);
 for (const item of categories.children){
-if (item.name == "Zeilboot"){
-const ul = menuToElement(item);
+if (item.name == "Zeilboot"){  
+
+  const ul = menuToElement(item);
   document.getElementById("menu").appendChild(ul);
   
+  if (item.children.length == 0){
+    var category1 = document.getElementById("menu");
+    menuSrc = category1.firstChild.firstChild.src
+    var catImg1 = document.getElementById("catImg1");
+    catImg1.src = menuSrc;
+  }
+  else{
+    //category 1 image
+    var category1 = document.getElementById("menu");
+    menuSrc = category1.firstChild.firstChild.firstChild.src
+    var catImg1 = document.getElementById("catImg1");
+    catImg1.src = menuSrc;
+  }
+
+  function togglePopup1() {
+      var popup = document.getElementById("myPopup1");
+      popup.classList.toggle("show");
+      $('.imageDropdownUl').css("display", "none");
+      $('#myPopup1').show();
+      $('#myPopup2').hide();
+      $('#myPopup3').hide();
+      
+      //reset image
+      var image = "/images/boat.png";
+      var topImage = document.getElementById("topImg1");
+      var topImage2 = document.getElementById("topImg2");
+      var topImage3 = document.getElementById("topImg3");
+      topImage.src = image;
+      topImage2.src = image;
+      topImage3.src = image;
+
+  }
 }
 else if (item.name == "Speedboot"){
+
   const ul2 = menuToElement(item);
   document.getElementById("menu2").appendChild(ul2);
+
+  if (item.children.length == 0){
+    //category 2 image
+    var category2 = document.getElementById("menu2");
+    menuSrc2 = category2.firstChild.firstChild.src
+    var catImg1 = document.getElementById("catImg2");
+    catImg2.src = menuSrc2;
+  }
+  else{
+    //category 2 image
+    var category2 = document.getElementById("menu2");
+    menuSrc2 = category2.firstChild.firstChild.firstChild.src
+    var catImg1 = document.getElementById("catImg2");
+    catImg2.src = menuSrc2;
+  }
+
+  function togglePopup2() {
+      var popup = document.getElementById("myPopup2");
+      popup.classList.toggle("show");
+      $('.imageDropdownUl').css("display", "none");
+      $('#myPopup2').show();
+      $('#myPopup1').hide();
+      $('#myPopup3').hide();
+
+      //reset image
+      var image = "/images/boat.png";
+      var topImage = document.getElementById("topImg1");
+      var topImage2 = document.getElementById("topImg2");
+      var topImage3 = document.getElementById("topImg3");
+      topImage.src = image;
+      topImage2.src = image;
+      topImage3.src = image;
+  }
 }
 
 else if (item.name == "Sloep"){
   const ul3 = menuToElement(item);
   document.getElementById("menu3").appendChild(ul3);
-}
 
-}
+  if (item.children.length == 0){
+    //category 3 image
+    var category3 = document.getElementById("menu3");
+    menuSrc3 = category3.firstChild.firstChild.src
+    var catImg1 = document.getElementById("catImg3");
+    catImg3.src = menuSrc3;
+  }
+  else{
+    //category 3 image
+    var category3 = document.getElementById("menu3");
+    menuSrc3 = category3.firstChild.firstChild.firstChild.src
+    var catImg1 = document.getElementById("catImg3");
+    catImg3.src = menuSrc3;
+  }
 
+  function togglePopup3() {
+      var popup = document.getElementById("myPopup3");
+      popup.classList.toggle("show");
+      $('.imageDropdownUl').css("display", "none");
+      $('#myPopup3').show();
+      $('#myPopup1').hide();
+      $('#myPopup2').hide();
 
+      //reset image
+      var image = "/images/boat.png";
+      var topImage = document.getElementById("topImg1");
+      var topImage2 = document.getElementById("topImg2");
+      var topImage3 = document.getElementById("topImg3");
+      topImage.src = image;
+      topImage2.src = image;
+      topImage3.src = image;
+  }
 
-//const ul = menuToElement(categories);
-//document.getElementById("menu").appendChild(ul);
-
-//const ul2 = menuToElement(tire);
-//document.getElementById("menu2").app, endChild(ul2);
-
-
-//When the user clicks on <div>, open the popup
-for (const item of categories.children){
-
-function togglePopup1() {
-    var popup = document.getElementById("myPopup1");
-    popup.classList.toggle("show");
-    $('.imageDropdownUl').css("display", "none");
-    $('#myPopup1').show();
-    $('#myPopup2').hide();
-    $('#myPopup3').hide();
-    
-    //reset image
-    var image = "/images/boat.png";
-    var topImage = document.getElementById("topImg1");
-    var topImage2 = document.getElementById("topImg2");
-    var topImage3 = document.getElementById("topImg3");
-    topImage.src = image;
-    topImage2.src = image;
-    topImage3.src = image;
-
-}
-
-function togglePopup2() {
-    var popup = document.getElementById("myPopup2");
-    popup.classList.toggle("show");
-    $('.imageDropdownUl').css("display", "none");
-    $('#myPopup2').show();
-    $('#myPopup1').hide();
-    $('#myPopup3').hide();
-
-    //reset image
-    var image = "/images/boat.png";
-    var topImage = document.getElementById("topImg1");
-    var topImage2 = document.getElementById("topImg2");
-    var topImage3 = document.getElementById("topImg3");
-    topImage.src = image;
-    topImage2.src = image;
-    topImage3.src = image;
-}
-
-function togglePopup3() {
-    var popup = document.getElementById("myPopup3");
-    popup.classList.toggle("show");
-    $('.imageDropdownUl').css("display", "none");
-    $('#myPopup3').show();
-    $('#myPopup1').hide();
-    $('#myPopup2').hide();
-
-    //reset image
-    var image = "/images/boat.png";
-    var topImage = document.getElementById("topImg1");
-    var topImage2 = document.getElementById("topImg2");
-    var topImage3 = document.getElementById("topImg3");
-    topImage.src = image;
-    topImage2.src = image;
-    topImage3.src = image;
 }
 
 //categories and subcategories onclick function
@@ -234,10 +266,6 @@ $(".btn-primary").on('click', function(event){
   
 });
 
-
-
-
-//dropdown in popup
 var txt = $('.txt'),
     options = $('.options');
 
@@ -255,9 +283,7 @@ txt.click(function (e) {
 $('body').click(function (e) {
     options.hide();
 });
-}
 
-//picture on click
 $(".borderBottom").on('click', function(event){   
     var pic = this.firstChild.src;
     var topImage = document.getElementById("topImg1");
@@ -268,23 +294,7 @@ $(".borderBottom").on('click', function(event){
     topImage3.src = pic;  
 });
 
-//category 1 image
-var category1 = document.getElementById("menu");
-menuSrc = category1.firstChild.firstChild.firstChild.src
-var catImg1 = document.getElementById("catImg1");
-catImg1.src = menuSrc;
-
-//category 2 image
-var category2 = document.getElementById("menu2");
-menuSrc2 = category2.firstChild.firstChild.firstChild.src
-var catImg1 = document.getElementById("catImg2");
-catImg2.src = menuSrc2;
-
-//category 3 image
-var category3 = document.getElementById("menu3");
-menuSrc3 = category3.firstChild.firstChild.firstChild.src
-var catImg1 = document.getElementById("catImg3");
-catImg3.src = menuSrc3;
+}
 
 </script>
 

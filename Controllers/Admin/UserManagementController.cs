@@ -244,9 +244,10 @@ namespace ContosoRTM.Controllers
         // [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteUser(string id)
         {
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
             var user = await _userManager.FindByIdAsync(id);
             var x = (from p in _dbContext.Bestelling where p.UserId == id select p).ToList();
-            if (user.Id != id)
+            if (user.Id != currentUser.Id)
             {
                 foreach (var item in x.ToList())
                 {

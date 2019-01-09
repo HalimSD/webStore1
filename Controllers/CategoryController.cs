@@ -64,19 +64,35 @@ namespace WebApp1.Controllers
                 } 
                 
                 // Retrieve the filter options for the number attributes
-                bool stop = false;
-                for (int i = 0; !stop; i++)
+                // First we count how many relevant keys there are
+                filters.AttributeFilters = new List<AttributeFilter>();
+                foreach (string key in HttpContext.Request.Query.Keys)
                 {
-                    if (HttpContext.Request.Query.ContainsKey("attributeCheckBoxId" + i) && HttpContext.Request.Query.ContainsKey("attributeCheckBoxValue" + i))
+                    if (key.Contains("AttributeId"))
                     {
-                        AttributeFilter currentFilter = new AttributeFilter()
+                        int index = int.Parse(key.Replace("AttributeId", String.Empty));
+                        if (HttpContext.Request.Query.ContainsKey("AttributeCheckboxValue" + index))
                         {
-                            AttributeId = int.Parse(HttpContext.Request.Query["attributeCheckBoxId" + i]),
-                            FilterRanges = HttpContext.Request.Query["attributeCheckBoxId" + i].ToArray()
-                        };
-                        filters.AttributeFilters.Add(currentFilter);
+                            AttributeFilter currentFilter = new AttributeFilter()
+                            {
+                                AttributeId = int.Parse(HttpContext.Request.Query["AttributeId" + index]),
+                                FilterRanges = HttpContext.Request.Query["AttributeCheckboxValue" + index].ToArray(),
+                                Type = "number"
+                            };
+                            filters.AttributeFilters.Add(currentFilter);
+                        }
+
+                        if (HttpContext.Request.Query.ContainsKey("AttributeInputValue" + index))
+                        {
+                            AttributeFilter currentFilter = new AttributeFilter()
+                            {
+                                AttributeId = int.Parse(HttpContext.Request.Query["AttributeId" + index]),
+                                FilterValue = HttpContext.Request.Query["AttributeInputValue" + index],
+                                Type = "string"
+                            };
+                            filters.AttributeFilters.Add(currentFilter);
+                        }
                     }
-                    else stop = true;
                 }
             }
             

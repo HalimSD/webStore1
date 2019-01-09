@@ -40,6 +40,28 @@ namespace WebApp1.Models
 
         public List<AttributeFilter> AttributeFilters { get; set; }
 
+        public bool HasAttributeFilters
+        {
+            get
+            {
+                bool empty = true;
+                if (AttributeFilters == null) return false;
+                foreach (AttributeFilter attributeFilter in AttributeFilters)
+                {
+                    if (attributeFilter.Type == "number")
+                    {
+                        empty = attributeFilter.FilterRanges != null;
+                    }
+                    else
+                    {
+                        empty = !string.IsNullOrWhiteSpace(attributeFilter.FilterValue);
+                    }
+                }
+
+                return !empty;
+            }
+        }
+
         // Used to check if Filter options are empty!
         public bool IsEmpty
         {
@@ -52,10 +74,17 @@ namespace WebApp1.Models
                 {
                     foreach (var item in AttributeFilters)
                     {
-                        if (item.FilterValue != null)
+                        if (item.Type == "string")
                         {
-                            empty = false;
+                            if (!string.IsNullOrEmpty(item.FilterValue)) empty = false;
                         }
+                        if (item.Type == "number") {
+                        {
+                            foreach (string range in item.FilterRanges)
+                            {
+                                if (range != "false") empty = false;
+                            }
+                        }}
                     }
                 }
                 else
@@ -134,7 +163,7 @@ namespace WebApp1.Models
                     select new AttributeFilter
                     {
                         AttributeName = atts.Attrbuut, AttributeId = atts.Id, Type = atts.Type
-                     }).ToList();
+                    }).ToList();
 
             foreach (var attribute in att)
             {
@@ -292,17 +321,18 @@ namespace WebApp1.Models
             int[] attributeValues =
             (
                 from attw in context.Attribuutwaarde
-                where attw.AttribuutsoortId == attributeId
+                where attw.AttribuutsoortId == attributeId &&
+                      attw.Waarde != "N/A"
                 select int.Parse(attw.Waarde)
-            ).ToArray();         
+            ).ToArray();
             if (!attributeValues.Any()) return new string[0];
-            
+
             // Detirmine how many ranges will be created
             // Max is 5
             int rangeOptions = attributeValues.Length;
             if (rangeOptions > 5) rangeOptions = 5;
-            
-            
+
+
             string[] ranges = new string[rangeOptions];
             double maxValue = attributeValues.Max();
             double minValue = attributeValues.Min();
@@ -310,7 +340,7 @@ namespace WebApp1.Models
             double rangeIncr = (maxValue - minValue) / rangeOptions;
             for (int i = 0; i <= ranges.Length - 1; i++)
             {
-                ranges[i] = $"{(int)(minValue + (rangeIncr * i))} - {(int)(minValue + (rangeIncr * (i + 1)))}";
+                ranges[i] = $"{(int) (minValue + (rangeIncr * i))} - {(int) (minValue + (rangeIncr * (i + 1)))}";
             }
 
             return ranges;
@@ -340,16 +370,12 @@ namespace WebApp1.Models
             return idArray;
         }
 
-        /// <summary>
-        /// Converts a price range string (e.g. "€500 - €2999")
-        /// and extracts the two numbers from it which will be placed in a double array
-        /// </summary>
-        /// <param name="range">The range string</param>
-        /// <returns>A double array that contains the minimum/maximum price</returns>
-        private double[] GetMinMaxPrice(string range)
+        private double[] GetRangeValuesFromString(string range)
         {
             double[] rangeArray = new double[2];
-            range = range.Replace("€", string.Empty).Replace(" ", string.Empty);
+            range = range.Replace("stukken", string.Empty)
+                .Replace("€", string.Empty)
+                .Replace(" ", string.Empty);
             string[] split = range.Split("-");
             rangeArray[0] = double.Parse(split[0]);
             rangeArray[1] = double.Parse(split[1]);
@@ -359,26 +385,6 @@ namespace WebApp1.Models
             {
                 double min = rangeArray[1];
                 double max = rangeArray[0];
-                rangeArray[0] = min;
-                rangeArray[1] = max;
-            }
-
-            return rangeArray;
-        }
-
-        private int[] GetQuantityRangeFromString(string range)
-        {
-            int[] rangeArray = new int[2];
-            range = range.Replace("stukken", string.Empty).Replace(" ", string.Empty);
-            string[] split = range.Split("-");
-            rangeArray[0] = int.Parse(split[0]);
-            rangeArray[1] = int.Parse(split[1]);
-
-            // Make sure index 0 is min and index 1 is max
-            if (rangeArray[0] > rangeArray[1])
-            {
-                int min = rangeArray[1];
-                int max = rangeArray[0];
                 rangeArray[0] = min;
                 rangeArray[1] = max;
             }
@@ -406,7 +412,7 @@ namespace WebApp1.Models
                     filtered = true;
 
                     // Get the price range that is used in the filter
-                    double[] range = GetMinMaxPrice(item);
+                    double[] range = GetRangeValuesFromString(item);
 
                     // First we check the products with discount
                     var discountQuery =
@@ -454,13 +460,13 @@ namespace WebApp1.Models
                     filtered = true;
 
                     // Get the price range that is used in the filter
-                    int[] range = GetQuantityRangeFromString(item);
+                    double[] range = GetRangeValuesFromString(item);
 
                     // Now we check the products that match the filter requirement
                     filteredQuery = filteredQuery.Union(
                         from p in query
-                        where p.Quantity >= range[0] &&
-                              p.Quantity <= range[1]
+                        where p.Quantity >= (int)range[0] &&
+                              p.Quantity <= (int)range[1]
                         select p
                     );
                 }
@@ -473,23 +479,46 @@ namespace WebApp1.Models
         private IQueryable<Productwaarde> FilterAttributes(CategoryFilterModel filters, IQueryable<Productwaarde> query)
         {
             if (filters == null) return query;
-            if (filters.AttributeFilters == null) return query;
+            if (!filters.HasAttributeFilters) return query;
 
             bool filtered = false;
             var filteredQuery = query.Take(0);
             foreach (AttributeFilter item in filters.AttributeFilters)
             {
-                if (item.FilterValue != null)
+                if (item.FilterValue == null && item.FilterRanges == null) continue;
+                filtered = true;
+                switch (item.Type)
                 {
-                    filtered = true;
-                    filteredQuery = filteredQuery.Union(
-                        from attw in context.Attribuutwaarde
-                        from pw in query
-                        where attw.ProductwaardeId == pw.Id &&
-                              attw.AttribuutsoortId == item.AttributeId &&
-                              attw.Waarde.ToUpper().Contains(item.FilterValue.ToUpper())
-                        select pw
-                    );
+                    case "number":
+                        foreach (string range in item.FilterRanges)
+                        {
+                            if (range == "false") continue;
+                            double[] rangeValues = GetRangeValuesFromString(range);
+                            filteredQuery = filteredQuery.Union(
+                                from attw in context.Attribuutwaarde
+                                from pw in query
+                                where attw.ProductwaardeId == pw.Id &&
+                                      attw.AttribuutsoortId == item.AttributeId &&
+                                      Convert.ToInt32(attw.Waarde) >= rangeValues[0] &&
+                                      Convert.ToInt32(attw.Waarde) <= rangeValues[1]
+                                select pw
+                            );
+
+                            
+                        }
+
+                        break;
+                    default:
+                        if (string.IsNullOrWhiteSpace(item.FilterValue)) continue;
+                        filteredQuery = filteredQuery.Union(
+                            from attw in context.Attribuutwaarde
+                            from pw in query
+                            where attw.ProductwaardeId == pw.Id &&
+                                  attw.AttribuutsoortId == item.AttributeId &&
+                                  attw.Waarde.ToUpper().Contains(item.FilterValue.ToUpper())
+                            select pw
+                        );
+                        break;
                 }
             }
 

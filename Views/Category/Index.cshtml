@@ -1,8 +1,39 @@
+@using Microsoft.AspNetCore.Mvc.Filters
 @model WebApp1.Models.CategoryViewModel
 
 @{
     ViewData["Title"] = Model.CategoryName;
     int paginationBtnLimit = 20;
+    
+    List<string> selectedAttributeRangeFilters = new List<string>();
+    if (Model.Filters?.AttributeFilters != null)
+    {
+        foreach (AttributeFilter attributeFilter in Model.Filters.AttributeFilters)
+        {
+            if (attributeFilter.Type == "number" && attributeFilter.FilterRanges != null)
+            {
+                foreach (string range in attributeFilter.FilterRanges)
+                {
+                    selectedAttributeRangeFilters.Add(range);
+                }
+            }
+        }
+    }
+    
+    List<int> selectedAttributeInputFilterId = new List<int>();
+    List<string> selectedAttributeInputFilterValue = new List<string>();
+    if (Model.Filters?.AttributeFilters != null)
+    {
+        foreach (AttributeFilter attributeFilter in Model.Filters.AttributeFilters)
+        {
+            if (attributeFilter.Type == "string" && attributeFilter.FilterValue != null)
+            {
+                selectedAttributeInputFilterId.Add(attributeFilter.AttributeId);
+                selectedAttributeInputFilterValue.Add(attributeFilter.FilterValue);
+            }
+        }
+    }
+    
 
     // The code below is used to populate the product page
     // The product page itself consists of 3 columns
@@ -59,7 +90,7 @@
             </form>
         </div>
     }
-    @if (Model.Products.Data.Any())
+    @if (Model.Attributes.Any() || Model.PriceFilterRange != null || Model.QuantityFilterRange != null)
     {
         <div id="categoryArea" style="margin-top: 15px;">
             <div class="categoryTitle">Filteren</div>
@@ -98,24 +129,41 @@
                     <hr>
                     @if (Model.Attributes.Any())
                     {
-                        <strong>Attributen</strong>
-                        <br>
                         for (int i = 0; i < Model.Attributes.Count(); i++)
                         {
-                            if (Model.Attributes[i].Type == "string")
+                            <br>
+                            if (Model.Attributes[i].Type == "number")
                             {
-                                <input type="hidden" asp-for="Filters.AttributeFilters[i].AttributeId" value="@Model.Attributes[i].AttributeId">
-                                <label>@Model.Attributes[i].AttributeName</label>
-                                <input class="form-control" type="text" asp-for="Filters.AttributeFilters[i].FilterValue"><br>
+                                <input type="hidden" name="@("AttributeId" + i)" value="@Model.Attributes[i].AttributeId">
+                                <label><strong>@Model.Attributes[i].AttributeName</strong></label>
+                                <br>
+                                for (int x = 0; x < Model.Attributes[i].FilterRanges.Length; x++)
+                                {
+                                    if (selectedAttributeRangeFilters.Contains(Model.Attributes[i].FilterRanges[x]))
+                                    {
+                                        <input type="checkbox" name="@("AttributeCheckboxValue" + i)" value ="@Model.Attributes[i].FilterRanges[x]" checked>
+                                        @Model.Attributes[i].FilterRanges[x]<br>
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" name="@("AttributeCheckboxValue" + i)" value ="@Model.Attributes[i].FilterRanges[x]">
+                                        @Model.Attributes[i].FilterRanges[x]<br>
+                                    }
+                                }
                             }
                             else
                             {
-                                <input type="hidden" name="@("attributeCheckBoxId" + i)" value="@Model.Attributes[i].AttributeId">
-                                <label>@Model.Attributes[i].AttributeName</label><br>
-                                foreach (var range in Model.Attributes[i].FilterRanges)
+                                if (selectedAttributeInputFilterId.Contains(Model.Attributes[i].AttributeId))
                                 {
-                                    <input type="checkbox" name="@("attributeCheckBoxValue" + i)" value="@range">
-                                    @range<br>
+                                    <input type="hidden" name="@("AttributeId" + i)" value="@Model.Attributes[i].AttributeId">
+                                    <label><strong>@Model.Attributes[i].AttributeName</strong></label>
+                                    <input class="form-control" type="text" name="@("AttributeInputValue" + i)" value="@selectedAttributeInputFilterValue[selectedAttributeInputFilterId.IndexOf(Model.Attributes[i].AttributeId)]">
+                                }
+                                else
+                                {
+                                    <input type="hidden" name="@("AttributeId" + i)" value="@Model.Attributes[i].AttributeId">
+                                    <label><strong>@Model.Attributes[i].AttributeName</strong></label>
+                                    <input class="form-control" type="text" name="@("AttributeInputValue" + i)" value="">
                                 }
                             }
                         }
@@ -351,7 +399,7 @@
                 <a class="page-link" asp-action="GotoPage" asp-route-id="@Model.CategoryId" asp-route-pageIndex="@Model.Products.TotalPages" data-toggle="tooltip" data-placement="top" title="Naar einde">»</a>
             </li>
         }
-        <a id="categoryPageJumper" class="paginationJumpTo"  role="button" title='Spring naar pagina:' data-toggle="popover" data-placement="top" data-html="true" data-content="">
+        <a id="categoryPageJumper" class="paginationJumpTo" role="button" title='Spring naar pagina:' data-toggle="popover" data-placement="top" data-html="true" data-content="">
             Pagina @Model.Products.PageNumber van @Model.Products.TotalPages
             <i class="inline-icon material-icons">
                 arrow_drop_down

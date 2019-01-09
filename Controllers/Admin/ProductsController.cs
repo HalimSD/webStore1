@@ -287,7 +287,8 @@ namespace WebApp1.Controllers
                     from productsoorten in _context.Productsoort
                     join atributen in _context.Attribuutsoort on productsoorten.Id equals atributen.ProductsoortId
                     where atributen.Custom == true
-                    select new CreateproductModel.CreateproductModel.AlreadyCustomAtributes(){customAtribute = atributen, selected = false};
+                    group atributen by productsoorten into g
+                    select new CreateproductModel.CreateproductModel.AllCustomAtt(){productSoort = g.Key, customAtributes = g.ToList(), selected = false};
            
 
             var ProductModel = new WebApp1.CreateproductModel.CreateproductModel();
@@ -308,7 +309,7 @@ namespace WebApp1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create3(Productwaarde productwaarde, IList<WebApp1.Models.Attribuutsoort> Attribuutsoorts, List<CreateproductModel.CreateproductModel.Atribuutsoortmetwaardes> newcustom, List<CreateproductModel.CreateproductModel.AlreadyCustomAtributes> AcustomAtributesall, List<CreateproductModel.CreateproductModel.AlreadyCustomAtributes> AcustomAtributesproductsoort )
+        public async Task<IActionResult> Create3(Productwaarde productwaarde, IList<WebApp1.Models.Attribuutsoort> Attribuutsoorts, List<CreateproductModel.CreateproductModel.Atribuutsoortmetwaardes> newcustom, List<CreateproductModel.CreateproductModel.AllCustomAtt> AcustomAtributesall, List<CreateproductModel.CreateproductModel.AlreadyCustomAtributes> AcustomAtributesproductsoort)
         {
             
 
@@ -376,12 +377,18 @@ namespace WebApp1.Controllers
 
             foreach(var item in AcustomAtributesall){ 
                 if (item.selected == true){
-                    var atributeID = from p in _context.Attribuutsoort where p.Attrbuut == item.customAtribute.Attrbuut select p;
                     var productwaardeid = from p in _context.Productwaarde where p.Title == productwaarde.Title select p;
-
-                    var customatwaarde = new Attribuutwaarde(){Waarde = item.cattribuutwaarde.Waarde, ProductwaardeId = productwaardeid.First().Id, AttribuutsoortId = atributeID.First().Id};
+                    for(var i=0; i<item.customAtributes.Count; i++){
+                        var atributeID = from p in _context.Attribuutsoort where p.Attrbuut == item.customAtributes[i].Attrbuut select p;
+                        var customatwaarde = new Attribuutwaarde(){Waarde = item.cattribuutwaarde[i].Waarde, ProductwaardeId = productwaardeid.First().Id, AttribuutsoortId = atributeID.First().Id};
                     _context.Attribuutwaarde.Add(customatwaarde); 
+                    
+                    }
                     await _context.SaveChangesAsync(); 
+                    
+                    
+
+                   
                  }
             }
 

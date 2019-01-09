@@ -18,7 +18,14 @@ namespace WebApp1.CreateproductModel
             public bool selected{get;set;}
         }
 
-         public IList<AlreadyCustomAtributes> AcustomAtributesall {get;set;}
+        public class AllCustomAtt{
+            public WebApp1.Models.Productsoort productSoort {get; set;}
+            public List<WebApp1.Models.Attribuutsoort> customAtributes {get; set;}
+            public List<WebApp1.Models.Attribuutwaarde> cattribuutwaarde {get; set;}
+            public bool selected{get;set;}
+        }
+
+         public IList<AllCustomAtt> AcustomAtributesall {get;set;}
          public IList<AlreadyCustomAtributes> AcustomAtributesproductsoort {get;set;}
         
         public IList<WebApp1.Models.Attribuutsoort> Attribuutsoorts {get; set;}

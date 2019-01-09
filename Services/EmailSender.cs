@@ -40,7 +40,7 @@ namespace WebPWrecover.Services
                 var client = new SmtpClient();
                
                     client.Connect("smtp.gmail.com", 587, false);
-                    client.Authenticate("testprojecthr@gmail.com", "1.Password");
+                    client.Authenticate("testprojecthr@gmail.com", "1.TestProjectC");
                     client.Send(message1);
                
 

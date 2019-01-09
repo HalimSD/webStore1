@@ -55,7 +55,8 @@ namespace WebApp1.Controllers
                     AttributeNameId = atts.Id,
                     AttributeName = atts.Attrbuut,
                     AttributeValueId = attw.Id,
-                    AttributeValue = attw.Waarde
+                    AttributeValue = attw.Waarde,
+                    Type = atts.Type
                 }
             ).ToList();
 

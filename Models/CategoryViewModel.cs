@@ -28,6 +28,7 @@ namespace WebApp1.Models
         // The fields below are used to display the correct filter options
         public string[] PriceFilterRange { get; set; }
         public string[] QuantityFilterRange { get; set; }
+        public bool IsFiltered { get; set; } = false;
     }
 
     // Model is used to group the filter parameters
@@ -152,19 +153,7 @@ namespace WebApp1.Models
                 where categoryIdList.Contains(pw.ProductsoortId)
                 select pw
             );
-
-            viewModel.PriceFilterRange = GetPriceFilterRange(productsQuery);
-            viewModel.QuantityFilterRange = GetQuantityFilterRange(productsQuery);
-
-            // Apply filters if controller provided us with one
-            productsQuery = FilterAttributes(filters, productsQuery);
-            productsQuery = FilterPrice(filters, productsQuery);
-            productsQuery = FilterQuantity(filters, productsQuery);
-
-            viewModel.Filters = filters;
-            productsQuery = productsQuery.OrderBy(p => p.ProductsoortId);
-            viewModel.Products = productsPage.GetPageIQueryable(pageNumber, productsQuery);
-
+            
             // Get the attributes of that category 
             List<AttributeFilter> att =
                 (from atts in context.Attribuutsoort
@@ -182,6 +171,17 @@ namespace WebApp1.Models
                 }
             }
 
+            viewModel.PriceFilterRange = GetPriceFilterRange(productsQuery);
+            viewModel.QuantityFilterRange = GetQuantityFilterRange(productsQuery);
+
+            // Apply filters if controller provided us with one
+            productsQuery = FilterAttributes(filters, productsQuery);
+            productsQuery = FilterPrice(filters, productsQuery);
+            productsQuery = FilterQuantity(filters, productsQuery);
+
+            viewModel.Filters = filters;
+            productsQuery = productsQuery.OrderBy(p => p.ProductsoortId);
+            viewModel.Products = productsPage.GetPageIQueryable(pageNumber, productsQuery);
 
             // Populate the view model with the needed data
             viewModel.Attributes = att;

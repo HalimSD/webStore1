@@ -85,10 +85,17 @@
         @foreach (ViewProductAttributes item in attributes)
         {
             <div class="form-group">
-                <label class="control-label">@item.AttributeName</label>
                 <input type="hidden" name="@("attributeId" + attributeIndex)" value="@item.AttributeValueId"/>
-                <input name="@("attributeValue" + attributeIndex)" class="form-control" value="@item.AttributeValue"/>
-                <span asp-validation-for="Price" class="text-danger"></span>
+                @if (item.Type == "string")
+                {
+                    <label for="@("validationDefault" + attributeIndex)">@(item.AttributeName + " - tekst")</label>
+                    <input type="text" id="@("validationDefault" + attributeIndex)" name="@("attributeValue" + attributeIndex)" class="form-control" value="@item.AttributeValue" required/>
+                }
+                else
+                {
+                    <label for="@("validationDefault" + attributeIndex)">@(item.AttributeName + " - getal")</label>
+                    <input type="number" id="@("validationDefault" + attributeIndex)" name="@("attributeValue" + attributeIndex)" class="form-control" value="@item.AttributeValue" required/>
+                }
             </div>
             attributeIndex++;
         }

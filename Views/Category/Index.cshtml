@@ -170,7 +170,7 @@
                         <hr>
                     }
                     <button class="btn btn-outline-success" type="submit">Filter</button>
-                    <br><a href="@Url.Action("Index", "Category")"> Filters ongedaan maken</a>
+                    <br><a href="@Url.Action("Index", "Category", new {categoryId = Model.CategoryId})"> Filters ongedaan maken</a>
                 </div>
             </form>
         </div>
@@ -198,6 +198,10 @@
         </ol>
     </nav>
     @(Model.Products.TotalDataCount + " resultaten")
+    @if (Model.IsFiltered)
+    {
+        @("(gefiltered) - ")<a href="@Url.Action("Index", "Category", new {categoryId = Model.CategoryId})"> Filters ongedaan maken</a>
+    }
     <div class="row" id="products">
         <div class="col-sm">
             @foreach (Productwaarde item in col0Items)

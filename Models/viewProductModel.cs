@@ -22,5 +22,6 @@ namespace WebApp1.Models
         public string AttributeName { get; set; }
         public int AttributeValueId { get; set; }
         public string AttributeValue { get; set; }
+        public string Type { get; set; }
     }
 }

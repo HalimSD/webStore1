@@ -108,6 +108,7 @@ namespace WebApp1.Controllers
             CategoryViewModel model = helper.CreateViewModel(categoryId, (int) pageNumber, filters);
             if (model == null) return NotFound(); 
             HttpContext.Session.Set(sessionFiltersKey, model.Filters);
+            model.IsFiltered = true;
             return View("Index", model);
         }
 

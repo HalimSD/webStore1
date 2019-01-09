@@ -42,7 +42,7 @@ namespace WebApp1.Controllers
             var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
             ViewData["cart"] = cart;
 
-            if (cart == null)
+            if (cart.ToArray().Length == 0)
             {
                 return View("EmptyShoppingCart");
             }
@@ -218,7 +218,9 @@ namespace WebApp1.Controllers
         public IActionResult checkOut()
         {
             var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
-            if (cart == null)
+            ViewBag.cart = cart;
+            ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
+            if (cart.ToArray().Length == 0)
             {
                 return RedirectToAction("Mainpage", "Home");
             }

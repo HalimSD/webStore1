@@ -246,12 +246,17 @@ namespace ContosoRTM.Controllers
         {
             var user = await _userManager.FindByIdAsync(id);
             var x = (from p in _dbContext.Bestelling where p.UserId == id select p).ToList();
-            foreach (var item in x.ToList())
+            if (user.Id != id)
             {
-                x.Remove(item);
+                foreach (var item in x.ToList())
+                {
+                    x.Remove(item);
+                }
+                await _userManager.DeleteAsync(user);
+            }else{
+                RedirectToAction("Index");
             }
-           
-            await _userManager.DeleteAsync(user);
+
             return RedirectToAction("Index");
         }
         private async Task<Users> GetUserById(string id) =>

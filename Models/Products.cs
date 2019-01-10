@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
-
-
-
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApp1.Models
 {
@@ -48,6 +46,7 @@ public class ParentChild{
 public class Productsoort
   {
     public int Id { get; set; }
+    [Required]
     public string Naam { get; set; }
    
     public string Image { get; set; }
@@ -61,6 +60,7 @@ public class Productsoort
   public class Attribuutsoort
   {
     public int Id { get; set; }
+    //[Required]
     public string Attrbuut { get; set; }
     public string Type { get; set; }
     public int ProductsoortId{ get; set; }
@@ -73,11 +73,30 @@ public class Productsoort
   public class Productwaarde
   {
     public int Id { get; set; }
+    
+    //[StringLength(60, MinimumLength = 3)]
+    [Required]
     public string Title { get; set; }
+
+    //[Range(1, 1000000)]
+    //[DataType(DataType.Currency)]
+    //[Column(TypeName = "double(18, 2)")]
+    [Required]
     public double Price { get; set; }
+
+    //[Range(1, 1000000)]
+    //[DataType(DataType.Currency)]
+    //[Column(TypeName = "double(18, 2)")]
+    //[Required]
     public double DiscountedPrice { get; set; }
+
+    //[Required]
     public string Image { get; set; }
+
     public int Quantity { get; set; }
+
+    //[StringLength(10000, MinimumLength = 3)]
+    [Required]
     public string Description { get; set; }
     public int ProductsoortId{ get; set; }
     public Productsoort productsoort { get; set; }
@@ -88,6 +107,7 @@ public class Productsoort
   public class Attribuutwaarde
   {
     public int Id { get; set; }
+    //[Required]
     public string Waarde { get; set; }
     public int ProductwaardeId{ get; set; }
     public int AttribuutsoortId{get; set;}

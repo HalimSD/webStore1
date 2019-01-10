@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="~/css/product_creation_generic.css">
 <script type='text/javascript'>
     function shhow(s){
-        console.log("henk");
         if (document.getElementById(s).style.display == "block"){
             document.getElementById(s).style.display = "none";
         }
@@ -38,6 +37,7 @@
             input.value="";
             input.placeholder="Attribuut Naam";
 
+
                 
 
 
@@ -64,6 +64,8 @@
             input3.value="";
             input3.placeholder="Waarde";
             input3.style.marginTop = "10px";
+
+
                
             container.appendChild(input);
             container.appendChild(document.createTextNode("Getal"));
@@ -127,7 +129,7 @@
                     {
                     
                     <div class="form-group">
-                        <label class="control-label">@item.Attrbuut</label>
+                        <label class="control-label">@item.Attrbuut, @item.Type </label>
                         <input type="text"  class="form-control" name="Attribuutsoorts[@i].Attribuutwaarde[0].Waarde"/>
                         <span asp-validation-for="Attribuutsoorts[@i].Attribuutwaarde[0].Waarde" class="text-danger"></span>
                     </div>
@@ -135,40 +137,41 @@
                     <div class="form-group">
                         <input type="hidden"  class="form-control" name="Attribuutsoorts[@i].Attribuutwaarde[0].AttribuutsoortId" value='@item.Id'/>
                     </div>
+
+                    <div class="form-group">
+                        <input type="hidden"  class="form-control" name="Attribuutsoorts[@i].Attrbuut" value='@item.Attrbuut'/>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="hidden"  class="form-control" name="Attribuutsoorts[@i].Type" value='@item.Type'/>
+                    </div>
                     i = i +1;
                     }
-                    <label class="control-label">Custom cat attributen</label>
-                    @for (var a = 0; a < Model.AcustomAtributesproductsoort.Count; a++)
-                    {
-                        <div class="form-group">
-                        <input type="checkbox" asp-for="@Model.AcustomAtributesproductsoort[a].selected"  />@Model.AcustomAtributesproductsoort[a].customAtribute.Attrbuut
-                         </div>
-                         <div class="form-group">
-                        <input type="hidden" asp-for="@Model.AcustomAtributesproductsoort[a].customAtribute.Attrbuut" />
-                        </div> 
-                         <div class="form-group">
-                        <input type="text" asp-for="@Model.AcustomAtributesproductsoort[a].cattribuutwaarde.Waarde" />
-                        </div>
-                        <hr>    
-                                                                                                      
-                    }
+                    
                     <label class="control-label">Alle custom attributen</label>
                     @for (var a = 0; a < Model.AcustomAtributesall.Count; a++)
                     {
                         
                         <br><label class="control-label">@Model.AcustomAtributesall[a].productSoort.Naam</label>
                          <div class="form-group">
-                         <input id="show" class="btn btn-primary" type="button" value="Show attributes" onclick="shhow(@a)" />
+                         <input id="show" class="btn btn-primary" type="button" value="Show at" onclick="shhow(@a)" />
                         </div>
                         <div id="@a" style="display: none;">
                         @for (var aa = 0; aa < Model.AcustomAtributesall[a].customAtributes.Count; aa++)
                         {
                         <div class="form-group">
-                        <input type="checkbox" asp-for="@Model.AcustomAtributesall[a].selected"  />@Model.AcustomAtributesall[a].customAtributes[aa].Attrbuut
+                        <input type="checkbox" asp-for="@Model.AcustomAtributesall[a].customAtributes[aa].selected"  />@Model.AcustomAtributesall[a].customAtributes[aa].customAtribute.Attrbuut, @Model.AcustomAtributesall[a].customAtributes[aa].customAtribute.Type 
                          </div>
                          <div class="form-group">
-                        <input type="hidden" asp-for="@Model.AcustomAtributesall[a].customAtributes[aa].Attrbuut" />
+                        <input type="hidden" asp-for="@Model.AcustomAtributesall[a].customAtributes[aa].customAtribute.Id" />
                         </div> 
+                         <div class="form-group">
+                        <input type="hidden" asp-for="@Model.AcustomAtributesall[a].customAtributes[aa].customAtribute.Attrbuut" />
+                        </div> 
+                        <div class="form-group">
+                        <input type="hidden" asp-for="@Model.AcustomAtributesall[a].customAtributes[aa].customAtribute.Type" />
+                        </div> 
+
                          <div class="form-group">
                         <input type="text" asp-for="@Model.AcustomAtributesall[a].cattribuutwaarde[aa].Waarde" />
                         </div>

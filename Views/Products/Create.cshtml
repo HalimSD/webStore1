@@ -81,6 +81,7 @@
             <span asp-validation-for="@Model.productsoort.Naam" class="text-danger"></span>
         </div>
          <div class="form-group">
+                <label asp-for="@Model.productsoort.Image" class="control-label"></label>
                 <input asp-for="@Model.productsoort.Image" type="file" Class="form-control" placeholder="Image"/>
                 <span asp-validation-for="@Model.productsoort.Image" class="text-danger"></span>
         </div>

@@ -12,21 +12,27 @@ namespace WebApp1.CreateproductModel
               public WebApp1.Models.Attribuutsoort extraAtribute {get; set;}
               public WebApp1.Models.Attribuutwaarde extraAtributewaarde {get; set;}
         }
-        public class AlreadyCustomAtributes{
-            public WebApp1.Models.Attribuutsoort customAtribute {get; set;}
-             public WebApp1.Models.Attribuutwaarde cattribuutwaarde {get; set;}
-            public bool selected{get;set;}
-        }
+        // public class AlreadyCustomAtributes{
+        //     public WebApp1.Models.Attribuutsoort customAtribute {get; set;}
+        //      public WebApp1.Models.Attribuutwaarde cattribuutwaarde {get; set;}
+        //     public bool selected{get;set;}
+        // }
 
         public class AllCustomAtt{
             public WebApp1.Models.Productsoort productSoort {get; set;}
-            public List<WebApp1.Models.Attribuutsoort> customAtributes {get; set;}
+            public List<AtwthBool> customAtributes {get; set;}
             public List<WebApp1.Models.Attribuutwaarde> cattribuutwaarde {get; set;}
-            public bool selected{get;set;}
         }
 
+        public class AtwthBool{
+           public WebApp1.Models.Attribuutsoort customAtribute {get; set;}
+           public bool selected{get;set;}
+        }
+
+
+
          public IList<AllCustomAtt> AcustomAtributesall {get;set;}
-         public IList<AlreadyCustomAtributes> AcustomAtributesproductsoort {get;set;}
+        //  public IList<AlreadyCustomAtributes> AcustomAtributesproductsoort {get;set;}
         
         public IList<WebApp1.Models.Attribuutsoort> Attribuutsoorts {get; set;}
         public IList<Atribuutsoortmetwaardes> newcustom{get;set;}

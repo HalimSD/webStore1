@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using WebApp1.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.Language;
+using Microsoft.EntityFrameworkCore.Scaffolding.Internal;
 using NuGet.Frameworks;
 
 namespace WebApp1.Controllers
@@ -33,85 +35,119 @@ namespace WebApp1.Controllers
             this.context = context;
             this.appEnvironment = appEnvironment;
         }
-        
+
         [Route("")]
         [Route("Index")]
-        public IActionResult Index(int id, ResultMsg msg = ResultMsg.None)
+        public IActionResult Index(int? id, ResultMsg msg = ResultMsg.None)
         {
-            Productwaarde product = (from pw in context.Productwaarde where pw.Id == id select pw).FirstOrDefault();           
-            if (product == null)
-            {
-                return StatusCode(404);
-            }
-   
-            List<ViewProductAttributes> attributes = (
+            if (id == null) return NotFound();
+
+            var query =
+                from pw in context.Productwaarde
+                where pw.Id == id
+                select new EditProductViewModel
+                {
+                    Id = pw.Id,
+                    Title = pw.Title,
+                    Price = pw.Price.ToString(new CultureInfo("nl-NL")),
+                    DiscountedPrice = pw.DiscountedPrice.ToString(new CultureInfo("nl-NL")),
+                    Image = pw.Image,
+                    Quantity = pw.Quantity,
+                    Description = pw.Description,
+                    ProductsoortId = pw.ProductsoortId
+                };
+
+            if (!query.Any()) return NotFound();
+
+            EditProductViewModel viewModel = query.FirstOrDefault();
+
+            viewModel.NumberAttributes = (
                 from atts in context.Attribuutsoort
                 from attw in context.Attribuutwaarde
-                where atts.ProductsoortId == product.ProductsoortId
-                where attw.AttribuutsoortId == atts.Id
-                where attw.ProductwaardeId == product.Id
-                select new ViewProductAttributes
+                where atts.ProductsoortId == viewModel.ProductsoortId &&
+                      attw.AttribuutsoortId == atts.Id &&
+                      attw.ProductwaardeId == viewModel.Id &&
+                      atts.Type == "number"
+                select new NumberAttributeModel
                 {
                     AttributeNameId = atts.Id,
                     AttributeName = atts.Attrbuut,
                     AttributeValueId = attw.Id,
                     AttributeValue = attw.Waarde,
-                    Type = atts.Type
                 }
             ).ToList();
 
-            ViewBag.EditProduct = product;
-            ViewBag.EditProductAttributes = attributes;
-            ViewBag.resultMsg = msg;
-            return View();
+            viewModel.StringAttributes = (
+                from atts in context.Attribuutsoort
+                from attw in context.Attribuutwaarde
+                where atts.ProductsoortId == viewModel.ProductsoortId &&
+                      attw.AttribuutsoortId == atts.Id &&
+                      attw.ProductwaardeId == viewModel.Id &&
+                      atts.Type == "string"
+                select new StringAttributeModel
+                {
+                    AttributeNameId = atts.Id,
+                    AttributeName = atts.Attrbuut,
+                    AttributeValueId = attw.Id,
+                    AttributeValue = attw.Waarde,
+                }
+            ).ToList();
+
+            viewModel.ResultMsg = msg;
+            return View(viewModel);
         }
-        
+
         [HttpPost]
         [Route("Edit")]
-        public IActionResult Edit(Productwaarde product, int attributeCount, IFormFile img, bool setDiscount=false)
+        public IActionResult Edit(EditProductViewModel viewModel, IFormFile img)
         {
             try
             {
-                // Get all the attributes and update the database with the new values
-                List<ViewProductAttributes> attributes = new List<ViewProductAttributes>();
-                for (int i = 0; i <= attributeCount - 1; i++)
-                {
-                    //int id = int.Parse(Request.Query["attributeId" + i].ToString());
-                    int id = int.Parse(Request.Form["attributeId" + i]);
-                    string value = Request.Form["attributeValue" + i];
-
-                    Attribuutwaarde attribute =
-                        (from attw in context.Attribuutwaarde where attw.Id == id select attw)
-                        .FirstOrDefault();
-
-                    attribute.Waarde = value;
-                }
-
                 // Get the current values of the produt in db and update it.
                 Productwaarde productModel =
-                    (from pw in context.Productwaarde where pw.Id == product.Id select pw).FirstOrDefault();
+                    (from pw in context.Productwaarde where pw.Id == viewModel.Id select pw).FirstOrDefault();
 
                 if (productModel == null)
                 {
                     return StatusCode(500);
                 }
 
-                productModel.Title = product.Title;
-                productModel.Price = product.Price;
-                productModel.Quantity = product.Quantity;
-                if (!string.IsNullOrWhiteSpace(product.Description))
+                productModel.Title = viewModel.Title;
+                productModel.Price = double.Parse(viewModel.Price);
+                productModel.Quantity = viewModel.Quantity;
+                if (!string.IsNullOrWhiteSpace(viewModel.Description))
                 {
-                    productModel.Description = product.Description;
+                    productModel.Description = viewModel.Description;
                 }
 
-                if (setDiscount)
+                if (viewModel.UseDiscount)
                 {
-                    productModel.DiscountedPrice = product.DiscountedPrice;
+                    productModel.DiscountedPrice = double.Parse(viewModel.DiscountedPrice);
                 }
                 else
                 {
                     // Setting discount price to -1 disabled it!
                     productModel.DiscountedPrice = -1;
+                }
+
+                // Update attributes
+                foreach (var numberAttribute in viewModel.NumberAttributes)
+                {
+                    Attribuutwaarde attribute =
+                        (from attw in context.Attribuutwaarde where attw.Id == numberAttribute.AttributeValueId select attw)
+                        .FirstOrDefault();
+
+
+                    attribute.Waarde = numberAttribute.AttributeValue;
+                }
+                foreach (var stringAttribute in viewModel.StringAttributes)
+                {
+                    Attribuutwaarde attribute =
+                        (from attw in context.Attribuutwaarde where attw.Id == stringAttribute.AttributeValueId select attw)
+                        .FirstOrDefault();
+
+
+                    attribute.Waarde = stringAttribute.AttributeValue;
                 }
 
 
@@ -130,27 +166,27 @@ namespace WebApp1.Controllers
                             file.CopyTo(fileStream);
                             productModel.Image = fileName;
                         }
-
                     }
 
                     // Delete old image
-                    if (product.Image != null)
+                    if (viewModel.Image != null)
                     {
-                        if (System.IO.File.Exists(Path.Combine(uploads, product.Image)) &&
-                            product.Image != "default.png")
+                        if (System.IO.File.Exists(Path.Combine(uploads, viewModel.Image)) &&
+                            viewModel.Image != "default.png")
                         {
-                            System.IO.File.Delete(Path.Combine(uploads, product.Image));
+                            System.IO.File.Delete(Path.Combine(uploads, viewModel.Image));
                         }
                     }
                 }
 
                 context.SaveChanges();
-                return RedirectToAction("Index", "EditProduct", new {id = product.Id, msg = ResultMsg.Success});
+                return RedirectToAction("Index", "EditProduct", new {id = viewModel.Id, msg = ResultMsg.Success});
             }
             catch (Exception e)
             {
-                Console.WriteLine("An error occured whilst editing a product (ID={0}) {1}{2}", product.Id, Environment.NewLine, e.Message);
-                return RedirectToAction("Index", "EditProduct", new {id = product.Id, msg = ResultMsg.Failed});
+                Console.WriteLine("An error occured whilst editing a product (ID={0}) {1}{2}", viewModel.Id,
+                    Environment.NewLine, e.Message);
+                return RedirectToAction("Index", "EditProduct", new {id = viewModel.Id, msg = ResultMsg.Failed});
             }
         }
     }

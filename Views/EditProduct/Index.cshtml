@@ -1,29 +1,23 @@
 @using Org.BouncyCastle.Asn1.Cms
 @using WebApp1.Controllers
 @using WebApp1.Models
-@model WebApp1.Models.Productwaarde
+@model WebApp1.Models.EditProductViewModel
 @{
-    ViewData["Title"] = "Product Bewerken";                                
-    Productwaarde product = ViewBag.EditProduct;
-    List<ViewProductAttributes> attributes = ViewBag.EditProductAttributes;
-    string imagePath = "/images/products/" + product.Image;
-    int attributeIndex = 0;
-    int attributeCount = attributes.Count();
-
-    var msg = ViewBag.resultMsg;
+    ViewData["Title"] = "Model Bewerken";                                
+    string imagePath = "/images/products/" + Model.Image;
 }
 <link rel="stylesheet" href="~/css/edit_product.css">
 <div class="pageRoot">
-    <h2>Product Bewerken</h2>
+    <h2>Model Bewerken</h2>
     <hr>
-    @if (msg == EditProductController.ResultMsg.Failed)
+    @if (Model.ResultMsg == EditProductController.ResultMsg.Failed)
     {
         <div class="alert-red">
             <span class="closeBtn" onclick="this.parentElement.style.display='none';">&times;</span> 
             <i class="material-icons">error</i>   Er is iets foutgegaan bij het bewerken!
         </div>
     }
-    @if (msg == EditProductController.ResultMsg.Success)
+    @if (Model.ResultMsg == EditProductController.ResultMsg.Success)
     {
         <div class="alert-green">
             <span class="closeBtn" onclick="this.parentElement.style.display='none';">&times;</span> 
@@ -32,72 +26,73 @@
     }
     <br>
     <form action="@Url.Action("Edit", "EditProduct")" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="Id" value="@product.Id" />
-        <input type="hidden" name="Image" value="@product.Image" />
+        <input type="hidden" asp-for="Id" value="@Model.Id" />
+        <input type="hidden" name="Image" value="@Model.Image" />
         <div class="row">
-            <div class="col-6" id="productContent">
+            <div class="col-6" id="ModelContent">
                 <div class="form-group">
-                    <label asp-for="Title" class="control-label">Product Naam</label>
-                    <input asp-for="Title" class="form-control" placeholder="Title" value="@product.Title"/>
+                    <label asp-for="Title" class="control-label">Model Naam</label>
+                    <input asp-for="Title" class="form-control" placeholder="Title" value="@Model.Title"/>
                     <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Price" class="control-label">Product prijs</label>
-                    <input asp-for="Price" class="form-control" placeholder="Price" value="@product.Price"/>
+                    <label asp-for="Price" class="control-label">Model prijs</label>
+                    <input asp-for="Price" class="form-control" placeholder="Price" value="@Model.Price"/>
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="DiscountedPrice" class="control-label">Korting prijs</label>
-                    @if (product.DiscountedPrice == -1)
+                    @if (Model.DiscountedPrice == "-1")
                     {
                         <input asp-for="DiscountedPrice" class="form-control" placeholder="Korting prijs" value="0"/>
-                        <input type="checkbox" name="setDiscount" value="true"/> @("Korting Inschakelen")<br>
+                        <span asp-validation-for="DiscountedPrice" class="text-danger"></span>
+                        <input type="checkbox" asp-for="UseDiscount" value="true"/> @("Korting Inschakelen")<br>
                         }
                     else
                     {
-                        <input asp-for="DiscountedPrice" class="form-control" placeholder="Korting prijs" value="@product.DiscountedPrice"/>
-                        <input type="checkbox" name="setDiscount" value="true" checked/> @("Korting Inschakelen")<br> 
+                        <input asp-for="DiscountedPrice" class="form-control" placeholder="Korting prijs" value="@Model.DiscountedPrice"/>
+                        <span asp-validation-for="DiscountedPrice" class="text-danger"></span>
+                        <input type="checkbox" asp-for="UseDiscount" value="true" checked/> @("Korting Inschakelen")<br> 
                     }
-                    <span asp-validation-for="DiscountedPrice" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label class="form-label-file">Product foto</label><br>
-                    <input name="img" class="form-control-file" type="file" value="@product.Image"/>
+                    <label class="form-label-file">Model foto</label><br>
+                    <input name="img" class="form-control-file" type="file" value="@Model.Image"/>
                 </div>
             </div>
             <div class="col-6">
-                <img src="@imagePath" height="300" width="400" class="productImage">
+                <img src="@imagePath" height="300" width="400" class="ModelImage">
             </div>
         </div>
         <div class="form-group" id="desc">
-            <label asp-for="Description" class="control-label">Product Beschrijving</label>
-            <textarea asp-for="Description" class="form-control" rows="2" placeholder="@product.Description"></textarea>
+            <label asp-for="Description" class="control-label">Model Beschrijving</label>
+            <textarea asp-for="Description" class="form-control" rows="2" placeholder="@Model.Description"></textarea>
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Quantity" class="control-label">Product Voorraad</label>
-            <input asp-for="Quantity" class="form-control" rows="2" value="@product.Quantity">
+            <label asp-for="Quantity" class="control-label">Model Voorraad</label>
+            <input asp-for="Quantity" class="form-control" rows="2" value="@Model.Quantity">
             <span asp-validation-for="Quantity" class="text-danger"></span>
         </div>
-        <input type="hidden" name="attributeCount" value="@attributeCount"/>
         <h4>Attributen</h4>
         <hr>
-        @foreach (ViewProductAttributes item in attributes)
+        @for (int i = 0; i < Model.NumberAttributes.Count(); i++)
         {
             <div class="form-group">
-                <input type="hidden" name="@("attributeId" + attributeIndex)" value="@item.AttributeValueId"/>
-                @if (item.Type == "string")
-                {
-                    <label for="@("validationDefault" + attributeIndex)">@(item.AttributeName + " - tekst")</label>
-                    <input type="text" id="@("validationDefault" + attributeIndex)" name="@("attributeValue" + attributeIndex)" class="form-control" value="@item.AttributeValue" required/>
-                }
-                else
-                {
-                    <label for="@("validationDefault" + attributeIndex)">@(item.AttributeName + " - getal")</label>
-                    <input type="number" id="@("validationDefault" + attributeIndex)" name="@("attributeValue" + attributeIndex)" class="form-control" value="@item.AttributeValue" required/>
-                }
+                <input type="hidden" asp-for="NumberAttributes[i].AttributeValueId" value="@Model.NumberAttributes[i].AttributeValueId"/>
+                <label asp-for="NumberAttributes[i].AttributeValue">@(Model.NumberAttributes[i].AttributeName + " - getal")</label>
+                <input type="text" asp-for="NumberAttributes[i].AttributeValue" class="form-control" value="@Model.NumberAttributes[i].AttributeValue"/>
+                <span asp-validation-for="NumberAttributes[i].AttributeValue" class="text-danger"></span>
             </div>
-            attributeIndex++;
+        }
+        @for (int i = 0; i < Model.StringAttributes.Count(); i++)
+        {
+            <div class="form-group">
+                <input type="hidden" asp-for="StringAttributes[i].AttributeValueId" value="@Model.StringAttributes[i].AttributeValueId"/>
+                <label asp-for="StringAttributes[i].AttributeValue">@(Model.StringAttributes[i].AttributeName + " - tekst")</label>
+                <input type="text" asp-for="StringAttributes[i].AttributeValue" class="form-control" value="@Model.StringAttributes[i].AttributeValue"/>
+                <span asp-validation-for="StringAttributes[i].AttributeValue" class="text-danger"></span>
+            </div>
         }
         <div class="form-group">
             <input type="submit" value="Opslaan" class="btn btn-primary"/>

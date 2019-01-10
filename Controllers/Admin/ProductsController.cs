@@ -82,7 +82,7 @@ namespace WebApp1.Controllers
                 ViewData["message"] = "Kies een unieke productsoort naam";
             }
             else if (message == 2){
-                ViewData["message"] = "Kies een uniek attribuut";
+                ViewData["message"] = "Kies een geldig attribuut";
             }
             else if (message == 3){
                 ViewData["message"] = "Vink een checkbox aan";
@@ -116,6 +116,12 @@ namespace WebApp1.Controllers
                 if (productsoortexists.Any()){
                         return RedirectToAction("Create", new{message = 1});
                     } 
+                //check of attribute is empty
+                foreach(var item in productsoort.Attribuutsoort){
+                    if(item.Attrbuut == null){
+                        return RedirectToAction("Create",new {message = 2 });
+                    }
+                }
                 
                 //check for empty parent
                 if (parents.Count()>0){ 
@@ -210,6 +216,8 @@ namespace WebApp1.Controllers
                         parentchild.ChildId =  productsoortid.First().Id;
                         _context.ParentChild.Add(parentchild);
                  }
+
+                 
                     await _context.SaveChangesAsync();
                  
 

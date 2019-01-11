@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using WebApp1.Models;
 using System;
 using Csv;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 
 namespace Controllers
 {
+    [Authorize(Roles= "Admin")]
     public class UploadFilesController : Controller
     {
         private readonly WebshopContext _context;

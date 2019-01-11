@@ -483,14 +483,17 @@ else
             <strong>Er zijn momenteel geen producten beschikbaar voor deze categorie.</strong>
             <br>
             <strong>Probeer het later nog eens!</strong>
+            <br>
+            <a href="@Url.Action("Index", "Category")">Terug naar alle producten</a>
         }
         else
         {
             <br>
             <strong>Er zijn geen producten die binnen uw gekozen filters zitten.</strong>
+            <br>
+            <a href="@Url.Action("Index", "Category", new {categoryId = Model.CategoryId})">Terug naar @Model.CategoryName</a>
         }
-        <br>
-        <a href="@Url.Action("Index", "Category")">Terug naar alle producten</a>
+
     </div>
 }
 </div>

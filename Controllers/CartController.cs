@@ -16,8 +16,6 @@ using Microsoft.EntityFrameworkCore.Scaffolding.Internal;
 
 namespace WebApp1.Controllers
 {
-
-
     public class CartController : Controller
     {
         private readonly WebshopContext _context;
@@ -29,13 +27,15 @@ namespace WebApp1.Controllers
         public const string SessionKeyName = "cart";
         public string SessionInfo_Name { get; private set; }
 
-        public CartController(WebshopContext context, UserManager<Users> userManager, IConverter converter, IHostingEnvironment appEnvironment)
+        public CartController(WebshopContext context, UserManager<Users> userManager, IConverter converter,
+            IHostingEnvironment appEnvironment)
         {
             _context = context;
             _userManager = userManager;
             _converter = converter;
             _appEnvironment = appEnvironment;
         }
+
         [Route("cart")]
         public IActionResult Index()
         {
@@ -52,8 +52,8 @@ namespace WebApp1.Controllers
                 ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
                 ViewBag.shippingCost = CalculateShippingCost(ViewBag.total);
                 ViewData["cart"] = cart;
-
             }
+
             return View();
         }
 
@@ -68,8 +68,10 @@ namespace WebApp1.Controllers
             {
                 total = cart.Sum(item => item.Product.DiscountedPrice * item.Quantity);
             }
+
             return total;
         }
+
         public IActionResult plus(int id)
         {
             List<Item> cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
@@ -101,7 +103,7 @@ namespace WebApp1.Controllers
 
 
         [Route("buy")]
-        public IActionResult Buy(int id, string action = "Mainpage", string controller = "Home")
+        public IActionResult Buy(int id, int? categoryId, int? pageNumber, string lastAction = "")
         {
             if (SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart") == null)
             {
@@ -116,7 +118,23 @@ namespace WebApp1.Controllers
                 _context.SaveChanges();
                 SessionExtensions.Set(HttpContext.Session, "cart", cart);
             }
-            return RedirectToAction("Mainpage", "Home");
+
+            if (lastAction == "defaultPage")
+            {
+                return RedirectToAction("Index", "ViewProduct", new {id});
+            }
+
+            if (lastAction == "categoryPage")
+            {
+                return RedirectToAction("Index", "Category", new {categoryId, pageNumber});
+            }
+
+            if (lastAction == "filteredPage")
+            {
+                return RedirectToAction("Filtered", "Category", new {categoryId, pageNumber, useSessionFilters = true});
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
         [Route("remove/{id}")]
@@ -131,6 +149,7 @@ namespace WebApp1.Controllers
             SessionExtensions.Set(HttpContext.Session, "cart", cart);
             return RedirectToAction("Index");
         }
+
         private void VoorraadVerminderen(int id)
         {
             Productwaarde productwaarde = _context.Productwaarde.Find(id);
@@ -138,7 +157,6 @@ namespace WebApp1.Controllers
             {
                 productwaarde.Quantity -= 1;
                 _context.SaveChanges();
-
             }
             else
             {
@@ -177,25 +195,27 @@ namespace WebApp1.Controllers
                 if (Product1.DiscountedPrice != -1)
                 {
                     Product1.Price = Product1.DiscountedPrice;
-                    cart.Add(new Item { Product = Product1, Quantity = 1 });
+                    cart.Add(new Item {Product = Product1, Quantity = 1});
                 }
                 else
                 {
-                    cart.Add(new Item { Product = Product1, Quantity = 1 });
+                    cart.Add(new Item {Product = Product1, Quantity = 1});
                 }
-                VoorraadVerminderen(id);
 
+                VoorraadVerminderen(id);
             }
             else
             {
                 RedirectToAction("Index", "Cart");
             }
         }
+
         private void SetSession()
         {
             List<Item> cart = new List<Item>();
             SessionExtensions.Set(HttpContext.Session, "cart", cart);
         }
+
         private void GetSession()
         {
             SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
@@ -211,6 +231,7 @@ namespace WebApp1.Controllers
                     return i;
                 }
             }
+
             return -1;
         }
 
@@ -226,14 +247,15 @@ namespace WebApp1.Controllers
             }
             else
             {
-
                 if (_userManager.GetUserName(User) == null)
                 {
                     return View("sendOrderMail");
                 }
             }
+
             return View("checkOut");
         }
+
         public void bestellingPlaatsen()
         {
             var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
@@ -263,6 +285,7 @@ namespace WebApp1.Controllers
                 _context.SaveChanges();
             }
         }
+
         public void increaseQuantity(int id)
         {
             // List<Item> cart = new List<Item>();
@@ -272,7 +295,6 @@ namespace WebApp1.Controllers
             // };
             Productwaarde productwaarde = _context.Productwaarde.Find(id);
             productwaarde.Quantity++;
-
         }
 
         [Route("QuantityInput/{id}")]
@@ -331,16 +353,16 @@ namespace WebApp1.Controllers
             var x = id;
             List<BesteldeItem> besteldeItem = new List<BesteldeItem>();
             besteldeItem = (from b in _context.BesteldeItem
-                            where b.BestellingId == id
-                            select new BesteldeItem
-                            {
-                                BesteldeItemId = b.BesteldeItemId,
-                                Title = b.Title,
-                                Price = b.Price,
-                                Quantity = b.Quantity,
-                                Image = b.Image
-                            }
-            ).ToList();
+                    where b.BestellingId == id
+                    select new BesteldeItem
+                    {
+                        BesteldeItemId = b.BesteldeItemId,
+                        Title = b.Title,
+                        Price = b.Price,
+                        Quantity = b.Quantity,
+                        Image = b.Image
+                    }
+                ).ToList();
 
             ViewBag.besteldeItem = besteldeItem;
             ViewBag.shippingFee = (from b in _context.Bestelling where b.BestellingId == id select b.ShippingFee)
@@ -348,12 +370,13 @@ namespace WebApp1.Controllers
 
             return View();
         }
-        [Route("oldOrders")]
 
+        [Route("oldOrders")]
         public IActionResult oldOrders(int pageNumber = 1)
         {
             // Helper object used to generate a page model
-            PaginationHelper<Bestelling> pagination = new PaginationHelper<Bestelling>(maxPageSize, _context.Bestelling);
+            PaginationHelper<Bestelling>
+                pagination = new PaginationHelper<Bestelling>(maxPageSize, _context.Bestelling);
 
             // Prepare a query that we will pass to the pagination helper
             IQueryable<Bestelling> query = (
@@ -393,11 +416,10 @@ namespace WebApp1.Controllers
                 client.Send(message);
                 client.Disconnect(true);
             }
+
             HttpContext.Session.Remove("cart");
             return View();
-
         }
-
 
 
         public string GetHTMLString()
@@ -436,7 +458,8 @@ namespace WebApp1.Controllers
                                     <td>{1}</td>
                                     <td>{2}</td>
                                     <td>{3}</td>
-                                  </tr>", emp.Product.Title, emp.Quantity, emp.Product.Price, emp.Product.Price * emp.Quantity);
+                                  </tr>", emp.Product.Title, emp.Quantity, emp.Product.Price,
+                    emp.Product.Price * emp.Quantity);
             }
 
             sb.AppendFormat(@"<tr >
@@ -461,7 +484,7 @@ namespace WebApp1.Controllers
                 ColorMode = ColorMode.Color,
                 Orientation = Orientation.Portrait,
                 PaperSize = PaperKind.A4,
-                Margins = new MarginSettings { Top = 10 },
+                Margins = new MarginSettings {Top = 10},
                 DocumentTitle = "PDF Report",
                 Out = @_appEnvironment.WebRootPath + "/images/reportPDF/Report.pdf"
             };
@@ -469,15 +492,19 @@ namespace WebApp1.Controllers
             {
                 PagesCount = true,
                 HtmlContent = GetHTMLString(),
-                WebSettings = { DefaultEncoding = "utf-8", UserStyleSheet = Path.Combine(Directory.GetCurrentDirectory(), "assets", "styles.css") },
-                HeaderSettings = { FontName = "Arial", FontSize = 9, Right = "Page [page] of [toPage]", Line = true },
-                FooterSettings = { FontName = "Arial", FontSize = 9, Line = true, Center = "Report Footer" }
+                WebSettings =
+                {
+                    DefaultEncoding = "utf-8",
+                    UserStyleSheet = Path.Combine(Directory.GetCurrentDirectory(), "assets", "styles.css")
+                },
+                HeaderSettings = {FontName = "Arial", FontSize = 9, Right = "Page [page] of [toPage]", Line = true},
+                FooterSettings = {FontName = "Arial", FontSize = 9, Line = true, Center = "Report Footer"}
             };
 
             var pdf = new HtmlToPdfDocument()
             {
                 GlobalSettings = globalSettings,
-                Objects = { objectSettings }
+                Objects = {objectSettings}
             };
 
             var file = _converter.Convert(pdf);
@@ -511,5 +538,4 @@ namespace WebApp1.Controllers
             return shipping;
         }
     }
-
 }

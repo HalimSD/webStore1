@@ -104,8 +104,7 @@ namespace WebApp1.Areas.Identity.Pages.Account
             public string Country { get; set; }
 
             [Required]
-            [DataType(DataType.PhoneNumber)]
-            [RegularExpression(@"([0-9]+)", ErrorMessage = "Moet een nummer zijn.")]
+            [RegularExpression(@"[0-9]+", ErrorMessage = "Moet een nummer zijn.")]
             [Display(Name = "Telefoonnummer")]
             public int TelephoneNumber { get; set; }
         }

@@ -90,7 +90,7 @@
             </form>
         </div>
     }
-    @if (Model.Attributes.Any() || Model.PriceFilterRange != null || Model.QuantityFilterRange != null)
+    @if (Model.Products.Data.Any() || Model.IsFiltered)
     {
         <div id="categoryArea" style="margin-top: 15px;">
             <div class="categoryTitle">Filteren</div>
@@ -241,7 +241,17 @@
                                 <input type="submit" class="btn btn-primary" value="Details">
                                 @if (item.Quantity > 0)
                                 {
-                                    <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@item.Id">
+                                    <input type="hidden" name="categoryId" value="@Model.CategoryId">
+                                    <input type="hidden" name="pageNumber" value="@Model.Products.PageNumber">                                                              
+                                    if (Model.IsFiltered)
+                                    {
+                                        <input type="hidden" name="lastAction" value="filteredPage"> 
+                                    }
+                                    else
+                                    {
+                                        <input type="hidden" name="lastAction" value="categoryPage">  
+                                    }
+                                    <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" formaction="@Url.Action("buy", "cart")">
                                 }
                             </div>
                         </form>
@@ -287,7 +297,17 @@
                                 <input type="submit" class="btn btn-primary" value="Details">
                                 @if (item.Quantity > 0)
                                 {
-                                    <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@item.Id">
+                                    <input type="hidden" name="categoryId" value="@Model.CategoryId">
+                                    <input type="hidden" name="pageNumber" value="@Model.Products.PageNumber">                                                              
+                                    if (Model.IsFiltered)
+                                    {
+                                        <input type="hidden" name="lastAction" value="filteredPage"> 
+                                    }
+                                    else
+                                    {
+                                        <input type="hidden" name="lastAction" value="categoryPage">  
+                                    }
+                                    <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" formaction="@Url.Action("buy", "cart")">
                                 }
                             </div>
                         </form>
@@ -333,7 +353,17 @@
                                 <input type="submit" class="btn btn-primary" value="Details">
                                 @if (item.Quantity > 0)
                                 {
-                                    <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@item.Id">
+                                    <input type="hidden" name="categoryId" value="@Model.CategoryId">
+                                    <input type="hidden" name="pageNumber" value="@Model.Products.PageNumber">                                                              
+                                    if (Model.IsFiltered)
+                                    {
+                                        <input type="hidden" name="lastAction" value="filteredPage"> 
+                                    }
+                                    else
+                                    {
+                                        <input type="hidden" name="lastAction" value="categoryPage">  
+                                    }
+                                    <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" formaction="@Url.Action("buy", "cart")">
                                 }
 
                             </div>

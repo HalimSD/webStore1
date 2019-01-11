@@ -131,7 +131,7 @@ namespace WebApp1.Controllers
             {
                 return RedirectToAction("Filtered", "Category", new
                 {
-                    categoryId = id,
+                    categoryId = id,    
                     pageNumber = pageIndex,
                     useSessionFilters = true
                 });

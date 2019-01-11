@@ -103,7 +103,11 @@ namespace WebApp1.Areas.Identity.Pages.Account
             public string Country { get; set; }
 
             [Required]
+<<<<<<< HEAD
             [DataType(DataType.PhoneNumber)]
+=======
+            [RegularExpression(@"[0-9]+", ErrorMessage = "Moet een nummer zijn.")]
+>>>>>>> d1e7b7df5ea5529c7da2775d9821c40a0d95382a
             [Display(Name = "Telefoonnummer")]
             public int TelephoneNumber { get; set; }
         }

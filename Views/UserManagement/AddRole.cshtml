@@ -4,13 +4,14 @@
 <link rel="stylesheet" href="~/css/product_creation_generic.css">
 
 <div class="pageRoot">
-    <h3>Add Role For @Model.Email</h3>
+    <h3>Rol toevoegen voor: @Model.Email</h3>
     <hr>
+    Op deze pagina kunt u voor de geselecteerde gebruiker een rol toevoegen.
     <br>
     <div asp-validation-summary="All"></div>
     <form asp-controller="UserManagement" asp-action="AddRole">
         <input asp-for="UserId" type="hidden" />
-        <select asp-for="NewRole" asp-items="Model.Roles"></select>
-        <input type="submit" value="Add Role" />
+        <select asp-for="NewRole" class="form-control" asp-items="Model.Roles"></select><br>
+        <button class="btn btn-primary" type="submit">Toevoegen</button>
     </form>
 </div>

@@ -149,6 +149,9 @@ namespace WebApp1.Controllers
             {
                 pageNumber = 1;
             }
+            if(search == null){
+                return RedirectToAction("Index","Home");
+            }
             
             var products = 
                 from m in context.Productwaarde

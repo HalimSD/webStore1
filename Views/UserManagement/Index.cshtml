@@ -2,20 +2,25 @@
 @model UserManagementIndex
 @inject UserManager<Users> userManager
 
+@{
+    ViewData["Title"] = "Gebruikers beheer";
+}
+
 <link rel="stylesheet" href="~/css/product_creation_generic.css">
 <div class="pageRoot">
-    <h2>User Management</h2>
+    <h2>Gebruikers Beheer</h2>
     <hr>
+    Op deze pagina kunt u alle geregistreerde gebruikers zien. Voor elk gebruiker kunt u administratieve acties uit voeren.<br>
     <br>
     <table>
         <thead>
         <tr>
             <th>Email</th>
-            <th>Roles</th>
-            <th>Options</th>
-            <th>Update</th>
-            <th>Delete</th>
-            <th>Password</th>
+            <th>Rollen</th>
+            <th>Opties</th>
+            <th>Bewerken</th>
+            <th>Verwijderen</th>
+            <th>Wachtwoord</th>
         </tr>
         </thead>
         <tbody>
@@ -24,10 +29,10 @@
             <tr>
                 <td>@user.Email</td>
                 <td>@(string.Join(",", await userManager.GetRolesAsync(user)))</td>
-                <td><a asp-controller="UserManagement" asp-action="AddRole" asp-route-id="@user.Id">Add Role</a></td>
-                <td><a asp-controller="UserManagement" asp-action="updateInfoAdmin" asp-route-id="@user.Id">Update</a></td>
-                <td><a asp-controller="UserManagement" asp-action="DeleteUser" asp-route-id="@user.Id">Delete</a></td>
-                <td><a asp-controller="usermanagement" asp-action="ResetUserPassword" asp-route-id="@user.Id">Reset Password</a></td> 
+                <td><a asp-controller="UserManagement" asp-action="AddRole" asp-route-id="@user.Id">Voeg Rol Toe</a></td>
+                <td><a asp-controller="UserManagement" asp-action="updateInfoAdmin" asp-route-id="@user.Id">Bewerken</a></td>
+                <td><a asp-controller="UserManagement" asp-action="DeleteUser" asp-route-id="@user.Id">Verwijderen</a></td>
+                <td><a asp-controller="usermanagement" asp-action="ResetUserPassword" asp-route-id="@user.Id">Reset Wachtwoord</a></td> 
            
             </tr>
         }

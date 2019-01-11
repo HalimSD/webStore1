@@ -94,7 +94,7 @@ function populateTable(jsonModel, filtered) {
         // Iterate through the object and create td html foreach value
         $.each(obj, function (key, value) {
             if ((key === "userId" && value === null) || (key === "userEmail" && value === null)) {
-                value = "Ordered by non-registered user";
+                value = "Bestelt door niet-geregistreerde klant";
             }
             let tdElement = document.createElement("td");
             let txtNode = document.createTextNode(value.toString());

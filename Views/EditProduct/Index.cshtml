@@ -8,7 +8,7 @@
 }
 <link rel="stylesheet" href="~/css/edit_product.css">
 <div class="pageRoot">
-    <h2>Model Bewerken</h2>
+    <h2>Product Bewerken</h2>
     <hr>
     @if (Model.ResultMsg == EditProductController.ResultMsg.Failed)
     {
@@ -31,12 +31,12 @@
         <div class="row">
             <div class="col-6" id="ModelContent">
                 <div class="form-group">
-                    <label asp-for="Title" class="control-label">Model Naam</label>
+                    <label asp-for="Title" class="control-label">Naam</label>
                     <input asp-for="Title" class="form-control" placeholder="Title" value="@Model.Title"/>
                     <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Price" class="control-label">Model prijs</label>
+                    <label asp-for="Price" class="control-label">Prijs</label>
                     <input asp-for="Price" class="form-control" placeholder="Price" value="@Model.Price"/>
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
@@ -56,7 +56,7 @@
                     }
                 </div>
                 <div class="form-group">
-                    <label class="form-label-file">Model foto</label><br>
+                    <label class="form-label-file">Foto</label><br>
                     <input name="img" class="form-control-file" type="file" value="@Model.Image"/>
                 </div>
             </div>
@@ -65,12 +65,12 @@
             </div>
         </div>
         <div class="form-group" id="desc">
-            <label asp-for="Description" class="control-label">Model Beschrijving</label>
+            <label asp-for="Description" class="control-label">Beschrijving</label>
             <textarea asp-for="Description" class="form-control" rows="2" placeholder="@Model.Description"></textarea>
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Quantity" class="control-label">Model Voorraad</label>
+            <label asp-for="Quantity" class="control-label">Voorraad</label>
             <input asp-for="Quantity" class="form-control" rows="2" value="@Model.Quantity">
             <span asp-validation-for="Quantity" class="text-danger"></span>
         </div>

@@ -117,11 +117,14 @@ namespace WebApp1.Controllers
                         return RedirectToAction("Create", new{message = 1});
                     } 
                 //check of attribute is empty
-                foreach(var item in productsoort.Attribuutsoort){
-                    if(item.Attrbuut == null){
-                        return RedirectToAction("Create",new {message = 2 });
-                    }
-                }
+                 if (productsoort.Attribuutsoort != null){
+                     
+                    foreach(var item in productsoort.Attribuutsoort){
+                            if(item.Attrbuut == null){
+                                return RedirectToAction("Create",new {message = 2 });
+                            }
+                        }
+                 }
                 
                 //check for empty parent
                 if (parents.Count()>0){ 
@@ -637,6 +640,9 @@ namespace WebApp1.Controllers
             if(m == 1){
                 ViewData["message"] = "De productsoortnaam bestaat al";
             }
+             if(m == 2){
+                ViewData["message"] = "Vul de attributen in";
+            }
            
             var model = new WebApp1.Models.EditproductsoortModel();
             var productsoorts = from p in _context.Productsoort select p;
@@ -652,30 +658,61 @@ namespace WebApp1.Controllers
                return RedirectToAction("ChooseProductsoort");
             }
             var p = m.productsoort;
-            return RedirectToAction("Editproductsoort", new{oudeproductsoort = p });
+            return RedirectToAction("Editproductsoort", new{oldproductsoort = p });
         }
 
-        public IActionResult Editproductsoort(string oudeproductsoort, string newproductsoort)
+        public IActionResult Editproductsoort(WebApp1.Models.EditproductsoortModel2 m )
         {
-            if (oudeproductsoort ==null ){
+            if (m.oldproductsoort ==null ){
                 return RedirectToAction("ChooseProductsoort");
             }
-            else if(newproductsoort == null){
-                var model = new WebApp1.Models.EditproductsoortModel2();
-                model.oudeproductsoort = oudeproductsoort;
-                return View(model);
-            }
-            else{
-                var result = _context.Productsoort.SingleOrDefault(p => p.Naam == oudeproductsoort);
-                var productsoortex = from p in _context.Productsoort where p.Naam == newproductsoort select p;
-                if(productsoortex.Any()){
-                   return RedirectToAction("ChooseProductsoort", new{m = 1}); 
+            
+           
+            else if(m.newproductsoort!=null&& m.oldproductsoort!=null){
+                var result = _context.Productsoort.SingleOrDefault(p => p.Naam == m.oldproductsoort);
+                var ats = from a in _context.Attribuutsoort where a.productsoort.Naam == m.oldproductsoort select a;
+                var lsitat = ats.ToList();
+                if(m.newproductsoort != m.oldproductsoort){
+                    var productsoortex = from p in _context.Productsoort where p.Naam == m.newproductsoort select p;
+                    if(productsoortex.Any()){
+                        return RedirectToAction("ChooseProductsoort", new{m = 1}); 
+                    }
                 }
-                result.Naam = newproductsoort;
+                if(m.atributes !=null){
+                    foreach(var item in m.atributes){
+                    if (item.Attrbuut==null){
+                        return RedirectToAction("ChooseProductsoort", new{m = 2}); 
+                    }
+                }
+                result.Naam = m.newproductsoort;
+                for (var a =0; a<lsitat.Count; a++)
+                {
+                    for (var b=0; b<m.atributes.Count; b++)
+                    {
+                        if (lsitat[a].Id == m.atributes[b].Id)
+                        {
+                             lsitat[a].Attrbuut = m.atributes[b].Attrbuut;
+                        }
+                    }
+                }
+
+                }
+                
+                
+                //_context.Update(ats);
                 //_context.Productsoort.Add(result);
                 _context.SaveChanges();
                 return RedirectToAction("ChooseProductsoort");
             }
+
+            else {
+                var getattributen = from at in _context.Attribuutsoort where at.productsoort.Naam == m.oldproductsoort select at;
+                var model = new WebApp1.Models.EditproductsoortModel2();
+                model.atributes = getattributen.ToList();
+                model.oldproductsoort = m.oldproductsoort;
+                return View(model);
+            }   
+            
         }
 
 

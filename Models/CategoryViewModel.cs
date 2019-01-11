@@ -140,6 +140,10 @@ namespace WebApp1.Models
                 if (categoryId == -1) return null;
             }
 
+            // Verify the ID provided is a valid ID
+            bool idIsValid = (from ps in context.Productsoort where ps.Id == categoryId select ps).Any();
+            if (!idIsValid) return null;
+            
             // Get list of categories where we have to retrieve products from
             List<int> categoryIdList = GetProductCategoryIds((int) categoryId);
 
@@ -157,7 +161,8 @@ namespace WebApp1.Models
             // Get the attributes of that category 
             List<AttributeFilter> att =
                 (from atts in context.Attribuutsoort
-                    where atts.ProductsoortId == categoryId
+                    where atts.ProductsoortId == categoryId &&
+                          atts.Custom == false
                     select new AttributeFilter
                     {
                         AttributeName = atts.Attrbuut, AttributeId = atts.Id, Type = atts.Type

@@ -241,7 +241,17 @@
                                 <input type="submit" class="btn btn-primary" value="Details">
                                 @if (item.Quantity > 0)
                                 {
-                                    <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@item.Id">
+                                    <input type="hidden" name="categoryId" value="@Model.CategoryId">
+                                    <input type="hidden" name="pageNumber" value="@Model.Products.PageNumber">                                                              
+                                    if (Model.IsFiltered)
+                                    {
+                                        <input type="hidden" name="lastAction" value="filteredPage"> 
+                                    }
+                                    else
+                                    {
+                                        <input type="hidden" name="lastAction" value="categoryPage">  
+                                    }
+                                    <input type="submit" class="btn btn-primary" value="Zet in winkelwagen" formaction="@Url.Action("buy", "cart")">
                                 }
                             </div>
                         </form>

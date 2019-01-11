@@ -58,7 +58,8 @@
                 <input type="hidden" name="id" value='@viewProductModel.Id'/>
                 @if (inStock)
                 {
-                    <input type="submit" class="CartBtn" value="Zet in winkelwagen" asp-controller="cart" asp-action="buy" asp-route-id="@viewProductModel.Id">
+                    <input type="hidden" name="lastAction" value="defaultPage">
+                    <input type="submit" class="CartBtn" value="Zet in winkelwagen" formaction="@Url.Action("buy", "cart")">
                 }     
                 @if (ViewBag.alreadyInFav)
                 {

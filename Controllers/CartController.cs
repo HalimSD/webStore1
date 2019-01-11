@@ -268,8 +268,7 @@ namespace WebApp1.Controllers
             ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
             return View("sendOrderMail");
         }
-
-        public void bestellingPlaatsen()
+        public void bestellingPlaatsenUnSub(SubscribeModel model)
         {
             var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
             ViewBag.cart = cart;
@@ -279,7 +278,52 @@ namespace WebApp1.Controllers
             Productwaarde productwaarde = new Productwaarde();
             bestelling.Status = "Onderweg";
             bestelling.Date = DateTime.Now;
-            bestelling.UserId = _userManager.GetUserId(User);
+            var id = bestelling.UserId;
+            var email = model.Email;
+            if (id == null)
+            {
+                bestelling.email = email;
+            }
+            else
+            {
+                id = _userManager.GetUserId(User);
+            }
+            bestelling.ShippingFee = CalculateShippingCost(cart.Sum(items => items.Product.Price * items.Quantity));
+            _context.Add(bestelling);
+            _context.SaveChanges();
+            foreach (var i in cart)
+            {
+                BesteldeItem besteldeItem = new BesteldeItem
+                {
+                    Quantity = i.Quantity,
+                    Price = i.Product.Price * i.Quantity,
+                    Image = i.Product.Image,
+                    Title = i.Product.Title,
+                    BestellingId = bestelling.BestellingId,
+                    ProductwaardeId = i.Product.Id
+                };
+                _context.Add(besteldeItem);
+                _context.SaveChanges();
+            }
+        }
+
+        public void bestellingPlaatsen(SubscribeModel model)
+        {
+            var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
+            ViewBag.cart = cart;
+            ViewBag.total = cart.Sum(items => items.Product.Price * items.Quantity);
+            ViewBag.total = CalculateShippingCost(ViewBag.total) + ViewBag.total;
+            Bestelling bestelling = new Bestelling();
+            Productwaarde productwaarde = new Productwaarde();
+            bestelling.Status = "Onderweg";
+            bestelling.Date = DateTime.Now;
+            var userId = _userManager.GetUserId(User);
+            if(userId == null){
+                bestelling.email = model.Email;
+            }else{
+                bestelling.email = _userManager.GetUserAsync(User).Result.Email;
+                bestelling.UserId = _userManager.GetUserAsync(User).Result.Id;
+            }
             bestelling.ShippingFee = CalculateShippingCost(cart.Sum(items => items.Product.Price * items.Quantity));
             _context.Add(bestelling);
             _context.SaveChanges();
@@ -356,7 +400,7 @@ namespace WebApp1.Controllers
                     client.Disconnect(true);
                 }
             }
-            bestellingPlaatsen();
+            bestellingPlaatsen(model);
             HttpContext.Session.Remove("cart");
             return View("pay");
         }
@@ -409,13 +453,18 @@ namespace WebApp1.Controllers
         }
 
         [Route("pay")]
-        public IActionResult pay()
+        public IActionResult pay(SubscribeModel model)
         {
-            bestellingPlaatsen();
+            var email = _userManager.GetUserName(User);
+            if ( email == null){
+               email = model.Email;
+            }
+
+
             var message = new MimeMessage();
 
             message.From.Add(new MailboxAddress("Banana Boat", "testprojecthr@gmail.com"));
-            message.To.Add(new MailboxAddress(_userManager.GetUserName(User)));
+            message.To.Add(new MailboxAddress(email));
             message.Subject = "Your order";
             var builder = new BodyBuilder();
             builder.TextBody = @"Beste klant,
@@ -430,6 +479,7 @@ namespace WebApp1.Controllers
                 client.Send(message);
                 client.Disconnect(true);
             }
+            bestellingPlaatsen(model);
 
             HttpContext.Session.Remove("cart");
             return View();

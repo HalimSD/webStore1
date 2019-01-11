@@ -58,7 +58,7 @@ namespace WebApp1.Controllers.Admin
                 {
                     Id = b.BestellingId,
                     Date = b.Date.ToShortDateString(),
-                    Status = b.Status,
+                    Status = b.Status
                    
                 }
             ).FirstOrDefault();

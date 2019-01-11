@@ -47,6 +47,7 @@ namespace WebApp1.Models
     {
         public int BestellingId { get; set; }
         public DateTime Date { get; set; }
+        public string email {get; set;}
         public string Status { get; set; }
         public double ShippingFee { get; set; }
         public ICollection<BesteldeItem> BesteldeItem { get; set; }

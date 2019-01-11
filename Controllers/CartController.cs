@@ -42,7 +42,7 @@ namespace WebApp1.Controllers
             var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
             ViewData["cart"] = cart;
 
-            if (cart.ToArray().Length == 0)
+            if (cart == null || cart.ToArray().Length == 0 )
             {
                 return View("EmptyShoppingCart");
             }

@@ -2,7 +2,9 @@
 @model WebApp1.CreateproductModel.CreateproductModel
 
 @using Microsoft.AspNetCore.Http
-
+@{
+    ViewData["Title"] = "Product aanmaken";
+}
 
 <link rel="stylesheet" href="~/css/product_creation_generic.css">
 <script type='text/javascript'>
@@ -88,7 +90,7 @@
 
    
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-12">
             <form asp-action="Create3" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
@@ -121,7 +123,7 @@
                 </div>
 
                  <div class="form-group">
-                <input asp-for="productwaarde.Image" type="file" Class="form-control" placeholder="Image"/>
+                <input asp-for="productwaarde.Image" type="file" Class="form-control-file" placeholder="Image"/>
                 <span asp-validation-for="productwaarde.Image" class="text-danger"></span>
                 </div>
                 @{var i = 0;}
@@ -154,7 +156,7 @@
                         
                         <br><label class="control-label">@Model.AcustomAtributesall[a].productSoort.Naam</label>
                          <div class="form-group">
-                         <input id="show" class="btn btn-primary" type="button" value="Show at" onclick="shhow(@a)" />
+                         <input id="show" class="btn btn-default" type="button" value="Toon bestaande custom attributen" onclick="shhow(@a)" />
                         </div>
                         <div id="@a" style="display: none;">
                         @for (var aa = 0; aa < Model.AcustomAtributesall[a].customAtributes.Count; aa++)
@@ -184,10 +186,10 @@
                 
                  <div id="container" class="form-group"></div>
                  <div class="form-group">
-                    <input id="AddAtribute" class="btn btn-primary" type="button" value="Voeg Custom attribuut toe" onclick="addFields()" />
+                    <input id="AddAtribute" class="btn btn-default" type="button" value="Voeg Custom attribuut toe" onclick="addFields()" />
                  </div>
                 <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
+                    <input type="submit" value="Aanmaken" class="btn btn-primary" />
                 </div>
                 
             

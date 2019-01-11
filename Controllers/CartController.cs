@@ -316,7 +316,7 @@ namespace WebApp1.Controllers
                 using (var client = new SmtpClient())
                 {
                     client.Connect("smtp.gmail.com", 587, false);
-                    client.Authenticate("testprojecthr@gmail.com", "1.Password");
+                    client.Authenticate("testprojecthr@gmail.com", "1.TestProjectC");
                     client.Send(message);
                     client.Disconnect(true);
                 }

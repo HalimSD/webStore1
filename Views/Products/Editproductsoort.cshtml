@@ -8,7 +8,8 @@
 
             <form asp-action="Editproductsoort">
                 <div class="form-group">
-                        <input asp-for="@Model.newproductsoort" class="form-control" placeholder="Categorie Naam"/>
+                        <label asp-for="@Model.oldproductsoort" class="control-label">@Model.oldproductsoort</label>
+                        <input asp-for="@Model.newproductsoort" class="form-control" placeholder="@Model.oldproductsoort"/>
                         <span asp-validation-for="@Model.newproductsoort" class="text-danger"></span>
                 </div>
                 <div class="form-group">

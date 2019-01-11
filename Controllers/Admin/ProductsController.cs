@@ -678,7 +678,8 @@ namespace WebApp1.Controllers
                         return RedirectToAction("ChooseProductsoort", new{m = 1}); 
                     }
                 }
-                foreach(var item in m.atributes){
+                if(m.atributes !=null){
+                    foreach(var item in m.atributes){
                     if (item.Attrbuut==null){
                         return RedirectToAction("ChooseProductsoort", new{m = 2}); 
                     }
@@ -694,6 +695,9 @@ namespace WebApp1.Controllers
                         }
                     }
                 }
+
+                }
+                
                 
                 //_context.Update(ats);
                 //_context.Productsoort.Add(result);

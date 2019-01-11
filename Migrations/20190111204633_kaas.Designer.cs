@@ -10,8 +10,8 @@ using WebApp1.Models;
 namespace WebApp1.Migrations
 {
     [DbContext(typeof(WebshopContext))]
-    [Migration("20190110145149_kaass")]
-    partial class kaass
+    [Migration("20190111204633_kaas")]
+    partial class kaas
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -208,6 +208,8 @@ namespace WebApp1.Migrations
                     b.Property<string>("Status");
 
                     b.Property<string>("UserId");
+
+                    b.Property<string>("email");
 
                     b.HasKey("BestellingId");
 

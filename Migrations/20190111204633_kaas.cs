@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace WebApp1.Migrations
 {
-    public partial class kaass : Migration
+    public partial class kaas : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -198,6 +198,7 @@ namespace WebApp1.Migrations
                     BestellingId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Date = table.Column<DateTime>(nullable: false),
+                    email = table.Column<string>(nullable: true),
                     Status = table.Column<string>(nullable: true),
                     ShippingFee = table.Column<double>(nullable: false),
                     UserId = table.Column<string>(nullable: true)

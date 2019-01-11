@@ -121,17 +121,17 @@ namespace WebApp1.Controllers
 
             if (lastAction == "defaultPage")
             {
-                return RedirectToAction("Index", "ViewProduct", new {id});
+                return RedirectToAction("Index", "ViewProduct", new { id });
             }
 
             if (lastAction == "categoryPage")
             {
-                return RedirectToAction("Index", "Category", new {categoryId, pageNumber});
+                return RedirectToAction("Index", "Category", new { categoryId, pageNumber });
             }
 
             if (lastAction == "filteredPage")
             {
-                return RedirectToAction("Filtered", "Category", new {categoryId, pageNumber, useSessionFilters = true});
+                return RedirectToAction("Filtered", "Category", new { categoryId, pageNumber, useSessionFilters = true });
             }
 
             return RedirectToAction("Index", "Home");
@@ -195,11 +195,11 @@ namespace WebApp1.Controllers
                 if (Product1.DiscountedPrice != -1)
                 {
                     Product1.Price = Product1.DiscountedPrice;
-                    cart.Add(new Item {Product = Product1, Quantity = 1});
+                    cart.Add(new Item { Product = Product1, Quantity = 1 });
                 }
                 else
                 {
-                    cart.Add(new Item {Product = Product1, Quantity = 1});
+                    cart.Add(new Item { Product = Product1, Quantity = 1 });
                 }
 
                 VoorraadVerminderen(id);
@@ -245,18 +245,30 @@ namespace WebApp1.Controllers
             {
                 return RedirectToAction("Mainpage", "Home");
             }
-            else
-            {
-                if (_userManager.GetUserName(User) == null)
-                {
-                    return View("sendOrderMail");
-                }
-            }
 
             return View("checkOut");
         }
+      
+         public IActionResult userLoginCheck()
+        {
+            var currentUser =  _userManager.GetUserAsync(User).Result;
+            if (currentUser == null)
+            {
+                return RedirectToAction("sendOrderMail", "cart");
 
-        public void bestellingPlaatsen()
+            }else {
+                return RedirectToAction("Pay", "cart");
+            }
+        }
+
+        public IActionResult sendOrderMail()
+        {
+            var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
+            ViewBag.cart = cart;
+            ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
+            return View("sendOrderMail");
+        }
+        public void bestellingPlaatsenUnSub(SubscribeModel model)
         {
             var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
             ViewBag.cart = cart;
@@ -265,8 +277,53 @@ namespace WebApp1.Controllers
             Bestelling bestelling = new Bestelling();
             Productwaarde productwaarde = new Productwaarde();
             bestelling.Status = "Onderweg";
-            bestelling.Date = DateTime.Today;
-            bestelling.UserId = _userManager.GetUserId(User);
+            bestelling.Date = DateTime.Now;
+            var id = bestelling.UserId;
+            var email = model.Email;
+            if (id == null)
+            {
+                bestelling.email = email;
+            }
+            else
+            {
+                id = _userManager.GetUserId(User);
+            }
+            bestelling.ShippingFee = CalculateShippingCost(cart.Sum(items => items.Product.Price * items.Quantity));
+            _context.Add(bestelling);
+            _context.SaveChanges();
+            foreach (var i in cart)
+            {
+                BesteldeItem besteldeItem = new BesteldeItem
+                {
+                    Quantity = i.Quantity,
+                    Price = i.Product.Price * i.Quantity,
+                    Image = i.Product.Image,
+                    Title = i.Product.Title,
+                    BestellingId = bestelling.BestellingId,
+                    ProductwaardeId = i.Product.Id
+                };
+                _context.Add(besteldeItem);
+                _context.SaveChanges();
+            }
+        }
+
+        public void bestellingPlaatsen(SubscribeModel model)
+        {
+            var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
+            ViewBag.cart = cart;
+            ViewBag.total = cart.Sum(items => items.Product.Price * items.Quantity);
+            ViewBag.total = CalculateShippingCost(ViewBag.total) + ViewBag.total;
+            Bestelling bestelling = new Bestelling();
+            Productwaarde productwaarde = new Productwaarde();
+            bestelling.Status = "Onderweg";
+            bestelling.Date = DateTime.Now;
+            var userId = _userManager.GetUserId(User);
+            if(userId == null){
+                bestelling.email = model.Email;
+            }else{
+                bestelling.email = _userManager.GetUserAsync(User).Result.Email;
+                bestelling.UserId = _userManager.GetUserAsync(User).Result.Id;
+            }
             bestelling.ShippingFee = CalculateShippingCost(cart.Sum(items => items.Product.Price * items.Quantity));
             _context.Add(bestelling);
             _context.SaveChanges();
@@ -332,7 +389,7 @@ namespace WebApp1.Controllers
                 var builder = new BodyBuilder();
                 builder.TextBody = @"Beste klant,
                 Bedankt voor je bestelling. 
-                Je facatuur vind je terug in de bijlage van deze mail.";
+                Je factuur vind je terug in de bijlage van deze mail.";
                 builder.Attachments.Add(_appEnvironment.WebRootPath + "/images/reportPDF/Report.pdf");
                 message.Body = builder.ToMessageBody();
                 using (var client = new SmtpClient())
@@ -343,7 +400,8 @@ namespace WebApp1.Controllers
                     client.Disconnect(true);
                 }
             }
-
+            bestellingPlaatsen(model);
+            HttpContext.Session.Remove("cart");
             return View("pay");
         }
 
@@ -353,15 +411,15 @@ namespace WebApp1.Controllers
             var x = id;
             List<BesteldeItem> besteldeItem = new List<BesteldeItem>();
             besteldeItem = (from b in _context.BesteldeItem
-                    where b.BestellingId == id
-                    select new BesteldeItem
-                    {
-                        BesteldeItemId = b.BesteldeItemId,
-                        Title = b.Title,
-                        Price = b.Price,
-                        Quantity = b.Quantity,
-                        Image = b.Image
-                    }
+                            where b.BestellingId == id
+                            select new BesteldeItem
+                            {
+                                BesteldeItemId = b.BesteldeItemId,
+                                Title = b.Title,
+                                Price = b.Price,
+                                Quantity = b.Quantity,
+                                Image = b.Image
+                            }
                 ).ToList();
 
             ViewBag.besteldeItem = besteldeItem;
@@ -395,13 +453,18 @@ namespace WebApp1.Controllers
         }
 
         [Route("pay")]
-        public IActionResult pay()
+        public IActionResult pay(SubscribeModel model)
         {
-            bestellingPlaatsen();
+            var email = _userManager.GetUserName(User);
+            if ( email == null){
+               email = model.Email;
+            }
+
+
             var message = new MimeMessage();
 
             message.From.Add(new MailboxAddress("Banana Boat", "testprojecthr@gmail.com"));
-            message.To.Add(new MailboxAddress(_userManager.GetUserName(User)));
+            message.To.Add(new MailboxAddress(email));
             message.Subject = "Your order";
             var builder = new BodyBuilder();
             builder.TextBody = @"Beste klant,
@@ -416,6 +479,7 @@ namespace WebApp1.Controllers
                 client.Send(message);
                 client.Disconnect(true);
             }
+            bestellingPlaatsen(model);
 
             HttpContext.Session.Remove("cart");
             return View();
@@ -484,7 +548,7 @@ namespace WebApp1.Controllers
                 ColorMode = ColorMode.Color,
                 Orientation = Orientation.Portrait,
                 PaperSize = PaperKind.A4,
-                Margins = new MarginSettings {Top = 10},
+                Margins = new MarginSettings { Top = 10 },
                 DocumentTitle = "PDF Report",
                 Out = @_appEnvironment.WebRootPath + "/images/reportPDF/Report.pdf"
             };
@@ -497,14 +561,14 @@ namespace WebApp1.Controllers
                     DefaultEncoding = "utf-8",
                     UserStyleSheet = Path.Combine(Directory.GetCurrentDirectory(), "assets", "styles.css")
                 },
-                HeaderSettings = {FontName = "Arial", FontSize = 9, Right = "Page [page] of [toPage]", Line = true},
-                FooterSettings = {FontName = "Arial", FontSize = 9, Line = true, Center = "Report Footer"}
+                HeaderSettings = { FontName = "Arial", FontSize = 9, Right = "Page [page] of [toPage]", Line = true },
+                FooterSettings = { FontName = "Arial", FontSize = 9, Line = true, Center = "Report Footer" }
             };
 
             var pdf = new HtmlToPdfDocument()
             {
                 GlobalSettings = globalSettings,
-                Objects = {objectSettings}
+                Objects = { objectSettings }
             };
 
             var file = _converter.Convert(pdf);

@@ -13,8 +13,9 @@
         <option>Paysafe Card</option>
     </select>
     <br><br>
-    <form action="@Url.Action("pay", "cart")">
-        <button type="submit" class="btn btn-primary">Betalen</button>
+    <form >
+        <input type="submit" class="btn btn-primary" value="Betalen" asp-controller="cart" asp-action="userLoginCheck">
+
         <button formaction="@Url.Action("Index", "Cart")" type="submit" class="btn btn-default">Terug</button>
     </form>
 </div>

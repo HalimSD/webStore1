@@ -98,7 +98,6 @@ namespace WebApp1.Areas.Identity.Pages.Account
             public string Gender { get; set; }
 
             [StringLength(20, ErrorMessage = "De {0} naam moet minimaal {2} en maximaal {1} characters zijn.", MinimumLength = 4)]
-            [Required]
             [DataType(DataType.Text)]
             [Display(Name = "Land")]
             public string Country { get; set; }

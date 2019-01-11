@@ -4,11 +4,10 @@
 @using (Html.BeginForm("EmailOrder", "Cart", FormMethod.Post))
 {
    
-    <h2>You are not logged in, enter your email to receive a confirmation!</h2>
+    <h2>u bent niet ingelogd, voer uw e-mailadres in om een bevestiging te ontvangen!</h2>
     <hr>
     @Html.TextBoxFor(model => model.Email)
     @Html.ValidationMessageFor(model => model.Email)
-    <input type="submit" class="btn btn-primary" value="Checkout">
-    
+    <input type="submit" class="btn btn-primary" value="Doorgaan" asp-controller="cart" asp-action="pay">
 }
 </div>

@@ -50,8 +50,20 @@ namespace WebApp1.Controllers.Admin
                 }
             ).FirstOrDefault();
             
-            if (model == null) return NotFound();
-            
+            if (model == null) {
+            model =
+            (
+                from b in context.Bestelling
+                select new OrderListViewModel
+                {
+                    Id = b.BestellingId,
+                    Date = b.Date.ToShortDateString(),
+                    Status = b.Status
+                   
+                }
+            ).FirstOrDefault();
+            }
+
             return View(model);
         }
 

@@ -117,11 +117,14 @@ namespace WebApp1.Controllers
                         return RedirectToAction("Create", new{message = 1});
                     } 
                 //check of attribute is empty
-                foreach(var item in productsoort.Attribuutsoort){
-                    if(item.Attrbuut == null){
-                        return RedirectToAction("Create",new {message = 2 });
-                    }
-                }
+                 if (productsoort.Attribuutsoort != null){
+                     
+                    foreach(var item in productsoort.Attribuutsoort){
+                            if(item.Attrbuut == null){
+                                return RedirectToAction("Create",new {message = 2 });
+                            }
+                        }
+                 }
                 
                 //check for empty parent
                 if (parents.Count()>0){ 

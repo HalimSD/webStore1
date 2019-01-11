@@ -11,7 +11,14 @@
     <b>Bestelling ID:</b><br>
     @Model.Id<br>
     <b>Klant ID:</b><br>
-    @Model.UserId<br>
+    @if (string.IsNullOrWhiteSpace(Model.UserId))
+    {
+        @("Bestelling geplaatst door niet-geregistreerde gebruiker")<br>
+    }
+    else
+    {
+        @Model.UserId<br>
+    }
     <b>Klant E-Mail:</b><br>
     @Model.UserEmail<br>
     <b>Huidige Status:</b><br>
@@ -20,7 +27,7 @@
         <input type="hidden" name="id" value="@Model.Id"/>
         <label class="label">Nieuwe bestel status:</label>
         <select class="form-control" name="selection">
-            <option value="OnderWeg">OnderWeg</option>
+            <option value="Onderweg">Onderweg</option>
             <option value="Bezorgd">Bezorgt</option>
             <option value="In Behandeling">In Behandeling</option>
             <option value="Geannuleerd">Geannuleerd</option>

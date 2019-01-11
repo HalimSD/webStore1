@@ -37,32 +37,17 @@ namespace WebApp1.Controllers.Admin
             OrderListViewModel model =
             (
                 from b in context.Bestelling
-                from u in context.Users
-                where b.BestellingId == id && 
-                      b.UserId == u.Id
+                where b.BestellingId == id
                 select new OrderListViewModel
                 {
                     Id = b.BestellingId,
                     //Date = b.Date.ToShortDateString(),
                     Status = b.Status,
-                    UserId = u.Id,
-                    UserEmail = u.Email
+                    UserId = b.UserId,
+                    UserEmail = b.email
                 }
             ).FirstOrDefault();
             
-            if (model == null) {
-            model =
-            (
-                from b in context.Bestelling
-                select new OrderListViewModel
-                {
-                    Id = b.BestellingId,
-                    Date = b.Date.ToShortDateString(),
-                    Status = b.Status
-                   
-                }
-            ).FirstOrDefault();
-            }
 
             return View(model);
         }

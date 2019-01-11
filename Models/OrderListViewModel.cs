@@ -58,7 +58,7 @@ namespace WebApp1.Models
                             where bi.BestellingId == order.BestellingId
                             select bi.Quantity
                         ).Sum(),
-                    UserEmail = (from u in context.Users where u.Id == order.UserId select u.Email).FirstOrDefault(),
+                    UserEmail = order.email,
                     UserId = order.UserId
                 };
                 newPage.Data.Add(model);

@@ -118,27 +118,23 @@ namespace WebApp1.Controllers
                 _context.SaveChanges();
                 SessionExtensions.Set(HttpContext.Session, "cart", cart);
             }
-<<<<<<< HEAD
-            return RedirectToAction("Mainpage", "Home", new {useSessionFilters = true});
-=======
 
             if (lastAction == "defaultPage")
             {
-                return RedirectToAction("Index", "ViewProduct", new {id});
+                return RedirectToAction("Index", "ViewProduct", new { id });
             }
 
             if (lastAction == "categoryPage")
             {
-                return RedirectToAction("Index", "Category", new {categoryId, pageNumber});
+                return RedirectToAction("Index", "Category", new { categoryId, pageNumber });
             }
 
             if (lastAction == "filteredPage")
             {
-                return RedirectToAction("Filtered", "Category", new {categoryId, pageNumber, useSessionFilters = true});
+                return RedirectToAction("Filtered", "Category", new { categoryId, pageNumber, useSessionFilters = true });
             }
 
             return RedirectToAction("Index", "Home");
->>>>>>> d1e7b7df5ea5529c7da2775d9821c40a0d95382a
         }
 
         [Route("remove/{id}")]
@@ -199,11 +195,11 @@ namespace WebApp1.Controllers
                 if (Product1.DiscountedPrice != -1)
                 {
                     Product1.Price = Product1.DiscountedPrice;
-                    cart.Add(new Item {Product = Product1, Quantity = 1});
+                    cart.Add(new Item { Product = Product1, Quantity = 1 });
                 }
                 else
                 {
-                    cart.Add(new Item {Product = Product1, Quantity = 1});
+                    cart.Add(new Item { Product = Product1, Quantity = 1 });
                 }
 
                 VoorraadVerminderen(id);
@@ -249,15 +245,28 @@ namespace WebApp1.Controllers
             {
                 return RedirectToAction("Mainpage", "Home");
             }
-            else
-            {
-                if (_userManager.GetUserName(User) == null)
-                {
-                    return View("sendOrderMail");
-                }
-            }
 
             return View("checkOut");
+        }
+      
+         public IActionResult userLoginCheck()
+        {
+            var currentUser =  _userManager.GetUserAsync(User).Result;
+            if (currentUser == null)
+            {
+                return RedirectToAction("sendOrderMail", "cart");
+
+            }else {
+                return RedirectToAction("Pay", "cart");
+            }
+        }
+
+        public IActionResult sendOrderMail()
+        {
+            var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
+            ViewBag.cart = cart;
+            ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
+            return View("sendOrderMail");
         }
 
         public void bestellingPlaatsen()
@@ -269,7 +278,7 @@ namespace WebApp1.Controllers
             Bestelling bestelling = new Bestelling();
             Productwaarde productwaarde = new Productwaarde();
             bestelling.Status = "Onderweg";
-            bestelling.Date = DateTime.Today;
+            bestelling.Date = DateTime.Now;
             bestelling.UserId = _userManager.GetUserId(User);
             bestelling.ShippingFee = CalculateShippingCost(cart.Sum(items => items.Product.Price * items.Quantity));
             _context.Add(bestelling);
@@ -347,7 +356,8 @@ namespace WebApp1.Controllers
                     client.Disconnect(true);
                 }
             }
-
+            bestellingPlaatsen();
+            HttpContext.Session.Remove("cart");
             return View("pay");
         }
 
@@ -357,15 +367,15 @@ namespace WebApp1.Controllers
             var x = id;
             List<BesteldeItem> besteldeItem = new List<BesteldeItem>();
             besteldeItem = (from b in _context.BesteldeItem
-                    where b.BestellingId == id
-                    select new BesteldeItem
-                    {
-                        BesteldeItemId = b.BesteldeItemId,
-                        Title = b.Title,
-                        Price = b.Price,
-                        Quantity = b.Quantity,
-                        Image = b.Image
-                    }
+                            where b.BestellingId == id
+                            select new BesteldeItem
+                            {
+                                BesteldeItemId = b.BesteldeItemId,
+                                Title = b.Title,
+                                Price = b.Price,
+                                Quantity = b.Quantity,
+                                Image = b.Image
+                            }
                 ).ToList();
 
             ViewBag.besteldeItem = besteldeItem;
@@ -488,7 +498,7 @@ namespace WebApp1.Controllers
                 ColorMode = ColorMode.Color,
                 Orientation = Orientation.Portrait,
                 PaperSize = PaperKind.A4,
-                Margins = new MarginSettings {Top = 10},
+                Margins = new MarginSettings { Top = 10 },
                 DocumentTitle = "PDF Report",
                 Out = @_appEnvironment.WebRootPath + "/images/reportPDF/Report.pdf"
             };
@@ -501,14 +511,14 @@ namespace WebApp1.Controllers
                     DefaultEncoding = "utf-8",
                     UserStyleSheet = Path.Combine(Directory.GetCurrentDirectory(), "assets", "styles.css")
                 },
-                HeaderSettings = {FontName = "Arial", FontSize = 9, Right = "Page [page] of [toPage]", Line = true},
-                FooterSettings = {FontName = "Arial", FontSize = 9, Line = true, Center = "Report Footer"}
+                HeaderSettings = { FontName = "Arial", FontSize = 9, Right = "Page [page] of [toPage]", Line = true },
+                FooterSettings = { FontName = "Arial", FontSize = 9, Line = true, Center = "Report Footer" }
             };
 
             var pdf = new HtmlToPdfDocument()
             {
                 GlobalSettings = globalSettings,
-                Objects = {objectSettings}
+                Objects = { objectSettings }
             };
 
             var file = _converter.Convert(pdf);

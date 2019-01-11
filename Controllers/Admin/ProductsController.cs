@@ -248,6 +248,12 @@ namespace WebApp1.Controllers
             else if (message == 4){
                 ViewData["message"] = "De waarde moet een getal zijn van attribuut: ";
             }
+            else if (message == 9){
+                ViewData["message"] = "De Prijs moet positief zijn";
+            }
+            else if (message == 10){
+                ViewData["message"] = "De kwantiteit moet positief zijn";
+            }
 
             if(at != null){
               ViewData["message"] = ViewData["message"] + at; 
@@ -367,6 +373,12 @@ namespace WebApp1.Controllers
             
                 if (productwaarde.Title == null){
                     return RedirectToAction("Create2",new {message = 1});
+                }
+                if(productwaarde.Price<0){
+                    return RedirectToAction("Create2", new{message = 9});
+                }
+                if(productwaarde.Quantity<0){
+                    return RedirectToAction("Create2", new{message = 10});
                 }
 
                 for(var i=0; i<Attribuutsoorts.Count; i++){

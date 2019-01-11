@@ -1,0 +1,27 @@
+@model WebApp1.Models.EditproductsoortModel2
+<link rel="stylesheet" href="~/css/product_creation_generic.css">
+<div class="pageRoot">
+    <h2>Product Categorie</h2>
+
+    <h4>Updaten</h4>
+    <hr />
+
+            <form asp-action="Editproductsoort">
+                <div class="form-group">
+                        <input name="newproductsoort" class="form-control" placeholder="Categorie Naam"/>
+                </div>
+                <div class="form-group">
+                        <input name="oudeproductsoort" class="form-control" value ="@Model.oudeproductsoort" type = "hidden" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Updaten" class="btn btn-primary"/>
+                </div>          
+            </form>
+    
+</div>
+   
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+}

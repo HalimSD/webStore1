@@ -631,6 +631,55 @@ namespace WebApp1.Controllers
             }
             return -1;
         }
+
+          public IActionResult ChooseProductsoort(int? m)
+        {
+            if(m == 1){
+                ViewData["message"] = "De productsoortnaam bestaat al";
+            }
+           
+            var model = new WebApp1.Models.EditproductsoortModel();
+            var productsoorts = from p in _context.Productsoort select p;
+            model.productsoorts = productsoorts.ToList();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+         public IActionResult ChooseProductsoort(WebApp1.Models.EditproductsoortModel m)
+        {
+            if(m.productsoort == null){
+               return RedirectToAction("ChooseProductsoort");
+            }
+            var p = m.productsoort;
+            return RedirectToAction("Editproductsoort", new{oudeproductsoort = p });
+        }
+
+        public IActionResult Editproductsoort(string oudeproductsoort, string newproductsoort)
+        {
+            if (oudeproductsoort ==null ){
+                return RedirectToAction("ChooseProductsoort");
+            }
+            else if(newproductsoort == null){
+                var model = new WebApp1.Models.EditproductsoortModel2();
+                model.oudeproductsoort = oudeproductsoort;
+                return View(model);
+            }
+            else{
+                var result = _context.Productsoort.SingleOrDefault(p => p.Naam == oudeproductsoort);
+                var productsoortex = from p in _context.Productsoort where p.Naam == newproductsoort select p;
+                if(productsoortex.Any()){
+                   return RedirectToAction("ChooseProductsoort", new{m = 1}); 
+                }
+                result.Naam = newproductsoort;
+                //_context.Productsoort.Add(result);
+                _context.SaveChanges();
+                return RedirectToAction("ChooseProductsoort");
+            }
+        }
+
+
+
         // [HttpPost]
         // public JsonResult _Fav(int ID)
         // {
@@ -679,3 +728,4 @@ namespace WebApp1.Controllers
 
     }
 }
+

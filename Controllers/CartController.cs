@@ -389,7 +389,7 @@ namespace WebApp1.Controllers
                 var builder = new BodyBuilder();
                 builder.TextBody = @"Beste klant,
                 Bedankt voor je bestelling. 
-                Je facatuur vind je terug in de bijlage van deze mail.";
+                Je factuur vind je terug in de bijlage van deze mail.";
                 builder.Attachments.Add(_appEnvironment.WebRootPath + "/images/reportPDF/Report.pdf");
                 message.Body = builder.ToMessageBody();
                 using (var client = new SmtpClient())

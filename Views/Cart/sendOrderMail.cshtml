@@ -6,7 +6,7 @@
    
     <h2>U bent niet ingelogd, voer uw e-mailadres in om een bevestiging te ontvangen!</h2>
     <hr>
-    @Html.TextBoxFor(model => model.Email, new {required = "required"})
+    @Html.TextBoxFor(model => model.Email, new {required = "required", type = "email"})
     @Html.ValidationMessageFor(model => model.Email)
     <input type="submit" class="btn btn-primary" value="Doorgaan" asp-controller="cart" asp-action="pay">
 }

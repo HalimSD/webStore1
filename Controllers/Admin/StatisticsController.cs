@@ -62,13 +62,13 @@ namespace WebApp1.Controllers
                  // Figure out which day it should be part off
                  // -1 Means it happened more than a week ago
                  int index = -1;
-                 if (order.Date == DateTime.Today) { index = 0; }
-                 if (order.Date == DateTime.Today.AddDays(-1)) { index = 1; }
-                 if (order.Date == DateTime.Today.AddDays(-2)) { index = 2; }
-                 if (order.Date == DateTime.Today.AddDays(-3)) { index = 3; }
-                 if (order.Date == DateTime.Today.AddDays(-4)) { index = 4; }
-                 if (order.Date == DateTime.Today.AddDays(-5)) { index = 5; }
-                 if (order.Date == DateTime.Today.AddDays(-6)) { index = 6; }
+                 if (order.Date.ToShortDateString() == DateTime.Today.ToShortDateString()) { index = 0; }
+                 if (order.Date.ToShortDateString() == DateTime.Today.AddDays(-1).ToShortDateString()) { index = 1; }
+                 if (order.Date.ToShortDateString() == DateTime.Today.AddDays(-2).ToShortDateString()) { index = 2; }
+                 if (order.Date.ToShortDateString() == DateTime.Today.AddDays(-3).ToShortDateString()) { index = 3; }
+                 if (order.Date.ToShortDateString() == DateTime.Today.AddDays(-4).ToShortDateString()) { index = 4; }
+                 if (order.Date.ToShortDateString() == DateTime.Today.AddDays(-5).ToShortDateString()) { index = 5; }
+                 if (order.Date.ToShortDateString() == DateTime.Today.AddDays(-6).ToShortDateString()) { index = 6; }
 
                  // If it doesn't fall under this week, purchase will not be included
                  // Skip this iteration of the foreach loop

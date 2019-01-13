@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -332,16 +333,16 @@ namespace WebApp1.Models
         {
             if (!query.Any()) return new string[0];
 
-            int[] attributeValues =
+            double[] attributeValues =
             (
                 from attw in context.Attribuutwaarde
                 where attw.AttribuutsoortId == attributeId &&
                       attw.Waarde != "N/A"
-                select int.Parse(attw.Waarde)
+                select double.Parse(attw.Waarde, CultureInfo.InvariantCulture)
             ).ToArray();
             if (!attributeValues.Any()) return new string[0];
 
-            // Detirmine how many ranges will be created
+            // Determine how many ranges will be created
             // Max is 5
             int rangeOptions = attributeValues.Length;
             if (rangeOptions > 5) rangeOptions = 5;
@@ -512,8 +513,8 @@ namespace WebApp1.Models
                                 from pw in query
                                 where attw.ProductwaardeId == pw.Id &&
                                       attw.AttribuutsoortId == item.AttributeId &&
-                                      Convert.ToInt32(attw.Waarde) >= rangeValues[0] &&
-                                      Convert.ToInt32(attw.Waarde) <= rangeValues[1]
+                                      Convert.ToDouble(attw.Waarde) >= rangeValues[0] &&
+                                      Convert.ToDouble(attw.Waarde) <= rangeValues[1]
                                 select pw
                             );
                             filtered = true;

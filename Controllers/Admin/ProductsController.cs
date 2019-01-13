@@ -535,10 +535,9 @@ namespace WebApp1.Controllers
                  var customatwaarde = new Attribuutwaarde(){Waarde = item.extraAtributewaarde.Waarde, ProductwaardeId = productwaardeid.First().Id, AttribuutsoortId = atributeID.First().Id};
                  _context.Attribuutwaarde.Add(customatwaarde); 
                  await _context.SaveChangesAsync(); 
-            //}
-                return RedirectToAction("index", "CategoryList");
             }
-            return RedirectToAction("index", "CategoryList");
+                return RedirectToAction("index", "CategoryList");
+           
         }
 
 

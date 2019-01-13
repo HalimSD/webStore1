@@ -29,7 +29,7 @@ namespace ContosoRTM.Controllers
             _roleManager = roleManager;
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Index()
         {
@@ -45,7 +45,7 @@ namespace ContosoRTM.Controllers
             return View(vm);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> AddRole(string id)
         {
@@ -59,7 +59,7 @@ namespace ContosoRTM.Controllers
             return View(vm);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddRole(UserManagementAddRole rvm)
         {

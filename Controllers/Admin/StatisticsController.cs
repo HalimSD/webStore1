@@ -112,7 +112,7 @@
                          from pw in context.Product
                          from ps in context.Category
                          where pw.Id == order.ProductId &&
-                               pw.ProductsoortId == ps.Id &&
+                               pw.CategoryId == ps.Id &&
                                ps.Naam == category
                          select ps.Naam
                      ).FirstOrDefault();

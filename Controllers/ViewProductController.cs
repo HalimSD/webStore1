@@ -31,15 +31,15 @@ namespace klaas.Controllers
             Product product = (from pw in context.Product where pw.Id == id select pw).FirstOrDefault();
             if (product == null) return NotFound();
             
-            Category category =(from ps in context.Category where ps.Id == product.ProductsoortId select ps).FirstOrDefault();           
+            Category category =(from ps in context.Category where ps.Id == product.CategoryId select ps).FirstOrDefault();           
             List<ViewProductAttributes> attributes = 
                 (from a in context.AttributeValue
-                join pwaarde in context.Product on a.ProductwaardeId equals pwaarde.Id
-                join at in context.AttributeType on a.AttribuutsoortId equals at.Id
+                join pwaarde in context.Product on a.ProductId equals pwaarde.Id
+                join at in context.AttributeType on a.AttributeTypeId equals at.Id
                 where pwaarde.Id == product.Id
                  select new ViewProductAttributes
                           {
-                              AttributeName = at.Attrbuut,
+                              AttributeName = at.Name,
                               AttributeValue = a.Waarde
                       
                                   

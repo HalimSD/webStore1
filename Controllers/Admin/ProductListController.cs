@@ -96,7 +96,7 @@ namespace WebApp1.Controllers.Admin
             IQueryable<Product> query =
                 from pw in context.Product
                 from ps in context.Category
-                where pw.ProductsoortId == ps.Id &&
+                where pw.CategoryId == ps.Id &&
                       pw.Title.ToUpper().Contains(name.ToUpper()) &&
                       ps.Naam.ToUpper().Contains(category.ToUpper())
                 select pw;

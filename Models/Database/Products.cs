@@ -28,7 +28,7 @@ namespace WebApp1.Models.Database
 
         //[StringLength(10000, MinimumLength = 3)]
         [Required] public string Description { get; set; }
-        public int ProductsoortId { get; set; }
+        public int CategoryId { get; set; }
         public Category Category { get; set; }
         public List<AttributeValue> AttributeValue { get; set; }
         public List<AttributeType> AttributeType { get; set; }

@@ -48,7 +48,7 @@ namespace WebApp1.Controllers
                  string res =
                  (
                      from ps in _context.Category
-                     where ps.Id == item.ProductsoortId
+                     where ps.Id == item.CategoryId
                      select ps.Naam
                  ).FirstOrDefault();
                  attributeNames.Add(res);
@@ -119,10 +119,10 @@ namespace WebApp1.Controllers
                         return RedirectToAction("Create", new{message = 1});
                     } 
                 //check of attribute is empty
-                 if (category.Attribuutsoort != null){
+                 if (category.AttributeType != null){
                      
-                    foreach(var item in category.Attribuutsoort){
-                            if(item.Attrbuut == null){
+                    foreach(var item in category.AttributeType){
+                            if(item.Name == null){
                                 return RedirectToAction("Create",new {message = 2 });
                             }
                         }
@@ -143,8 +143,8 @@ namespace WebApp1.Controllers
                
             
                 // check attribuut dubbel in lijst
-                if(category.Attribuutsoort!= null){ var attribuutinlijst = category.Attribuutsoort
-                                   .GroupBy(e => e.Attrbuut)
+                if(category.AttributeType!= null){ var attribuutinlijst = category.AttributeType
+                                   .GroupBy(e => e.Name)
                                    .Any(e => e.Count() > 1);
                                    
                                    if(attribuutinlijst)
@@ -315,7 +315,7 @@ namespace WebApp1.Controllers
 
              var standardattributen =
                     from productsoorten in _context.Category
-                    join atributen in _context.AttributeType on productsoorten.Id equals atributen.ProductsoortId
+                    join atributen in _context.AttributeType on productsoorten.Id equals atributen.CategoryId
                     where productsoorten.Naam == productsoortt && atributen.Custom == false
                     select atributen;
             var id = productsoortid.First().Id;
@@ -328,7 +328,7 @@ namespace WebApp1.Controllers
             
             var alreadyattributencustomall =
                     from productsoorten in _context.Category
-                    join atributen in _context.AttributeType on productsoorten.Id equals atributen.ProductsoortId
+                    join atributen in _context.AttributeType on productsoorten.Id equals atributen.CategoryId
                     where atributen.Custom == true
                     group atributen by productsoorten into g
                     select g;
@@ -385,9 +385,9 @@ namespace WebApp1.Controllers
 
                 for(var i=0; i<Attribuutsoorts.Count; i++){
                         if(Attribuutsoorts[i].Type == "number"){
-                                bool isDouble = Double.TryParse(Attribuutsoorts[i].Attribuutwaarde[0].Waarde, out double n );
+                                bool isDouble = Double.TryParse(Attribuutsoorts[i].AttributeValues[0].Waarde, out double n );
                                 if(!isDouble) {
-                                    return RedirectToAction("Create2",new { message = 4, at = Attribuutsoorts[i].Attrbuut });
+                                    return RedirectToAction("Create2",new { message = 4, at = Attribuutsoorts[i].Name });
                                 }
                             }
                  }
@@ -409,7 +409,7 @@ namespace WebApp1.Controllers
 
                  // check attribuut dubbel in lijst
                var attribuutinlijst = newcustom
-                                   .GroupBy(e => e.extraAtribute.Attrbuut)
+                                   .GroupBy(e => e.extraAtribute.Name)
                                    .Any(e => e.Count() > 1);
                 if(attribuutinlijst)
                 {
@@ -456,14 +456,14 @@ namespace WebApp1.Controllers
                 await _context.SaveChangesAsync();
 
              foreach(var item in Attribuutsoorts){
-                if(item.Attribuutwaarde[0].Waarde == null){
+                if(item.AttributeValues[0].Waarde == null){
                      _context.Product.Remove(product);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("Create2",new {message = 2, at = item.Attrbuut});
+                    return RedirectToAction("Create2",new {message = 2, at = item.Name});
                 }
                 else{
                 var productwaardeid = from p in _context.Product where p.Title == product.Title select p;
-                var standardatt = new AttributeValue(){Waarde = item.Attribuutwaarde[0].Waarde, ProductwaardeId = productwaardeid.First().Id, AttribuutsoortId = item.Attribuutwaarde[0].AttribuutsoortId};
+                var standardatt = new AttributeValue(){Waarde = item.AttributeValues[0].Waarde, ProductId = productwaardeid.First().Id, AttributeTypeId = item.AttributeValues[0].AttributeTypeId};
                 _context.AttributeValue.Add(standardatt); 
                     await _context.SaveChangesAsync();
                     }
@@ -476,18 +476,18 @@ namespace WebApp1.Controllers
                          if(item.cattribuutwaarde[i].Waarde == null){
                               _context.Product.Remove(product);
                             await _context.SaveChangesAsync();
-                            return RedirectToAction("Create2",new {message = 2, at = item.customAtributes[i].customAtribute.Attrbuut});
+                            return RedirectToAction("Create2",new {message = 2, at = item.customAtributes[i].customAtribute.Name});
                             }
                         if(item.customAtributes[i].customAtribute.Type == "number"){
                                 bool isDouble = Double.TryParse(item.cattribuutwaarde[i].Waarde, out double n );
                                 if(!isDouble) {
                                      _context.Product.Remove(product);
                                     await _context.SaveChangesAsync();
-                                    return RedirectToAction("Create2",new { message = 4, at = item.customAtributes[i].customAtribute.Attrbuut});
+                                    return RedirectToAction("Create2",new { message = 4, at = item.customAtributes[i].customAtribute.Name});
                                 }
                             }
                         var atributeID = from p in _context.AttributeType where p.Id == item.customAtributes[i].customAtribute.Id select p;
-                        var customatwaarde = new AttributeValue(){Waarde = item.cattribuutwaarde[i].Waarde, ProductwaardeId = productwaardeid.First().Id, AttribuutsoortId = atributeID.First().Id};
+                        var customatwaarde = new AttributeValue(){Waarde = item.cattribuutwaarde[i].Waarde, ProductId = productwaardeid.First().Id, AttributeTypeId = atributeID.First().Id};
                     _context.AttributeValue.Add(customatwaarde) ; 
                     
                     }
@@ -523,18 +523,18 @@ namespace WebApp1.Controllers
                                 if(!isDouble) {
                                      _context.Product.Remove(product);
                                     await _context.SaveChangesAsync();
-                                    return RedirectToAction("Create2",new { message = 4, at = item.extraAtribute.Attrbuut});
+                                    return RedirectToAction("Create2",new { message = 4, at = item.extraAtribute.Name});
                                 }
                 }
                 
-                var customat = new AttributeType(){Attrbuut = item.extraAtribute.Attrbuut, Type= item.extraAtribute.Type, Custom= true,ProductsoortId= product.ProductsoortId};
+                var customat = new AttributeType(){Name = item.extraAtribute.Name, Type= item.extraAtribute.Type, Custom= true,CategoryId= product.CategoryId};
                  _context.AttributeType.Add(customat);
                  await _context.SaveChangesAsync();
 
                  var atributeID = from p in _context.AttributeType where p.Id == customat.Id select p;
                 var productwaardeid = from p in _context.Product where p.Title == product.Title select p;
 
-                 var customatwaarde = new AttributeValue(){Waarde = item.extraAtributewaarde.Waarde, ProductwaardeId = productwaardeid.First().Id, AttribuutsoortId = atributeID.First().Id};
+                 var customatwaarde = new AttributeValue(){Waarde = item.extraAtributewaarde.Waarde, ProductId = productwaardeid.First().Id, AttributeTypeId = atributeID.First().Id};
                  _context.AttributeValue.Add(customatwaarde); 
                  await _context.SaveChangesAsync(); 
             }
@@ -693,7 +693,7 @@ namespace WebApp1.Controllers
                 }
                 if(m.atributes !=null){
                     foreach(var item in m.atributes){
-                    if (item.Attrbuut==null){
+                    if (item.Name==null){
                         return RedirectToAction("ChooseProductsoort", new{m = 2}); 
                     }
                 }
@@ -704,7 +704,7 @@ namespace WebApp1.Controllers
                     {
                         if (lsitat[a].Id == m.atributes[b].Id)
                         {
-                             lsitat[a].Attrbuut = m.atributes[b].Attrbuut;
+                             lsitat[a].Name = m.atributes[b].Name;
                         }
                     }
                 }

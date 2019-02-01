@@ -50,7 +50,7 @@ namespace WebApp1.Models
                     Category = 
                     (
                         from ps in context.Category
-                        where ps.Id == item.ProductsoortId
+                        where ps.Id == item.CategoryId
                         select ps.Naam
                     ).FirstOrDefault()
                 };
@@ -80,14 +80,14 @@ namespace WebApp1.Models
                     ProductCount =
                     (
                         from pw in context.Product
-                        where pw.ProductsoortId == item.Id
+                        where pw.CategoryId == item.Id
                         select pw.Id
                     ).Count(),
                     AttributeCount =
                     (
                         from atts in context.AttributeType
-                        where atts.ProductsoortId == item.Id
-                        select atts.Attrbuut
+                        where atts.CategoryId == item.Id
+                        select atts.Name
                     ).Count()
                 };
                 model.Data.Add(viewModel);

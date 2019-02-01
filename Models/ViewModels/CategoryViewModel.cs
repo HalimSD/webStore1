@@ -157,18 +157,18 @@ namespace WebApp1.Models
             IQueryable<Product> productsQuery =
             (
                 from pw in context.Product
-                where categoryIdList.Contains(pw.ProductsoortId)
+                where categoryIdList.Contains(pw.CategoryId)
                 select pw
             );
             
             // Get the attributes of that category 
             List<AttributeFilter> att =
                 (from atts in context.AttributeType
-                    where atts.ProductsoortId == categoryId &&
+                    where atts.CategoryId == categoryId &&
                           atts.Custom == false
                     select new AttributeFilter
                     {
-                        AttributeName = atts.Attrbuut, AttributeId = atts.Id, Type = atts.Type
+                        AttributeName = atts.Name, AttributeId = atts.Id, Type = atts.Type
                     }).ToList();
 
             foreach (var attribute in att)
@@ -188,7 +188,7 @@ namespace WebApp1.Models
             productsQuery = FilterQuantity(filters, productsQuery);
 
             viewModel.Filters = filters;
-            productsQuery = productsQuery.OrderBy(p => p.ProductsoortId);
+            productsQuery = productsQuery.OrderBy(p => p.CategoryId);
             viewModel.Products = productsPage.GetPageIQueryable(pageNumber, productsQuery);
 
             // Populate the view model with the needed data
@@ -338,7 +338,7 @@ namespace WebApp1.Models
             double[] attributeValues =
             (
                 from attw in context.AttributeValue
-                where attw.AttribuutsoortId == attributeId &&
+                where attw.AttributeTypeId == attributeId &&
                       attw.Waarde != "N/A"
                 select double.Parse(attw.Waarde, CultureInfo.InvariantCulture)
             ).ToArray();
@@ -513,8 +513,8 @@ namespace WebApp1.Models
                             filteredQuery = filteredQuery.Union(
                                 from attw in context.AttributeValue
                                 from pw in query
-                                where attw.ProductwaardeId == pw.Id &&
-                                      attw.AttribuutsoortId == item.AttributeId &&
+                                where attw.ProductId == pw.Id &&
+                                      attw.AttributeTypeId == item.AttributeId &&
                                       Convert.ToDouble(attw.Waarde) >= rangeValues[0] &&
                                       Convert.ToDouble(attw.Waarde) <= rangeValues[1]
                                 select pw
@@ -528,8 +528,8 @@ namespace WebApp1.Models
                         filteredQuery = filteredQuery.Union(
                             from attw in context.AttributeValue
                             from pw in query
-                            where attw.ProductwaardeId == pw.Id &&
-                                  attw.AttribuutsoortId == item.AttributeId &&
+                            where attw.ProductId == pw.Id &&
+                                  attw.AttributeTypeId == item.AttributeId &&
                                   attw.Waarde.ToUpper().Contains(item.FilterValue.ToUpper())
                             select pw
                         );

@@ -47,7 +47,7 @@ namespace WebApp1.CreateproductModel
 
         public int GetAttribuutsoortsA()
         {
-            var AttribuutsoortsA = from a in Attribuutsoorts select a.ProductsoortId;
+            var AttribuutsoortsA = from a in Attribuutsoorts select a.CategoryId;
             return AttribuutsoortsA.ToArray()[0];
         }
     }

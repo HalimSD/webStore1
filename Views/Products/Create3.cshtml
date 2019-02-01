@@ -110,8 +110,8 @@
                 </div>
                 <div class="form-group">
                     
-                    <input asp-for="Product.ProductsoortId" class="form-control" placeholder="ProductsoortId" type="hidden"  value= '@Model.Product.Id' />
-                    <span asp-validation-for="Product.ProductsoortId" class="text-danger"></span>
+                    <input asp-for="Product.CategoryId" class="form-control" placeholder="ProductsoortId" type="hidden"  value= '@Model.Product.Id' />
+                    <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
                      <input asp-for="Product.DiscountedPrice" class="form-control" placeholder="ProductsoortId" type="hidden"  value= "-1" />
                     <span asp-validation-for="Product.DiscountedPrice" class="text-danger"></span>
                 </div>
@@ -131,7 +131,7 @@
                     {
                     
                     <div class="form-group">
-                        <label class="control-label">@item.Attrbuut, @item.Type </label>
+                        <label class="control-label">@item.Name, @item.Type </label>
                         <input type="text"  class="form-control" name="Attribuutsoorts[@i].Attribuutwaarde[0].Waarde"/>
                         <span asp-validation-for="Attribuutsoorts[@i].Attribuutwaarde[0].Waarde" class="text-danger"></span>
                     </div>
@@ -141,7 +141,7 @@
                     </div>
 
                     <div class="form-group">
-                        <input type="hidden"  class="form-control" name="Attribuutsoorts[@i].Attrbuut" value='@item.Attrbuut'/>
+                        <input type="hidden"  class="form-control" name="Attribuutsoorts[@i].Attrbuut" value='@item.Name'/>
                     </div>
 
                     <div class="form-group">
@@ -162,13 +162,13 @@
                         @for (var aa = 0; aa < Model.AcustomAtributesall[a].customAtributes.Count; aa++)
                         {
                         <div class="form-group">
-                        <input type="checkbox" asp-for="@Model.AcustomAtributesall[a].customAtributes[aa].selected"  />@Model.AcustomAtributesall[a].customAtributes[aa].customAtribute.Attrbuut, @Model.AcustomAtributesall[a].customAtributes[aa].customAtribute.Type 
+                        <input type="checkbox" asp-for="@Model.AcustomAtributesall[a].customAtributes[aa].selected"  />@Model.AcustomAtributesall[a].customAtributes[aa].customAtribute.Name, @Model.AcustomAtributesall[a].customAtributes[aa].customAtribute.Type 
                          </div>
                          <div class="form-group">
                         <input type="hidden" asp-for="@Model.AcustomAtributesall[a].customAtributes[aa].customAtribute.Id" />
                         </div> 
                          <div class="form-group">
-                        <input type="hidden" asp-for="@Model.AcustomAtributesall[a].customAtributes[aa].customAtribute.Attrbuut" />
+                        <input type="hidden" asp-for="@Model.AcustomAtributesall[a].customAtributes[aa].customAtribute.Name" />
                         </div> 
                         <div class="form-group">
                         <input type="hidden" asp-for="@Model.AcustomAtributesall[a].customAtributes[aa].customAtribute.Type" />

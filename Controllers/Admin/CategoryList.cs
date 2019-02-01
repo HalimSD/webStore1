@@ -112,12 +112,12 @@ namespace WebApp1.Controllers.Admin
                       ps.Naam.ToUpper().Contains(name.ToUpper()) &&
                       (
                           from atts in context.AttributeType
-                          where atts.ProductsoortId == ps.Id
+                          where atts.CategoryId == ps.Id
                           select atts
                       ).Count().ToString().Contains(attributeCount) &&
                       (
                           from pw in context.Product
-                          where pw.ProductsoortId == ps.Id
+                          where pw.CategoryId == ps.Id
                           select pw
                       ).Count().ToString().Contains(productCount)
                 select ps;

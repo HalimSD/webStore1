@@ -55,7 +55,7 @@ namespace WebApp1.Controllers
                     Image = pw.Image,
                     Quantity = pw.Quantity,
                     Description = pw.Description,
-                    ProductsoortId = pw.ProductsoortId
+                    ProductsoortId = pw.CategoryId
                 };
 
             if (!query.Any()) return NotFound();
@@ -65,14 +65,14 @@ namespace WebApp1.Controllers
             viewModel.NumberAttributes = (
                 from atts in context.AttributeType
                 from attw in context.AttributeValue
-                where atts.ProductsoortId == viewModel.ProductsoortId &&
-                      attw.AttribuutsoortId == atts.Id &&
-                      attw.ProductwaardeId == viewModel.Id &&
+                where atts.CategoryId == viewModel.ProductsoortId &&
+                      attw.AttributeTypeId == atts.Id &&
+                      attw.ProductId == viewModel.Id &&
                       atts.Type == "number"
                 select new NumberAttributeModel
                 {
                     AttributeNameId = atts.Id,
-                    AttributeName = atts.Attrbuut,
+                    AttributeName = atts.Name,
                     AttributeValueId = attw.Id,
                     AttributeValue = attw.Waarde,
                 }
@@ -81,14 +81,14 @@ namespace WebApp1.Controllers
             viewModel.StringAttributes = (
                 from atts in context.AttributeType
                 from attw in context.AttributeValue
-                where atts.ProductsoortId == viewModel.ProductsoortId &&
-                      attw.AttribuutsoortId == atts.Id &&
-                      attw.ProductwaardeId == viewModel.Id &&
+                where atts.CategoryId == viewModel.ProductsoortId &&
+                      attw.AttributeTypeId == atts.Id &&
+                      attw.ProductId == viewModel.Id &&
                       atts.Type == "string"
                 select new StringAttributeModel
                 {
                     AttributeNameId = atts.Id,
-                    AttributeName = atts.Attrbuut,
+                    AttributeName = atts.Name,
                     AttributeValueId = attw.Id,
                     AttributeValue = attw.Waarde,
                 }

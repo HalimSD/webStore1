@@ -6,8 +6,8 @@ namespace WebApp1.Models.Database
 
         //[Required]
         public string Waarde { get; set; }
-        public int ProductwaardeId { get; set; }
-        public int AttribuutsoortId { get; set; }
+        public int ProductId { get; set; }
+        public int AttributeTypeId { get; set; }
         public AttributeType AttributeType { get; set; }
         public Product Product { get; set; }
     }

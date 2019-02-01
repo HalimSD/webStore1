@@ -164,14 +164,14 @@ namespace WebApp1.Controllers
             {
                 var query0 =
                     from productwaarde in context.Product
-                    join atributen in context.AttributeType on productwaarde.ProductsoortId equals atributen.ProductsoortId
-                    where atributen.Attrbuut.ToUpper().Contains(search.ToUpper())
+                    join atributen in context.AttributeType on productwaarde.CategoryId equals atributen.CategoryId
+                    where atributen.Name.ToUpper().Contains(search.ToUpper())
                     select productwaarde;
 
                 var query1 =
                     from attributen in context.AttributeValue
-                    join productwaarde in context.Product on attributen.ProductwaardeId equals productwaarde.Id
-                    join atribuut in context.AttributeType on attributen.AttribuutsoortId equals atribuut.Id
+                    join productwaarde in context.Product on attributen.ProductId equals productwaarde.Id
+                    join atribuut in context.AttributeType on attributen.AttributeTypeId equals atribuut.Id
                     where attributen.Waarde.ToUpper().Contains(search.ToUpper())
                     select productwaarde;
 

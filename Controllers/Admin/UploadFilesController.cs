@@ -110,7 +110,7 @@ namespace Controllers
                         Description = description,
                         Quantity = quantity,
                         Price = price,
-                        ProductsoortId = productsid,
+                        CategoryId = productsid,
                         Image = image,
                         DiscountedPrice = -1
                     };
@@ -136,7 +136,7 @@ namespace Controllers
 
                     var attributenid = new List<int>();
                     var queryatrsid = from a in _context.AttributeType
-                        where a.ProductsoortId == productsid
+                        where a.CategoryId == productsid
                         select a;
                     foreach (var q in queryatrsid)
                     {
@@ -154,8 +154,8 @@ namespace Controllers
                         {
                             AttributeValue attributeValue = new AttributeValue
                             {
-                                ProductwaardeId = productwid,
-                                AttribuutsoortId = atributenidarray[index],
+                                ProductId = productwid,
+                                AttributeTypeId = atributenidarray[index],
                                 Waarde = extraatributenarray[index]
                             };
 
@@ -167,8 +167,8 @@ namespace Controllers
                         {
                             AttributeValue attributeValue = new AttributeValue
                             {
-                                ProductwaardeId = productwid,
-                                AttribuutsoortId = atributenidarray[index],
+                                ProductId = productwid,
+                                AttributeTypeId = atributenidarray[index],
                                 Waarde = "N/A"
                             };
 

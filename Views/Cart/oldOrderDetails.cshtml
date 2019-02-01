@@ -1,3 +1,4 @@
+@using WebApp1.Models.Database
 <link rel="stylesheet" href="~/css/product_creation_generic.css">
 <link rel="stylesheet" href="~/css/favorites.css">
 <div class="pageRoot">
@@ -23,7 +24,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach (BesteldeItem item in ViewBag.besteldeItem)
+        @foreach (OrderDetail item in ViewBag.besteldeItem)
         {
             <tr>
                 <td>

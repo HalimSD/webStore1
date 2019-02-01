@@ -6,8 +6,9 @@
  using WebApp1.Models;
  using Microsoft.AspNetCore.Mvc;
  using Remotion.Linq.Clauses;
+ using WebApp1.Models.Database;
 
-namespace WebApp1.Controllers
+ namespace WebApp1.Controllers
  {
      [Authorize(Roles = "Admin")]
      [Route("/Admin/[controller]/")]
@@ -25,19 +26,19 @@ namespace WebApp1.Controllers
              List<string[]> tableRows = new List<string[]>();
              
              // Add total revenue statistic
-             double revenue = (from bi in context.BesteldeItem select bi.Price).Sum();
+             double revenue = (from bi in context.OrderDetail select bi.Price).Sum();
              tableRows.Add(new[] {"Totale Omzet", "€ " + revenue.ToString()});
              
              // Add Total sold statistic
-             int soldCount = (from bi in context.BesteldeItem select bi.Quantity).Sum();
+             int soldCount = (from bi in context.OrderDetail select bi.Quantity).Sum();
              tableRows.Add(new[] {"Totaal verkochtte producten", soldCount.ToString()});
              
              // Add total products statistic
-             int productCount = (from pw in context.Productwaarde select pw).Count();
+             int productCount = (from pw in context.Product select pw).Count();
              tableRows.Add(new[] {"Totaal Aantal Producten", productCount.ToString()});
              
              // Add products in stock statistic
-             int inStockCount = (from pw in context.Productwaarde where pw.Quantity > 0 select pw).Count();
+             int inStockCount = (from pw in context.Product where pw.Quantity > 0 select pw).Count();
              tableRows.Add(new[] {"Aantal producten In Voorraad", inStockCount.ToString()});
 
              ViewBag.chartTableRows = tableRows;
@@ -47,7 +48,7 @@ namespace WebApp1.Controllers
          [Route("GetTotalSoldData")]
          public JsonResult GetTotalSoldData()
          {
-             Bestelling[] orders = (from b in context.Bestelling select b).ToArray();
+             Order[] orders = (from b in context.Order select b).ToArray();
              List<string[]> json = new List<string[]>();
              json.Add(new[] {"X", "Verkochtte Producten"});
              
@@ -57,7 +58,7 @@ namespace WebApp1.Controllers
              // etc...
              int[] soldCount = new int[7] {0,0,0,0,0,0,0};
              
-             foreach (Bestelling order in orders)
+             foreach (Order order in orders)
              {
                  // Figure out which day it should be part off
                  // -1 Means it happened more than a week ago
@@ -77,8 +78,8 @@ namespace WebApp1.Controllers
                  // Amount of products in this specific order
                  int productCount =
                  (
-                     from bi in context.BesteldeItem
-                     where bi.BestellingId == order.BestellingId
+                     from bi in context.OrderDetail
+                     where bi.OrderId == order.Id
                      select bi.Quantity
                  ).Sum();
 
@@ -96,21 +97,21 @@ namespace WebApp1.Controllers
          [Route("GetCategorySold")]
          public JsonResult GetCategorySold()
          {
-             string[] categoryArray = (from ps in context.Productsoort select ps.Naam).ToArray();
-             List<BesteldeItem> orders = (from bi in context.BesteldeItem select bi).ToList();
+             string[] categoryArray = (from ps in context.Category select ps.Naam).ToArray();
+             List<OrderDetail> orders = (from bi in context.OrderDetail select bi).ToList();
              List<string[]> json = new List<string[]>();
              json.Add(new[] {"Categorieen", "Verkochtte Producten"});
 
              foreach (string category in categoryArray)
              {
                  int count = 0;
-                 foreach (BesteldeItem order in orders)
+                 foreach (OrderDetail order in orders)
                  {
                      string categoryName =
                      (
-                         from pw in context.Productwaarde
-                         from ps in context.Productsoort
-                         where pw.Id == order.ProductwaardeId &&
+                         from pw in context.Product
+                         from ps in context.Category
+                         where pw.Id == order.ProductId &&
                                pw.ProductsoortId == ps.Id &&
                                ps.Naam == category
                          select ps.Naam

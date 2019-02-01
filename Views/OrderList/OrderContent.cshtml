@@ -1,3 +1,4 @@
+@using WebApp1.Models.Database
 @model OrderContentViewModel
 @{
     ViewData["Title"] = "Bestellings inhoud";
@@ -28,7 +29,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach (BesteldeItem item in Model.Products)
+        @foreach (OrderDetail item in Model.Products)
         {
             <tr>
                 <td>

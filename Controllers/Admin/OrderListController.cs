@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Scaffolding.Internal;
 using WebApp1.Models;
+using WebApp1.Models.Database;
+using WebApp1.Models.Helper;
 
 namespace WebApp1.Controllers.Admin
 {
@@ -36,11 +38,11 @@ namespace WebApp1.Controllers.Admin
 
             OrderListViewModel model =
             (
-                from b in context.Bestelling
-                where b.BestellingId == id
+                from b in context.Order
+                where b.Id == id
                 select new OrderListViewModel
                 {
-                    Id = b.BestellingId,
+                    Id = b.Id,
                     //Date = b.Date.ToShortDateString(),
                     Status = b.Status,
                     UserId = b.UserId,
@@ -57,7 +59,7 @@ namespace WebApp1.Controllers.Admin
         {
             if (id == null || selection == null) return NotFound();
 
-            Bestelling order = (from b in context.Bestelling where b.BestellingId == id select b).FirstOrDefault();
+            Order order = (from b in context.Order where b.Id == id select b).FirstOrDefault();
             order.Status = selection;
             context.SaveChanges();
             
@@ -69,7 +71,7 @@ namespace WebApp1.Controllers.Admin
         {
             if (id == null) return NotFound();
 
-            string uid = (from b in context.Bestelling where b.BestellingId == id select b.UserId).FirstOrDefault();
+            string uid = (from b in context.Order where b.Id == id select b.UserId).FirstOrDefault();
             OrderContentViewModel model = new OrderContentViewModel
             {
                 OrderId = (int)id,
@@ -77,8 +79,8 @@ namespace WebApp1.Controllers.Admin
                 UserEmail = (from u in context.Users where u.Id == uid select u.Email).FirstOrDefault(),
                 Products = 
                 (
-                    from bi in context.BesteldeItem
-                    where bi.BestellingId == id
+                    from bi in context.OrderDetail
+                    where bi.OrderId == id
                     select bi
                 ).ToList()
             };
@@ -91,8 +93,8 @@ namespace WebApp1.Controllers.Admin
         public JsonResult GetData(int pageIndex=1)
         {
             // Create the PaginationHelper instance and use it to generate the required page
-            PaginationHelper<Bestelling> pagination = new PaginationHelper<Bestelling>(maxPageSize,context.Bestelling);
-            PaginationViewModel<Bestelling> orderPage = pagination.GetPage(pageIndex);
+            PaginationHelper<Order> pagination = new PaginationHelper<Order>(maxPageSize,context.Order);
+            PaginationViewModel<Order> orderPage = pagination.GetPage(pageIndex);
             
             // Since the default Productwaarde doesn't contain all of the needed info
             // We will create a new model that we will return
@@ -106,7 +108,7 @@ namespace WebApp1.Controllers.Admin
         public JsonResult GetDataFiltered(string id="", string date="", string status="", string productCount="", string userEmail="", string userId="", int pageIndex=1)
         {
             // Create a PaginationHelper instance. It will be used to generate a page
-            PaginationHelper<Bestelling> pagination = new PaginationHelper<Bestelling>(maxPageSize,context.Bestelling);
+            PaginationHelper<Order> pagination = new PaginationHelper<Order>(maxPageSize,context.Order);
             
             // Some error checking as JS may give null values!
             if (id == null) { id = ""; }
@@ -118,16 +120,16 @@ namespace WebApp1.Controllers.Admin
 
             // Since the pagination helper doesn't have built-in filtering,
             // we'll have to prepare a custom filtered query and pass it to the helper
-            IQueryable<Bestelling> query =
-                from b in context.Bestelling
+            IQueryable<Order> query =
+                from b in context.Order
                 from u in context.Users
                 where u.Id == b.UserId &&
-                      b.BestellingId.ToString().Contains(id) &&
+                      b.Id.ToString().Contains(id) &&
                       b.Date.ToShortDateString().Contains(date) &&
                       b.Status.ToUpper().Contains(status.ToUpper()) &&
                       (
-                          from bi in context.BesteldeItem
-                          where bi.BestellingId == b.BestellingId
+                          from bi in context.OrderDetail
+                          where bi.OrderId == b.Id
                           select bi.Quantity
                       ).Sum().ToString().Contains(productCount) &&
                       b.UserId.ToUpper().Contains(userId.ToUpper()) &&
@@ -136,7 +138,7 @@ namespace WebApp1.Controllers.Admin
                       
 
             // Generate pages from the custom query
-            PaginationViewModel<Bestelling> productPage = pagination.GetPageIQueryable(pageIndex, query);
+            PaginationViewModel<Order> productPage = pagination.GetPageIQueryable(pageIndex, query);
             
             // Since the default Productwaarde doesn't contain all of the needed info
             // We will create a new model that we will return

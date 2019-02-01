@@ -1,4 +1,5 @@
-@model PaginationViewModel<Bestelling>
+@using WebApp1.Models.Database
+@model WebApp1.Models.Helper.PaginationViewModel<WebApp1.Models.Database.Order>
 <link rel="stylesheet" href="~/css/product_creation_generic.css">
 <link rel="stylesheet" href="~/css/favorites.css">
 <div class="pageRoot">
@@ -22,11 +23,11 @@
         </tr>
         </thead>
         <tbody>
-        @foreach (Bestelling item in Model.Data)
+        @foreach (Order item in Model.Data)
         {
             <tr>
                 <td>
-                    @item.BestellingId
+                    @item.Id
                 </td>
                 <td>
                     @item.Date.ToShortDateString();
@@ -36,8 +37,8 @@
                 </td>
                 <td>
                     <form method="get">
-                        <input type="hidden" name="id" value="@item.BestellingId">
-                        <input type="hidden" name="returnUrl" value="@Url.Action("oldOrderDetails","Cart", new {id=item.BestellingId})"/>
+                        <input type="hidden" name="id" value="@item.Id">
+                        <input type="hidden" name="returnUrl" value="@Url.Action("oldOrderDetails","Cart", new {id=item.Id})"/>
                         <button id="gotoProduct" class="btn btn-primary" type="submit" formaction="@Url.Action("oldOrderDetails", "Cart")">Details</button>                        
                     </form>
                 </td>

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using System;
+using WebApp1.Models.Database;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -246,7 +247,7 @@ namespace ContosoRTM.Controllers
         {
             var currentUser = await _userManager.GetUserAsync(HttpContext.User);
             var user = await _userManager.FindByIdAsync(id);
-            var x = (from p in _dbContext.Bestelling where p.UserId == id select p).ToList();
+            var x = (from p in _dbContext.Order where p.UserId == id select p).ToList();
             if (user.Id != currentUser.Id)
             {
                 foreach (var item in x.ToList())

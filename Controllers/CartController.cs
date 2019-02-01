@@ -13,6 +13,9 @@ using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Hosting;
 using System;
 using Microsoft.EntityFrameworkCore.Scaffolding.Internal;
+using WebApp1.Models.Database;
+using WebApp1.Models.Helper;
+using WebApp1.Models.ViewModels;
 
 namespace WebApp1.Controllers
 {
@@ -83,10 +86,10 @@ namespace WebApp1.Controllers
 
         public IActionResult min(int id)
         {
-            Productwaarde productwaarde = _context.Productwaarde.Find(id);
+            Product product = _context.Product.Find(id);
             List<Item> cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
             int index = isExist(id);
-            productwaarde.Quantity += 1;
+            product.Quantity += 1;
             _context.SaveChanges();
             if (cart[index].Quantity > 1)
             {
@@ -140,10 +143,10 @@ namespace WebApp1.Controllers
         [Route("remove/{id}")]
         public IActionResult Remove(int id)
         {
-            Productwaarde productwaarde = _context.Productwaarde.Find(id);
+            Product product = _context.Product.Find(id);
             List<Item> cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
             int index = isExist(id);
-            productwaarde.Quantity += cart[index].Quantity;
+            product.Quantity += cart[index].Quantity;
             _context.SaveChanges();
             cart.RemoveAt(index);
             SessionExtensions.Set(HttpContext.Session, "cart", cart);
@@ -152,15 +155,15 @@ namespace WebApp1.Controllers
 
         private void VoorraadVerminderen(int id)
         {
-            Productwaarde productwaarde = _context.Productwaarde.Find(id);
-            if (productwaarde.Quantity > 0)
+            Product product = _context.Product.Find(id);
+            if (product.Quantity > 0)
             {
-                productwaarde.Quantity -= 1;
+                product.Quantity -= 1;
                 _context.SaveChanges();
             }
             else
             {
-                productwaarde.Quantity = 0;
+                product.Quantity = 0;
                 _context.SaveChanges();
             }
         }
@@ -174,8 +177,8 @@ namespace WebApp1.Controllers
             }
             else
             {
-                Productwaarde productwaarde = _context.Productwaarde.Find(id);
-                if (productwaarde.Quantity == 0)
+                Product product = _context.Product.Find(id);
+                if (product.Quantity == 0)
                 {
                     RedirectToAction("Index", "Cart");
                 }
@@ -189,9 +192,9 @@ namespace WebApp1.Controllers
 
         private void AddToShoppingCart(int id, List<Item> cart)
         {
-            if (_context.Productwaarde.Find(id).Quantity > 0)
+            if (_context.Product.Find(id).Quantity > 0)
             {
-                var Product1 = _context.Productwaarde.Find(id);
+                var Product1 = _context.Product.Find(id);
                 if (Product1.DiscountedPrice != -1)
                 {
                     Product1.Price = Product1.DiscountedPrice;
@@ -274,35 +277,35 @@ namespace WebApp1.Controllers
             ViewBag.cart = cart;
             ViewBag.total = cart.Sum(items => items.Product.Price * items.Quantity);
             ViewBag.total = CalculateShippingCost(ViewBag.total) + ViewBag.total;
-            Bestelling bestelling = new Bestelling();
-            Productwaarde productwaarde = new Productwaarde();
-            bestelling.Status = "Onderweg";
-            bestelling.Date = DateTime.Now;
-            var id = bestelling.UserId;
+            Order order = new Order();
+            Product product = new Product();
+            order.Status = "Onderweg";
+            order.Date = DateTime.Now;
+            var id = order.UserId;
             var email = model.Email;
             if (id == null)
             {
-                bestelling.email = email;
+                order.email = email;
             }
             else
             {
                 id = _userManager.GetUserId(User);
             }
-            bestelling.ShippingFee = CalculateShippingCost(cart.Sum(items => items.Product.Price * items.Quantity));
-            _context.Add(bestelling);
+            order.ShippingFee = CalculateShippingCost(cart.Sum(items => items.Product.Price * items.Quantity));
+            _context.Add(order);
             _context.SaveChanges();
             foreach (var i in cart)
             {
-                BesteldeItem besteldeItem = new BesteldeItem
+                OrderDetail orderDetail = new OrderDetail
                 {
                     Quantity = i.Quantity,
                     Price = i.Product.Price * i.Quantity,
                     Image = i.Product.Image,
                     Title = i.Product.Title,
-                    BestellingId = bestelling.BestellingId,
-                    ProductwaardeId = i.Product.Id
+                    OrderId = order.Id,
+                    ProductId = i.Product.Id
                 };
-                _context.Add(besteldeItem);
+                _context.Add(orderDetail);
                 _context.SaveChanges();
             }
         }
@@ -313,32 +316,32 @@ namespace WebApp1.Controllers
             ViewBag.cart = cart;
             ViewBag.total = cart.Sum(items => items.Product.Price * items.Quantity);
             ViewBag.total = CalculateShippingCost(ViewBag.total) + ViewBag.total;
-            Bestelling bestelling = new Bestelling();
-            Productwaarde productwaarde = new Productwaarde();
-            bestelling.Status = "Onderweg";
-            bestelling.Date = DateTime.Now;
+            Order order = new Order();
+            Product product = new Product();
+            order.Status = "Onderweg";
+            order.Date = DateTime.Now;
             var userId = _userManager.GetUserId(User);
             if(userId == null){
-                bestelling.email = model.Email;
+                order.email = model.Email;
             }else{
-                bestelling.email = _userManager.GetUserAsync(User).Result.Email;
-                bestelling.UserId = _userManager.GetUserAsync(User).Result.Id;
+                order.email = _userManager.GetUserAsync(User).Result.Email;
+                order.UserId = _userManager.GetUserAsync(User).Result.Id;
             }
-            bestelling.ShippingFee = CalculateShippingCost(cart.Sum(items => items.Product.Price * items.Quantity));
-            _context.Add(bestelling);
+            order.ShippingFee = CalculateShippingCost(cart.Sum(items => items.Product.Price * items.Quantity));
+            _context.Add(order);
             _context.SaveChanges();
             foreach (var i in cart)
             {
-                BesteldeItem besteldeItem = new BesteldeItem
+                OrderDetail orderDetail = new OrderDetail
                 {
                     Quantity = i.Quantity,
                     Price = i.Product.Price * i.Quantity,
                     Image = i.Product.Image,
                     Title = i.Product.Title,
-                    BestellingId = bestelling.BestellingId,
-                    ProductwaardeId = i.Product.Id
+                    OrderId = order.Id,
+                    ProductId = i.Product.Id
                 };
-                _context.Add(besteldeItem);
+                _context.Add(orderDetail);
                 _context.SaveChanges();
             }
         }
@@ -350,15 +353,15 @@ namespace WebApp1.Controllers
             // BesteldeItem besteldeItem = new BesteldeItem{
             //     besteldeItem.Quantity = 1
             // };
-            Productwaarde productwaarde = _context.Productwaarde.Find(id);
-            productwaarde.Quantity++;
+            Product product = _context.Product.Find(id);
+            product.Quantity++;
         }
 
         [Route("QuantityInput/{id}")]
         [HttpPost]
         public int QuantityInput(int changedQuantity, int id)
         {
-            Productwaarde productwaarde = _context.Productwaarde.Find(id);
+            Product product = _context.Product.Find(id);
             List<Item> cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
             int index = isExist(id);
             cart[index].Quantity = changedQuantity;
@@ -409,12 +412,12 @@ namespace WebApp1.Controllers
         public IActionResult oldOrderDetails(int id)
         {
             var x = id;
-            List<BesteldeItem> besteldeItem = new List<BesteldeItem>();
-            besteldeItem = (from b in _context.BesteldeItem
-                            where b.BestellingId == id
-                            select new BesteldeItem
+            List<OrderDetail> besteldeItem = new List<OrderDetail>();
+            besteldeItem = (from b in _context.OrderDetail
+                            where b.OrderId == id
+                            select new OrderDetail
                             {
-                                BesteldeItemId = b.BesteldeItemId,
+                                Id = b.Id,
                                 Title = b.Title,
                                 Price = b.Price,
                                 Quantity = b.Quantity,
@@ -423,7 +426,7 @@ namespace WebApp1.Controllers
                 ).ToList();
 
             ViewBag.besteldeItem = besteldeItem;
-            ViewBag.shippingFee = (from b in _context.Bestelling where b.BestellingId == id select b.ShippingFee)
+            ViewBag.shippingFee = (from b in _context.Order where b.Id == id select b.ShippingFee)
                 .FirstOrDefault();
 
             return View();
@@ -433,22 +436,22 @@ namespace WebApp1.Controllers
         public IActionResult oldOrders(int pageNumber = 1)
         {
             // Helper object used to generate a page model
-            PaginationHelper<Bestelling>
-                pagination = new PaginationHelper<Bestelling>(maxPageSize, _context.Bestelling);
+            PaginationHelper<Order>
+                pagination = new PaginationHelper<Order>(maxPageSize, _context.Order);
 
             // Prepare a query that we will pass to the pagination helper
-            IQueryable<Bestelling> query = (
-                from x in _context.Bestelling
+            IQueryable<Order> query = (
+                from x in _context.Order
                 where x.UserId == _userManager.GetUserId(User)
-                select new Bestelling
+                select new Order
                 {
-                    BestellingId = x.BestellingId,
+                    Id = x.Id,
                     Status = x.Status,
                     Date = x.Date
                 }
             );
             // Let the pagination helper build a page model and pass it to the view
-            PaginationViewModel<Bestelling> model = pagination.GetPageIQueryable(pageNumber, query);
+            PaginationViewModel<Order> model = pagination.GetPageIQueryable(pageNumber, query);
             return View(model);
         }
 

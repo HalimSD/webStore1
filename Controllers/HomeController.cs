@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore.Scaffolding.Internal;
 using Org.BouncyCastle.Crypto.Signers;
+using WebApp1.Models.Database;
+using WebApp1.Models.ViewModels;
 
 namespace klaas.Controllers
 {
@@ -32,7 +34,7 @@ namespace klaas.Controllers
         public IActionResult Index()
         {            
             var myList = new List<string>();
-            var productsoorten = from m in _context.Productsoort select new {m.Naam};
+            var productsoorten = from m in _context.Category select new {m.Naam};
 
             foreach (var product in productsoorten){
                 myList.Add(product.ToString());
@@ -60,7 +62,7 @@ namespace klaas.Controllers
             //     }
             // }
              var main = new Datastructure();
-            var result =  from m in _context.Productwaarde select m;
+            var result =  from m in _context.Product select m;
             if (root1 != 0){main.kaas = CreateSubTree(root1);}
             
             main.productwaardes = result;
@@ -72,7 +74,7 @@ namespace klaas.Controllers
         }
          public Node CreateSubTree(int id)
         {
-            var parent = (from p in _context.Productsoort where p.Id == id select p).FirstOrDefault();
+            var parent = (from p in _context.Category where p.Id == id select p).FirstOrDefault();
             var subtree = new Node(parent.Naam,parent.Image,parent.Id);
             var children = from c in _context.ParentChild where c.ParentId ==id select c;
             foreach (var c in children){
@@ -143,7 +145,7 @@ namespace klaas.Controllers
         {
             if (!User.Identity.IsAuthenticated) return -1;
             string userId = mUserManager.GetUserId(User);
-            return (from f in _context.Favorites where f.UserId == userId select f).Count();
+            return (from f in _context.Favorite where f.UserId == userId select f).Count();
         }
 
         

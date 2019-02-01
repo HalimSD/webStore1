@@ -10,6 +10,8 @@ using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Signers;
 using Org.BouncyCastle.OpenSsl;
 using Remotion.Linq.Clauses;
+using WebApp1.Models.Database;
+using WebApp1.Models.Helper;
 
 namespace WebApp1.Models
 {
@@ -18,9 +20,9 @@ namespace WebApp1.Models
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public List<string[]> CategoryPath { get; set; }
-        public PaginationViewModel<Productwaarde> Products { get; set; }
+        public PaginationViewModel<Product> Products { get; set; }
 
-        public List<Productsoort> Categories { get; set; }
+        public List<Category> Categories { get; set; }
 
         // Index 0 = name, Index 1 = id, Index 2 = type
         public List<AttributeFilter> Attributes { get; set; }
@@ -131,8 +133,8 @@ namespace WebApp1.Models
         public CategoryViewModel CreateViewModel(int? categoryId, int pageNumber, CategoryFilterModel filters = null)
         {
             CategoryViewModel viewModel = new CategoryViewModel();
-            PaginationHelper<Productwaarde> productsPage =
-                new PaginationHelper<Productwaarde>(maxPageSize, context.Productwaarde);
+            PaginationHelper<Product> productsPage =
+                new PaginationHelper<Product>(maxPageSize, context.Product);
 
             // If no id was provided, we will display all products
             if (categoryId == null)
@@ -142,26 +144,26 @@ namespace WebApp1.Models
             }
 
             // Verify the ID provided is a valid ID
-            bool idIsValid = (from ps in context.Productsoort where ps.Id == categoryId select ps).Any();
+            bool idIsValid = (from ps in context.Category where ps.Id == categoryId select ps).Any();
             if (!idIsValid) return null;
             
             // Get list of categories where we have to retrieve products from
             List<int> categoryIdList = GetProductCategoryIds((int) categoryId);
 
             viewModel.CategoryName =
-                (from ps in context.Productsoort where ps.Id == categoryId select ps.Naam).FirstOrDefault();
+                (from ps in context.Category where ps.Id == categoryId select ps.Naam).FirstOrDefault();
 
             // Retrieve all products that belong to one of the categories
-            IQueryable<Productwaarde> productsQuery =
+            IQueryable<Product> productsQuery =
             (
-                from pw in context.Productwaarde
+                from pw in context.Product
                 where categoryIdList.Contains(pw.ProductsoortId)
                 select pw
             );
             
             // Get the attributes of that category 
             List<AttributeFilter> att =
-                (from atts in context.Attribuutsoort
+                (from atts in context.AttributeType
                     where atts.ProductsoortId == categoryId &&
                           atts.Custom == false
                     select new AttributeFilter
@@ -193,7 +195,7 @@ namespace WebApp1.Models
             viewModel.Attributes = att;
             viewModel.Categories =
             (
-                from ps in context.Productsoort
+                from ps in context.Category
                 from pc in context.ParentChild
                 where pc.ParentId == categoryId &&
                       ps.Id == pc.ChildId
@@ -219,12 +221,12 @@ namespace WebApp1.Models
         public int GetRootParentId()
         {
             bool containsParentChildRows = (from pc in context.ParentChild select pc).Any();
-            int containsCategoryRowCount = (from ps in context.Productsoort select ps).Count();
+            int containsCategoryRowCount = (from ps in context.Category select ps).Count();
             if (!containsParentChildRows)
             {
                 if (containsCategoryRowCount == 1)
                 {
-                    var res = (from ps in context.Productsoort select ps.Id).FirstOrDefault();
+                    var res = (from ps in context.Category select ps.Id).FirstOrDefault();
                     return res;
                 }
 
@@ -254,7 +256,7 @@ namespace WebApp1.Models
                 pathList = new List<string[]>();
             }
 
-            Productsoort category = (from ps in context.Productsoort where ps.Id == id select ps).FirstOrDefault();
+            Category category = (from ps in context.Category where ps.Id == id select ps).FirstOrDefault();
 
 
             IQueryable<int> query =
@@ -273,7 +275,7 @@ namespace WebApp1.Models
                 pathList.Add
                 (
                     (
-                        from ps in context.Productsoort
+                        from ps in context.Category
                         where ps.Id == GetRootParentId()
                         select new[]
                         {
@@ -287,7 +289,7 @@ namespace WebApp1.Models
             return pathList;
         }
 
-        private string[] GetPriceFilterRange(IQueryable<Productwaarde> query)
+        private string[] GetPriceFilterRange(IQueryable<Product> query)
         {
             if (!query.Any()) return new string[5];
 
@@ -314,7 +316,7 @@ namespace WebApp1.Models
             return ranges;
         }
 
-        private string[] GetQuantityFilterRange(IQueryable<Productwaarde> query)
+        private string[] GetQuantityFilterRange(IQueryable<Product> query)
         {
             if (!query.Any()) return new string[5];
 
@@ -329,13 +331,13 @@ namespace WebApp1.Models
             return ranges;
         }
 
-        private string[] GetNumberAttributeFilterRange(IQueryable<Productwaarde> query, int attributeId)
+        private string[] GetNumberAttributeFilterRange(IQueryable<Product> query, int attributeId)
         {
             if (!query.Any()) return new string[0];
 
             double[] attributeValues =
             (
-                from attw in context.Attribuutwaarde
+                from attw in context.AttributeValue
                 where attw.AttribuutsoortId == attributeId &&
                       attw.Waarde != "N/A"
                 select double.Parse(attw.Waarde, CultureInfo.InvariantCulture)
@@ -407,7 +409,7 @@ namespace WebApp1.Models
             return rangeArray;
         }
 
-        private IQueryable<Productwaarde> FilterPrice(CategoryFilterModel filters, IQueryable<Productwaarde> query)
+        private IQueryable<Product> FilterPrice(CategoryFilterModel filters, IQueryable<Product> query)
         {
             // Error check
             if (filters == null) return query;
@@ -455,7 +457,7 @@ namespace WebApp1.Models
             return query;
         }
 
-        private IQueryable<Productwaarde> FilterQuantity(CategoryFilterModel filters, IQueryable<Productwaarde> query)
+        private IQueryable<Product> FilterQuantity(CategoryFilterModel filters, IQueryable<Product> query)
         {
             // Error check
             if (filters == null) return query;
@@ -491,7 +493,7 @@ namespace WebApp1.Models
             return query;
         }
 
-        private IQueryable<Productwaarde> FilterAttributes(CategoryFilterModel filters, IQueryable<Productwaarde> query)
+        private IQueryable<Product> FilterAttributes(CategoryFilterModel filters, IQueryable<Product> query)
         {
             if (filters == null) return query;
             if (!filters.HasAttributeFilters) return query;
@@ -509,7 +511,7 @@ namespace WebApp1.Models
                             if (range == "false") continue;
                             double[] rangeValues = GetRangeValuesFromString(range);
                             filteredQuery = filteredQuery.Union(
-                                from attw in context.Attribuutwaarde
+                                from attw in context.AttributeValue
                                 from pw in query
                                 where attw.ProductwaardeId == pw.Id &&
                                       attw.AttribuutsoortId == item.AttributeId &&
@@ -524,7 +526,7 @@ namespace WebApp1.Models
                     default:
                         if (string.IsNullOrWhiteSpace(item.FilterValue)) continue;
                         filteredQuery = filteredQuery.Union(
-                            from attw in context.Attribuutwaarde
+                            from attw in context.AttributeValue
                             from pw in query
                             where attw.ProductwaardeId == pw.Id &&
                                   attw.AttribuutsoortId == item.AttributeId &&

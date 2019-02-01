@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using WebApp1.Models;
+using WebApp1.Models.Database;
+using WebApp1.Models.Helper;
 
 namespace WebApp1.Models
 {
@@ -26,7 +28,7 @@ namespace WebApp1.Models
 
     public class ProductListViewModelHelper
     {
-        public PaginationViewModel<ProductListViewModel> ConvertToViewModel(WebshopContext context, PaginationViewModel<Productwaarde> productPage)
+        public PaginationViewModel<ProductListViewModel> ConvertToViewModel(WebshopContext context, PaginationViewModel<Product> productPage)
         {
             PaginationViewModel<ProductListViewModel> model = new PaginationViewModel<ProductListViewModel>
             {
@@ -36,7 +38,7 @@ namespace WebApp1.Models
                 Data = new List<ProductListViewModel>()
             };
 
-            foreach (Productwaarde item in productPage.Data)
+            foreach (Product item in productPage.Data)
             {
                 ProductListViewModel viewModel = new ProductListViewModel
                 {
@@ -47,7 +49,7 @@ namespace WebApp1.Models
                     Quantity = item.Quantity,
                     Category = 
                     (
-                        from ps in context.Productsoort
+                        from ps in context.Category
                         where ps.Id == item.ProductsoortId
                         select ps.Naam
                     ).FirstOrDefault()
@@ -59,7 +61,7 @@ namespace WebApp1.Models
         }
 
         public PaginationViewModel<CategoryListViewModel> ConvertToCategoryViewModel(WebshopContext context,
-            PaginationViewModel<Productsoort> productCategory)
+            PaginationViewModel<Category> productCategory)
         {
             PaginationViewModel<CategoryListViewModel> model = new PaginationViewModel<CategoryListViewModel>
             {
@@ -69,7 +71,7 @@ namespace WebApp1.Models
                 Data = new List<CategoryListViewModel>()
             };
 
-            foreach (Productsoort item in productCategory.Data)
+            foreach (Category item in productCategory.Data)
             {
                 CategoryListViewModel viewModel = new CategoryListViewModel
                 {
@@ -77,13 +79,13 @@ namespace WebApp1.Models
                     Name = item.Naam,
                     ProductCount =
                     (
-                        from pw in context.Productwaarde
+                        from pw in context.Product
                         where pw.ProductsoortId == item.Id
                         select pw.Id
                     ).Count(),
                     AttributeCount =
                     (
-                        from atts in context.Attribuutsoort
+                        from atts in context.AttributeType
                         where atts.ProductsoortId == item.Id
                         select atts.Attrbuut
                     ).Count()

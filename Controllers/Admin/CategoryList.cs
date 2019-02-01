@@ -3,6 +3,8 @@ using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApp1.Models;
+using WebApp1.Models.Database;
+using WebApp1.Models.Helper;
 
 namespace WebApp1.Controllers.Admin
 {
@@ -33,7 +35,7 @@ namespace WebApp1.Controllers.Admin
             {
                 return NotFound();
             }           
-            Productsoort category = context.Productsoort.FirstOrDefault(m => m.Id == id);            
+            Category category = context.Category.FirstOrDefault(m => m.Id == id);            
             if (category == null)
             {
                 return NotFound();
@@ -49,24 +51,24 @@ namespace WebApp1.Controllers.Admin
                 return NotFound();
             }
 
-            Productsoort category = context.Productsoort.FirstOrDefault(m => m.Id == id); 
+            Category category = context.Category.FirstOrDefault(m => m.Id == id); 
             if (category == null)
             {
                 return NotFound();
             }
 
             Findchildren(category.Id);
-            context.Productsoort.Remove(category);
+            context.Category.Remove(category);
             context.SaveChanges();
             return RedirectToAction("Index", "CategoryList");
         }
          public void Findchildren(int id)
         {
-            var parent = (from p in context.Productsoort where p.Id == id select p).FirstOrDefault();
+            var parent = (from p in context.Category where p.Id == id select p).FirstOrDefault();
             
             var children = from c in context.ParentChild 
                             where c.ParentId ==id select c;
-            context.Productsoort.Remove(parent);
+            context.Category.Remove(parent);
             foreach (var c in children){
               
               Findchildren(c.ChildId);
@@ -79,8 +81,8 @@ namespace WebApp1.Controllers.Admin
         public JsonResult GetData(int pageIndex=1)
         {
             // Create the PaginationHelper instance and use it to get the first page of productwaarde
-            PaginationHelper<Productsoort> pagination = new PaginationHelper<Productsoort>(maxPageSize,context.Productsoort);
-            PaginationViewModel<Productsoort> categoryPage = pagination.GetPage(pageIndex);
+            PaginationHelper<Category> pagination = new PaginationHelper<Category>(maxPageSize,context.Category);
+            PaginationViewModel<Category> categoryPage = pagination.GetPage(pageIndex);
             
             // Since the default Productwaarde doesn't contain all of the needed info
             // We will create a new model that we will return
@@ -94,7 +96,7 @@ namespace WebApp1.Controllers.Admin
         public JsonResult GetDataFiltered(string id="", string name="", string productCount="", string attributeCount="", int pageIndex=1)
         {
             // Create a PaginationHelper instance. It will be used to generate a page
-            PaginationHelper<Productsoort> pagination = new PaginationHelper<Productsoort>(maxPageSize,context.Productsoort);
+            PaginationHelper<Category> pagination = new PaginationHelper<Category>(maxPageSize,context.Category);
             
             // Some error checking as JS may give null values!
             if (id == null) { id = ""; }
@@ -104,17 +106,17 @@ namespace WebApp1.Controllers.Admin
 
             // Since the pagination helper doesn't have built-in filtering,
             // we'll have to prepare a custom filtered query and pass it to the helper
-            IQueryable<Productsoort> query =
-                from ps in context.Productsoort
+            IQueryable<Category> query =
+                from ps in context.Category
                 where ps.Id.ToString().Contains(id) &&
                       ps.Naam.ToUpper().Contains(name.ToUpper()) &&
                       (
-                          from atts in context.Attribuutsoort
+                          from atts in context.AttributeType
                           where atts.ProductsoortId == ps.Id
                           select atts
                       ).Count().ToString().Contains(attributeCount) &&
                       (
-                          from pw in context.Productwaarde
+                          from pw in context.Product
                           where pw.ProductsoortId == ps.Id
                           select pw
                       ).Count().ToString().Contains(productCount)
@@ -123,7 +125,7 @@ namespace WebApp1.Controllers.Admin
                       
 
             // Generate pages from the custom query
-            PaginationViewModel<Productsoort> categoryPage = pagination.GetPageIQueryable(pageIndex, query);
+            PaginationViewModel<Category> categoryPage = pagination.GetPageIQueryable(pageIndex, query);
             
             // Since the default Productwaarde doesn't contain all of the needed info
             // We will create a new model that we will return

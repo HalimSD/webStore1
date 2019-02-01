@@ -17,6 +17,7 @@ using DinkToPdf;
 using WebApp1.Controllers;
 using System.IO;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using WebApp1.Models.Database;
 using WebPWrecover.Services;
 
 namespace WebApp1

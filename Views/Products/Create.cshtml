@@ -79,21 +79,21 @@
     <form asp-action="Create" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
-            <label asp-for="@Model.productsoort.Naam" class="control-label"></label>
-            <input asp-for="@Model.productsoort.Naam" class="form-control" placeholder="Categorie Naam"/>
-            <span asp-validation-for="@Model.productsoort.Naam" class="text-danger"></span>
+            <label asp-for="@Model.Category.Naam" class="control-label"></label>
+            <input asp-for="@Model.Category.Naam" class="form-control" placeholder="Categorie Naam"/>
+            <span asp-validation-for="@Model.Category.Naam" class="text-danger"></span>
         </div>
          <div class="form-group">
-                <label asp-for="@Model.productsoort.Image" class="control-label"></label>
-                <input asp-for="@Model.productsoort.Image" type="file" Class="form-control-file" placeholder="Image"/>
-                <span asp-validation-for="@Model.productsoort.Image" class="text-danger"></span>
+                <label asp-for="@Model.Category.Image" class="control-label"></label>
+                <input asp-for="@Model.Category.Image" type="file" Class="form-control-file" placeholder="Image"/>
+                <span asp-validation-for="@Model.Category.Image" class="text-danger"></span>
         </div>
        <div id="categoryFormContent" class = "checkbox checkboxlist">
            <p>Kies de bovenliggende categorie(n) uit de onderstaande lijst</p>
                     @for (var i = 0; i < Model.parents.Count; i++)
                     {
-                        <input type="checkbox" asp-for="@Model.parents[i].selected"  />@Model.parents[i].Productsoorts.Naam
-                        <input type="hidden" asp-for="@Model.parents[i].Productsoorts.Id" /> 
+                        <input type="checkbox" asp-for="@Model.parents[i].selected"  />@Model.parents[i].Categories.Naam
+                        <input type="hidden" asp-for="@Model.parents[i].Categories.Id" /> 
                         <hr>                                                                                  
                     }
         </div>

@@ -19,7 +19,7 @@ namespace WebApp1.Controllers
         private readonly int maxPageSize = 9;
         private readonly WebshopContext context;
         private readonly string sessionFiltersKey = "categoryFilters";
-        private CategoryViewModelHelper helper;
+        private readonly CategoryViewModelHelper helper;
         
         public CategoryController(WebshopContext context)
         {

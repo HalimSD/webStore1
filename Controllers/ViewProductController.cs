@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using WebApp1.Models;
 using Microsoft.AspNetCore.Mvc;
 using WebApp1.Models.Database;
+using WebApp1.Models.Helper;
 
 namespace klaas.Controllers
 {

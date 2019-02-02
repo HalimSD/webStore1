@@ -32,9 +32,9 @@
             container.appendChild(document.createTextNode("Custom Atribute "+ i));
 
             var input = document.createElement("input");
-            input.name= "newcustom["+i+"].extraAtribute.Attrbuut";
+            input.name= "newcustom["+i+"].extraAtribute.Name";
             input.setAttribute("class","form-control");
-            input.id="newcustom["+i+"].extraAtribute.Attrbuut";
+            input.id="newcustom["+i+"].extraAtribute.Name";
             input.type="text";
             input.value="";
             input.placeholder="Attribuut Naam";
@@ -132,16 +132,16 @@
                     
                     <div class="form-group">
                         <label class="control-label">@item.Name, @item.Type </label>
-                        <input type="text"  class="form-control" name="Attribuutsoorts[@i].Attribuutwaarde[0].Waarde"/>
-                        <span asp-validation-for="Attribuutsoorts[@i].Attribuutwaarde[0].Waarde" class="text-danger"></span>
+                        <input type="text"  class="form-control" name="Attribuutsoorts[@i].AttributeValues[0].Waarde"/>
+                        <span asp-validation-for="Attribuutsoorts[@i].AttributeValues[0].Waarde" class="text-danger"></span>
                     </div>
 
                     <div class="form-group">
-                        <input type="hidden"  class="form-control" name="Attribuutsoorts[@i].Attribuutwaarde[0].AttribuutsoortId" value='@item.Id'/>
+                        <input type="hidden"  class="form-control" name="Attribuutsoorts[@i].AttributeValues[0].AttributeTypeId" value='@item.Id'/>
                     </div>
 
                     <div class="form-group">
-                        <input type="hidden"  class="form-control" name="Attribuutsoorts[@i].Attrbuut" value='@item.Name'/>
+                        <input type="hidden"  class="form-control" name="Attribuutsoorts[@i].Name" value='@item.Name'/>
                     </div>
 
                     <div class="form-group">

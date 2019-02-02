@@ -82,7 +82,7 @@ namespace klaas.Controllers
             if (count > 0) { ViewBag.alreadyInFav = true; }
             else { ViewBag.alreadyInFav = false; }
             
-            ViewData["ProductModel"] = product;
+            ViewData["ProductModel"] = productViewModel;
             ViewData["ProductAttributeModel"] = attributes;
             return View();
         }

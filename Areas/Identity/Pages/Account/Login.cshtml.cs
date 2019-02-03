@@ -19,12 +19,14 @@ namespace WebApp1.Areas.Identity.Pages.Account
         private readonly SignInManager<Users> _signInManager;
         private readonly UserManager<Users> _userManager;
         private readonly ILogger<LoginModel> _logger;
+        public WebshopContext _context;
 
-        public LoginModel(SignInManager<Users> signInManager, ILogger<LoginModel> logger, UserManager<Users> userManager)
+        public LoginModel(SignInManager<Users> signInManager, ILogger<LoginModel> logger, UserManager<Users> userManager, WebshopContext context)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
+            _context = context;
         }
 
         [BindProperty]
@@ -90,11 +92,12 @@ namespace WebApp1.Areas.Identity.Pages.Account
                     {
                         var result1 = await _signInManager.PasswordSignInAsync(Input.Email,
                                    Input.Password, Input.RememberMe, lockoutOnFailure: false);
+
                     }
                 }
-var result = await _signInManager.PasswordSignInAsync(Input.Email,
-                                   Input.Password, Input.RememberMe, lockoutOnFailure: false);
-               
+                var result = await _signInManager.PasswordSignInAsync(Input.Email,
+                                                   Input.Password, Input.RememberMe, lockoutOnFailure: false);
+
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
 

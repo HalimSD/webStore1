@@ -503,7 +503,7 @@ namespace WebApp1.Controllers
                                 <br>
                                 Bedankt voor je bestelling. 
                                 <br>
-                                Hieronder vind je je facatuur terug.
+                                Hieronder vind je je factuur terug.
                                 </h1></div>
                                 <br>
                                 <table align='center'>

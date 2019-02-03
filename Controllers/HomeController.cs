@@ -38,6 +38,7 @@ namespace klaas.Controllers
                 myList.Add(product.ToString());
                 Console.WriteLine(product.Naam);
             }
+            
             var myArray = myList.ToArray();
             ViewData["productsoorten"] =  myArray;
             

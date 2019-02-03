@@ -7,10 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using WebApp1.Models;
 using System;
 using Csv;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using WebApp1.Models.Database;
 
 namespace Controllers
 {
+    [Authorize(Roles= "Admin")]
     public class UploadFilesController : Controller
     {
         private readonly WebshopContext _context;
@@ -38,8 +41,8 @@ namespace Controllers
         [HttpPost("UploadFiles")]
         public async Task<IActionResult> index(IFormFile files)
         {
-            List<Productwaarde> addedProducts = new List<Productwaarde>();
-            List<Attribuutwaarde> addedAttributes = new List<Attribuutwaarde>();
+            List<Product> addedProducts = new List<Product>();
+            List<AttributeValue> addedAttributes = new List<AttributeValue>();
             string filePath;
             try
             {
@@ -79,7 +82,7 @@ namespace Controllers
                     string productss = record[0].ToString();
 
                     //productsoortidquery
-                    var query = from a in _context.Productsoort where a.Naam == productss select a;
+                    var query = from a in _context.Category where a.Naam == productss select a;
                     foreach (var q in query)
                     {
                         id = q.Id;
@@ -101,20 +104,20 @@ namespace Controllers
                         description = "Geen beschrijving beschikbaar!";
                     }
 
-                    Productwaarde productwaarde = new Productwaarde
+                    Product product = new Product
                     {
                         Title = title,
                         Description = description,
                         Quantity = quantity,
                         Price = price,
-                        ProductsoortId = productsid,
+                        CategoryId = productsid,
                         Image = image,
                         DiscountedPrice = -1
                     };
 
-                    _context.Productwaarde.Add(productwaarde);
+                    _context.Product.Add(product);
                     _context.SaveChanges();
-                    addedProducts.Add(productwaarde);
+                    addedProducts.Add(product);
 
                     var extrattributen = new List<string>();
                     for (int recor = 6; recor < record.ColumnCount; recor++)
@@ -125,15 +128,15 @@ namespace Controllers
                     var extraatributenarray = extrattributen.ToArray();
 
                     var productwid = 0;
-                    var productwaardequery = from a in _context.Productwaarde where a.Title == title select a;
+                    var productwaardequery = from a in _context.Product where a.Title == title select a;
                     foreach (var q in productwaardequery)
                     {
                         productwid = q.Id;
                     }
 
                     var attributenid = new List<int>();
-                    var queryatrsid = from a in _context.Attribuutsoort
-                        where a.ProductsoortId == productsid
+                    var queryatrsid = from a in _context.AttributeType
+                        where a.CategoryId == productsid
                         select a;
                     foreach (var q in queryatrsid)
                     {
@@ -149,29 +152,29 @@ namespace Controllers
                         // we'll use "N/A" as attribute value for the remaining attributes
                         try
                         {
-                            Attribuutwaarde attribuutwaarde = new Attribuutwaarde
+                            AttributeValue attributeValue = new AttributeValue
                             {
-                                ProductwaardeId = productwid,
-                                AttribuutsoortId = atributenidarray[index],
+                                ProductId = productwid,
+                                AttributeTypeId = atributenidarray[index],
                                 Waarde = extraatributenarray[index]
                             };
 
-                            _context.Attribuutwaarde.Add(attribuutwaarde);
+                            _context.AttributeValue.Add(attributeValue);
                             _context.SaveChanges();
-                            addedAttributes.Add(attribuutwaarde);
+                            addedAttributes.Add(attributeValue);
                         }
                         catch (IndexOutOfRangeException)
                         {
-                            Attribuutwaarde attribuutwaarde = new Attribuutwaarde
+                            AttributeValue attributeValue = new AttributeValue
                             {
-                                ProductwaardeId = productwid,
-                                AttribuutsoortId = atributenidarray[index],
+                                ProductId = productwid,
+                                AttributeTypeId = atributenidarray[index],
                                 Waarde = "N/A"
                             };
 
-                            _context.Attribuutwaarde.Add(attribuutwaarde);
+                            _context.AttributeValue.Add(attributeValue);
                             _context.SaveChanges();
-                            addedAttributes.Add(attribuutwaarde);
+                            addedAttributes.Add(attributeValue);
                         }
                     }
                 }
@@ -188,7 +191,7 @@ namespace Controllers
                 {
                     foreach (var product in addedProducts)
                     {
-                        _context.Productwaarde.Remove(product);
+                        _context.Product.Remove(product);
                     }
 
                     _context.SaveChanges();

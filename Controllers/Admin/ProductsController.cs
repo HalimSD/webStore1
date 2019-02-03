@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using WebApp1.Models.Database;
+using WebApp1.Models.ViewModels;
 
 namespace WebApp1.Controllers
 {
@@ -33,20 +35,20 @@ namespace WebApp1.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Productsoort.ToListAsync());
+            return View(await _context.Category.ToListAsync());
         }
 
          public IActionResult Indexproductwaarde()
          {
-             List<Productwaarde> products = _context.Productwaarde.ToList();
+             List<Product> products = _context.Product.ToList();
              List<string> attributeNames = new List<string>();
 
-             foreach (Productwaarde item in products)
+             foreach (Product item in products)
              {
                  string res =
                  (
-                     from ps in _context.Productsoort
-                     where ps.Id == item.ProductsoortId
+                     from ps in _context.Category
+                     where ps.Id == item.CategoryId
                      select ps.Naam
                  ).FirstOrDefault();
                  attributeNames.Add(res);
@@ -65,7 +67,7 @@ namespace WebApp1.Controllers
                 return NotFound();
             }
 
-            var products = await _context.Productsoort
+            var products = await _context.Category
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (products == null)
             {
@@ -90,8 +92,8 @@ namespace WebApp1.Controllers
             else if (message == 4){
                 ViewData["message"] = "Geef een geldig afbeeldingsformaat: png,jpg,jpeg,gif";
             }
-            var parents = from m in _context.Productsoort select new WebApp1.Models.AddCategory.Parent(){Productsoorts = m, selected = false };
-            var childs = from m in _context.Productsoort select new WebApp1.Models.AddCategory.Child(){Productsoorts = m, selected = false };
+            var parents = from m in _context.Category select new WebApp1.Models.AddCategory.Parent(){Categories = m, selected = false };
+            var childs = from m in _context.Category select new WebApp1.Models.AddCategory.Child(){Categories = m, selected = false };
              var main = new WebApp1.Models.AddCategory();
                                 main.parents = parents.ToList();
                                 main.children  = childs.ToList();
@@ -104,23 +106,23 @@ namespace WebApp1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Productsoort productsoort, List<WebApp1.Models.AddCategory.Parent> parents )
+        public async Task<IActionResult> Create(Category category, List<WebApp1.Models.AddCategory.Parent> parents )
         {
              //if (ModelState.IsValid)
             //{
-                if(productsoort.Naam == null){
+                if(category.Naam == null){
                     return RedirectToAction("Create", new{message = 1});
                 }
                 //check of productsoort bestaat
-                var productsoortexists = from p in _context.Productsoort where p.Naam == productsoort.Naam select p;
+                var productsoortexists = from p in _context.Category where p.Naam == category.Naam select p;
                 if (productsoortexists.Any()){
                         return RedirectToAction("Create", new{message = 1});
                     } 
                 //check of attribute is empty
-                 if (productsoort.Attribuutsoort != null){
+                 if (category.AttributeType != null){
                      
-                    foreach(var item in productsoort.Attribuutsoort){
-                            if(item.Attrbuut == null){
+                    foreach(var item in category.AttributeType){
+                            if(item.Name == null){
                                 return RedirectToAction("Create",new {message = 2 });
                             }
                         }
@@ -141,8 +143,8 @@ namespace WebApp1.Controllers
                
             
                 // check attribuut dubbel in lijst
-                if(productsoort.Attribuutsoort!= null){ var attribuutinlijst = productsoort.Attribuutsoort
-                                   .GroupBy(e => e.Attrbuut)
+                if(category.AttributeType!= null){ var attribuutinlijst = category.AttributeType
+                                   .GroupBy(e => e.Name)
                                    .Any(e => e.Count() > 1);
                                    
                                    if(attribuutinlijst)
@@ -177,18 +179,18 @@ namespace WebApp1.Controllers
                         using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
                         {
                             await file.CopyToAsync(fileStream);
-                            productsoort.Image = fileName;
+                            category.Image = fileName;
                         }
 
                     }
                 }
             }
 
-                if (productsoort.Image == null)
+                if (category.Image == null)
                 {
-                    productsoort.Image = "default.png";
+                    category.Image = "default.png";
                 }
-                _context.Productsoort.Add(productsoort);
+                _context.Category.Add(category);
 
 
                 try
@@ -203,14 +205,14 @@ namespace WebApp1.Controllers
                
             
 
-            var productsoortid = from p in _context.Productsoort where p.Naam == productsoort.Naam select p;
+            var productsoortid = from p in _context.Category where p.Naam == category.Naam select p;
             productsoortid.First();
             
 
-             var selectedparents = new List<Productsoort>();
+             var selectedparents = new List<Category>();
                 for (var i = 0; i<parents.Count(); i++ ){
                     if(parents[i].selected == true){
-                        selectedparents.Add(parents[i].Productsoorts);
+                        selectedparents.Add(parents[i].Categories);
                     }
                 }
                  foreach(var parent in selectedparents){  
@@ -259,7 +261,7 @@ namespace WebApp1.Controllers
               ViewData["message"] = ViewData["message"] + at; 
             }
             var myList = new List<string>();
-            var productsoorten = from m in _context.Productsoort select new { m.Naam };
+            var productsoorten = from m in _context.Category select new { m.Naam };
 
 
             foreach (var product in productsoorten)
@@ -307,13 +309,13 @@ namespace WebApp1.Controllers
                 return RedirectToAction("Create2");
             }   
              var productsoortid =
-                    from productsoorten in _context.Productsoort
+                    from productsoorten in _context.Category
                     where productsoorten.Naam == productsoortt 
                     select productsoorten;
 
              var standardattributen =
-                    from productsoorten in _context.Productsoort
-                    join atributen in _context.Attribuutsoort on productsoorten.Id equals atributen.ProductsoortId
+                    from productsoorten in _context.Category
+                    join atributen in _context.AttributeType on productsoorten.Id equals atributen.CategoryId
                     where productsoorten.Naam == productsoortt && atributen.Custom == false
                     select atributen;
             var id = productsoortid.First().Id;
@@ -325,8 +327,8 @@ namespace WebApp1.Controllers
             //         select new CreateproductModel.CreateproductModel.AlreadyCustomAtributes(){customAtribute = atributen, selected = false};
             
             var alreadyattributencustomall =
-                    from productsoorten in _context.Productsoort
-                    join atributen in _context.Attribuutsoort on productsoorten.Id equals atributen.ProductsoortId
+                    from productsoorten in _context.Category
+                    join atributen in _context.AttributeType on productsoorten.Id equals atributen.CategoryId
                     where atributen.Custom == true
                     group atributen by productsoorten into g
                     select g;
@@ -352,7 +354,7 @@ namespace WebApp1.Controllers
                     ProductModel.Attribuutsoorts = standardattributen.ToList();
                     ProductModel.AcustomAtributesall = customats;
                     // ProductModel.AcustomAtributesproductsoort = alreadyattributencustomproductsoort.ToList();
-                    ProductModel.productwaarde = new Productwaarde(){Id = id}; 
+                    ProductModel.Product = new Product(){Id = id}; 
 
             return View(ProductModel);
             
@@ -366,26 +368,26 @@ namespace WebApp1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create3(Productwaarde productwaarde, IList<WebApp1.Models.Attribuutsoort> Attribuutsoorts, List<CreateproductModel.CreateproductModel.Atribuutsoortmetwaardes> newcustom, List<CreateproductModel.CreateproductModel.AllCustomAtt> AcustomAtributesall)
+        public async Task<IActionResult> Create3(Product product, IList<AttributeType> Attribuutsoorts, List<CreateproductModel.CreateproductModel.Atribuutsoortmetwaardes> newcustom, List<CreateproductModel.CreateproductModel.AllCustomAtt> AcustomAtributesall)
         {
             
 
             
-                if (productwaarde.Title == null){
+                if (product.Title == null){
                     return RedirectToAction("Create2",new {message = 1});
                 }
-                if(productwaarde.Price<0){
+                if(product.Price<0){
                     return RedirectToAction("Create2", new{message = 9});
                 }
-                if(productwaarde.Quantity<0){
+                if(product.Quantity<0){
                     return RedirectToAction("Create2", new{message = 10});
                 }
 
                 for(var i=0; i<Attribuutsoorts.Count; i++){
                         if(Attribuutsoorts[i].Type == "number"){
-                                bool isDouble = Double.TryParse(Attribuutsoorts[i].Attribuutwaarde[0].Waarde, out double n );
+                                bool isDouble = Double.TryParse(Attribuutsoorts[i].AttributeValues[0].Waarde, out double n );
                                 if(!isDouble) {
-                                    return RedirectToAction("Create2",new { message = 4, at = Attribuutsoorts[i].Attrbuut });
+                                    return RedirectToAction("Create2",new { message = 4, at = Attribuutsoorts[i].Name });
                                 }
                             }
                  }
@@ -393,7 +395,7 @@ namespace WebApp1.Controllers
                 
                
                 //check of productwaarde al bestaat
-                var productwaardeextists = from p in _context.Productwaarde where p.Title == productwaarde.Title select p;
+                var productwaardeextists = from p in _context.Product where p.Title == product.Title select p;
                     if (productwaardeextists.Any()){
                         return RedirectToAction("Create2",new { message = 1});
                     } 
@@ -407,7 +409,7 @@ namespace WebApp1.Controllers
 
                  // check attribuut dubbel in lijst
                var attribuutinlijst = newcustom
-                                   .GroupBy(e => e.extraAtribute.Attrbuut)
+                                   .GroupBy(e => e.extraAtribute.Name)
                                    .Any(e => e.Count() > 1);
                 if(attribuutinlijst)
                 {
@@ -439,30 +441,30 @@ namespace WebApp1.Controllers
                         using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
                         {
                             await file.CopyToAsync(fileStream);
-                            productwaarde.Image = fileName;
+                            product.Image = fileName;
                         }
 
                     }
                 }
             }
 
-                if (productwaarde.Image == null)
+                if (product.Image == null)
                 {
-                    productwaarde.Image = "default.png";
+                    product.Image = "default.png";
                 }
-                _context.Productwaarde.Add(productwaarde); 
+                _context.Product.Add(product); 
                 await _context.SaveChangesAsync();
 
              foreach(var item in Attribuutsoorts){
-                if(item.Attribuutwaarde[0].Waarde == null){
-                     _context.Productwaarde.Remove(productwaarde);
+                if(item.AttributeValues[0].Waarde == null){
+                     _context.Product.Remove(product);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("Create2",new {message = 2, at = item.Attrbuut});
+                    return RedirectToAction("Create2",new {message = 2, at = item.Name});
                 }
                 else{
-                var productwaardeid = from p in _context.Productwaarde where p.Title == productwaarde.Title select p;
-                var standardatt = new Attribuutwaarde(){Waarde = item.Attribuutwaarde[0].Waarde, ProductwaardeId = productwaardeid.First().Id, AttribuutsoortId = item.Attribuutwaarde[0].AttribuutsoortId};
-                _context.Attribuutwaarde.Add(standardatt); 
+                var productwaardeid = from p in _context.Product where p.Title == product.Title select p;
+                var standardatt = new AttributeValue(){Waarde = item.AttributeValues[0].Waarde, ProductId = productwaardeid.First().Id, AttributeTypeId = item.AttributeValues[0].AttributeTypeId};
+                _context.AttributeValue.Add(standardatt); 
                     await _context.SaveChangesAsync();
                     }
              }
@@ -470,23 +472,23 @@ namespace WebApp1.Controllers
             foreach(var item in AcustomAtributesall){ 
                 for (var i = 0; i<item.customAtributes.Count; i++){
                     if(item.customAtributes[i].selected == true){
-                    var productwaardeid = from p in _context.Productwaarde where p.Title == productwaarde.Title select p;
+                    var productwaardeid = from p in _context.Product where p.Title == product.Title select p;
                          if(item.cattribuutwaarde[i].Waarde == null){
-                              _context.Productwaarde.Remove(productwaarde);
+                              _context.Product.Remove(product);
                             await _context.SaveChangesAsync();
-                            return RedirectToAction("Create2",new {message = 2, at = item.customAtributes[i].customAtribute.Attrbuut});
+                            return RedirectToAction("Create2",new {message = 2, at = item.customAtributes[i].customAtribute.Name});
                             }
                         if(item.customAtributes[i].customAtribute.Type == "number"){
                                 bool isDouble = Double.TryParse(item.cattribuutwaarde[i].Waarde, out double n );
                                 if(!isDouble) {
-                                     _context.Productwaarde.Remove(productwaarde);
+                                     _context.Product.Remove(product);
                                     await _context.SaveChangesAsync();
-                                    return RedirectToAction("Create2",new { message = 4, at = item.customAtributes[i].customAtribute.Attrbuut});
+                                    return RedirectToAction("Create2",new { message = 4, at = item.customAtributes[i].customAtribute.Name});
                                 }
                             }
-                        var atributeID = from p in _context.Attribuutsoort where p.Id == item.customAtributes[i].customAtribute.Id select p;
-                        var customatwaarde = new Attribuutwaarde(){Waarde = item.cattribuutwaarde[i].Waarde, ProductwaardeId = productwaardeid.First().Id, AttribuutsoortId = atributeID.First().Id};
-                    _context.Attribuutwaarde.Add(customatwaarde) ; 
+                        var atributeID = from p in _context.AttributeType where p.Id == item.customAtributes[i].customAtribute.Id select p;
+                        var customatwaarde = new AttributeValue(){Waarde = item.cattribuutwaarde[i].Waarde, ProductId = productwaardeid.First().Id, AttributeTypeId = atributeID.First().Id};
+                    _context.AttributeValue.Add(customatwaarde) ; 
                     
                     }
                     await _context.SaveChangesAsync(); 
@@ -512,33 +514,32 @@ namespace WebApp1.Controllers
 
             foreach(var item in newcustom){ 
                 if(item.extraAtributewaarde.Waarde == null){
-                            _context.Productwaarde.Remove(productwaarde);
+                            _context.Product.Remove(product);
                             await _context.SaveChangesAsync();
                             return RedirectToAction("Create2",new { message = 2});
                 }
                 if(item.extraAtribute.Type == "number"){
                      bool isDouble = Double.TryParse(item.extraAtributewaarde.Waarde, out double n );
                                 if(!isDouble) {
-                                     _context.Productwaarde.Remove(productwaarde);
+                                     _context.Product.Remove(product);
                                     await _context.SaveChangesAsync();
-                                    return RedirectToAction("Create2",new { message = 4, at = item.extraAtribute.Attrbuut});
+                                    return RedirectToAction("Create2",new { message = 4, at = item.extraAtribute.Name});
                                 }
                 }
                 
-                var customat = new Attribuutsoort(){Attrbuut = item.extraAtribute.Attrbuut, Type= item.extraAtribute.Type, Custom= true,ProductsoortId= productwaarde.ProductsoortId};
-                 _context.Attribuutsoort.Add(customat);
+                var customat = new AttributeType(){Name = item.extraAtribute.Name, Type= item.extraAtribute.Type, Custom= true,CategoryId= product.CategoryId};
+                 _context.AttributeType.Add(customat);
                  await _context.SaveChangesAsync();
 
-                 var atributeID = from p in _context.Attribuutsoort where p.Id == customat.Id select p;
-                var productwaardeid = from p in _context.Productwaarde where p.Title == productwaarde.Title select p;
+                 var atributeID = from p in _context.AttributeType where p.Id == customat.Id select p;
+                var productwaardeid = from p in _context.Product where p.Title == product.Title select p;
 
-                 var customatwaarde = new Attribuutwaarde(){Waarde = item.extraAtributewaarde.Waarde, ProductwaardeId = productwaardeid.First().Id, AttribuutsoortId = atributeID.First().Id};
-                 _context.Attribuutwaarde.Add(customatwaarde); 
+                 var customatwaarde = new AttributeValue(){Waarde = item.extraAtributewaarde.Waarde, ProductId = productwaardeid.First().Id, AttributeTypeId = atributeID.First().Id};
+                 _context.AttributeValue.Add(customatwaarde); 
                  await _context.SaveChangesAsync(); 
-            //}
-                return RedirectToAction("index", "CategoryList");
             }
-            return RedirectToAction("index", "CategoryList");
+                return RedirectToAction("index", "CategoryList");
+           
         }
 
 
@@ -558,7 +559,7 @@ namespace WebApp1.Controllers
                 return NotFound();
             }
 
-            var products = await _context.Productsoort.FindAsync(id);
+            var products = await _context.Category.FindAsync(id);
             if (products == null)
             {
                 return NotFound();
@@ -571,7 +572,7 @@ namespace WebApp1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Price")] Productwaarde products)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Price")] Product products)
         {
             if (id != products.Id)
             {
@@ -609,7 +610,7 @@ namespace WebApp1.Controllers
                 return NotFound();
             }
 
-            var products = await _context.Productsoort
+            var products = await _context.Category
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (products == null)
             {
@@ -624,15 +625,15 @@ namespace WebApp1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var products = await _context.Productsoort.FindAsync(id);
-            _context.Productsoort.Remove(products);
+            var products = await _context.Category.FindAsync(id);
+            _context.Category.Remove(products);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProductsExists(int id)
         {
-            return _context.Productsoort.Any(e => e.Id == id);
+            return _context.Category.Any(e => e.Id == id);
         }
         private int favExists(int id)
         {
@@ -657,7 +658,7 @@ namespace WebApp1.Controllers
             }
            
             var model = new WebApp1.Models.EditproductsoortModel();
-            var productsoorts = from p in _context.Productsoort select p;
+            var productsoorts = from p in _context.Category select p;
             model.productsoorts = productsoorts.ToList();
             return View(model);
         }
@@ -681,18 +682,18 @@ namespace WebApp1.Controllers
             
            
             else if(m.newproductsoort!=null&& m.oldproductsoort!=null){
-                var result = _context.Productsoort.SingleOrDefault(p => p.Naam == m.oldproductsoort);
-                var ats = from a in _context.Attribuutsoort where a.productsoort.Naam == m.oldproductsoort select a;
+                var result = _context.Category.SingleOrDefault(p => p.Naam == m.oldproductsoort);
+                var ats = from a in _context.AttributeType where a.Category.Naam == m.oldproductsoort select a;
                 var lsitat = ats.ToList();
                 if(m.newproductsoort != m.oldproductsoort){
-                    var productsoortex = from p in _context.Productsoort where p.Naam == m.newproductsoort select p;
+                    var productsoortex = from p in _context.Category where p.Naam == m.newproductsoort select p;
                     if(productsoortex.Any()){
                         return RedirectToAction("ChooseProductsoort", new{m = 1}); 
                     }
                 }
                 if(m.atributes !=null){
                     foreach(var item in m.atributes){
-                    if (item.Attrbuut==null){
+                    if (item.Name==null){
                         return RedirectToAction("ChooseProductsoort", new{m = 2}); 
                     }
                 }
@@ -703,7 +704,7 @@ namespace WebApp1.Controllers
                     {
                         if (lsitat[a].Id == m.atributes[b].Id)
                         {
-                             lsitat[a].Attrbuut = m.atributes[b].Attrbuut;
+                             lsitat[a].Name = m.atributes[b].Name;
                         }
                     }
                 }
@@ -718,7 +719,7 @@ namespace WebApp1.Controllers
             }
 
             else {
-                var getattributen = from at in _context.Attribuutsoort where at.productsoort.Naam == m.oldproductsoort select at;
+                var getattributen = from at in _context.AttributeType where at.Category.Naam == m.oldproductsoort select at;
                 var model = new WebApp1.Models.EditproductsoortModel2();
                 model.atributes = getattributen.ToList();
                 model.oldproductsoort = m.oldproductsoort;

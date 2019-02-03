@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Primitives;
 using Org.BouncyCastle.Ocsp;
 using WebApp1.Models;
+using WebApp1.Models.Database;
+using WebApp1.Models.Helper;
 
 namespace WebApp1.Controllers
 {
@@ -17,7 +19,7 @@ namespace WebApp1.Controllers
         private readonly int maxPageSize = 9;
         private readonly WebshopContext context;
         private readonly string sessionFiltersKey = "categoryFilters";
-        private CategoryViewModelHelper helper;
+        private readonly CategoryViewModelHelper helper;
         
         public CategoryController(WebshopContext context)
         {
@@ -154,27 +156,27 @@ namespace WebApp1.Controllers
             }
             
             var products = 
-                from m in context.Productwaarde
+                from m in context.Product
                 where m.Title.ToUpper().Contains(search.ToUpper())
                 select m;
 
             if (!String.IsNullOrEmpty(search))
             {
                 var query0 =
-                    from productwaarde in context.Productwaarde
-                    join atributen in context.Attribuutsoort on productwaarde.ProductsoortId equals atributen.ProductsoortId
-                    where atributen.Attrbuut.ToUpper().Contains(search.ToUpper())
+                    from productwaarde in context.Product
+                    join atributen in context.AttributeType on productwaarde.CategoryId equals atributen.CategoryId
+                    where atributen.Name.ToUpper().Contains(search.ToUpper())
                     select productwaarde;
 
                 var query1 =
-                    from attributen in context.Attribuutwaarde
-                    join productwaarde in context.Productwaarde on attributen.ProductwaardeId equals productwaarde.Id
-                    join atribuut in context.Attribuutsoort on attributen.AttribuutsoortId equals atribuut.Id
+                    from attributen in context.AttributeValue
+                    join productwaarde in context.Product on attributen.ProductId equals productwaarde.Id
+                    join atribuut in context.AttributeType on attributen.AttributeTypeId equals atribuut.Id
                     where attributen.Waarde.ToUpper().Contains(search.ToUpper())
                     select productwaarde;
 
                 products = products.Union(query0).Union(query1);
-                var pagination = new PaginationHelper<Productwaarde>(maxPageSize, context.Productwaarde);
+                var pagination = new PaginationHelper<Product>(maxPageSize, context.Product);
                 var viewModel = new CategoryViewModel
                 {
                     CategoryName = search,
@@ -198,7 +200,7 @@ namespace WebApp1.Controllers
             if (parentId == -1) return new JsonResult(parentId);
             List<List<string>> json =
             (
-                from ps in context.Productsoort
+                from ps in context.Category
                 from pc in context.ParentChild
                 where ps.Id == pc.ChildId
                 where pc.ParentId == parentId

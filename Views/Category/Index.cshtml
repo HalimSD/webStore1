@@ -1,4 +1,5 @@
 @using Microsoft.AspNetCore.Mvc.Filters
+@using WebApp1.Models.Database
 @model WebApp1.Models.CategoryViewModel
 
 @{
@@ -39,12 +40,12 @@
     // The product page itself consists of 3 columns
     // We must first sort all the products into each column    
     // Afterwards, we populate the page
-    List<Productwaarde> col0Items = new List<Productwaarde>();
-    List<Productwaarde> col1Items = new List<Productwaarde>();
-    List<Productwaarde> col2Items = new List<Productwaarde>();
+    List<Product> col0Items = new List<Product>();
+    List<Product> col1Items = new List<Product>();
+    List<Product> col2Items = new List<Product>();
 
     int currentColumn = 0;
-    foreach (Productwaarde item in Model.Products.Data)
+    foreach (Product item in Model.Products.Data)
     {
         switch (currentColumn)
         {
@@ -75,7 +76,7 @@
             <div class="categoryTitle">Sub-Categorieën</div>
             <form asp-action="Index">
                 <div id="container1" class="form-group">
-                    @foreach (Productsoort item in Model.Categories)
+                    @foreach (Category item in Model.Categories)
                     {
                         if (item == Model.Categories.Last())
                         {
@@ -204,7 +205,7 @@
     }
     <div class="row" id="products">
         <div class="col-sm">
-            @foreach (Productwaarde item in col0Items)
+            @foreach (Product item in col0Items)
             {
                 <div class="card" style="width: 20rem;">
                     <div class="card-body">
@@ -260,7 +261,7 @@
             }
         </div>
         <div class="col-sm">
-            @foreach (Productwaarde item in col1Items)
+            @foreach (Product item in col1Items)
             {
                 <div class="card" style="width: 20rem;">
                     <div class="card-body">
@@ -316,7 +317,7 @@
             }
         </div>
         <div class="col-sm">
-            @foreach (Productwaarde item in col2Items)
+            @foreach (Product item in col2Items)
             {
                 <div class="card" style="width: 20rem;">
                     <div class="card-body">

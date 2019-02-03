@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
 
-namespace WebApp1.Models
+namespace WebApp1.Models.Helper
 {
     // Default page model
     public class PaginationViewModel<T>

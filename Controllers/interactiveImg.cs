@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using WebApp1.Models;
+using WebApp1.Models.Database;
 
 namespace WebApp1.Controllers
 {
@@ -17,7 +18,7 @@ namespace WebApp1.Controllers
         [Route("interactiveImg")]
         public IActionResult Index()
         {
-             var parent1 = (from soort in _context.Productsoort join parent in _context.ParentChild
+             var parent1 = (from soort in _context.Category join parent in _context.ParentChild
                             on soort.Id  equals parent.ParentId
                             where soort.Id == parent.ParentId
                             select soort).ToList().Distinct();
@@ -52,7 +53,7 @@ namespace WebApp1.Controllers
 
         public IActionResult child(int id)
         {
-            var child1 = (from soort in _context.Productsoort join parent in _context.ParentChild
+            var child1 = (from soort in _context.Category join parent in _context.ParentChild
                             on soort.Id  equals parent.ChildId
                             where id == parent.ParentId
                             select soort).ToList().Distinct();
@@ -76,7 +77,7 @@ namespace WebApp1.Controllers
          [Route("parent/{id}")]
         public IActionResult parent(int id)
         {
-             var parent1 = _context.Productsoort.Select(x=> x.Parents.Select(l=> l.Parent).Where(v=> v.Id == id)).ToList();
+             var parent1 = _context.Category.Select(x=> x.Parents.Select(l=> l.Parent).Where(v=> v.Id == id)).ToList();
 
 
             //  var parent1 = (from soort in _context.Productsoort join parent in _context.ParentChild

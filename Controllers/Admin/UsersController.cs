@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Scaffolding.Internal;
 using WebApp1.Models;
+using WebApp1.Models.Database;
 
 namespace WebApp1.Controllers.Admin
 {

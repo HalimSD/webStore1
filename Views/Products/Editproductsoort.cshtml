@@ -17,8 +17,8 @@
                 </div>
                 @for (var i = 0; i < Model.atributes.Count; i++)
                     {
-                        <label asp-for="@Model.atributes[i].Attrbuut" class="control-label">@Model.atributes[i].Attrbuut</label>
-                        <input Class="form-control" asp-for="@Model.atributes[i].Attrbuut" value="" placeholder="@Model.atributes[i].Attrbuut"/> 
+                        <label asp-for="@Model.atributes[i].Name" class="control-label">@Model.atributes[i].Name</label>
+                        <input Class="form-control" asp-for="@Model.atributes[i].Name" value="" placeholder="@Model.atributes[i].Name"/> 
                         <input type = "hidden" asp-for="@Model.atributes[i].Id" /> 
                         <hr>                                                                                  
                     }

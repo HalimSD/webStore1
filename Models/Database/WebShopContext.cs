@@ -1,21 +1,20 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using WebApp1.Models;
 
-namespace WebApp1.Models
+namespace WebApp1.Models.Database
 {
     public class WebshopContext : IdentityDbContext<Users>
     {
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<WebApp1.Models.ParentChild>()
+            modelBuilder.Entity<ParentChild>()
                 .HasKey(bc => new { bc.ChildId, bc.ParentId });
-            modelBuilder.Entity<WebApp1.Models.ParentChild>()
+            modelBuilder.Entity<ParentChild>()
                 .HasOne(p => p.Child)
                 .WithMany(p => p.Children)
                 .HasForeignKey(bc => bc.ChildId);
-            modelBuilder.Entity<WebApp1.Models.ParentChild>()
+            modelBuilder.Entity<ParentChild>()
                 .HasOne(bc => bc.Parent)
                 .WithMany(c => c.Parents)
                 .HasForeignKey(bc => bc.ParentId);
@@ -25,15 +24,13 @@ namespace WebApp1.Models
             : base(options)
         {
         }
-        public DbSet<Extra_Atributes> Extra_Atributes { get; set; }
-        public DbSet<Productsoort> Productsoort { get; set; }
-        public DbSet<Productwaarde> Productwaarde { get; set; }
-        public DbSet<Attribuutsoort> Attribuutsoort { get; set; }
-        public DbSet<Attribuutwaarde> Attribuutwaarde { get; set; }
-        public DbSet<FavoritesModel> Favorites { get; set; }
-        public DbSet<Item> Items { get; set; }
-        public DbSet<BesteldeItem> BesteldeItem { get; set; }
-        public DbSet<Bestelling> Bestelling { get; set; }
+        public DbSet<Category> Category { get; set; }
+        public DbSet<Product> Product { get; set; }
+        public DbSet<AttributeType> AttributeType { get; set; }
+        public DbSet<AttributeValue> AttributeValue { get; set; }
+        public DbSet<Favorite> Favorite { get; set; }
+        public DbSet<OrderDetail> OrderDetail { get; set; }
+        public DbSet<Order> Order { get; set; }
         public DbSet<ParentChild> ParentChild { get; set; }
        
 

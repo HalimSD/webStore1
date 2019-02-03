@@ -1,8 +1,9 @@
 ﻿@using WebApp1.Models
+@using WebApp1.Models.Database
 @model WebApp1.Models.Datastructure
 @{
     ViewData["Title"] = "Home Page";
-    List<Productwaarde> products = Model.productwaardes.ToList();
+    List<Product> products = Model.productwaardes.ToList();
 }
 
 <link rel="stylesheet" href="~/css/interactiveimage.css">

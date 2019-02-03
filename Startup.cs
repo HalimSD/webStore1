@@ -17,6 +17,7 @@ using DinkToPdf;
 using WebApp1.Controllers;
 using System.IO;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using WebApp1.Models.Database;
 using WebPWrecover.Services;
 
 namespace WebApp1
@@ -42,7 +43,7 @@ namespace WebApp1
 
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromSeconds(30);
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
                 options.Cookie.HttpOnly = true;
             });
 

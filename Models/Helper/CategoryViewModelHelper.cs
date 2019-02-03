@@ -1,121 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.EntityFrameworkCore.Internal;
-using Org.BouncyCastle.Crypto.Agreement.Srp;
-using Org.BouncyCastle.Crypto.Engines;
-using Org.BouncyCastle.Crypto.Signers;
-using Org.BouncyCastle.OpenSsl;
-using Remotion.Linq.Clauses;
+using WebApp1.Models.Database;
 
-namespace WebApp1.Models
+namespace WebApp1.Models.Helper
 {
-    public class CategoryViewModel
-    {
-        public int CategoryId { get; set; }
-        public string CategoryName { get; set; }
-        public List<string[]> CategoryPath { get; set; }
-        public PaginationViewModel<Productwaarde> Products { get; set; }
-
-        public List<Productsoort> Categories { get; set; }
-
-        // Index 0 = name, Index 1 = id, Index 2 = type
-        public List<AttributeFilter> Attributes { get; set; }
-        public CategoryFilterModel Filters { get; set; }
-
-        // The fields below are used to display the correct filter options
-        public string[] PriceFilterRange { get; set; }
-        public string[] QuantityFilterRange { get; set; }
-        public bool IsFiltered { get; set; } = false;
-    }
-
-    // Model is used to group the filter parameters
-    // that is passed to the controller by the form into one model
-    public class CategoryFilterModel
-    {
-        // Model will be expanded as more filter options are added
-        public string[] PriceRanges { get; set; }
-        public string[] QuantityRanges { get; set; }
-
-        public List<AttributeFilter> AttributeFilters { get; set; }
-
-        public bool HasAttributeFilters
-        {
-            get
-            {
-                bool containsFilters = false;
-                if (AttributeFilters == null) return false;
-                foreach (AttributeFilter attributeFilter in AttributeFilters)
-                {
-                    if (attributeFilter.Type == "number")
-                    {
-                        if (attributeFilter.FilterRanges != null)
-                        {
-                            containsFilters = true;
-                        }
-                    }
-                    if (attributeFilter.Type == "string")
-                    {
-                        if (!string.IsNullOrWhiteSpace(attributeFilter.FilterValue))
-                        {
-                            containsFilters = true;
-                        }
-                    }
-                }
-
-                return containsFilters;
-            }
-        }
-
-        // Used to check if Filter options are empty!
-        public bool IsEmpty
-        {
-            // Check if all fields of this model are null
-            get
-            {
-                bool emptyPrice = PriceRanges == null && QuantityRanges == null;
-                bool empty = true;
-                if (AttributeFilters != null)
-                {
-                    foreach (var item in AttributeFilters)
-                    {
-                        if (item.Type == "string")
-                        {
-                            if (!string.IsNullOrEmpty(item.FilterValue)) empty = false;
-                        }
-
-                        if (item.Type == "number")
-                        {
-                            {
-                                foreach (string range in item.FilterRanges)
-                                {
-                                    if (range != "false") empty = false;
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    empty = true;
-                }
-
-                return empty && emptyPrice;
-            }
-        }
-    }
-
-    public class AttributeFilter
-    {
-        public int AttributeId { get; set; }
-        public string AttributeName { get; set; }
-        public string[] FilterRanges { get; set; }
-        public string Type { get; set; }
-        public string FilterValue { get; set; }
-    }
-
     public class CategoryViewModelHelper
     {
         private readonly WebshopContext context;
@@ -130,8 +20,8 @@ namespace WebApp1.Models
         public CategoryViewModel CreateViewModel(int? categoryId, int pageNumber, CategoryFilterModel filters = null)
         {
             CategoryViewModel viewModel = new CategoryViewModel();
-            PaginationHelper<Productwaarde> productsPage =
-                new PaginationHelper<Productwaarde>(maxPageSize, context.Productwaarde);
+            PaginationHelper<Product> productsPage =
+                new PaginationHelper<Product>(maxPageSize, context.Product);
 
             // If no id was provided, we will display all products
             if (categoryId == null)
@@ -141,31 +31,31 @@ namespace WebApp1.Models
             }
 
             // Verify the ID provided is a valid ID
-            bool idIsValid = (from ps in context.Productsoort where ps.Id == categoryId select ps).Any();
+            bool idIsValid = (from ps in context.Category where ps.Id == categoryId select ps).Any();
             if (!idIsValid) return null;
-            
+
             // Get list of categories where we have to retrieve products from
             List<int> categoryIdList = GetProductCategoryIds((int) categoryId);
 
             viewModel.CategoryName =
-                (from ps in context.Productsoort where ps.Id == categoryId select ps.Naam).FirstOrDefault();
+                (from ps in context.Category where ps.Id == categoryId select ps.Naam).FirstOrDefault();
 
             // Retrieve all products that belong to one of the categories
-            IQueryable<Productwaarde> productsQuery =
+            IQueryable<Product> productsQuery =
             (
-                from pw in context.Productwaarde
-                where categoryIdList.Contains(pw.ProductsoortId)
+                from pw in context.Product
+                where categoryIdList.Contains(pw.CategoryId)
                 select pw
             );
-            
+
             // Get the attributes of that category 
             List<AttributeFilter> att =
-                (from atts in context.Attribuutsoort
-                    where atts.ProductsoortId == categoryId &&
+                (from atts in context.AttributeType
+                    where atts.CategoryId == categoryId &&
                           atts.Custom == false
                     select new AttributeFilter
                     {
-                        AttributeName = atts.Attrbuut, AttributeId = atts.Id, Type = atts.Type
+                        AttributeName = atts.Name, AttributeId = atts.Id, Type = atts.Type
                     }).ToList();
 
             foreach (var attribute in att)
@@ -185,14 +75,14 @@ namespace WebApp1.Models
             productsQuery = FilterQuantity(filters, productsQuery);
 
             viewModel.Filters = filters;
-            productsQuery = productsQuery.OrderBy(p => p.ProductsoortId);
+            productsQuery = productsQuery.OrderBy(p => p.CategoryId);
             viewModel.Products = productsPage.GetPageIQueryable(pageNumber, productsQuery);
 
             // Populate the view model with the needed data
             viewModel.Attributes = att;
             viewModel.Categories =
             (
-                from ps in context.Productsoort
+                from ps in context.Category
                 from pc in context.ParentChild
                 where pc.ParentId == categoryId &&
                       ps.Id == pc.ChildId
@@ -218,12 +108,12 @@ namespace WebApp1.Models
         public int GetRootParentId()
         {
             bool containsParentChildRows = (from pc in context.ParentChild select pc).Any();
-            int containsCategoryRowCount = (from ps in context.Productsoort select ps).Count();
+            int containsCategoryRowCount = (from ps in context.Category select ps).Count();
             if (!containsParentChildRows)
             {
                 if (containsCategoryRowCount == 1)
                 {
-                    var res = (from ps in context.Productsoort select ps.Id).FirstOrDefault();
+                    var res = (from ps in context.Category select ps.Id).FirstOrDefault();
                     return res;
                 }
 
@@ -253,7 +143,7 @@ namespace WebApp1.Models
                 pathList = new List<string[]>();
             }
 
-            Productsoort category = (from ps in context.Productsoort where ps.Id == id select ps).FirstOrDefault();
+            Category category = (from ps in context.Category where ps.Id == id select ps).FirstOrDefault();
 
 
             IQueryable<int> query =
@@ -272,7 +162,7 @@ namespace WebApp1.Models
                 pathList.Add
                 (
                     (
-                        from ps in context.Productsoort
+                        from ps in context.Category
                         where ps.Id == GetRootParentId()
                         select new[]
                         {
@@ -286,7 +176,7 @@ namespace WebApp1.Models
             return pathList;
         }
 
-        private string[] GetPriceFilterRange(IQueryable<Productwaarde> query)
+        private string[] GetPriceFilterRange(IQueryable<Product> query)
         {
             if (!query.Any()) return new string[5];
 
@@ -313,7 +203,7 @@ namespace WebApp1.Models
             return ranges;
         }
 
-        private string[] GetQuantityFilterRange(IQueryable<Productwaarde> query)
+        private string[] GetQuantityFilterRange(IQueryable<Product> query)
         {
             if (!query.Any()) return new string[5];
 
@@ -328,20 +218,20 @@ namespace WebApp1.Models
             return ranges;
         }
 
-        private string[] GetNumberAttributeFilterRange(IQueryable<Productwaarde> query, int attributeId)
+        private string[] GetNumberAttributeFilterRange(IQueryable<Product> query, int attributeId)
         {
             if (!query.Any()) return new string[0];
 
-            int[] attributeValues =
+            double[] attributeValues =
             (
-                from attw in context.Attribuutwaarde
-                where attw.AttribuutsoortId == attributeId &&
+                from attw in context.AttributeValue
+                where attw.AttributeTypeId == attributeId &&
                       attw.Waarde != "N/A"
-                select int.Parse(attw.Waarde)
+                select double.Parse(attw.Waarde, CultureInfo.InvariantCulture)
             ).ToArray();
             if (!attributeValues.Any()) return new string[0];
 
-            // Detirmine how many ranges will be created
+            // Determine how many ranges will be created
             // Max is 5
             int rangeOptions = attributeValues.Length;
             if (rangeOptions > 5) rangeOptions = 5;
@@ -406,7 +296,7 @@ namespace WebApp1.Models
             return rangeArray;
         }
 
-        private IQueryable<Productwaarde> FilterPrice(CategoryFilterModel filters, IQueryable<Productwaarde> query)
+        private IQueryable<Product> FilterPrice(CategoryFilterModel filters, IQueryable<Product> query)
         {
             // Error check
             if (filters == null) return query;
@@ -454,7 +344,7 @@ namespace WebApp1.Models
             return query;
         }
 
-        private IQueryable<Productwaarde> FilterQuantity(CategoryFilterModel filters, IQueryable<Productwaarde> query)
+        private IQueryable<Product> FilterQuantity(CategoryFilterModel filters, IQueryable<Product> query)
         {
             // Error check
             if (filters == null) return query;
@@ -490,7 +380,7 @@ namespace WebApp1.Models
             return query;
         }
 
-        private IQueryable<Productwaarde> FilterAttributes(CategoryFilterModel filters, IQueryable<Productwaarde> query)
+        private IQueryable<Product> FilterAttributes(CategoryFilterModel filters, IQueryable<Product> query)
         {
             if (filters == null) return query;
             if (!filters.HasAttributeFilters) return query;
@@ -508,12 +398,12 @@ namespace WebApp1.Models
                             if (range == "false") continue;
                             double[] rangeValues = GetRangeValuesFromString(range);
                             filteredQuery = filteredQuery.Union(
-                                from attw in context.Attribuutwaarde
+                                from attw in context.AttributeValue
                                 from pw in query
-                                where attw.ProductwaardeId == pw.Id &&
-                                      attw.AttribuutsoortId == item.AttributeId &&
-                                      Convert.ToInt32(attw.Waarde) >= rangeValues[0] &&
-                                      Convert.ToInt32(attw.Waarde) <= rangeValues[1]
+                                where attw.ProductId == pw.Id &&
+                                      attw.AttributeTypeId == item.AttributeId &&
+                                      Convert.ToDouble(attw.Waarde) >= rangeValues[0] &&
+                                      Convert.ToDouble(attw.Waarde) <= rangeValues[1]
                                 select pw
                             );
                             filtered = true;
@@ -523,10 +413,10 @@ namespace WebApp1.Models
                     default:
                         if (string.IsNullOrWhiteSpace(item.FilterValue)) continue;
                         filteredQuery = filteredQuery.Union(
-                            from attw in context.Attribuutwaarde
+                            from attw in context.AttributeValue
                             from pw in query
-                            where attw.ProductwaardeId == pw.Id &&
-                                  attw.AttribuutsoortId == item.AttributeId &&
+                            where attw.ProductId == pw.Id &&
+                                  attw.AttributeTypeId == item.AttributeId &&
                                   attw.Waarde.ToUpper().Contains(item.FilterValue.ToUpper())
                             select pw
                         );

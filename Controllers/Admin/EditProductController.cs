@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.Language;
 using Microsoft.EntityFrameworkCore.Scaffolding.Internal;
 using NuGet.Frameworks;
+using WebApp1.Models.Database;
 
 namespace WebApp1.Controllers
 {
@@ -43,7 +44,7 @@ namespace WebApp1.Controllers
             if (id == null) return NotFound();
 
             var query =
-                from pw in context.Productwaarde
+                from pw in context.Product
                 where pw.Id == id
                 select new EditProductViewModel
                 {
@@ -54,7 +55,7 @@ namespace WebApp1.Controllers
                     Image = pw.Image,
                     Quantity = pw.Quantity,
                     Description = pw.Description,
-                    ProductsoortId = pw.ProductsoortId
+                    ProductsoortId = pw.CategoryId
                 };
 
             if (!query.Any()) return NotFound();
@@ -62,32 +63,32 @@ namespace WebApp1.Controllers
             EditProductViewModel viewModel = query.FirstOrDefault();
 
             viewModel.NumberAttributes = (
-                from atts in context.Attribuutsoort
-                from attw in context.Attribuutwaarde
-                where atts.ProductsoortId == viewModel.ProductsoortId &&
-                      attw.AttribuutsoortId == atts.Id &&
-                      attw.ProductwaardeId == viewModel.Id &&
+                from atts in context.AttributeType
+                from attw in context.AttributeValue
+                where atts.CategoryId == viewModel.ProductsoortId &&
+                      attw.AttributeTypeId == atts.Id &&
+                      attw.ProductId == viewModel.Id &&
                       atts.Type == "number"
                 select new NumberAttributeModel
                 {
                     AttributeNameId = atts.Id,
-                    AttributeName = atts.Attrbuut,
+                    AttributeName = atts.Name,
                     AttributeValueId = attw.Id,
                     AttributeValue = attw.Waarde,
                 }
             ).ToList();
 
             viewModel.StringAttributes = (
-                from atts in context.Attribuutsoort
-                from attw in context.Attribuutwaarde
-                where atts.ProductsoortId == viewModel.ProductsoortId &&
-                      attw.AttribuutsoortId == atts.Id &&
-                      attw.ProductwaardeId == viewModel.Id &&
+                from atts in context.AttributeType
+                from attw in context.AttributeValue
+                where atts.CategoryId == viewModel.ProductsoortId &&
+                      attw.AttributeTypeId == atts.Id &&
+                      attw.ProductId == viewModel.Id &&
                       atts.Type == "string"
                 select new StringAttributeModel
                 {
                     AttributeNameId = atts.Id,
-                    AttributeName = atts.Attrbuut,
+                    AttributeName = atts.Name,
                     AttributeValueId = attw.Id,
                     AttributeValue = attw.Waarde,
                 }
@@ -104,8 +105,8 @@ namespace WebApp1.Controllers
             try
             {
                 // Get the current values of the produt in db and update it.
-                Productwaarde productModel =
-                    (from pw in context.Productwaarde where pw.Id == viewModel.Id select pw).FirstOrDefault();
+                Product productModel =
+                    (from pw in context.Product where pw.Id == viewModel.Id select pw).FirstOrDefault();
 
                 if (productModel == null)
                 {
@@ -133,8 +134,8 @@ namespace WebApp1.Controllers
                 // Update attributes
                 foreach (var numberAttribute in viewModel.NumberAttributes)
                 {
-                    Attribuutwaarde attribute =
-                        (from attw in context.Attribuutwaarde where attw.Id == numberAttribute.AttributeValueId select attw)
+                    AttributeValue attribute =
+                        (from attw in context.AttributeValue where attw.Id == numberAttribute.AttributeValueId select attw)
                         .FirstOrDefault();
 
 
@@ -142,8 +143,8 @@ namespace WebApp1.Controllers
                 }
                 foreach (var stringAttribute in viewModel.StringAttributes)
                 {
-                    Attribuutwaarde attribute =
-                        (from attw in context.Attribuutwaarde where attw.Id == stringAttribute.AttributeValueId select attw)
+                    AttributeValue attribute =
+                        (from attw in context.AttributeValue where attw.Id == stringAttribute.AttributeValueId select attw)
                         .FirstOrDefault();
 
 

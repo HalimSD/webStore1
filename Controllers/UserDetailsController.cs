@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebApp1.Models;
+using WebApp1.Models.Database;
 
 namespace WebApp1.Controllers{
 

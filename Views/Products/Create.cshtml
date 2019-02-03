@@ -18,9 +18,9 @@
             container.appendChild(document.createTextNode("Attribute "+ i));
 
             var input = document.createElement("input");
-            input.name= "productsoort.Attribuutsoort["+i+"].Attrbuut";
+            input.name= "category.AttributeType["+i+"].Name";
             input.setAttribute("class","form-control");
-            input.id="productsoort.Attribuutsoort["+i+"].Attrbuut";
+            input.id="category.AttributeType["+i+"].Name";
             input.type="text";
             input.value="";
             input.placeholder="Attribuut Naam";
@@ -28,24 +28,24 @@
 
             var radioN = document.createElement("input");
 				radioN.type = "radio";
-                radioN.id = "productsoort.Attribuutsoort["+i+"].Type";
-				radioN.name = "productsoort.Attribuutsoort["+i+"].Type";
+                radioN.id = "category.AttributeType["+i+"].Type";
+				radioN.name = "category.AttributeType["+i+"].Type";
                 radioN.checked = true;
 				radioN.value = "number";
     
 
              var radioS = document.createElement("input");
 				radioS.type = "radio";
-                radioS.id = "productsoort.Attribuutsoort["+i+"].Type";
-				radioS.name = "productsoort.Attribuutsoort["+i+"].Type";
+                radioS.id = "category.AttributeType["+i+"].Type";
+				radioS.name = "category.AttributeType["+i+"].Type";
 				radioS.value = "string";
                 
                 
             /*
             var input2 = document.createElement("input");
-            input2.name= "productsoort.Attribuutsoort["+i+"].Type";
+            input2.name= "category.AttributeType["+i+"].Type";
             input2.setAttribute("class", "form-control");
-            input2.id="productsoort.Attribuutsoort["+i+"].Type";
+            input2.id="category.AttributeType["+i+"].Type";
             input2.type="text";
             input2.value="";
             input2.placeholder="Type";
@@ -79,21 +79,21 @@
     <form asp-action="Create" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
-            <label asp-for="@Model.productsoort.Naam" class="control-label"></label>
-            <input asp-for="@Model.productsoort.Naam" class="form-control" placeholder="Categorie Naam"/>
-            <span asp-validation-for="@Model.productsoort.Naam" class="text-danger"></span>
+            <label asp-for="@Model.Category.Naam" class="control-label"></label>
+            <input asp-for="@Model.Category.Naam" class="form-control" placeholder="Categorie Naam"/>
+            <span asp-validation-for="@Model.Category.Naam" class="text-danger"></span>
         </div>
          <div class="form-group">
-                <label asp-for="@Model.productsoort.Image" class="control-label"></label>
-                <input asp-for="@Model.productsoort.Image" type="file" Class="form-control-file" placeholder="Image"/>
-                <span asp-validation-for="@Model.productsoort.Image" class="text-danger"></span>
+                <label asp-for="@Model.Category.Image" class="control-label"></label>
+                <input asp-for="@Model.Category.Image" type="file" Class="form-control-file" placeholder="Image"/>
+                <span asp-validation-for="@Model.Category.Image" class="text-danger"></span>
         </div>
        <div id="categoryFormContent" class = "checkbox checkboxlist">
            <p>Kies de bovenliggende categorie(n) uit de onderstaande lijst</p>
                     @for (var i = 0; i < Model.parents.Count; i++)
                     {
-                        <input type="checkbox" asp-for="@Model.parents[i].selected"  />@Model.parents[i].Productsoorts.Naam
-                        <input type="hidden" asp-for="@Model.parents[i].Productsoorts.Id" /> 
+                        <input type="checkbox" asp-for="@Model.parents[i].selected"  />@Model.parents[i].Categories.Naam
+                        <input type="hidden" asp-for="@Model.parents[i].Categories.Id" /> 
                         <hr>                                                                                  
                     }
         </div>

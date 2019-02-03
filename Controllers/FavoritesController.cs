@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using WebApp1.Models;
+using WebApp1.Models.Database;
 
 namespace WebApp1.Controllers
 {
@@ -30,8 +31,8 @@ namespace WebApp1.Controllers
             string userId = userManager.GetUserId(User);
             List<FavoritesViewModel> products =
             (
-                from f in context.Favorites
-                from pw in context.Productwaarde
+                from f in context.Favorite
+                from pw in context.Product
                 where f.UserId == userId && f.ProductId == pw.Id
                 select new FavoritesViewModel
                 {
@@ -48,7 +49,7 @@ namespace WebApp1.Controllers
         [Authorize]
         public IActionResult AddProduct(int id)
         {
-            FavoritesModel model = new FavoritesModel
+            Favorite model = new Favorite
             {
                 ProductId = id,
                 UserId = userManager.GetUserId(User),
@@ -56,14 +57,14 @@ namespace WebApp1.Controllers
             };
 
             int count = 
-                (from f in context.Favorites
+                (from f in context.Favorite
                 where f.ProductId == model.ProductId && f.UserId == model.UserId
                 select f).Count();
             
             // If product is already within user's favorites then skip it
             if (count == 0)
             {
-                context.Favorites.Add(model);
+                context.Favorite.Add(model);
                 context.SaveChanges();
             }
             
@@ -76,16 +77,16 @@ namespace WebApp1.Controllers
         public IActionResult RemoveProduct(int id, string returnUrl)
         {
             var res =
-                from f in context.Favorites
+                from f in context.Favorite
                 where f.ProductId == id && f.UserId == userManager.GetUserId(User)
                 select f;
 
-            FavoritesModel model = res.FirstOrDefault();
+            Favorite model = res.FirstOrDefault();
             
             // If product is already within user's favorites then skip it
             if (res.Any() && model != null)
             {
-                context.Favorites.Remove(model);
+                context.Favorite.Remove(model);
                 context.SaveChanges();
             }
             

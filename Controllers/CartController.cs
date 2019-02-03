@@ -408,53 +408,6 @@ namespace WebApp1.Controllers
             return View("pay");
         }
 
-        [Route("History")]
-        public IActionResult oldOrderDetails(int id)
-        {
-            var x = id;
-            List<OrderDetail> besteldeItem = new List<OrderDetail>();
-            besteldeItem = (from b in _context.OrderDetail
-                            where b.OrderId == id
-                            select new OrderDetail
-                            {
-                                Id = b.Id,
-                                Title = b.Title,
-                                Price = b.Price,
-                                Quantity = b.Quantity,
-                                Image = b.Image
-                            }
-                ).ToList();
-
-            ViewBag.besteldeItem = besteldeItem;
-            ViewBag.shippingFee = (from b in _context.Order where b.Id == id select b.ShippingFee)
-                .FirstOrDefault();
-
-            return View();
-        }
-
-        [Route("oldOrders")]
-        public IActionResult oldOrders(int pageNumber = 1)
-        {
-            // Helper object used to generate a page model
-            PaginationHelper<Order>
-                pagination = new PaginationHelper<Order>(maxPageSize, _context.Order);
-
-            // Prepare a query that we will pass to the pagination helper
-            IQueryable<Order> query = (
-                from x in _context.Order
-                where x.UserId == _userManager.GetUserId(User)
-                select new Order
-                {
-                    Id = x.Id,
-                    Status = x.Status,
-                    Date = x.Date
-                }
-            );
-            // Let the pagination helper build a page model and pass it to the view
-            PaginationViewModel<Order> model = pagination.GetPageIQueryable(pageNumber, query);
-            return View(model);
-        }
-
         [Route("pay")]
         public IActionResult pay(SubscribeModel model)
         {

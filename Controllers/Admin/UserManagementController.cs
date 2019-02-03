@@ -8,6 +8,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using System;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using System.Text.Encodings.Web;
+using WebApp1.Areas.Identity.Pages.Account;
 using WebApp1.Models.Database;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -19,18 +22,20 @@ namespace ContosoRTM.Controllers
         private readonly WebshopContext _dbContext;
         private readonly UserManager<Users> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-
+        private readonly IEmailSender _emailSender;
         public UserManagementController(
             WebshopContext dbContext,
             UserManager<Users> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            IEmailSender emailSender)
         {
             _dbContext = dbContext;
             _userManager = userManager;
             _roleManager = roleManager;
+            _emailSender = emailSender;
         }
+        [Authorize(Roles = "Admin")]
 
-        //[Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Index()
         {
@@ -45,8 +50,8 @@ namespace ContosoRTM.Controllers
 
             return View(vm);
         }
+        [Authorize(Roles = "Admin")]
 
-        //[Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> AddRole(string id)
         {
@@ -59,8 +64,8 @@ namespace ContosoRTM.Controllers
             };
             return View(vm);
         }
+        [Authorize(Roles = "Admin")]
 
-        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddRole(UserManagementAddRole rvm)
         {
@@ -83,6 +88,7 @@ namespace ContosoRTM.Controllers
 
         }
         [Authorize]
+
         [HttpGet]
         public async Task<IActionResult> updateInfo()
         {
@@ -103,8 +109,8 @@ namespace ContosoRTM.Controllers
             };
             return View(user);
         }
-
         [Authorize]
+
         [HttpPost]
         public async Task<IActionResult> updateInfo(UserEdit model)
         {
@@ -138,8 +144,8 @@ namespace ContosoRTM.Controllers
             }
             return RedirectToAction("Index");
         }
-
         [Authorize(Roles = "Admin")]
+
         [HttpGet]
         public async Task<IActionResult> updateInfoAdmin(string id)
         {
@@ -161,8 +167,8 @@ namespace ContosoRTM.Controllers
             };
             return View(user);
         }
-
         [Authorize(Roles = "Admin")]
+
         [HttpPost]
         public async Task<IActionResult> updateInfoAdmin(UserEdit model)
         {
@@ -198,35 +204,30 @@ namespace ContosoRTM.Controllers
             }
             return RedirectToAction("Index");
         }
-
         [Authorize(Roles = "Admin")]
+
         public async Task<ActionResult> ResetUserPassword(string id)
         {
             Users appUser = await _userManager.FindByIdAsync(id);
             UserEdit user = new UserEdit()
             {
                 UserId = appUser.Id,
-                Password = appUser.PasswordHash,
-                Email = appUser.Email,
-                FirstName = appUser.FirstName,
-                LastName = appUser.LastName,
-                BirthDate = appUser.BirthDate,
-                HouseNumber = appUser.HouseNumber,
-                Street = appUser.Street,
-                PostalCode = appUser.PostalCode,
-                City = appUser.City,
+                Email = appUser.Email
             };
 
             return View(user);
         }
-
         [Authorize(Roles = "Admin")]
+
         [HttpPost]
         public async Task<ActionResult> ResetUserPassword(UserEdit model)
         {
-            if (ModelState.IsValid)
+
+            var x = await _userManager.FindByEmailAsync(model.Email);
+
+            if (model.Password != null)
             {
-                var x = await _userManager.FindByIdAsync(model.UserId);
+
                 await _userManager.RemovePasswordAsync(x);
                 await _userManager.AddPasswordAsync(x, model.Password);
 
@@ -234,15 +235,32 @@ namespace ContosoRTM.Controllers
                 TempData["Message"] = "Password successfully reset to " + model.Password;
                 TempData["MessageValue"] = "1";
 
+
+
                 return RedirectToAction("Index");
             }
+
+            var code = await _userManager.GeneratePasswordResetTokenAsync(x);
+            var callbackUrl =
+            Url.Page(
+                "/Account/ResetPassword",
+                pageHandler: null,
+                values: new { area = "Identity", code },
+                protocol: Request.Scheme
+                );
+            ;
+            await _emailSender.SendEmailAsync(
+                x.Email,
+                "Reset Password",
+                $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
 
             TempData["Message"] = "Invalid User Details. Please try again in some minutes ";
             TempData["MessageValue"] = "0";
             return View();
         }
 
-        // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteUser(string id)
         {
             var currentUser = await _userManager.GetUserAsync(HttpContext.User);
@@ -255,7 +273,9 @@ namespace ContosoRTM.Controllers
                     x.Remove(item);
                 }
                 await _userManager.DeleteAsync(user);
-            }else{
+            }
+            else
+            {
                 RedirectToAction("Index");
             }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using WebApp1.Models;
+using WebApp1.Models.Database;
 
 namespace WebApp1.Areas.Identity.Pages.Account
 {
@@ -20,17 +22,21 @@ namespace WebApp1.Areas.Identity.Pages.Account
         private readonly UserManager<Users> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly WebshopContext _context;
 
         public RegisterModel(
             UserManager<Users> userManager,
             SignInManager<Users> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            WebshopContext context
+            )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
         [BindProperty]
@@ -163,5 +169,20 @@ namespace WebApp1.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
+        // public ActionResult GetUsersInRole()
+        // {
+        //    var x = _context.UserRoles.Where(a => a.RoleId == "").Select(b => b.UserId).Distinct().ToList(); 
+            
+        //     var user1 = (from user in _userManager.Users select new
+        //     {
+        //         UserId = user.Id,
+        //         Username = user.UserName,
+        //         Email = user.Email,
+        //         RoleNames = (from userRole in user.Roles
+        //                      join role in context.Roles on userRole.RoleId
+        //                      equals role.Id
+        //                      select role.Name).ToList()
+        //     }).ToList();
+        // }
     }
 }

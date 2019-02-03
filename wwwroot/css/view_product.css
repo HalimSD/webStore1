@@ -142,3 +142,20 @@ div.descriptionTitle {
     color: orange;
     text-decoration: underline;
 }
+
+
+
+input.CartBtnRed {
+    background-color: red;
+    border-radius: 5px;
+    color: white;
+    width: 165px;
+    height: 45px;
+    font-size: 14px;
+    border-style: solid;
+}
+input.CartBtnRed:hover {
+    background-color: #ae0000;
+    transition: 0.2s;
+    border: none;
+}

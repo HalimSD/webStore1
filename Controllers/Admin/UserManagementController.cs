@@ -15,7 +15,7 @@ using WebApp1.Models.Database;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace ContosoRTM.Controllers
+namespace Controllers
 {
     public class UserManagementController : Controller
     {
@@ -23,11 +23,16 @@ namespace ContosoRTM.Controllers
         private readonly UserManager<Users> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEmailSender _emailSender;
+
+        public enum ResultMessage
+        {
+            passwordReset, emailSent, passwordIsRequired, error
+        }
         public UserManagementController(
-            WebshopContext dbContext,
-            UserManager<Users> userManager,
-            RoleManager<IdentityRole> roleManager,
-            IEmailSender emailSender)
+   WebshopContext dbContext,
+   UserManager<Users> userManager,
+   RoleManager<IdentityRole> roleManager,
+   IEmailSender emailSender)
         {
             _dbContext = dbContext;
             _userManager = userManager;
@@ -222,24 +227,27 @@ namespace ContosoRTM.Controllers
         [HttpPost]
         public async Task<ActionResult> ResetUserPassword(UserEdit model)
         {
-
             var x = await _userManager.FindByEmailAsync(model.Email);
-
             if (model.Password != null)
             {
-
                 await _userManager.RemovePasswordAsync(x);
                 await _userManager.AddPasswordAsync(x, model.Password);
 
-
-                TempData["Message"] = "Password successfully reset to " + model.Password;
-                TempData["MessageValue"] = "1";
-
-
-
-                return RedirectToAction("Index");
+                ViewBag.resultMsg = ResultMessage.passwordReset;
+                return View();
             }
-
+            else if (model.Password == null)
+            {
+                ViewBag.resultMsg = ResultMessage.passwordIsRequired;
+                return View();
+            }
+            ViewBag.resultMsg = ResultMessage.error;
+            return View();
+        }
+        [HttpPost]
+        public async Task<ActionResult> sendEmailToUser(UserEdit model)
+        {
+            var x = await _userManager.FindByEmailAsync(model.Email);
             var code = await _userManager.GeneratePasswordResetTokenAsync(x);
             var callbackUrl =
             Url.Page(
@@ -253,11 +261,8 @@ namespace ContosoRTM.Controllers
                 x.Email,
                 "Reset Password",
                 $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-
-            TempData["Message"] = "Invalid User Details. Please try again in some minutes ";
-            TempData["MessageValue"] = "0";
-            return View();
+            ViewBag.resultMsg = ResultMessage.emailSent;
+            return View("ResetUserPassword");
         }
 
         [Authorize(Roles = "Admin")]

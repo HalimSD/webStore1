@@ -17,6 +17,12 @@ export function createPagination(jsonModel, inputHandler) {
     while (root.firstChild) {
         root.removeChild(root.firstChild);
     }
+    
+    // Remove all items in the pop over form dropdown
+    let popoverDropdown = document.getElementById("popover-content");
+    while (popoverDropdown.firstChild) {
+        popoverDropdown.removeChild(popoverDropdown.firstChild);
+    }
 
     // Create the 'jump to first page' button
     if (pageNumber > 1) {
@@ -39,6 +45,7 @@ export function createPagination(jsonModel, inputHandler) {
         }
         aElement.className = "page-link";
         aElement.appendChild(document.createTextNode("Vorige"));
+        aElement.href = "#";
         liElement.appendChild(aElement);
         root.appendChild(liElement);
     }
@@ -74,6 +81,7 @@ export function createPagination(jsonModel, inputHandler) {
         }
         aElement.className = "page-link";
         aElement.appendChild(document.createTextNode("Volgende"));
+        aElement.href = "#";
         liElement.appendChild(aElement);
         root.appendChild(liElement);
     }
@@ -83,7 +91,7 @@ export function createPagination(jsonModel, inputHandler) {
         createSkipToPageBtn(inputHandler, root, "»", totalPages);
     }
 
-    //createPopoverForm(pageNumber, totalPages, root, inputHandler);
+    createPopover(pageNumber, totalPages, root, inputHandler);
 }
 
 /**
@@ -108,6 +116,7 @@ function createPageBtn(inputHandler, root, active, pageNumber) {
     });
     aElement.className = "page-link";
     aElement.appendChild(document.createTextNode(pageNumber.toString()));
+    aElement.href = "#";
     liElement.appendChild(aElement);
     root.appendChild(liElement);
 }
@@ -126,10 +135,34 @@ function createSkipToPageBtn(inputHandler, root, txt, skipToPageNumber) {
     root.appendChild(liElement);
 }
 
+function createPopoverForm() {
+    
+    // Create the content
+    let br = document.createElement("br");
+    let root = document.getElementById("popover-content");
+    let form = document.createElement("form");
+    let select = document.createElement("select");
+    let button = document.createElement("button");
+    form.id = "popover-form";
+    select.id = "pageJumpFormSelect";
+    select.className = "form-control";
+    button.type = "submit";
+    button.className = "btn btn-primary btn-block";
+    button.innerHTML = "Ga";
+    
+    form.appendChild(select);
+    form.appendChild(br);
+    form.appendChild(button);
+    root.appendChild(form);
+}
+
+
 
 // Doesn't work
-function createPopoverForm(pageNumber, totalPages, root, inputHandler) {
+function createPopover(pageNumber, totalPages, root, inputHandler) {
 
+    createPopoverForm();
+    
     // Create the <a> element that creates the popover on click
     let aElement = document.createElement("a");
     aElement.id = "listPageJumper";
@@ -147,24 +180,26 @@ function createPopoverForm(pageNumber, totalPages, root, inputHandler) {
     iconElement.className = "inline-icon material-icons";
     iconElement.append(document.createTextNode("arrow_drop_down"));
     aElement.appendChild(iconElement);
-
-    // Populate the form select input
     let selectElement = document.getElementById("pageJumpFormSelect");
+    
+    // Populate the form select input
     for (let i = 1; i <= totalPages; i++) {
         let option = document.createElement("option");
         option.value = i.toString();
         option.innerHTML = i.toString();
         selectElement.appendChild(option);
     }
-
-    let form = document.getElementById("paginationPopoverForm");
-    form.onsubmit = function(e) {
-        e.preventDefault();
-        console.log("dd");
-        inputHandler(selectElement.options[selectElement.selectedIndex].value);
-
-        e.returnValue = false;
-    };
+    
+    $(document).on('submit', '.popover-body',function(event){
+        console.log("Event triggered!");
+        event.preventDefault();
+        let selectElement = document.getElementsByClassName("popover-body")[0].querySelector("form").querySelector("select");
+        let value = selectElement.options[selectElement.selectedIndex].value;
+        inputHandler(value);
+        $('#listPageJumper').popover('hide');
+        event.stopImmediatePropagation();
+    });
+    
     
     $('#listPageJumper').popover({
         html: true,
@@ -172,4 +207,5 @@ function createPopoverForm(pageNumber, totalPages, root, inputHandler) {
             return $("#popover-content").html();
         }
     });
+    
 }

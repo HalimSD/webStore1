@@ -1,0 +1,57 @@
+@model WebApp1.Models.Helper.PaginationViewModel<WebApp1.Models.Database.Order>
+@{
+    ViewData["Title"] = "Bestellings geschiedenis";
+}
+<link rel="stylesheet" href="~/css/product_creation_generic.css">
+<link rel="stylesheet" href="~/css/favorites.css">
+<div class="pageRoot">
+    <h2>Bestellings geschiedenis</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                <input id="filterId" type="text" class="form-control" placeholder="Filteren bij ID">
+            </th>
+            <th>
+                <input id="filterDate" type="text" class="form-control" placeholder="Filteren bij Datum">
+            </th>
+            <th>
+                <select id="filterStatus" type="text" class="form-control">
+                    <option value="" selected>Alles</option>
+                    <option value="Onderweg">Onderweg</option>
+                    <option value="Bezorgd">Bezorgd</option>
+                    <option value="In Behandeling">In Behandeling</option>
+                    <option value="Geannuleerd">Geannuleerd</option>
+                    <option value="Mislukt">Mislukt</option>
+                </select>
+            </th>
+            <th>
+
+            </th>
+        </tr>
+        <tr>
+            <th>
+                Bestelling ID
+            </th>
+            <th>
+                Bestelling Datum
+            </th>
+            <th>
+                Bestelling Status
+            </th>
+            <th>
+                Details
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody id="tableBody">
+        </tbody>
+    </table>
+    <br>
+    <ul id="pagination" class="pagination flex-wrap" style="margin-top: 10px;">
+    </ul>
+    <div id="popover-content" style="display: none;">
+    </div>
+</div>
+<script type="module" src="~/js/loadUserOrders.js"></script>

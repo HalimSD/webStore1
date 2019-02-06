@@ -1,50 +1,45 @@
-﻿@using Microsoft.AspNetCore.Identity;
-@model UserManagementIndex
-@inject UserManager<Users> userManager
-
+﻿
 @{
     ViewData["Title"] = "Gebruikers beheer";
 }
 
 <link rel="stylesheet" href="~/css/product_creation_generic.css">
-<div class="pageRoot">
+<link rel="stylesheet" href="~/css/shopping_cart.css">
+<div class="pageRoot" style="margin-left: 20%; margin-right: 20%;">
     <h2>Gebruikers Beheer</h2>
     <hr>
     Op deze pagina kunt u alle geregistreerde gebruikers zien. Voor elk gebruiker kunt u administratieve acties uit voeren.<br>
     <br>
-    <table>
+    <table id="table">
         <thead>
         <tr>
+            <th>
+                <input id="filterId" type="text" class="form-control" placeholder="Filteren bij ID">
+            </th>
+            <th>
+                <input id="filterEmail" type="text" class="form-control" placeholder="Filteren bij E-Mail">
+            </th>
+            <th>
+                <input id="filterRole" type="text" class="form-control" placeholder="Filteren bij Rollen">
+            </th>
+            <th>
+            </th>
+        </tr>
+        <tr>
+            <th>ID</th>
             <th>Email</th>
             <th>Rollen</th>
             <th>Opties</th>
-            <th>Bewerken</th>
-            <th>Verwijderen</th>
-            <th>Wachtwoord</th>
         </tr>
         </thead>
-        <tbody>
-        @foreach (var user in Model.Users)
-        {
-            <tr>
-                <td>@user.Email</td>
-                <td>@(string.Join(",", await userManager.GetRolesAsync(user)))</td>
-                <td><a asp-controller="UserManagement" asp-action="AddRole" asp-route-id="@user.Id">Voeg Rol Toe</a></td>
-                <td><a asp-controller="UserManagement" asp-action="updateInfoAdmin" asp-route-id="@user.Id">Bewerken</a></td>
-                <td><a asp-controller="UserManagement" asp-action="DeleteUser" asp-route-id="@user.Id">Verwijderen</a></td>
-                <td><a asp-controller="usermanagement" asp-action="ResetUserPassword" asp-route-id="@user.Id">Reset Wachtwoord</a></td> 
-           
-            </tr>
-        }
+        <tbody id="tableBody">
         </tbody>
     </table>
+    <ul id="pagination" class="pagination flex-wrap" style="margin-top: 10px;">
+    </ul>
+    <div id="popover-content" style="display: none;">
+    </div>
 </div>
 
-<style>
-    tbody {
-        margin-top: 10px;
-    }
-    table {
-        width: 100%;
-    }
-</style>
+
+<script type="module" src="~/js/loadUsers.js"></script>

@@ -10,8 +10,12 @@ using Microsoft.AspNetCore.Authorization;
 using System;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Text.Encodings.Web;
+using Microsoft.EntityFrameworkCore.Scaffolding.Internal;
+using Remotion.Linq.Clauses;
 using WebApp1.Areas.Identity.Pages.Account;
 using WebApp1.Models.Database;
+using WebApp1.Models.Helper;
+using WebApp1.Models.ViewModels;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,40 +27,76 @@ namespace Controllers
         private readonly UserManager<Users> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEmailSender _emailSender;
+        private readonly int maxPageSize = 25;
 
         public enum ResultMessage
         {
-            passwordReset, emailSent, passwordIsRequired, error
+            passwordReset,
+            emailSent,
+            passwordIsRequired,
+            error
         }
+
         public UserManagementController(
-   WebshopContext dbContext,
-   UserManager<Users> userManager,
-   RoleManager<IdentityRole> roleManager,
-   IEmailSender emailSender)
+            WebshopContext dbContext,
+            UserManager<Users> userManager,
+            RoleManager<IdentityRole> roleManager,
+            IEmailSender emailSender)
         {
             _dbContext = dbContext;
             _userManager = userManager;
             _roleManager = roleManager;
             _emailSender = emailSender;
         }
-        [Authorize(Roles = "Admin")]
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Index()
         {
-
-            var vm = new UserManagementIndex
-            {
-                Users = _dbContext.Users.OrderBy(u => u.Email).ToList()
-                // .Include(u => u.Roles).ToList()
-            };
-
-
-
-            return View(vm);
+            return View();
         }
-        [Authorize(Roles = "Admin")]
 
+        [Authorize(Roles = "Admin")]
+        public JsonResult GetUsersData(int pageIndex = 1)
+        {
+            // Create the PaginationHelper instance and use it to get the first page of productwaarde
+            PaginationHelper<Users> pagination = new PaginationHelper<Users>(maxPageSize, _dbContext.Users);
+            PaginationViewModel<Users> data = pagination.GetPage(pageIndex);
+
+            PaginationViewModel<UserListViewModel> model = UserListViewModelHelper.ConvertToViewModel(_dbContext, data);
+
+            return new JsonResult(model);
+        }
+        
+        [Authorize(Roles = "Admin")]
+        public JsonResult GetUsersDataFiltered(string id="", string email="", string role="", int pageIndex=1)
+        {
+            // Create a PaginationHelper instance. It will be used to generate a page
+            PaginationHelper<Users> pagination = new PaginationHelper<Users>(maxPageSize,_dbContext.Users);
+            
+            // Some error checking as JS may give null values!
+            if (id == null) { id = ""; }
+            if (email == null) { email = ""; }
+            if (role == null) { role = ""; }
+
+            // Since the pagination helper doesn't have built-in filtering,
+            // we'll have to prepare a custom filtered query
+            PaginationViewModel<Users> data = pagination.GetPage(pageIndex);
+
+            PaginationViewModel<UserListViewModel> model = UserListViewModelHelper.ConvertToViewModel(_dbContext, data);
+            model.Data =
+            (
+                from d in model.Data
+                where d.Id.ToUpper().Contains(id.ToUpper()) &&
+                      d.Email.ToUpper().Contains(email.ToUpper()) &&
+                      d.Roles.ToUpper().Contains(role.ToUpper())
+                select d
+            ).ToList();
+
+            return new JsonResult(model);
+        }
+
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> AddRole(string id)
         {
@@ -69,8 +109,8 @@ namespace Controllers
             };
             return View(vm);
         }
-        [Authorize(Roles = "Admin")]
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddRole(UserManagementAddRole rvm)
         {
@@ -82,18 +122,19 @@ namespace Controllers
                 {
                     return RedirectToAction("Index");
                 }
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(error.Code, error.Description);
                 }
             }
+
             rvm.Email = user.Email;
             rvm.Roles = GetAllRoles();
             return View(rvm);
-
         }
-        [Authorize]
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> updateInfo()
         {
@@ -110,12 +151,11 @@ namespace Controllers
                 City = appUser.City,
                 Gender = appUser.Gender,
                 TelephoneNumber = appUser.TelephoneNumber
-
             };
             return View(user);
         }
-        [Authorize]
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> updateInfo(UserEdit model)
         {
@@ -139,18 +179,19 @@ namespace Controllers
 
                 if (result.Succeeded)
                 {
-
                     return View(model);
                 }
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(error.Code, error.Description);
                 }
             }
+
             return RedirectToAction("Index");
         }
-        [Authorize(Roles = "Admin")]
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> updateInfoAdmin(string id)
         {
@@ -168,12 +209,11 @@ namespace Controllers
                 City = appUser.City,
                 Gender = appUser.Gender,
                 TelephoneNumber = appUser.TelephoneNumber
-
             };
             return View(user);
         }
-        [Authorize(Roles = "Admin")]
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> updateInfoAdmin(UserEdit model)
         {
@@ -199,18 +239,19 @@ namespace Controllers
 
                 if (result.Succeeded)
                 {
-
                     return RedirectToAction("Index");
                 }
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(error.Code, error.Description);
                 }
             }
+
             return RedirectToAction("Index");
         }
-        [Authorize(Roles = "Admin")]
 
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> ResetUserPassword(string id)
         {
             Users appUser = await _userManager.FindByIdAsync(id);
@@ -222,8 +263,8 @@ namespace Controllers
 
             return View(user);
         }
-        [Authorize(Roles = "Admin")]
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult> ResetUserPassword(UserEdit model)
         {
@@ -241,20 +282,22 @@ namespace Controllers
                 ViewBag.resultMsg = ResultMessage.passwordIsRequired;
                 return View();
             }
+
             ViewBag.resultMsg = ResultMessage.error;
             return View();
         }
+
         [HttpPost]
         public async Task<ActionResult> sendEmailToUser(UserEdit model)
         {
             var x = await _userManager.FindByEmailAsync(model.Email);
             var code = await _userManager.GeneratePasswordResetTokenAsync(x);
             var callbackUrl =
-            Url.Page(
-                "/Account/ResetPassword",
-                pageHandler: null,
-                values: new { area = "Identity", code },
-                protocol: Request.Scheme
+                Url.Page(
+                    "/Account/ResetPassword",
+                    pageHandler: null,
+                    values: new {area = "Identity", code},
+                    protocol: Request.Scheme
                 );
             ;
             await _emailSender.SendEmailAsync(
@@ -277,6 +320,7 @@ namespace Controllers
                 {
                     x.Remove(item);
                 }
+
                 await _userManager.DeleteAsync(user);
             }
             else
@@ -286,12 +330,10 @@ namespace Controllers
 
             return RedirectToAction("Index");
         }
+
         private async Task<Users> GetUserById(string id) =>
             await _userManager.FindByIdAsync(id);
 
         private SelectList GetAllRoles() => new SelectList(_roleManager.Roles.OrderBy(r => r.Name));
-
     }
-
-
 }

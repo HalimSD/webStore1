@@ -39,7 +39,11 @@ namespace WebApp1
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+<<<<<<< HEAD
             services.AddDbContext<WebshopContext>(opt => opt.UseNpgsql(@"Host=localhost;Database=webShop34234324234234;Username=postgres;Password=wanne"));
+=======
+            services.AddDbContext<WebshopContext>(opt => opt.UseNpgsql(@"Host=localhost;Database=webShop;Username=postgres;Password="));
+>>>>>>> e09653ba0b43d46c0df7e6e28505da8a1f76c3c7
 
             services.AddSession(options =>
             {
@@ -57,6 +61,11 @@ namespace WebApp1
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSingleton<IEmailSender, EmailSender>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().AddRazorPagesOptions(options =>
+{
+    options.AllowAreas = true;
+});
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, WebshopContext context)
@@ -67,7 +76,7 @@ namespace WebApp1
                 app.UseDatabaseErrorPage();
             }
             else
-            {   
+            {
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }

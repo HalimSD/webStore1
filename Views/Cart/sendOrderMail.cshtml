@@ -4,10 +4,60 @@
 @using (Html.BeginForm("EmailOrder", "Cart", FormMethod.Post))
 {
    
-    <h2>U bent niet ingelogd, voer uw e-mailadres in om een bevestiging te ontvangen!</h2>
+    <h2>U bent niet ingelogd, vul de volginde gegevens in!</h2>
     <hr>
-    @Html.TextBoxFor(model => model.Email, new {required = "required", type = "email"})
-    @Html.ValidationMessageFor(model => model.Email)
+   
+            <div class="form-group">
+                <label asp-for="Email">Email</label>
+                <input asp-for="Email" class="form-control" />
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label asp-for="FirstName">Voornaam</label>
+                <input asp-for="FirstName" class="form-control" />
+                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group" >
+                <label asp-for="LastName">Achternaam</label>
+                <input asp-for="LastName" class="form-control" />
+                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label asp-for="BirthDate">Geboortedatum</label>
+                <input asp-for="BirthDate" class="form-control" />
+                @Html.ValidationMessageFor(model => model.BirthDate, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label asp-for="TelephoneNumber"></label>
+                <input asp-for="TelephoneNumber" class="form-control" />
+                @Html.ValidationMessageFor(model => model.TelephoneNumber, "", new { @class = "text-danger" })
+            </div>
+            <hr/>
+            <div class="form-group">
+                <label asp-for="Street">Straat</label>
+                <input asp-for="Street" class="form-control" />
+                @Html.ValidationMessageFor(model => model.Street, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label asp-for="HouseNumber">Huisnummer</label>
+                <input asp-for="HouseNumber" class="form-control" />
+                @Html.ValidationMessageFor(model => model.HouseNumber, "", new { @class = "text-danger" })
+            </div> 
+            <div class="form-group">
+                <label asp-for="PostalCode">Postcode</label>
+                <input asp-for="PostalCode" class="form-control" />
+                @Html.ValidationMessageFor(model => model.PostalCode, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label asp-for="City">Stad</label>
+                <input asp-for="City" class="form-control" />
+                @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label asp-for="Country">Land</label>
+                <input asp-for="Country" class="form-control" />
+                @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
+            </div>
     <input type="submit" class="btn btn-primary" value="Doorgaan" asp-controller="cart" asp-action="pay">
 }
 </div>

@@ -16,6 +16,8 @@ using Microsoft.EntityFrameworkCore.Scaffolding.Internal;
 using WebApp1.Models.Database;
 using WebApp1.Models.Helper;
 using WebApp1.Models.ViewModels;
+using FluentValidation.Results;
+using System.ComponentModel;
 
 namespace WebApp1.Controllers
 {
@@ -25,6 +27,7 @@ namespace WebApp1.Controllers
         private UserManager<Users> _userManager;
         private IConverter _converter;
         private readonly IHostingEnvironment _appEnvironment;
+        BindingList<string> errors = new BindingList<string>();
         private readonly int maxPageSize = 5;
 
         public const string SessionKeyName = "cart";
@@ -45,7 +48,7 @@ namespace WebApp1.Controllers
             var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
             ViewData["cart"] = cart;
 
-            if (cart == null || cart.ToArray().Length == 0 )
+            if (cart == null || cart.ToArray().Length == 0)
             {
                 return View("EmptyShoppingCart");
             }
@@ -251,15 +254,17 @@ namespace WebApp1.Controllers
 
             return View("checkOut");
         }
-      
-         public IActionResult userLoginCheck()
+
+        public IActionResult userLoginCheck()
         {
-            var currentUser =  _userManager.GetUserAsync(User).Result;
+            var currentUser = _userManager.GetUserAsync(User).Result;
             if (currentUser == null)
             {
-                return RedirectToAction("sendOrderMail", "cart");
+                return View("askregister", "cart");
 
-            }else {
+            }
+            else
+            {
                 return RedirectToAction("Pay", "cart");
             }
         }
@@ -271,7 +276,7 @@ namespace WebApp1.Controllers
             ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
             return View("sendOrderMail");
         }
-        public void bestellingPlaatsenUnSub(SubscribeModel model)
+        public IActionResult bestellingPlaatsenUnSub(SubscribeModel model)
         {
             var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
             ViewBag.cart = cart;
@@ -279,10 +284,22 @@ namespace WebApp1.Controllers
             ViewBag.total = CalculateShippingCost(ViewBag.total) + ViewBag.total;
             Order order = new Order();
             Product product = new Product();
+            AddressValidator validator = new AddressValidator();
             order.Status = "Onderweg";
             order.Date = DateTime.Now;
             var id = order.UserId;
             var email = model.Email;
+            // var results = validator.Validate(model);
+            // if (results.IsValid == false)
+            // {
+            //     foreach (ValidationFailure failure in results.Errors)
+            //     {
+            //         ModelState.AddModelError(failure.PropertyName, failure.ErrorMessage);
+            //         return View("sendOrderMail");
+
+            //         // errors.Add($"{failure.PropertyName}: {failure.ErrorMessage}");
+            //     }
+            // }
             if (id == null)
             {
                 order.email = email;
@@ -308,6 +325,8 @@ namespace WebApp1.Controllers
                 _context.Add(orderDetail);
                 _context.SaveChanges();
             }
+            return View("sendOrderMail");
+
         }
 
         public void bestellingPlaatsen(SubscribeModel model)
@@ -321,9 +340,12 @@ namespace WebApp1.Controllers
             order.Status = "Onderweg";
             order.Date = DateTime.Now;
             var userId = _userManager.GetUserId(User);
-            if(userId == null){
+            if (userId == null)
+            {
                 order.email = model.Email;
-            }else{
+            }
+            else
+            {
                 order.email = _userManager.GetUserAsync(User).Result.Email;
                 order.UserId = _userManager.GetUserAsync(User).Result.Id;
             }
@@ -381,6 +403,7 @@ namespace WebApp1.Controllers
         [HttpPost]
         public ActionResult EmailOrder(SubscribeModel model)
         {
+           
             if (ModelState.IsValid)
             {
                 var email = model.Email;
@@ -411,9 +434,23 @@ namespace WebApp1.Controllers
         [Route("pay")]
         public IActionResult pay(SubscribeModel model)
         {
+            AddressValidator validator = new AddressValidator();
+            var results = validator.Validate(model);
+            if (results.IsValid == false)
+            {
+                foreach (ValidationFailure failure in results.Errors)
+                {
+                    ModelState.AddModelError(failure.PropertyName, failure.ErrorMessage);
+
+                    // errors.Add($"{failure.PropertyName}: {failure.ErrorMessage}");
+                    return View("sendOrderMail");
+
+                }
+            }
             var email = _userManager.GetUserName(User);
-            if ( email == null){
-               email = model.Email;
+            if (email == null)
+            {
+                email = model.Email;
             }
 
 

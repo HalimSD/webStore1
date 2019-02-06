@@ -19,6 +19,7 @@
     }
 
 	var i=0;
+
         function addFields(){
             var container = document.getElementById("container");
             // Clear previous contents of the container
@@ -29,7 +30,7 @@
                 
 				
             // Create an <input> element, set its type and name attributes
-            container.appendChild(document.createTextNode("Custom Atribute "+ i));
+            container.appendChild(document.createTextNode("Extra Attribuut "+ i));
 
             var input = document.createElement("input");
             input.name= "newcustom["+i+"].extraAtribute.Name";
@@ -59,9 +60,9 @@
                 
 
             var input3 = document.createElement("input");
-            input3.name= "newcustom["+i+"].extraAtributewaarde.waarde";
+            input3.name= "newcustom["+i+"].extraAtributewaarde.Waarde";
             input3.setAttribute("class", "form-control");
-            input3.id="newcustom["+i+"].extraAtributewaarde.waarde";
+            input3.id="newcustom["+i+"].extraAtributewaarde.Waarde";
             input3.type="text";
             input3.value="";
             input3.placeholder="Waarde";
@@ -79,22 +80,24 @@
             // Append a line break 
             container.appendChild(document.createElement("br"));
             i++;
+           
 
         }
     </script> 
+<form asp-action="Create3" enctype="multipart/form-data">    
 <div class="pageRoot">
     <h2>Product aanmaken</h2>
-
-    <h4>Producten</h4>
+    <h4>Standaard attributen</h4>
+    <h6>*Deze velden moeten worden ingevuld</h6>
     <hr />
 
    
     <div class="row">
         <div class="col-md-12">
-            <form asp-action="Create3" enctype="multipart/form-data">
+            
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="Product.Title" class="control-label">Titel</label>
+                    <label asp-for="Product.Title" class="control-label">Naam</label>
                     <input asp-for="Product.Title" class="form-control" placeholder="Title"/>
                     <span asp-validation-for="Product.Title" class="text-danger"></span>
                 </div>
@@ -123,34 +126,60 @@
                 </div>
 
                  <div class="form-group">
+                <label asp-for="Product.Image" class="control-label">Plaatje</label>
                 <input asp-for="Product.Image" type="file" Class="form-control-file" placeholder="Image"/>
                 <span asp-validation-for="Product.Image" class="text-danger"></span>
                 </div>
-                @{var i = 0;}
-                 @foreach (var item in Model.Attribuutsoorts)
-                    {
+            </div>
+        </div>
+    </div>
+                @if(Model.Attribuutsoorts.Count!=0){
+                    <div class="pageRoot">
+                     <h4>Categorie attributen</h4>
+                    <h6>*Deze velden moeten worden ingevuld</h6>
+                    <hr />
+                    @{var i = 0;}
+                    @foreach (var item in Model.Attribuutsoorts)
+                        {
+                        
+                        <div class="form-group">
+                            <label class="control-label">@item.Name, @item.Type </label>
+                            <input type="text"  class="form-control" name="Attribuutsoorts[@i].AttributeValues[0].Waarde"/>
+                            <span asp-validation-for="Attribuutsoorts[@i].AttributeValues[0].Waarde" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="hidden"  class="form-control" name="Attribuutsoorts[@i].AttributeValues[0].AttributeTypeId" value='@item.Id'/>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="hidden"  class="form-control" name="Attribuutsoorts[@i].Name" value='@item.Name'/>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="hidden"  class="form-control" name="Attribuutsoorts[@i].Type" value='@item.Type'/>
+                        </div>
+                        i = i +1;
+                        }
+                    </div>
+                }
+               
                     
-                    <div class="form-group">
-                        <label class="control-label">@item.Name, @item.Type </label>
-                        <input type="text"  class="form-control" name="Attribuutsoorts[@i].AttributeValues[0].Waarde"/>
-                        <span asp-validation-for="Attribuutsoorts[@i].AttributeValues[0].Waarde" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <input type="hidden"  class="form-control" name="Attribuutsoorts[@i].AttributeValues[0].AttributeTypeId" value='@item.Id'/>
-                    </div>
-
-                    <div class="form-group">
-                        <input type="hidden"  class="form-control" name="Attribuutsoorts[@i].Name" value='@item.Name'/>
-                    </div>
-
-                    <div class="form-group">
-                        <input type="hidden"  class="form-control" name="Attribuutsoorts[@i].Type" value='@item.Type'/>
-                    </div>
-                    i = i +1;
+                    <div class="pageRoot">
+                    <h4>Optionele attributen </h4><h6>*Deze velden zijn optioneel dus hoeven niet worden ingevuld</h6>
+                    <hr />
+                    <br>
+                    @if(Model.AcustomAtributesall.Count != 0){
+                         <h5>Lijst met alle attributen</h5>
+                    <h6>*U kunt ervoor kiezen om een attribuut van een andere categorie uit de onderstaande lijst ook bij u product te zetten</h6>
+                    <h6>*Klik op een onderstaande button om te zien welke attributen de categorie heeft</h6>
+                    <h6>*U voegt een attribuut toe door de checkbox aan te vinken en de bijhorende waarde in te vullen</h6>
+                    <hr />
+                        <label class="control-label"></label>
+                        
+                        
                     }
                     
-                    <label class="control-label">Alle custom attributen</label>
                     @for (var a = 0; a < Model.AcustomAtributesall.Count; a++)
                     {
                         
@@ -180,27 +209,43 @@
                         
                         <hr>   
                         } 
+                        
                         </div>
+                        
                                                                                                       
                     }
+                    <br>
+                    <br>
+                    <h5>Nieuw attribuut</h5>
+                    <h6>*U attribuut niet in bovenstaande lijst gevonden? Maak het attribuut dan hierbeneden aan door op de knop te klikken</h6>
+                    <h6>*Deze velden moeten worden ingevuld</h6>
+                    <hr />
                 
                  <div id="container" class="form-group"></div>
                  <div class="form-group">
-                    <input id="AddAtribute" class="btn btn-default" type="button" value="Voeg Custom attribuut toe" onclick="addFields()" />
+                     
+                    <input id="AddAtribute" class="btn btn-default" type="button" value="Voeg attribuut toe" onclick="addFields()" />
+                    
                  </div>
+                 </div>
+                <div class="pageRoot">
                 <div class="form-group">
+                     <h4>Maak product aan</h4>
+                    <h6>*Wanneer u op onderstaande knop klikt word het product aangemaakt</h6>
+                     <hr />
                     <input type="submit" value="Aanmaken" class="btn btn-primary" />
                 </div>
                 
+                
             
             </form>
-        </div>
-    </div>
+        
 
     <div>
         <a asp-action="Create">Terug naar product categorien</a>
     </div>
-</div>
+    </div>
+ 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 

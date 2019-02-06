@@ -123,7 +123,7 @@ namespace WebApp1.Models
         [StringLength(30, ErrorMessage = "De stadsnaam moet minimaal {2} en maximaal {1} characters zijn.", MinimumLength = 2)]
         public string City { get; set; }
 
-        [Required(ErrorMessage = "Landnaam invullen is verplicht")]
+        [Required(ErrorMessage = "Land naam invullen is verplicht")]
         [StringLength(20, ErrorMessage = "De landsnaam moet minimaal {2} en maximaal {1} characters zijn.", MinimumLength = 2)]
         public string Country { get; set; }
     }
@@ -137,31 +137,31 @@ namespace WebApp1.Models
             .EmailAddress().WithMessage("Vul een geldige {PropertyName} in.");
 
             RuleFor(x => x.FirstName)
-            .Empty().WithMessage("Vul een geldige {PropertyName} in.");
+            .NotEmpty().WithMessage("Vul een geldige voornaam in.");
 
             RuleFor(x => x.LastName)
-            .NotEmpty().WithMessage("Vul een geldige {PropertyName} in.");
+            .NotEmpty().WithMessage("Vul een geldige achternaam in.");
 
             RuleFor(x => x.BirthDate)
             .Must(validAge).WithMessage("ongeldig geboortedatum");
 
             RuleFor(x => x.Street)
-            .NotEmpty().WithMessage("Vul een geldige {PropertyName} in.");
+            .NotEmpty().WithMessage("Vul een geldige straat naam in.");
 
             RuleFor(x => x.HouseNumber)
-            .NotEmpty().WithMessage("Vul een geldige {PropertyName} in.");
+            .NotEmpty().WithMessage("Vul een geldige huisnummer in.");
 
             RuleFor(x => x.PostalCode)
-            .NotEmpty().WithMessage("Vul een geldige {PropertyName} in.");
+            .NotEmpty().WithMessage("Vul een geldige post code in.");
 
             RuleFor(x => x.TelephoneNumber)
-            .NotEmpty().WithMessage("Vul een geldige {PropertyName} in.");
+            .NotEmpty().WithMessage("Vul een geldige telefoonnummer in.");
 
             RuleFor(x => x.City)
-            .NotEmpty().WithMessage("Vul een geldige {PropertyName} in.");
+            .NotEmpty().WithMessage("Vul een geldige stad naam in.");
 
             RuleFor(x => x.Country)
-            .NotEmpty().WithMessage("Vul een geldige {PropertyName} in.");
+            .NotEmpty().WithMessage("Vul een geldige land naam in.");
         }
         protected bool validAge(DateTime date)
         {

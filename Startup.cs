@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -43,7 +43,6 @@ namespace WebApp1
             services.AddDbContext<WebshopContext>(opt => opt.UseNpgsql(@"Host=localhost;Database=webShop34234324234234;Username=postgres;Password=wanne"));
 =======
             services.AddDbContext<WebshopContext>(opt => opt.UseNpgsql(@"Host=localhost;Database=webShop;Username=postgres;Password="));
->>>>>>> e09653ba0b43d46c0df7e6e28505da8a1f76c3c7
 
             services.AddSession(options =>
             {

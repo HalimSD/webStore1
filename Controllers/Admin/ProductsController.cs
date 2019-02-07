@@ -259,10 +259,10 @@ namespace WebApp1.Controllers
               ViewData["message"] = ViewData["message"] + at; 
             }
             var myList = new List<string>();
-            var productsoorten = from m in _context.Category select new { m.Naam };
+            var productsorts = from m in _context.Category select new { m.Naam };
 
 
-            foreach (var product in productsoorten)
+            foreach (var product in productsorts)
             {
                 myList.Add(product.ToString());
                 Console.WriteLine(product.Naam);
@@ -292,8 +292,8 @@ namespace WebApp1.Controllers
 
             }
             HttpContext.Session.SetString("Test", hi);
-            var kaas = HttpContext.Session.GetString("Test");
-            Console.WriteLine(kaas);
+            var sessionstring = HttpContext.Session.GetString("Test");
+            Console.WriteLine(sessionstring);
 
             return RedirectToAction("Create3");
         }
@@ -306,17 +306,17 @@ namespace WebApp1.Controllers
             if (string.IsNullOrEmpty(productsoortt)) {
                 return RedirectToAction("Create2");
             }   
-             var productsoortid =
-                    from productsoorten in _context.Category
-                    where productsoorten.Naam == productsoortt 
-                    select productsoorten;
+             var productsortid =
+                    from productsort in _context.Category
+                    where productsort.Naam == productsoortt 
+                    select productsort;
 
-             var standardattributen =
-                    from productsoorten in _context.Category
-                    join atributen in _context.AttributeType on productsoorten.Id equals atributen.CategoryId
-                    where productsoorten.Naam == productsoortt && atributen.Custom == false
-                    select atributen;
-            var id = productsoortid.First().Id;
+             var standardAttributes =
+                    from productsorts in _context.Category
+                    join atributes in _context.AttributeType on productsorts.Id equals atributes.CategoryId
+                    where productsorts.Naam == productsoortt && atributes.Custom == false
+                    select atributes;
+            var id = productsortid.First().Id;
             
             // var alreadyattributencustomproductsoort =
             //         from productsoorten in _context.Productsoort
@@ -324,15 +324,15 @@ namespace WebApp1.Controllers
             //         where atributen.Custom == true && productsoorten.Naam == productsoortt
             //         select new CreateproductModel.CreateproductModel.AlreadyCustomAtributes(){customAtribute = atributen, selected = false};
             
-            var alreadyattributencustomall =
-                    from productsoorten in _context.Category
-                    join atributen in _context.AttributeType on productsoorten.Id equals atributen.CategoryId
-                    where atributen.Custom == true
-                    group atributen by productsoorten into g
+            var alreadyAttributesCustomAll =
+                    from productsorts in _context.Category
+                    join atributes in _context.AttributeType on productsorts.Id equals atributes.CategoryId
+                    where atributes.Custom == true
+                    group atributes by productsorts into g
                     select g;
 
                     var customats = new List<CreateproductModel.CreateproductModel.AllCustomAtt>(){};
-                    foreach(var g in alreadyattributencustomall) {
+                    foreach(var g in alreadyAttributesCustomAll) {
                         var at = new CreateproductModel.CreateproductModel.AllCustomAtt();
                         at.customAtributes = new List<CreateproductModel.CreateproductModel.AtwthBool>(){};
                         at.productSoort = g.Key;
@@ -349,7 +349,7 @@ namespace WebApp1.Controllers
            
 
             var ProductModel = new WebApp1.CreateproductModel.CreateproductModel();
-                    ProductModel.Attribuutsoorts = standardattributen.ToList();
+                    ProductModel.Attribuutsoorts = standardAttributes.ToList();
                     ProductModel.AcustomAtributesall = customats;
                     // ProductModel.AcustomAtributesproductsoort = alreadyattributencustomproductsoort.ToList();
                     ProductModel.Product = new Product(){Id = id}; 
@@ -393,8 +393,8 @@ namespace WebApp1.Controllers
                 
                
                 //check of productwaarde al bestaat
-                var productwaardeextists = from p in _context.Product where p.Title == product.Title select p;
-                    if (productwaardeextists.Any()){
+                var productValueExtists = from p in _context.Product where p.Title == product.Title select p;
+                    if (productValueExtists.Any()){
                         return RedirectToAction("Create2",new { message = 1});
                     } 
                 //check of attribuutsoort al bestaat
@@ -406,10 +406,10 @@ namespace WebApp1.Controllers
                 // }
 
                  // check attribuut dubbel in lijst
-               var attribuutinlijst = newcustom
+               var attribuutInList = newcustom
                                    .GroupBy(e => e.extraAtribute.Name)
                                    .Any(e => e.Count() > 1);
-                if(attribuutinlijst)
+                if(attribuutInList)
                 {
                         return RedirectToAction("Create2", new{message = 2});
                 }
@@ -460,9 +460,9 @@ namespace WebApp1.Controllers
                     return RedirectToAction("Create2",new {message = 11, at = item.Name});
                 }
                 else{
-                var productwaardeid = from p in _context.Product where p.Title == product.Title select p;
-                var standardatt = new AttributeValue(){Waarde = item.AttributeValues[0].Waarde, ProductId = productwaardeid.First().Id, AttributeTypeId = item.AttributeValues[0].AttributeTypeId};
-                _context.AttributeValue.Add(standardatt); 
+                var productValueId = from p in _context.Product where p.Title == product.Title select p;
+                var standardAtt = new AttributeValue(){Waarde = item.AttributeValues[0].Waarde, ProductId = productValueId.First().Id, AttributeTypeId = item.AttributeValues[0].AttributeTypeId};
+                _context.AttributeValue.Add(standardAtt); 
                     await _context.SaveChangesAsync();
                     }
              }
@@ -485,8 +485,8 @@ namespace WebApp1.Controllers
                                 }
                             }
                         var atributeID = from p in _context.AttributeType where p.Id == item.customAtributes[i].customAtribute.Id select p;
-                        var customatwaarde = new AttributeValue(){Waarde = item.cattribuutwaarde[i].Waarde, ProductId = productwaardeid.First().Id, AttributeTypeId = atributeID.First().Id};
-                    _context.AttributeValue.Add(customatwaarde) ; 
+                        var customatValue = new AttributeValue(){Waarde = item.cattribuutwaarde[i].Waarde, ProductId = productwaardeid.First().Id, AttributeTypeId = atributeID.First().Id};
+                    _context.AttributeValue.Add(customatValue) ; 
                     
                     }
                     await _context.SaveChangesAsync(); 
@@ -530,10 +530,10 @@ namespace WebApp1.Controllers
                  await _context.SaveChangesAsync();
 
                  var atributeID = from p in _context.AttributeType where p.Id == customat.Id select p;
-                var productwaardeid = from p in _context.Product where p.Title == product.Title select p;
+                var productValueId = from p in _context.Product where p.Title == product.Title select p;
 
-                 var customatwaarde = new AttributeValue(){Waarde = item.extraAtributewaarde.Waarde, ProductId = productwaardeid.First().Id, AttributeTypeId = atributeID.First().Id};
-                 _context.AttributeValue.Add(customatwaarde); 
+                 var customatValue = new AttributeValue(){Waarde = item.extraAtributewaarde.Waarde, ProductId = productValueId.First().Id, AttributeTypeId = atributeID.First().Id};
+                 _context.AttributeValue.Add(customatValue); 
                  await _context.SaveChangesAsync(); 
             }
                 return RedirectToAction("index", "CategoryList");
@@ -656,8 +656,8 @@ namespace WebApp1.Controllers
             }
            
             var model = new WebApp1.Models.EditproductsoortModel();
-            var productsoorts = from p in _context.Category select p;
-            model.productsoorts = productsoorts.ToList();
+            var productkind = from p in _context.Category select p;
+            model.productsoorts = productkind.ToList();
             return View(model);
         }
 
@@ -717,9 +717,9 @@ namespace WebApp1.Controllers
             }
 
             else {
-                var getattributen = from at in _context.AttributeType where at.Category.Naam == m.oldproductsoort select at;
+                var getattribute = from at in _context.AttributeType where at.Category.Naam == m.oldproductsoort select at;
                 var model = new WebApp1.Models.EditproductsoortModel2();
-                model.atributes = getattributen.ToList();
+                model.atributes = getattribute.ToList();
                 model.oldproductsoort = m.oldproductsoort;
                 return View(model);
             }   

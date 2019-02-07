@@ -259,10 +259,10 @@ namespace WebApp1.Controllers
               ViewData["message"] = ViewData["message"] + at; 
             }
             var myList = new List<string>();
-            var productsoorts = from m in _context.Category select new { m.Naam };
+            var productsorts = from m in _context.Category select new { m.Naam };
 
 
-            foreach (var product in productsoorts)
+            foreach (var product in productsorts)
             {
                 myList.Add(product.ToString());
                 Console.WriteLine(product.Naam);
@@ -311,7 +311,7 @@ namespace WebApp1.Controllers
                     where productsort.Naam == productsoortt 
                     select productsort;
 
-             var standardattributes =
+             var standardAttributes =
                     from productsorts in _context.Category
                     join atributes in _context.AttributeType on productsorts.Id equals atributes.CategoryId
                     where productsorts.Naam == productsoortt && atributes.Custom == false
@@ -349,7 +349,7 @@ namespace WebApp1.Controllers
            
 
             var ProductModel = new WebApp1.CreateproductModel.CreateproductModel();
-                    ProductModel.Attribuutsoorts = standardattributes.ToList();
+                    ProductModel.Attribuutsoorts = standardAttributes.ToList();
                     ProductModel.AcustomAtributesall = customats;
                     // ProductModel.AcustomAtributesproductsoort = alreadyattributencustomproductsoort.ToList();
                     ProductModel.Product = new Product(){Id = id}; 
@@ -406,10 +406,10 @@ namespace WebApp1.Controllers
                 // }
 
                  // check attribuut dubbel in lijst
-               var attribuutinlist = newcustom
+               var attribuutInList = newcustom
                                    .GroupBy(e => e.extraAtribute.Name)
                                    .Any(e => e.Count() > 1);
-                if(attribuutinlist)
+                if(attribuutInList)
                 {
                         return RedirectToAction("Create2", new{message = 2});
                 }

@@ -1,9 +1,7 @@
 @model WebApp1.Models.SubscribeModel
 <link rel="stylesheet" href="~/css/shopping_cart.css">
 <div class="pageRoot">
-    @{
-        var x = new SelectList(ViewBag.Countries);
-    }
+    
    
 @using (Html.BeginForm("EmailOrder", "Cart", FormMethod.Post))
 {

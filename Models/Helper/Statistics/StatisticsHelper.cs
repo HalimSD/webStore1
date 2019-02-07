@@ -9,6 +9,7 @@ namespace WebApp1.Models.Helper.Statistics
     {
         public enum Range
         {
+            All,
             Year = 365,
             SixMonths = 183,
             ThreeMonths = 90,
@@ -16,7 +17,6 @@ namespace WebApp1.Models.Helper.Statistics
             ThreeWeeks = 21,
             TwoWeeks = 14,
             Week = 7,
-            All
         }
 
         private readonly WebshopContext context;
@@ -69,26 +69,29 @@ namespace WebApp1.Models.Helper.Statistics
 
         public List<string[]> GetCategorySold(Range range)
         {
-            string[] categoryArray = (from ps in context.Category select ps.Naam).ToArray();
+            Category[] categoryArray = (from ps in context.Category select ps).ToArray();
             List<OrderDetail> orders = (from bi in context.OrderDetail select bi).ToList();
             List<string[]> data = new List<string[]>();
             data.Add(new[] {"Categorieen", "Verkochtte Producten"});
 
-            foreach (string category in categoryArray)
+            foreach (Category category in categoryArray)
             {
                 int count = 0;
                 foreach (OrderDetail order in orders)
                 {
-                    DateTime orderDate =
-                    (
-                        from o in context.Order
-                        where o.Id == order.OrderId
-                        select o.Date
-                    ).FirstOrDefault();
+                    if (range != Range.All)
+                    {
+                        DateTime orderDate =
+                        (
+                            from o in context.Order
+                            where o.Id == order.OrderId
+                            select o.Date
+                        ).FirstOrDefault();
                     
-                    // Figure out which day it should be part off
-                    // -1 Means it happened outside the date range
-                    if (GetIndexFromDateRange((int)range, orderDate) == -1) continue;
+                        // Figure out which day it should be part off
+                        // -1 Means it happened outside the date range
+                        if (GetIndexFromDateRange((int)range, orderDate) == -1) continue;
+                    }
                     
                     string categoryName =
                     (
@@ -96,7 +99,7 @@ namespace WebApp1.Models.Helper.Statistics
                         from ps in context.Category
                         where pw.Id == order.ProductId &&
                               pw.CategoryId == ps.Id &&
-                              ps.Naam == category
+                              ps.Id == category.Id
                         select ps.Naam
                     ).FirstOrDefault();
 
@@ -104,7 +107,7 @@ namespace WebApp1.Models.Helper.Statistics
                     count += order.Quantity;
                 }
 
-                data.Add(new[] {category, count.ToString()});
+                data.Add(new[] {category.Naam, count.ToString()});
             }
 
             return data;

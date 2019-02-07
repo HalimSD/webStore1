@@ -36,19 +36,19 @@ function init() {
 function enumDefinition(enumValue) {
     switch (enumValue) {
         case "Week":
-            return "1 week";
+            return "1 Week";
         case "TwoWeeks":
-            return "2 weken";
+            return "2 Weken";
         case "ThreeWeeks":
-            return "3 weken";
+            return "3 Weken";
         case "Month":
-            return "1 maand";
+            return "1 Maand";
         case "ThreeMonths":
-            return "3 maanden";
+            return "3 Maanden";
         case "SixMonths":
-            return "6 maanden";
+            return "6 Maanden";
         case "Year":
-            return "1 jaar";
+            return "1 Jaar";
         case "All":
             return "Alles";
         default:
@@ -76,6 +76,7 @@ function updateRangeDropdown(ranges, selectElement, defaultOption = "Week") {
 
 function drawCategoryChart(range = "All") {
     $.get("Statistics/GetCategorySold/" + range, function (jsonData) {
+        console.log("Statistics/GetCategorySold/" + range);
         let dataArray = [];
         let isFirst = true;
         jsonData.data.forEach(function (element) {

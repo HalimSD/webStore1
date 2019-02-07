@@ -46,8 +46,14 @@ function onInputChanged(pageNumber=1) {
 }
 
 // Creates the options column of a row
-function createOptionsColumn(productId) {
+function createOptionsColumn(productId, name) {
     let tdElement = document.createElement("td");
+
+    // Edit option
+    let aElementEdit = document.createElement("a");
+    let aElementEditTxt = document.createTextNode("Bewerken");
+    aElementEdit.appendChild(aElementEditTxt);
+    aElementEdit.setAttribute("href", "/Products/Editproductsoort?oldproductsoort=" + name);
     
     // Delete option
     let aElementDelete = document.createElement("a");
@@ -56,6 +62,8 @@ function createOptionsColumn(productId) {
     aElementDelete.setAttribute("href", "/Admin/CategoryList/ConfirmDelete?id=" + productId.toString());
     
     // Append everything
+    tdElement.appendChild(aElementEdit);
+    tdElement.appendChild(document.createTextNode(" | "));
     tdElement.appendChild(aElementDelete);
     return tdElement;
 }
@@ -78,6 +86,8 @@ function populateTable(jsonModel, filtered) {
         let trElement = document.createElement("tr");
         // Product ID
         let id = -1;
+        // Category Name
+        let name = "";
         
         // Iterate through the object and create td html foreach value
         $.each(obj, function (key, value) {
@@ -87,6 +97,7 @@ function populateTable(jsonModel, filtered) {
                 tdElement.setAttribute("width", "10%");
                 id = value;
             }
+            if (key === "name") name = value;
             
             // Append the newly created elements into their respective parent elements
             tdElement.appendChild(txtNode);
@@ -94,7 +105,7 @@ function populateTable(jsonModel, filtered) {
         });
         
         
-        trElement.appendChild(createOptionsColumn(id));
+        trElement.appendChild(createOptionsColumn(id, name));
         tableBody.appendChild(trElement);
     }
     createPagination(jsonModel, onInputChanged);

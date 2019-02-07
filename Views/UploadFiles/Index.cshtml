@@ -37,11 +37,12 @@
         <i>Categorie, Naam, Prijs, Beschrijving, Voorraad, Foto bestandsnaam, attribuut 1, attribuut 2, etc</i><br>
         Ook moeten de relevante categorieën al aangemaakt zijn met de juiste hoeveelheid attributen!
     </p>
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" id="submitForm">
         <div class="form-group">
             <p>Kies een CSV bestand en klik op 'Uploaden':</p>
             <input type="file" class="form-control-file" name="files" multiple style="width: 50%;" required/><br>
-            <button type="submit" class="btn btn-primary">Uploaden</button>
+            <button id="submitBtn" type="submit" class="btn btn-primary" onclick="updateBtn()">Uploaden</button>
         </div>
     </form>
 </div>
+<script type="module" src="~/js/uploadCsv.js"></script>

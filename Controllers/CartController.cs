@@ -18,6 +18,8 @@ using WebApp1.Models.Helper;
 using WebApp1.Models.ViewModels;
 using FluentValidation.Results;
 using System.ComponentModel;
+using System.Globalization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace WebApp1.Controllers
 {
@@ -268,9 +270,34 @@ namespace WebApp1.Controllers
                 return RedirectToAction("Pay", "cart");
             }
         }
+        public static Dictionary<string, string> CountryList()
+        {
+            //Creating Dictionary
+            Dictionary<string, string> cultureList = new Dictionary<string, string>();
+
+            //getting the specific CultureInfo from CultureInfo class
+            CultureInfo[] getCultureInfo = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
+
+            foreach (CultureInfo getCulture in getCultureInfo)
+            {
+                //creating the object of RegionInfo class
+                RegionInfo getRegionInfo = new RegionInfo(getCulture.Name);
+                //adding each country Name into the Dictionary
+                if (!(cultureList.ContainsKey(getRegionInfo.Name)))
+                {
+                    cultureList.Add(getRegionInfo.Name, getRegionInfo.EnglishName);
+                }
+            }
+            //returning country list
+            return cultureList;
+
+        }
 
         public IActionResult sendOrderMail()
         {
+            var list = new SelectList(CartController.CountryList(), "Key", "Value");
+            var sortList = list.OrderBy(p => p.Text).ToList();
+            ViewBag.Countries = sortList;
             var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
             ViewBag.cart = cart;
             ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
@@ -278,6 +305,7 @@ namespace WebApp1.Controllers
         }
         public IActionResult bestellingPlaatsenUnSub(SubscribeModel model)
         {
+
             var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
             ViewBag.cart = cart;
             ViewBag.total = cart.Sum(items => items.Product.Price * items.Quantity);
@@ -289,6 +317,9 @@ namespace WebApp1.Controllers
             order.Date = DateTime.Now;
             var id = order.UserId;
             var email = model.Email;
+
+
+
             // var results = validator.Validate(model);
             // if (results.IsValid == false)
             // {
@@ -403,9 +434,16 @@ namespace WebApp1.Controllers
         [HttpPost]
         public ActionResult EmailOrder(SubscribeModel model)
         {
-           
+            var list = new SelectList(CartController.CountryList(), "Key", "Value");
+            var sortList = list.OrderBy(p => p.Text).ToList();
+            ViewBag.Countries = sortList;
+
             if (ModelState.IsValid)
             {
+                if (model.Country == null)
+                {
+                    model.Country = "";
+                }
                 var email = model.Email;
                 var message = new MimeMessage();
 
@@ -434,6 +472,11 @@ namespace WebApp1.Controllers
         [Route("pay")]
         public IActionResult pay(SubscribeModel model)
         {
+            var list = new SelectList(CartController.CountryList(), "Key", "Value");
+            var sortList = list.OrderBy(p => p.Text).ToList();
+            ViewBag.Countries = sortList;
+
+
             AddressValidator validator = new AddressValidator();
             var results = validator.Validate(model);
             if (results.IsValid == false)

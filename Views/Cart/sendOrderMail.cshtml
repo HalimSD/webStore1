@@ -1,6 +1,10 @@
 @model WebApp1.Models.SubscribeModel
 <link rel="stylesheet" href="~/css/shopping_cart.css">
 <div class="pageRoot">
+    @{
+        var x = new SelectList(ViewBag.Countries);
+    }
+   
 @using (Html.BeginForm("EmailOrder", "Cart", FormMethod.Post))
 {
    
@@ -55,8 +59,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Country">Land</label>
-                <input asp-for="Country" class="form-control" />
-                @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
+                @Html.DropDownList("Country", new SelectList(ViewBag.Countries, "Value", "Text"))
             </div>
     <input type="submit" class="btn btn-primary" value="Doorgaan" asp-controller="cart" asp-action="pay">
 }

@@ -126,6 +126,7 @@ namespace WebApp1.Models
         [Required(ErrorMessage = "Land naam invullen is verplicht")]
         [StringLength(20, ErrorMessage = "De landsnaam moet minimaal {2} en maximaal {1} characters zijn.", MinimumLength = 2)]
         public string Country { get; set; }
+
     }
     public class AddressValidator : AbstractValidator<SubscribeModel>
     {

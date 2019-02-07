@@ -244,6 +244,7 @@ namespace WebApp1.Controllers
             else if (message == 2){
                 ViewData["message"] = "Attribuutnaam staat al in de lijst ";
             }
+            
             else if (message == 3){
                 ViewData["message"] = "Geef een geldige afbeelding in: png,jpg,jpeg,gif";
             }
@@ -255,6 +256,9 @@ namespace WebApp1.Controllers
             }
             else if (message == 10){
                 ViewData["message"] = "De kwantiteit moet positief zijn";
+            }
+            else if (message == 11){
+                ViewData["message"] = "Attribuutwaarde mag niet leeg zijn: ";
             }
 
             if(at != null){
@@ -368,7 +372,7 @@ namespace WebApp1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create3(Product product, IList<AttributeType> Attribuutsoorts, List<CreateproductModel.CreateproductModel.Atribuutsoortmetwaardes> newcustom, List<CreateproductModel.CreateproductModel.AllCustomAtt> AcustomAtributesall)
+        public async Task<IActionResult> Create3(Product product, IList<AttributeType> Attribuutsoorts, IList<CreateproductModel.CreateproductModel.Atribuutsoortmetwaardes> newcustom, IList<CreateproductModel.CreateproductModel.AllCustomAtt> AcustomAtributesall)
         {
             
 
@@ -459,7 +463,7 @@ namespace WebApp1.Controllers
                 if(item.AttributeValues[0].Waarde == null){
                      _context.Product.Remove(product);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("Create2",new {message = 2, at = item.Name});
+                    return RedirectToAction("Create2",new {message = 11, at = item.Name});
                 }
                 else{
                 var productwaardeid = from p in _context.Product where p.Title == product.Title select p;

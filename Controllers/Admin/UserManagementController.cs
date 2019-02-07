@@ -49,14 +49,14 @@ namespace Controllers
             _emailSender = emailSender;
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public JsonResult GetUsersData(int pageIndex = 1)
         {
             // Create the PaginationHelper instance and use it to get the first page of productwaarde
@@ -68,7 +68,7 @@ namespace Controllers
             return new JsonResult(model);
         }
         
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public JsonResult GetUsersDataFiltered(string id="", string email="", string role="", int pageIndex=1)
         {
             // Create a PaginationHelper instance. It will be used to generate a page
@@ -96,7 +96,7 @@ namespace Controllers
             return new JsonResult(model);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> AddRole(string id)
         {
@@ -110,7 +110,7 @@ namespace Controllers
             return View(vm);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddRole(UserManagementAddRole rvm)
         {

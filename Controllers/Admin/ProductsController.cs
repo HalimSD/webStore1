@@ -32,12 +32,6 @@ namespace WebApp1.Controllers
             _appEnvironment = appEnvironment;
         }
 
-        // GET: Products
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Category.ToListAsync());
-        }
-
          public IActionResult Indexproductwaarde()
          {
              List<Product> products = _context.Product.ToList();
@@ -601,7 +595,7 @@ namespace WebApp1.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "CategoryList");
             }
             return View(products);
         }
@@ -632,7 +626,7 @@ namespace WebApp1.Controllers
             var products = await _context.Category.FindAsync(id);
             _context.Category.Remove(products);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "CategoryList");
         }
 
         private bool ProductsExists(int id)

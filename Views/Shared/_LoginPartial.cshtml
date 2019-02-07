@@ -2,13 +2,15 @@
 
 @inject SignInManager<Users> SignInManager
 @inject UserManager<Users> UserManager
+<link rel="stylesheet" href="~/css/loginpartial.css">
+
 
 @if (SignInManager.IsSignedIn(User))
 {
     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link"><img src="~/Images/log-out.png" width="20"/></button>
+                <p><button type="submit" class="btn btn-link navbar-btn navbar-link">Uitloggen<img src="~/Images/log-out1.png" width="35"/></button></p>
             </li>
         </ul>
     </form>
@@ -17,6 +19,6 @@ else
 {
     <ul class="nav navbar-nav navbar-right" id="accountLinks">
         
-        <li id="registerLink"><a asp-area="Identity" asp-page="/Account/Login"><img src="~/Images/userProfile.png" width="20"/></a></li>
+        <li id="registerLink"><p><a asp-area="Identity" asp-page="/Account/Login">Inloggen<img id="userProfile" src="~/Images/userProfile1.png" width="30" /></a></p></li>
     </ul>
 }

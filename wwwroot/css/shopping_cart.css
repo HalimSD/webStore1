@@ -42,3 +42,12 @@ input.some-class[type="text"] {
     padding-left: 5px;
     padding-right: 5px;
 }
+
+#InlogTitle {
+    margin-bottom: 40px;
+}
+
+#BreakMargin {
+    margin-bottom: 30px;
+
+}

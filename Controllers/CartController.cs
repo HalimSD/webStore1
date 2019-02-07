@@ -18,6 +18,9 @@ using WebApp1.Models.Helper;
 using WebApp1.Models.ViewModels;
 using FluentValidation.Results;
 using System.ComponentModel;
+using System.Globalization;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Threading.Tasks;
 
 namespace WebApp1.Controllers
 {
@@ -255,22 +258,55 @@ namespace WebApp1.Controllers
             return View("checkOut");
         }
 
-        public IActionResult userLoginCheck()
+        public async Task<IActionResult> userLoginCheck(SubscribeModel model)
         {
-            var currentUser = _userManager.GetUserAsync(User).Result;
-            if (currentUser == null)
+            var currentUser = await GetCurrentUserAsync();
+            if (currentUser == null || ModelState.IsValid == true)
             {
                 return View("askregister", "cart");
 
             }
             else
             {
-                return RedirectToAction("Pay", "cart");
+                if (currentUser != null || ModelState.IsValid == true)
+                {
+                    return RedirectToAction("pay", "cart");
+
+                }
+                else
+                {
+                    return View("askregister", "cart");
+                }
             }
+        }
+        public static Dictionary<string, string> CountryList()
+        {
+            //Creating Dictionary
+            Dictionary<string, string> cultureList = new Dictionary<string, string>();
+
+            //getting the specific CultureInfo from CultureInfo class
+            CultureInfo[] getCultureInfo = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
+
+            foreach (CultureInfo getCulture in getCultureInfo)
+            {
+                //creating the object of RegionInfo class
+                RegionInfo getRegionInfo = new RegionInfo(getCulture.Name);
+                //adding each country Name into the Dictionary
+                if (!(cultureList.ContainsKey(getRegionInfo.Name)))
+                {
+                    cultureList.Add(getRegionInfo.Name, getRegionInfo.EnglishName);
+                }
+            }
+            //returning country list
+            return cultureList;
+
         }
 
         public IActionResult sendOrderMail()
         {
+            var list = new SelectList(CartController.CountryList(), "Key", "Value");
+            var sortList = list.OrderBy(p => p.Text).ToList();
+            ViewBag.Countries = sortList;
             var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
             ViewBag.cart = cart;
             ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
@@ -278,6 +314,7 @@ namespace WebApp1.Controllers
         }
         public IActionResult bestellingPlaatsenUnSub(SubscribeModel model)
         {
+
             var cart = SessionExtensions.Get<List<Item>>(HttpContext.Session, "cart");
             ViewBag.cart = cart;
             ViewBag.total = cart.Sum(items => items.Product.Price * items.Quantity);
@@ -289,17 +326,7 @@ namespace WebApp1.Controllers
             order.Date = DateTime.Now;
             var id = order.UserId;
             var email = model.Email;
-            // var results = validator.Validate(model);
-            // if (results.IsValid == false)
-            // {
-            //     foreach (ValidationFailure failure in results.Errors)
-            //     {
-            //         ModelState.AddModelError(failure.PropertyName, failure.ErrorMessage);
-            //         return View("sendOrderMail");
 
-            //         // errors.Add($"{failure.PropertyName}: {failure.ErrorMessage}");
-            //     }
-            // }
             if (id == null)
             {
                 order.email = email;
@@ -370,11 +397,6 @@ namespace WebApp1.Controllers
 
         public void increaseQuantity(int id)
         {
-            // List<Item> cart = new List<Item>();
-            // cart.Add(new Item { Product = _context.Productwaarde.Find(id), Quantity = 1 });
-            // BesteldeItem besteldeItem = new BesteldeItem{
-            //     besteldeItem.Quantity = 1
-            // };
             Product product = _context.Product.Find(id);
             product.Quantity++;
         }
@@ -388,71 +410,27 @@ namespace WebApp1.Controllers
             int index = isExist(id);
             cart[index].Quantity = changedQuantity;
             _context.SaveChanges();
-
-
-            // // cart.Add(new Item { Product = _context.Productwaarde.Find(id),  Quantity = changedQuantity });
-            // // ViewBag.cart = cart;
-            // // ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
-            // // ViewData["cart"] = cart;
-
-            // SessionExtensions.Set(HttpContext.Session, "cart", cart);
-
             return changedQuantity;
         }
 
-        [HttpPost]
-        public ActionResult EmailOrder(SubscribeModel model)
+        // [HttpPost]
+        public async Task EmailOrderAsync(SubscribeModel model)
         {
-           
-            if (ModelState.IsValid)
+            var list = new SelectList(CartController.CountryList(), "Key", "Value");
+            var sortList = list.OrderBy(p => p.Text).ToList();
+            ViewBag.Countries = sortList;
+            string email;
+            bool currentUser = await GetCurrentUserAsync() != null;
+            if (currentUser)
             {
-                var email = model.Email;
-                var message = new MimeMessage();
-
-                message.From.Add(new MailboxAddress("Banana Boat", "testprojecthr@gmail.com"));
-                message.To.Add(new MailboxAddress(email));
-                message.Subject = "Your order";
-                var builder = new BodyBuilder();
-                builder.TextBody = @"Beste klant,
-                Bedankt voor je bestelling. 
-                Je factuur vind je terug in de bijlage van deze mail.";
-                builder.Attachments.Add(_appEnvironment.WebRootPath + "/images/reportPDF/Report.pdf");
-                message.Body = builder.ToMessageBody();
-                using (var client = new SmtpClient())
-                {
-                    client.Connect("smtp.gmail.com", 587, false);
-                    client.Authenticate("testprojecthr@gmail.com", "1.TestProjectC");
-                    client.Send(message);
-                    client.Disconnect(true);
-                }
+                var currentUserEmail = GetCurrentUserAsync().Result.Email;
+                email = currentUserEmail;
             }
-            bestellingPlaatsen(model);
-            HttpContext.Session.Remove("cart");
-            return View("pay");
-        }
-
-        [Route("pay")]
-        public IActionResult pay(SubscribeModel model)
-        {
-            AddressValidator validator = new AddressValidator();
-            var results = validator.Validate(model);
-            if (results.IsValid == false)
+            else
             {
-                foreach (ValidationFailure failure in results.Errors)
-                {
-                    ModelState.AddModelError(failure.PropertyName, failure.ErrorMessage);
 
-                    // errors.Add($"{failure.PropertyName}: {failure.ErrorMessage}");
-                    return View("sendOrderMail");
-
-                }
-            }
-            var email = _userManager.GetUserName(User);
-            if (email == null)
-            {
                 email = model.Email;
             }
-
 
             var message = new MimeMessage();
 
@@ -461,8 +439,8 @@ namespace WebApp1.Controllers
             message.Subject = "Your order";
             var builder = new BodyBuilder();
             builder.TextBody = @"Beste klant,
-            Bedankt voor je bestelling. 
-            Je facatuur vind je terug in de bijlage van deze mail.";
+                Bedankt voor je bestelling. 
+                Je factuur vind je terug in de bijlage van deze mail.";
             builder.Attachments.Add(_appEnvironment.WebRootPath + "/images/reportPDF/Report.pdf");
             message.Body = builder.ToMessageBody();
             using (var client = new SmtpClient())
@@ -472,12 +450,48 @@ namespace WebApp1.Controllers
                 client.Send(message);
                 client.Disconnect(true);
             }
+            // }
             bestellingPlaatsen(model);
-
             HttpContext.Session.Remove("cart");
+        }
+        private Task<Users> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
+        [Route("pay")]
+        public async Task<IActionResult> pay(SubscribeModel model)
+        {
+            var list = new SelectList(CartController.CountryList(), "Key", "Value");
+            var sortList = list.OrderBy(p => p.Text).ToList();
+            ViewBag.Countries = sortList;
+
+
+            AddressValidator validator = new AddressValidator();
+            var results = validator.Validate(model);
+            var currentUser = await GetCurrentUserAsync();
+            var email = _userManager.GetUserName(User);
+
+            if (currentUser == null)
+            {
+
+                email = model.Email;
+                if (ModelState.IsValid)
+                {
+                    await EmailOrderAsync(model);
+                    return View();
+                }
+                else
+                {
+                    foreach (ValidationFailure failure in results.Errors)
+                    {
+                        ModelState.AddModelError(failure.PropertyName, failure.ErrorMessage);
+                        return View("sendOrderMail");
+
+                    }
+                }
+            }
+
+            await EmailOrderAsync(model);
             return View();
         }
-
 
         public string GetHTMLString()
         {
@@ -567,7 +581,6 @@ namespace WebApp1.Controllers
             var file = _converter.Convert(pdf);
             _converter.Convert(pdf);
 
-            // return File(file, "application/pdf");
             return RedirectToAction("checkOut", "Cart");
         }
 

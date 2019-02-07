@@ -3,16 +3,18 @@
 @inject UserManager<Users> UserManager
       
 <link rel="stylesheet" href="~/css/shopping_cart.css">
+
 <div class="pageRoot">
-    <h3>U bent niet ingelogd </h3>
-    <h4>Heb je een account? <a type="submit" href="/Identity/Account/Login">Log hier in.</a></h4>
-    <hr>
-    <h3>Hebt u geen account?</h3>
-    <h4>klik dan hier om een <a type="submit" href="/Identity/Account/Register"> neiewe account </a> aan te maken</h4>
-    <hr>
-    <h4>Doorgaan zonder inloggen?</h4>
-     
+    <h3 id="InlogTitle">U bent nog niet ingelogd... </h3>
+    <h4>Bent u een bestaande klant?</h4>
+    <p><a  href="/Identity/Account/Login">Log hier in.</a></p>
+    <hr id="BreakMargin">
+    <h4>Nog geen account?</h4>
+    <p>
+    <a  href="/Identity/Account/Register">Maak een nieuw account!</a>
+    </p>
+    <hr id="BreakMargin">
+    <h4>Doorgaan zonder klant te worden?</h4>
      <button  class="btn btn-primary" value="Doorgaan"  onclick="location.href='@Url.Action("sendOrderMail", "cart")'" >
-                    Doorgaan
-            </button>
+         Doorgaan</button>
 </div>
